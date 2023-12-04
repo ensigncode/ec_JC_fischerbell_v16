@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+		<report
+			id="fischerbell_loan_item_report_action"
+			model="sale.order.line"
+			string="Loan Items"
+			report_type="xlsx"
+			name="fischerbell_custom.loan_item_report"
+			file="Loan Items Report"
+			attachment_use="False"
+		/>
+	</data>
+</odoo>

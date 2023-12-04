@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+		<report
+			id="fischerbell_purchase_history_report_action"
+			model="product.template"
+			string="Purchase History"
+			report_type="xlsx"
+			name="fischerbell_custom.purchase_history_report"
+			file="Purchase History Report"
+			attachment_use="False"
+		/>
+	</data>
+</odoo>

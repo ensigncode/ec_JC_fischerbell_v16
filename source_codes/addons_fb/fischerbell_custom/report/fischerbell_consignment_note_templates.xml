@@ -1,0 +1,541 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="fischerbell_custom_consignment_note_paperformat" model="report.paperformat">
+            <field name="name">Fischerbell Consignment Note Paperformat</field>
+            <field name="default" eval="False"/>
+            <field name="format">A4</field>
+            <field name="page_height">0</field>
+            <field name="page_width">0</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">100</field>
+            <field name="margin_bottom">40</field>
+            <field name="margin_left">2</field>
+            <field name="margin_right">3</field>
+            <field name="header_line" eval="False"/>
+            <field name="header_spacing">100</field>
+            <field name="dpi">95</field>
+        </record>
+
+        <template id="page_consignment_note_template">
+            <table width="100%" style="border: 0px solid white;">
+                <tbody>
+                    <t t-set="count" t-value="0" />
+                    <t t-if="doc.move_raw_ids">
+                        <t t-foreach="doc.move_raw_ids" t-as="line" >
+                            <t t-set="count" t-value="count+1" />
+                            <tr>
+                                <td width="5%" class="text-center"><span t-esc="count"/></td>
+                                <td width="10%" class="text-left"><span t-esc="line.product_id.default_code"/></td>
+                                <td width="10%">
+                                    <div>
+                                        <t t-if="line.product_id.image_1920" >
+                                            <img class="variant-image" t-attf-src="data:image/*;base64,{{line.product_id.image_1920}}" align="center" width="5" height="70" style='margin:0px;padding-top:0px;'/>
+                                        </t>
+                                    </div>
+                                </td>
+                                <td width="25%">
+                                    <span t-field="line.product_id.name"/><br/>
+                                    <span t-field="line.product_id.description_sale"/>
+                                </td>
+                                <td width="5%" class="text-center"><t t-esc="int(line.product_uom_qty)"/></td>
+                                <td width="10%" class="text-center"><t t-esc="line.product_uom.name"/></td>
+                            </tr>
+                        </t>
+                    </t>
+                    <t t-else="">
+                        <span>
+                            <br/>
+                            <br/>
+                            <br/>
+                        </span>
+                    </t>
+                </tbody>
+            </table>
+        </template>
+
+        <template id="fischerbell_report_consignment_note_document">
+            <t t-call="web.html_container">
+                <t t-call="web.basic_layout">
+                    <t t-foreach="docs" t-as="doc">
+                        <style>
+                            .page { 
+                                font-family: 'Arial';
+                                font-size: 13px;
+                            }
+                            .page td {
+                                vertical-align: top;
+                                padding-top: 10px;
+                            }
+                            .footer {
+                                font-size: 35px;
+                                font-weight: bold;
+                            }
+                            .text-wrap {
+                                font-weight: bold;
+                                font-size: 13px;
+                                font-family: 'Tara SC Black';
+                            }
+                            .text-style {
+                                font-size: 13px;
+                                font-family: 'Arial';
+                            }
+                            .text-note {
+                                font-size: 13px;
+                                font-family: 'Arial';
+                            }
+                            table.order-line {
+                                width: 100%;
+                                border: 0px solid white;
+                                margin: 8px 5px 0 5px;
+                            }
+
+                            table.order-line thead tr th {
+                                font-size: 13px;
+                                font-family: 'Tara SC Black';
+                                font-weight: bold;
+                                padding-top: 10px;
+                                padding-bottom: 10px;
+                                border-top: 2px solid black;
+                                border-bottom: 2px solid black;
+                            }
+                            .variant-image {
+                                margin-top: 20px;
+                                width: 60%;
+                            }
+                            .table table-total {
+                                border: 1px solid black;
+                                min-height: 200px; 
+                                position: absolute; 
+                                bottom: 0px;"
+                            }
+                        </style>
+                        <!-- Header -->
+                        <div class="header" >
+                            <div style="border-bottom: 2px solid white; margin-bottom:10px;">
+                                <table style="border: 0px solid white;" width="100%">
+                                    <tr>
+                                        <td width="70%">
+                                            <img src="/fischerbell_custom/static/src/img/fischerbell_header.jpeg" width="400" height="100" style="margin-bottom: 10px;"/>
+                                        </td>
+                                        <td>
+                                            <img src="/fischerbell_custom/static/src/img/fischerbell_header2.jpeg" width="180" height="100" style="margin-bottom: 10px;"/>
+                                        </td>
+                                        <td>
+                                            <img src="/fischerbell_custom/static/src/img/fischerbell_header3.jpeg" width="130" height="100" style="margin-bottom: 10px;"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="3">
+                                            <div class="row">
+                                                <div class="document-title">
+                                                    <table style="width:100%; border: 0px solid white;">
+                                                        <tr>
+                                                            <td width="45%" class="text-wrap">
+                                                                <span style="font-weight: bold; margin-left: 5px; font-family: 'Unitext Pro Regular'; padding: 5px; font-size: 20px;">Consignment Note</span>
+                                                            </td>
+                                                            <td width="50%" class="text-wrap">
+                                                                <span style="font-weight: bold; margin-left: 10px; font-family: 'Unitext Pro Regular'; padding: 5px; font-size: 20px;">Consignment Note No.</span>
+                                                                <span style="font-weight: bold; font-family: 'Unitext Pro Regular'; padding: 5px; font-size: 20px;" t-esc="doc.name"/>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="3">
+                                            <table width="100%" style="border-top: 2px solid black; border-left: 0px solid white; border-right: 0px solid white; border-bottom: 0px solid white; margin-left: 10px; margin-top: 5px;">
+                                                <tr>
+                                                    <td width="47.8%">
+                                                        <table style="width:100%; border: 0px solid white;">
+                                                            <tr>
+                                                                <td width="30%" >
+                                                                    <strong><span style="font-family: 'Unitext Pro Regular'; line-height: 1em; font-size: 12px;">Customer Code</span></strong>
+                                                                </td>
+                                                                <td width="5%" >
+                                                                    <span style="font-family: 'Unitext Pro Regular'; line-height: 1em; font-size: 12px;">:</span>
+                                                                </td>
+                                                                <td width="65%" >
+                                                                    <span style="font-family: 'Unitext Pro Regular'; line-height: 1em; font-size: 12px;" t-esc="doc.partner_id.customer_code"/>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td width="30%" class="text-wrap">
+                                                                    <span style="font-family: 'Unitext Pro Regular'; line-height: 1em; font-size: 12px; font-weight: bold;">Company Name</span>
+                                                                </td>
+                                                                <td width="5%" class="text-wrap">
+                                                                    <span style="font-family: 'Unitext Pro Regular'; line-height: 1em; font-size: 12px;">:</span>
+                                                                </td>
+                                                                <td width="65%" class="text-style">
+                                                                    <t t-if="doc.partner_id">
+                                                                        <span style="font-family: 'Unitext Pro Regular'; line-height: 1em; font-size: 12px;" t-esc="doc.partner_id.name"/><br/>
+                                                                    </t>
+                                                                    <t t-else="">
+                                                                        <span><br/></span>
+                                                                    </t>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td width="30%" class="text-wrap">
+                                                                    <span style="font-family: 'Unitext Pro Regular'; line-height: 1em; font-size: 12px; font-weight: bold;">Address</span>
+                                                                </td>
+                                                                <td width="5%" class="text-wrap">
+                                                                    <span style="font-family: 'Unitext Pro Regular'; line-height: 1em; font-size: 12px;">:</span>
+                                                                </td>
+                                                                <td width="65%" class="text-style">
+                                                                    <t t-if="doc.partner_id.street">
+                                                                        <span style="font-family: 'Unitext Pro Regular'; line-height: 1em; font-size: 12px;" t-esc="doc.partner_id.street"/><br/>
+                                                                    </t>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td width="30%" class="text-wrap">
+                                                                    <span style="font-family: 'Unitext Pro Regular'; line-height: 1em; font-size: 12px; font-weight: bold;">Postal Code</span>
+                                                                </td>
+                                                                <td width="5%" class="text-wrap">
+                                                                    <span style="font-family: 'Unitext Pro Regular'; line-height: 1em; font-size: 12px;">:</span>
+                                                                </td>
+                                                                <td width="65%" class="text-style">
+                                                                    <t t-if="doc.partner_id.country_id">
+                                                                        <span style="line-height: 1em; font-family: 'Unitext Pro Regular'; font-size: 12px;" t-esc="doc.partner_id.country_id.name"/> - 
+                                                                    </t>
+                                                                    <t t-if="doc.partner_id.zip">
+                                                                        <span style="font-family: 'Unitext Pro Regular'; line-height: 1em; font-size: 12px;" t-esc="doc.partner_id.zip" /><br/>
+                                                                    </t>
+                                                                    <t t-else="">
+                                                                        <span><br/></span>
+                                                                    </t>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td width="30%" class="text-wrap">
+                                                                    <span style="font-family: 'Unitext Pro Regular'; line-height: 1em; font-size: 12px; font-weight: bold;"></span>
+                                                                </td>
+                                                                <td width="5%" class="text-wrap">
+                                                                    <span style="font-family: 'Unitext Pro Regular'; line-height: 1em; font-size: 12px;"></span>
+                                                                </td>
+                                                                <td width="65%" class="text-style">
+                                                                    <div>
+                                                                        <t t-if="doc.partner_note and int(doc.len_note) > 0">
+                                                                            <t t-if="int(doc.len_note) > 118">
+                                                                                <span style="line-height: 1em; font-family: 'Unitext Pro Regular'; font-size: 12px;" t-esc="doc.partner_note"/>
+                                                                            </t>
+                                                                            <t t-elif="int(doc.len_note) > 79">
+                                                                                <span style="line-height: 1em; font-family: 'Unitext Pro Regular'; font-size: 12px;" t-esc="doc.partner_note"/><br/><br/>
+                                                                            </t>
+                                                                            <t t-elif="int(doc.len_note) > 40">
+                                                                                <span style="line-height: 1em; font-family: 'Unitext Pro Regular'; font-size: 12px;" t-esc="doc.partner_note"/><br/><br/><br/>
+                                                                            </t>
+                                                                            <t t-else="">
+                                                                                <span style="font-family: 'Unitext Pro Regular'; line-height: 1em; font-size: 12px;" t-esc="doc.partner_note"/><br/><br/><br/><br/>
+                                                                            </t>
+                                                                        </t>
+                                                                        <t t-else="">
+                                                                            <br/><br/><br/><br/>
+                                                                        </t>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                    </td>
+                                                    <td width="52.2%%" >
+                                                        <table style="width:100%; border: 0px solid white;">
+                                                            <tr>
+                                                                <td width="30%" >
+                                                                    <strong><span style="font-family: 'Unitext Pro Regular'; line-height: 1em; font-size: 12px;">Date</span></strong>
+                                                                </td>
+                                                                <td width="5%" >
+                                                                    <span style="font-family: 'Unitext Pro Regular'; line-height: 1em; font-size: 12px;">:</span>
+                                                                </td>
+                                                                <td width="65%"  style="padding-left: 5px;">
+                                                                    <span style="font-family: 'Unitext Pro Regular'; line-height: 1em; font-size: 12px;" t-esc="doc.date_planned_start.strftime('%d/%m/%Y')"/>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td width="30%">
+                                                                    <strong><span style="font-family: 'Unitext Pro Regular'; line-height: 1em; font-size: 12px;">Consignment Period</span></strong>
+                                                                </td>
+                                                                <td width="5%">
+                                                                    <span style="font-family: 'Unitext Pro Regular'; line-height: 1em; font-size: 12px;">:</span>
+                                                                </td>
+                                                                <td width="65%"  style="padding-left: 5px;">
+                                                                    <span style="font-family: 'Unitext Pro Regular'; line-height: 1em; font-size: 12px;" t-esc="doc.consignment_period_id.name"></span>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td width="30%" >
+                                                                    <strong><span style="font-family: 'Unitext Pro Regular'; line-height: 1em; font-size: 12px;">Salesperson</span></strong>
+                                                                </td>
+                                                                <td width="5%" >
+                                                                    <span style="font-family: 'Unitext Pro Regular'; line-height: 1em; font-size: 12px;">:</span>
+                                                                </td>
+                                                                <td width="65%"  style="padding-left: 5px;">
+                                                                    <span style="font-family: 'Unitext Pro Regular'; line-height: 1em; font-size: 12px;" t-esc="doc.user_id.name"/>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td width="30%" >
+                                                                    <strong><span style="font-family: 'Unitext Pro Regular'; line-height: 1em; font-size: 12px;">Processor</span></strong>
+                                                                </td>
+                                                                <td width="5%" >
+                                                                    <span style="font-family: 'Unitext Pro Regular'; line-height: 1em; font-size: 12px;">:</span>
+                                                                </td>
+                                                                <td width="65%"  style="padding-left: 5px;">
+                                                                    <span style="font-family: 'Unitext Pro Regular'; line-height: 1em; font-size: 12px;" t-esc="doc.mrp_team_id.name"/>
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                            <table width="100%" style="border-top: 2px solid black; border-left: 0px solid white; border-right: 0px solid white; border-bottom: 0px solid white; margin-left: 10px; margin-top: 5px;">
+                                                <tr>
+                                                    <br/>
+                                                    <td width="47.8%">
+                                                        <table style="width:100%; border: 0px solid white;">
+                                                            <tr>
+                                                                <td width="30%" class="text-wrap">
+                                                                    <span style="font-family: 'Unitext Pro Regular'; line-height: 1em; font-size: 12px; font-weight: bold;">Delivery Date</span>
+                                                                </td>
+                                                                <td width="5%" class="text-wrap">
+                                                                    <span style="font-family: 'Unitext Pro Regular'; line-height: 1em; font-size: 12px;">:</span>
+                                                                </td>
+                                                                <td width="65%" class="text-style">
+                                                                   <span style="font-family: 'Unitext Pro Regular'; line-height: 1em; font-size: 12px;" t-esc="doc.delivery_date.strftime('%d/%m/%Y')"></span>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td width="30%" class="text-wrap">
+                                                                    <span style="font-family: 'Unitext Pro Regular'; line-height: 1em; font-size: 12px; font-weight: bold;">Requestor</span>
+                                                                </td>
+                                                                <td width="5%" class="text-wrap">
+                                                                    <span style="font-family: 'Unitext Pro Regular'; line-height: 1em; font-size: 12px;">:</span>
+                                                                </td>
+                                                                <td width="65%" class="text-style">
+                                                                    <t t-if="doc.partner_id.phone">
+                                                                        <span style="font-family: 'Unitext Pro Regular'; line-height: 1em; font-size: 12px;" t-esc="doc.requestor_id.name" /><br/>
+                                                                    </t>
+                                                                    <t t-else="">
+                                                                        <span><br/></span>
+                                                                    </t>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td width="30%" class="text-wrap">
+                                                                    <span style="font-family: 'Unitext Pro Regular'; line-height: 1em; font-size: 12px; font-weight: bold;">Contact No</span>
+                                                                </td>
+                                                                <td width="5%" class="text-wrap">
+                                                                    <span style="font-family: 'Unitext Pro Regular'; line-height: 1em; font-size: 12px;">:</span>
+                                                                </td>
+                                                                <td width="65%" class="text-style">
+                                                                    <t t-if="doc.partner_id.phone">
+                                                                        <span style="font-family: 'Unitext Pro Regular'; line-height: 1em; font-size: 12px;" t-esc="doc.requestor_id.phone" /><br/>
+                                                                    </t>
+                                                                    <t t-else="">
+                                                                        <span><br/></span>
+                                                                    </t>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td width="30%" class="text-wrap">
+                                                                    <span style="font-family: 'Unitext Pro Regular'; line-height: 1em; font-size: 12px; font-weight: bold;">Email</span>
+                                                                </td>
+                                                                <td width="5%" class="text-wrap">
+                                                                    <span style="font-family: 'Unitext Pro Regular'; line-height: 1em; font-size: 12px;">:</span>
+                                                                </td>
+                                                                <td width="65%" class="text-style">
+                                                                    <t t-if="doc.partner_id.email">
+                                                                        <span style="font-family: 'Unitext Pro Regular'; line-height: 1em; font-size: 12px;" t-esc="doc.requestor_id.email" /><br/>
+                                                                    </t>
+                                                                    <t t-else="">
+                                                                        <span><br/></span>
+                                                                    </t>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td width="30%" class="text-wrap">
+                                                                    <span style="font-family: 'Unitext Pro Regular'; line-height: 1em; font-size: 12px; font-weight: bold;">Fax</span>
+                                                                </td>
+                                                                <td width="5%" class="text-wrap">
+                                                                    <span style="font-family: 'Unitext Pro Regular'; line-height: 1em; font-size: 12px;">:</span>
+                                                                </td>
+                                                                <td width="65%" class="text-style">
+                                                                    <t t-if="doc.partner_id.fax">
+                                                                        <span style="font-family: 'Unitext Pro Regular'; line-height: 1em; font-size: 12px;" t-esc="doc.requestor_id.fax" /><br/>
+                                                                    </t>
+                                                                    <t t-else="">
+                                                                        <span><br/></span>
+                                                                    </t>
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                    </td>
+                                                    <td width="52.2%%" >
+                                                        <table style="width:100%; border: 0px solid white;">
+                                                            <tr>
+                                                                <td width="30%" ><strong><span style="font-family: 'Unitext Pro Regular'; line-height: 1em; font-size: 12px;">Deliver To.</span></strong></td>
+                                                                <td width="5%" ></td>
+                                                                <td width="65%" class="text-style"/>
+                                                            </tr>
+                                                            <tr>
+                                                                <td width="30%" ><strong><span style="font-family: 'Unitext Pro Regular'; line-height: 1em; font-size: 12px;">Address</span></strong></td>
+                                                                <td width="5%" ><span style="font-family: 'Unitext Pro Regular'; line-height: 1em; font-size: 12px;">:</span></td>
+                                                                <td width="65%" class="text-style">
+                                                                    <t t-foreach="doc.partner_id.child_ids" t-as="child">
+                                                                        <t t-if="child.type == 'delivery'">
+                                                                            <t t-if="child.street">
+                                                                                <span style="line-height: 1em; font-family: 'Unitext Pro Regular'; font-size: 12px;" t-esc="child.street"/><br/>
+                                                                            </t>
+                                                                        </t>
+                                                                    </t>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td width="30%" ><strong><span style="font-family: 'Unitext Pro Regular'; line-height: 1em; font-size: 12px;">Postal Code</span></strong></td>
+                                                                <td width="5%" ><span style="font-family: 'Unitext Pro Regular'; line-height: 1em; font-size: 12px;">:</span></td>
+                                                                <td width="65%" class="text-style">
+                                                                    <t t-foreach="doc.partner_id.child_ids" t-as="child">
+                                                                        <t t-if="child.type == 'delivery'">
+                                                                            <t t-if="child.country_id">
+                                                                                <span style="line-height: 1em; font-family: 'Unitext Pro Regular'; font-size: 12px;" t-esc="child.country_id.name"/> - 
+                                                                            </t>
+                                                                            <t t-if="child.zip">
+                                                                                <span style="line-height: 1em; font-family: 'Unitext Pro Regular'; font-size: 12px;" t-esc="child.zip"/><br/>
+                                                                            </t>
+                                                                        </t>
+                                                                    </t>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td width="30%" class="text-wrap">
+                                                                    <span style="font-family: 'Unitext Pro Regular'; line-height: 1em; font-size: 12px; font-weight: bold;">Special Remarks</span>
+                                                                </td>
+                                                                <td width="5%" class="text-wrap">
+                                                                    <span style="font-family: 'Unitext Pro Regular'; line-height: 1em; font-size: 12px;">:</span>
+                                                                </td>
+                                                                <td width="65%" class="text-style">
+                                                                    <t t-if="doc.note">
+                                                                        <span style="font-family: 'Unitext Pro Regular'; line-height: 1em; font-size: 12px;" t-esc="doc.note" /><br/>
+                                                                    </t>
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                    </td>
+                                                    <td width="10%"/>
+                                                </tr>
+                                            </table>
+                                            <table width="100%" class="table-head" style="font-size: 15px; font-weight: bold; padding-top: 10px; padding-bottom: 10px; border-left: 2px solid white; border-bottom: 3px solid black; border-top: 3px solid black; border-right: 2px solid white; margin-bottom: 10px;">
+                                                <br/>
+                                                <br/>
+                                                <thead>
+                                                    <tr>
+                                                        <th width="5%">SN</th>
+                                                        <th width="10%" style="text-align: left;"><span>PRODUCT CODE</span></th>
+                                                        <th width="15%" style="text-align: left;"><span>DESCRIPTION</span></th>
+                                                        <th width="20%" style="text-align: left;"></th>
+                                                        <th width="5%"><span>QTY</span></th>
+                                                        <th width="10%"><span>UOM</span></th>
+                                                    </tr>
+                                                </thead>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </t>
+                    <t>
+                        <div class="page">
+                            <t t-call="fischerbell_custom.page_consignment_note_template"/>
+                        </div>
+                        <div>
+                            <br/>
+                            <div style="border-top: 2px solid black; padding-top: 7px; line-height: 1em;">
+                              <table width="100%" style="float: left; vertical-align: center; border: 1px solid white;">
+                                <tr>
+                                    <td width="50%" style="font-family: 'Unitext Pro Regular'; text-align: left; vertical-align: top; font-size: 12px;">
+                                        <span t-field="doc.notes"/>
+                                    </td>
+                                    <td width="10%"/>
+                                    <td width="40%"/>
+                                </tr>
+                              </table>
+                            </div>
+                        </div>
+                        <div class="footer">
+                            <div class="hide_lastpage">
+                                <table width="100%" style="border: 0px solid white; padding-top: 10px; min-height: 700px;">
+                                    <tr>
+                                        <td style="text-align: center;">
+                                            <span>Authorized Signature</span>
+                                        </td>
+                                        <td style="text-align: center;">
+                                            <span>Acknowledged By</span>
+                                        </td>
+                                    </tr>
+                                </table>
+                                <br/>
+                                <br/>
+                                <br/>
+                                <br/>
+                                <table width="100%" style="border: 0px solid white; margin_top: 30px; min-height: 200px;">
+                                    <tr>
+                                        <td width="10%"/>
+                                        <td width="34%" style="text-align: center; border-bottom: 2px solid black;"><strong><span>No Signature Required</span></strong></td>
+                                        <td width="19%"/>
+                                        <td width="27%" style="text-align: center; border-bottom: 2px solid black;"/>
+                                        <td width="10%"/>
+                                    </tr>
+                                    <tr>
+                                        <td width="10%"/>
+                                        <td width="34%" style="text-align: center;"></td>
+                                        <td width="19%"/>
+                                        <td width="27%" style="text-align: center;"><span>Signature, Name &amp; Date</span></td>
+                                        <td width="10%"/>
+                                    </tr>
+                                </table>
+                                <br/>
+                                <table width="100%" style="border: 0px solid white;">
+                                    <tr>
+                                        <td width="30%">
+                                            <t t-set="datetime_now" t-value="(datetime.datetime.today())"/>
+                                            <span t-esc="docs.user.name" style="font-size: 12px; font-family: 'Arial'; text-align: left;"/> <span style="font-size: 12px; font-family: 'Arial'; text-align: left;" t-esc="datetime_now" t-options="{'widget': 'datetime'}"/>
+                                        </td>
+                                        <td width="60%"/>
+                                        <td width="10%">
+                                            <span style="font-family: 'Unitext Pro Regular'; line-height: 1em; font-size: 12px; text-align:">Page No : </span>
+                                            <span style="margin-left: 5px; font-family: 'Unitext Pro Regular'; line-height: 1em; font-size: 12px;" class="page"/>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+
+        <template id="fischerbell_report_consignment_note">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="doc">
+                    <t t-call="fischerbell_custom.fischerbell_report_consignment_note_document" t-lang="doc.partner_id.lang"/>
+                </t>
+            </t>
+        </template>
+
+        <record id="action_report_consignment_note" model="ir.actions.report">
+            <field name="name">Consignment Note</field>
+            <field name="model">mrp.production</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">fischerbell_custom.fischerbell_report_consignment_note</field>
+            <field name="report_file">fischerbell_custom.fischerbell_report_consignment_note</field>
+            <field name="print_report_name">'Consigment Note - %s' % (object.name or '')</field>
+            <field name="binding_model_id" ref="model_mrp_production"/>
+            <field name="binding_type">report</field>
+            <field name="paperformat_id" ref="fischerbell_custom.fischerbell_custom_consignment_note_paperformat"/>
+        </record>
+
+    </data>
+</odoo>

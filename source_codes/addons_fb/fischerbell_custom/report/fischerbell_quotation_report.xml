@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<!--     <record id="fischerbell_custom_paperformat" model="report.paperformat">
+        <field name="name">Fischerbell Quotation Custom Paperformat</field>
+        <field name="default" eval="False" />
+        <field name="format">A4</field>
+        <field name="orientation">Portrait</field>
+        <field name="margin_top">106</field>
+        <field name="margin_bottom">15.00</field>
+        <field name="margin_left">3</field>
+        <field name="margin_right">3</field>
+        <field name="header_line" eval="False" />
+        <field name="header_spacing">40</field>
+        <field name="dpi">90</field>
+    </record>
+
+    <record id="sale.action_report_saleorder" model="ir.actions.report">
+        <field name="name">Quotation / Order</field>
+        <field name="model">sale.order</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">fischerbell_custom.fischerbell_report_saleorder</field>
+        <field name="report_file">fischerbell_custom.page_quotation_template</field>
+        <field name="print_report_name">(object.state in ('draft', 'sent') and 'Quotation Testtttt - %s' % (object.name)) or 'Order - %s' % (object.name)</field>
+        <field name="paperformat_id" ref="fischerbell_custom.fischerbell_custom_paperformat"/>
+        <field name="binding_model_id" ref="model_sale_order"/>
+        <field name="binding_type">report</field>
+    </record>
+ -->
+    <report id="action_quotation_sale_order_report" 
+        string="Quotation / Order" 
+        model="sale.order" 
+        report_type="qweb-pdf" 
+        file="fischerbell_custom.page_quotation_template" 
+        name="fischerbell_custom.fischerbell_report_saleorder"/>
+    
+    <record id="fischerbell_custom_paperformat" model="report.paperformat">
+        <field name="name">Fischerbell Quotation Custom Paperformat</field>
+        <field name="default" eval="True"/>
+        <field name="format">A4</field>
+        <field name="page_height">0</field>
+        <field name="page_width">0</field>
+        <field name="orientation">Portrait</field>
+        <field name="margin_top">300</field>
+        <field name="margin_bottom">10</field>
+        <field name="margin_left">2</field>
+        <field name="margin_right">2</field>
+        <field name="header_line" eval="False"/>
+        <field name="header_spacing">106</field>
+        <field name="dpi">80</field>
+    </record>
+
+    <record id="fischerbell_custom.action_quotation_sale_order_report" model="ir.actions.report">
+        <field name="paperformat_id" ref="fischerbell_custom.fischerbell_custom_paperformat" />
+    </record>
+</odoo>

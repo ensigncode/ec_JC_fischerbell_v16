@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+		<report
+			id="fischerbell_gr_report_action"
+			model="stock.picking"
+			string="GR Report"
+			report_type="xlsx"
+			name="fischerbell_custom.gr_report"
+			file="GR Report"
+			attachment_use="False"
+		/>
+	</data>
+</odoo>

@@ -1,0 +1,340 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="fischerbell_custom_statement_of_account_paperformat" model="report.paperformat">
+            <field name="name">Fischerbell Statement Of Account Paperformat</field>
+            <field name="default" eval="False"/>
+            <field name="format">A4</field>
+            <field name="page_height">0</field>
+            <field name="page_width">0</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">75</field>
+            <field name="margin_bottom">60</field>
+            <field name="margin_left">2</field>
+            <field name="margin_right">3</field>
+            <field name="header_line" eval="False"/>
+            <field name="header_spacing">73</field>
+            <field name="dpi">95</field>
+        </record>
+
+        <template id="footer_soa_template">
+            <t>
+                <div style="border-top: 2px solid white; padding-top: 7px; line-height: 1em;">
+                    <table width="40%" style="float: right; vertical-align: center; border: 1px solid white;">
+                        <tbody>
+                            <tr>
+                                <td width="15%" style="font-size: 15px; font-family: 'Arial'; text-align: left;"><strong>Total : </strong></td>
+                                <td width="5%" style="font-size: 15px; font-family: 'Arial'; text-align: center;"><span t-esc="doc.currency_id.name"/></td>
+                                <td width="20%" style="font-size: 15px; font-family: 'Arial'; text-align: right;">
+                                    <span t-esc="doc.total_balance_due"/>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <span>
+                    <br/>
+                    <br/>
+                    <br/>
+                    DOLLARS ZERO AND CENTS ZERO ONLY
+                </span>
+                <table width="100%" style="border: 1px solid black;">
+                    <tr style="height: 40px;">
+                        <th width="13%" style="text-align: right; padding-right: 3px; padding-top: 20px;"></th>
+                        <th width="13%" style="text-align: right; padding-right: 3px; padding-top: 20px;">Balance Due</th>
+                        <th width="14%" style="text-align: right; padding-right: 3px; padding-top: 20px;"><span>Current Month</span></th>
+                        <th width="15%" style="text-align: right; padding-right: 3px; padding-top: 20px;"><span>Over 1 Month</span></th>
+                        <th width="15%" style="text-align: right; padding-right: 3px; padding-top: 20px;"><span>Over 2 Months</span></th>
+                        <th width="15%" style="text-align: right; padding-right: 3px; padding-top: 20px;"><span>Over 3 Months</span></th>
+                        <th width="15%" style="text-align: right; padding-right: 3px; padding-top: 20px;"><span>Over 4 Months</span></th>
+                    </tr>
+                    <tbody>
+                        <tr style="height: 40px;">
+                            <td width="13%" style="text-align: center; padding-top: 10px; font-weight: bold;">Total in SGD</td>
+                            <td width="13%" style="text-align: right; padding-top: 10px; font-weight: bold; padding-right: 3px;"><span t-esc="doc.total_balance_due"/></td>
+                            <td width="14%" style="text-align: right; padding-top: 10px; font-weight: bold; padding-right: 3px;"><span t-esc="doc.current_month"/></td>
+                            <td width="15%" style="text-align: right; padding-top: 10px; font-weight: bold; padding-right: 3px;"><span t-esc="doc.over_1month"/></td>
+                            <td width="15%" style="text-align: right; padding-top: 10px; font-weight: bold; padding-right: 3px;"><span t-esc="doc.over_2month"/></td>
+                            <td width="15%" style="text-align: right; padding-top: 10px; font-weight: bold; padding-right: 3px;"><span t-esc="doc.over_3month"/></td>
+                            <td width="15%" style="text-align: right; padding-top: 10px; font-weight: bold; padding-right: 3px;"><span t-esc="doc.over_4month"/></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table width="100%" style="border: 1px solid white;">
+                    <tr>
+                        <td width="90%"></td>
+                        <td width="10%">
+                            <br/>
+                            <p>Page <span class="page" /> of <span class="topage" /></p>
+                        </td>
+                    </tr>
+                </table>
+            </t>
+        </template>
+
+
+        <template id="fischerbell_report_statement_of_account_document">
+            <t t-call="web.html_container">
+                <t t-call="web.basic_layout">
+                    <t t-foreach="docs" t-as="doc">
+                        <style>
+                            .page { 
+                                font-family: 'Arial';
+                                font-size: 13px;
+                            }
+                            .page td {
+                                vertical-align: top;
+                                padding-top: 10px;
+                            }
+                            .footer {
+                                font-size: 35px;
+                                font-weight: bold;
+                            }
+                            .text-wrap {
+                                font-weight: bold;
+                                font-size: 13px;
+                                font-family: 'Tara SC Black';
+                            }
+                            .text-style {
+                                font-size: 13px;
+                                font-family: 'Arial';
+                            }
+                            .text-note {
+                                font-size: 13px;
+                                font-family: 'Arial';
+                            }
+                            table.order-line {
+                                width: 100%;
+                                border: 0px solid white;
+                                margin: 8px 5px 0 5px;
+                            }
+
+                            table.order-line thead tr th {
+                                font-size: 13px;
+                                font-family: 'Tara SC Black';
+                                font-weight: bold;
+                                padding-top: 10px;
+                                padding-bottom: 10px;
+                                border-top: 2px solid black;
+                                border-bottom: 2px solid black;
+                            }
+                            .variant-image {
+                                margin-top: 20px;
+                                width: 60%;
+                            }
+                            .table table-total {
+                                border: 1px solid black;
+                                min-height: 200px; 
+                                position: absolute; 
+                                bottom: 0px;"
+                            }
+                        </style>
+                        <!-- Header -->
+                        <div class="header" >
+                            <div style="border-bottom: 2px solid white; margin-bottom:10px;">
+                                <table style="border: 0px solid white;" width="100%">
+                                    <tr>
+                                        <td width="70%">
+                                            <img src="/fischerbell_custom/static/src/img/fischerbell_header.jpeg" width="400" height="100" style="margin-bottom: 10px;"/>
+                                        </td>
+                                        <td>
+                                            <img src="/fischerbell_custom/static/src/img/fischerbell_header2.jpeg" width="180" height="100" style="margin-bottom: 10px;"/>
+                                        </td>
+                                        <td>
+                                            <img src="/fischerbell_custom/static/src/img/fischerbell_header3.jpeg" width="130" height="100" style="margin-bottom: 10px;"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="3">
+                                            <div class="row">
+                                                <div class="document-title">
+                                                    <h4 style="text-align:center; font-size: 20px; font-family: 'Tara SC Black'; vertical-align: bottom"><b>STATEMENT OF ACCOUNT</b></h4>
+                                                    <br/>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="3">
+                                            <table width="100%" style="border-top: 1px solid white; border-left: 0px solid white; border-right: 0px solid white; border-bottom: 0px solid white; margin-left: 10px; margin-top: 5px;">
+                                                <tr>
+                                                    <td width="30%">
+                                                        <table style="width:100%; border: 0px solid white;">
+                                                            <tr>
+                                                                <td width="75%" >
+                                                                    <t t-if="doc.partner_id">
+                                                                        <span style="font-family: 'Unitext Pro Regular'; line-height: 1em;" t-esc="doc.partner_id.name"/><br/>
+                                                                        <span style="font-family: 'Unitext Pro Regular'; line-height: 1em;" t-esc="doc.partner_id.street"/><br/>
+                                                                        <span style="font-family: 'Unitext Pro Regular'; line-height: 1em;" t-esc="doc.partner_id.street2"/><br/>
+                                                                        <span style="font-family: 'Unitext Pro Regular'; line-height: 1em;" t-esc="doc.partner_id.country_id.name" /> - <span style="font-family: 'Unitext Pro Regular'; line-height: 1em;" t-esc="doc.partner_id.zip" />
+                                                                    </t>
+                                                                    <span>
+                                                                        <br/>
+                                                                        <br/>
+                                                                        <br/>
+                                                                    </span>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td width="20%">
+                                                                    <span style="font-family: 'Unitext Pro Regular'; line-height: 1em;">Tel : <span style="font-family: 'Unitext Pro Regular'; line-height: 1em;" t-esc="doc.partner_id.phone"/></span>
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                    </td>
+                                                    <td width="33%"/>
+                                                    <td width="37%%" >
+                                                        <table style="width:100%; border: 0px solid white;">
+                                                            <tr>
+                                                                <td width="40%">
+                                                                    <span style="font-family: 'Unitext Pro Regular'; line-height: 1em;">Aging Date</span>
+                                                                </td>
+                                                                <td width="5%" >
+                                                                    <strong><span style="font-family: 'Unitext Pro Regular'; line-height: 1em;">:</span></strong>
+                                                                </td>
+                                                                <td width="55%"  style="padding-left: 5px;">
+                                                                    <t t-if="doc.invoice_date_due">
+                                                                        <span style="font-family: 'Unitext Pro Regular'; line-height: 1em;" t-esc="doc.invoice_date_due.strftime('%d.%m.%Y')"/>
+                                                                    </t>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td width="40%" >
+                                                                    <span style="font-family: 'Unitext Pro Regular'; line-height: 1em;">Contact Person</span>
+                                                                </td>
+                                                                <td width="5%" >
+                                                                    <span style="font-family: 'Unitext Pro Regular'; line-height: 1em;">:</span>
+                                                                </td>
+                                                                <t t-foreach="doc.partner_id.child_ids" t-as="child">
+                                                                    <t t-if="child.type == 'contact'">
+                                                                        <td width="55%" style="padding-left: 5px;">
+                                                                            <span style="font-family: 'Unitext Pro Regular'; line-height: 1em;" t-esc="child.name"></span>
+                                                                        </td>
+                                                                    </t>
+                                                                </t>
+                                                            </tr>
+                                                            <tr>
+                                                                <td width="40%">
+                                                                    <span style="font-family: 'Unitext Pro Regular'; line-height: 1em;">Sales Person</span>
+                                                                </td>
+                                                                <td width="5%">
+                                                                    <span style="font-family: 'Unitext Pro Regular'; line-height: 1em;">:</span>
+                                                                </td>
+                                                                <td width="55%"  style="padding-left: 5px;">
+                                                                    <span style="font-family: 'Unitext Pro Regular'; line-height: 1em;" t-esc="doc.invoice_user_id.name"/>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td width="40%" >
+                                                                    <span style="font-family: 'Unitext Pro Regular'; line-height: 1em;">Currency</span>
+                                                                </td>
+                                                                <td width="5%" >
+                                                                    <span style="font-family: 'Unitext Pro Regular'; line-height: 1em;">:</span>
+                                                                </td>
+                                                                <td width="55%"  style="padding-left: 5px;">
+                                                                    <span style="font-family: 'Unitext Pro Regular'; line-height: 1em;" t-esc="doc.currency_id.name"/>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td width="40%" >
+                                                                    <span style="font-family: 'Unitext Pro Regular'; line-height: 1em;">Payment Terms</span>
+                                                                </td>
+                                                                <td width="5%" >
+                                                                    <span style="font-family: 'Unitext Pro Regular'; line-height: 1em;">:</span>
+                                                                </td>
+                                                                <td width="55%"  style="padding-left: 5px;">
+                                                                    <t t-if="doc.invoice_payment_term_id">
+                                                                        <span style="font-family: 'Unitext Pro Regular'; line-height: 1em;" t-esc="doc.invoice_payment_term_id.name"></span>
+                                                                    </t>
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                    </td>
+                                                    <td width="10%"/>
+                                                </tr>
+                                            </table>
+                                            <table width="100%" class="table-head" style="font-size: 15px; font-weight: bold; padding-top: 10px; padding-bottom: 10px; border-left: 2px solid white; border-bottom: 3px solid black; border-top: 3px solid black; border-right: 2px solid white; margin-bottom: 10px;">
+                                                <colgroup>
+                                                    <col width="10%"/>
+                                                    <col width="10%"/>
+                                                    <col width="35%"/>
+                                                    <col width="25%" />
+                                                    <col width="20%"/>
+                                                </colgroup>
+                                                <thead>
+                                                    <tr>
+                                                        <th width="10%">Date</th>
+                                                        <th width="10%"></th>
+                                                        <th width="35%" colspan="2" style="text-align: left;"><span>Document No.</span></th>
+                                                        <th width="25%" style="text-align: left;"><span>Reference No. (Customer P.O)</span></th>
+                                                        <th width="20%"><span>Amount Open</span></th>
+                                                    </tr>
+                                                </thead>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                        <t t-set="total" t-value="0"/>
+                        <div class="page">
+                            <table width="100%" style="border: 0px solid white;">
+                                <tbody>
+                                    <tr>
+                                        <td width="10%" class="text-center">
+                                            <t t-if="doc.invoice_date">
+                                                <t t-set="date" t-value="doc.invoice_date.strftime('%d.%m.%Y')"/>
+                                            </t>
+                                            <span t-esc="date"/>
+                                        </td>
+                                        <td width="10%" class="text-center">
+                                            <t t-if="doc.move_type == 'out_invoice'">
+                                                <span>IN</span>
+                                            </t>
+                                            <t t-elif="doc.move_type == 'entry'">
+                                                <span>JE</span>
+                                            </t>
+                                            <t t-else="">
+                                                <span/>
+                                            </t>
+                                        </td>
+                                        <td width="35%" class="text-left"><span t-esc="doc.name"/></td>
+                                        <td width="25%" class="text-left">
+                                            <t t-if="doc.sale_id.client_order_ref">
+                                                <span t-esc="doc.sale_id.client_order_ref"/>
+                                            </t>
+                                        </td>
+                                        <td width="20%" class="text-center">
+                                            <t t-if="doc.move_type == 'out_invoice'">
+                                                <span t-esc="'{:0,.2f}'.format(float(doc.amount_total))"/>
+                                            </t>
+                                            <t t-else="">
+                                                <p>(<span t-esc="'{:0,.2f}'.format(float(doc.amount_total))"/>)</p>
+
+                                            </t>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="footer">
+                            <t t-call="fischerbell_custom.footer_soa_template"/>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+
+        <record id="action_report_statement_of_account" model="ir.actions.report">
+            <field name="name">Statement Of Account</field>
+            <field name="model">account.move</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">fischerbell_custom.fischerbell_report_statement_of_account_document</field>
+            <field name="report_file">fischerbell_custom.fischerbell_report_statement_of_account_document</field>
+            <field name="print_report_name">'Statement Of Account - %s' % (object.name)</field>
+            <field name="binding_model_id" ref="model_account_move"/>
+            <field name="binding_type">report</field>
+            <field name="paperformat_id" ref="fischerbell_custom.fischerbell_custom_statement_of_account_paperformat"/>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="stock.view_production_lot_tree" model="ir.ui.view">
+        <field name="name">stock.production.lot.tree</field>
+        <field name="model">stock.lot</field>
+        <field name="arch" type="xml">
+            <tree string="Batch/Serial Numbers" multi_edit="1" expand="1">
+                <field name="name" decoration-bf="1" string="Batch/Serial Numbers"/>
+                <field name="ref" optional="show"/>
+                <field name="product_id" readonly="1"/>
+                <field name="create_date" optional="show"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+                <field name="last_delivery_partner_id" optional="hide" string="Transfer to"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="fischerbell_view_production_lot_form" model="ir.ui.view">
+        <field name="name">stock.production.lot.form</field>
+        <field name="model">stock.lot</field>
+        <field name="inherit_id" ref="stock.view_production_lot_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='description']" position="after">
+                <page name="attribute_one" string="Attribute 1">
+                    <field name="attribute_one"/>
+                </page>
+                <page name="attribute_two" string="Attribute 2">
+                    <field name="attribute_one"/>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+
+    <record model="ir.ui.view" id="fischerbell_search_product_lot_filter">
+        <field name="name">Production Batch/Serial Filter</field>
+        <field name="model">stock.lot</field>
+        <field name="inherit_id" ref="stock.search_product_lot_filter"/>
+        <field name="arch" type="xml">
+            <xpath expr="//search//group//filter[@name='group_by_product']" position="after">
+                <separator/>
+                <filter name="group_by_tracking" string="Tracking" domain="[]" context="{'group_by': 'tracking'}"/>
+            </xpath>
+            <xpath expr="//search//field[@name='product_id']" position="after">
+                <separator/>
+                <filter name="tracking" string="By Batch" domain="[('tracking', '=', 'lot')]"/>
+                <filter name="tracking" string="By Serial Numbers" domain="[('tracking', '=', 'serial')]"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="stock.action_production_lot_form" model="ir.actions.act_window">
+        <field name="name">Batch/Serial Numbers</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">stock.lot</field>
+        <field name="view_ids"
+                   eval="[(5, 0, 0),
+                          (0, 0, {'view_mode': 'tree', 'view_id': ref('stock.view_production_lot_tree')}),
+                          (0, 0, {'view_mode': 'form', 'view_id': ref('stock.view_production_lot_form')})]"/>
+        <field name="search_view_id" ref="fischerbell_custom.fischerbell_search_product_lot_filter"/>
+        <field name="context">{'group_by': ['tracking','product_id'], 'display_complete': True, 'default_company_id': allowed_company_ids[0]}</field>
+        <field name="help" type="html">
+          <p class="o_view_nocontent_smiling_face">
+            Add a Batch/serial number
+          </p><p>
+            Lots/Serial numbers help you tracking the path followed by your products.
+            From their traceability report you will see the full history of their use, as well as their composition.
+          </p>
+        </field>
+    </record>
+
+    <menuitem action="stock.action_production_lot_form" id="menu_action_production_lot_form"
+        parent="stock.menu_stock_inventory_control" groups="stock.group_production_lot"
+        sequence="101" name="Batch/Serial Numbers"/>
+
+    <menuitem id="mrp.menu_mrp_traceability"
+          name="Batch/Serial Numbers"
+          parent="mrp.menu_mrp_bom"
+          action="stock.action_production_lot_form"
+          groups="stock.group_production_lot"
+          sequence="15"/>
+
+    <menuitem 
+        id="quality_control.quality_control_menu_traceability"
+        name="Batch/Serial Numbers"
+        action="stock.action_production_lot_form"
+        parent="quality_control.quality_control_menu_product"
+        groups="stock.group_production_lot"
+        sequence="15"/>
+</odoo>

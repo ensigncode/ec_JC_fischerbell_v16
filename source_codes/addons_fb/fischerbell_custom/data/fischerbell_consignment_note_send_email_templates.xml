@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+		<record id="fischerbell_consignment_note_template_email" model="mail.template">
+			<field name="name">Send: Consignment Note</field>
+			<field name="model_id" ref="fischerbell_custom.model_mrp_production"/>
+			<field name="subject">Consignment Note of {{ object.name }}</field>
+			<field name="partner_to">{{ object.partner_id.id }}</field>
+			<field name="body_html" type="html">
+				<div>
+					<p>
+						<p>Hello,</p>
+						<p>Here is the consignment note for  <t t-if="object.name" t-out="object.name or ''"/> 
+							Plase finish the manufacute in <t t-if="object.consignment_period_id" t-out="object.consignment_period_id.name or ''"/> and deliver at <t t-if="object.delivery_date" t-out="object.delivery_date.strftime('%d %b %Y') or ''"/>
+						</p>
+						<p>Do not hesitate to contact us if you have any questions.
+						Thank you!</p>
+						<br/><br/>
+
+						<p>Best regards,</p>
+						<p><t t-out="object.user_id.name or ''"/></p><br/>
+					</p>
+				</div>
+			</field>
+		</record>
+	</data>
+</odoo>

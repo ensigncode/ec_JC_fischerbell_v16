@@ -1,0 +1,64 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<odoo>
+    <record id="fischerbell_delivery_route_tree_view" model="ir.ui.view">
+        <field name="name">fischerbell.delivery.route.tree</field>
+        <field name="model">fischerbell.delivery.route</field>
+        <field name="type">tree</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name" string="Route"/>
+            </tree>
+        </field>
+    </record>
+
+
+    <record id="fischerbell_delivery_route_form_view" model="ir.ui.view">
+        <field name="name">fischerbell.delivery.route.form</field>
+        <field name="model">fischerbell.delivery.route</field>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name" string="Route" required="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Postal Code">
+                            <field name="zone_line_ids">
+                                <tree editable="bottom">
+                                    <field name="name" string="Code"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+
+    <record id="fischerbell_custom_delivery_route_action" model="ir.actions.act_window">
+        <field name="res_model">fischerbell.delivery.route</field>
+        <field name="name">Delivery Route</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{}</field>
+        <field name="domain">[]</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a new Delivery Route
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="menu_deliery_route" 
+    name="Delivery Route" 
+    parent="sale.menu_sale_config"
+    action="fischerbell_custom.fischerbell_custom_delivery_route_action"
+    />
+
+
+
+
+</odoo>

@@ -1,0 +1,273 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<odoo>
+    <record id="fischerbell_view_order_form" model="ir.ui.view">
+        <field name="name">fischerbell.sale.order.form</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="priority">17</field>
+        <field name="arch" type="xml">
+            <xpath expr="//group[@name='sale_header']//group[@name='order_details']//field[@name='payment_term_id']" position="after">
+                <field name="reference" invisible="1"/>
+            </xpath>
+            <xpath expr="//page[@name='other_information']//group//group[@name='sale_info']//field[@name='invoice_status']" position="before">"
+                <field name="journal_id" domain="[('type','in',['bank','cash'])]"/>
+            </xpath>
+            <xpath expr="//page[@name='order_lines']//group[@name='note_group']//group//field[@name='note']" position="replace">
+                <field colspan="2" name="terms_and_conditions" nolabel="1" placeholder="Terms and conditions..."/>
+            </xpath>
+            <xpath expr="//field[@name='partner_id']" position="after">
+                <field name="customer_code" readonly="1"/>
+            </xpath>
+            <xpath expr="//field[@name='partner_invoice_id']" position="before">
+                <field name="attn_to"/>
+                <field name="contact_person_id" options="{'no_create_edit': True, 'no_create': True}" domain="[('is_company','=',False)]"/>
+                <field name="user" invisible="1"/>
+                <field name="today" invisible="1"/>
+                <field name="purchase_ref" invisible="1"/>
+                <field name="procurement_group_id" invisible="1"/>
+            </xpath>
+            <xpath expr="//field[@name='partner_invoice_id']" position="replace">
+                <field name="partner_invoice_id" context="{'default_type':'invoice', 'show_address': 1}" options="{&quot;always_reload&quot;: True}" readonly="1"/>
+            </xpath>
+            <xpath expr="//field[@name='partner_shipping_id']" position="before">
+                <field name="check_partner_address" invisible="1"/>
+                <div attrs="{'invisible': [('check_partner_address','=',False)]}">
+                    <label for="partner_invoice_address" string="" attrs="{'invisible': [('check_partner_address','=',False)]}"/>
+                </div>
+                <field name="partner_invoice_address" nolabel="1" attrs="{'invisible': [('check_partner_address','=',False)]}" readonly="1"/>
+            </xpath>
+            <xpath expr="//field[@name='order_line']//tree//field[@name='product_id']" position="after">
+                <field name="customer_sku"/>
+            </xpath>
+            <xpath expr="//field[@name='order_line']//tree//field[@name='product_template_id']" position="after">
+                <field name="customer_id" invisible="1"/>
+                <field name="product_code"/>
+                <field name="bp_code" optional="hide"/>
+            </xpath>
+            <xpath expr="//field[@name='partner_shipping_id']" position="replace">
+                <field name="partner_shipping_id" context="{'default_type':'delivery', 'show_address': 1}" options="{&quot;always_reload&quot;: True}" readonly="1"/>
+            </xpath>
+            <xpath expr="//group[@name='sale_header']//group[@name='order_details']//field[@name='payment_term_id']" position="after">
+                <field name="type"/>
+                <field name="partner_note"/>
+                <field name="len_note" invisible="1"/>
+            </xpath>
+            <xpath expr="//button[@name='action_quotation_send']" position="before">
+                <button name="create_exchange_order" type="object" string="Create Exchange Order" attrs="{'invisible':['|',('state','in',['draft','done','waiting_approval']),('type','not in','sale')]}" />
+                <button name="create_loan_orders" type="object" string="Create Loan Order" attrs="{'invisible':['|',('state','in',['draft','done','waiting_approval']),('type','not in','sale')]}" />
+                <button name="create_replacement_orders" type="object" string="Create Replacement Order" attrs="{'invisible':['|',('state','in',['draft','done','waiting_approval']),('type','not in','sale')]}" />
+                <field name="approval_state" invisible="1"/>
+                <button name="action_to_approve" type="object" string="Approve" attrs="{'invisible': [('approval_state','!=','waiting_approval')]}" class="btn-primary"/>
+                <button name="action_to_reject" type="object" string="Reject" attrs="{'invisible': [('approval_state','!=','waiting_approval')]}" class="btn-primary"/>
+            </xpath>
+            <xpath expr="//field[@name='validity_date']" position="after">
+                <field name="sale_id" attrs="{'invisible': [('type','not in',['exchange','loan','replacement'])]}" string="Sale Order"/>
+            </xpath>
+            <xpath expr="//button[@name='action_view_invoice']" position="after">
+                <button type="object" name="action_view_exchange_order" class="oe_stat_button" icon="fa-exchange" attrs="{'invisible':['|',('exchange_order_count', '=', 0),('type','not in','sale')]}">
+                    <field name="exchange_order_ids" invisible="1" />
+                    <field name="exchange_order_count" widget="statinfo" string="Exchange Order" />
+                </button>
+                <button type="object" name="action_view_loan_order" class="oe_stat_button" icon="fa-pencil-square-o" attrs="{'invisible':['|',('loan_order_count', '=', 0),('type','not in','sale')]}">
+                    <field name="loan_ids" invisible="1" />
+                    <field name="loan_order_count" widget="statinfo" string="Loan Order" />
+                </button>
+                <button type="object" name="action_view_replacement_order" class="oe_stat_button" icon="fa-retweet" attrs="{'invisible':['|',('replacement_order_count', '=', 0),('type','not in','sale')]}">
+                    <field name="replacement_order_ids" invisible="1" />
+                    <field name="replacement_order_count" widget="statinfo" string="Replacement Order" />
+                </button>
+            </xpath>
+            <xpath expr="//group[@name='sale_header']//group[@name='order_details']//field[@name='payment_term_id']" position="replace">
+                <field name="payment_term_id" options="{'no_open':True,'no_create': True}" attrs="{'invisible': [('type','=','loan')]}"/>
+                <field name="payment_term_id" options="{'no_open':True,'no_create': True}" string="Temporary Loan Period" attrs="{'invisible': [('type','!=','loan')]}"/>
+            </xpath>
+            <xpath expr="//field[@name='order_line']//tree//field[@name='customer_lead']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='order_line']//form//group//group//label[@for='customer_lead']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='order_line']//form//group//group//div[@name='lead']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='order_line']//tree//field[@name='customer_lead']" position="after">
+                <field name="lead_time_stock" optional="hide" string="Lead Time"/>
+            </xpath>
+            <xpath expr="//field[@name='order_line']//form//group//group//div[@name='lead']" position="after">
+                <label for="lead_time_stock"/>
+                <div>
+                    <field name="lead_time_stock" string="Lead Time"/>
+                </div>
+            </xpath>
+            <xpath expr="//page[@name='other_information']//group//group//field[@name='client_order_ref']" position="after">
+                <field name="approval_state" widget="badge" decoration-danger="approval_state == 'reject'" decoration-warning="approval_state == 'waiting_approval'" decoration-success="approval_state == 'approved'" decoration-info="approval_state == 'no'" readonly="1"/>
+            </xpath>
+            <xpath expr="//field[@name='order_line']//tree//field[@name='name']" position="after">
+                <field name="terms_and_condition_ids" widget="many2many_tags" />
+            </xpath>
+            <!-- <xpath expr="//field[@name='partner_id']" position="attributes">
+                <attribute name="domain">[('company_type','=','person'),('type','!=','private'),('company_id','in',[False,company_id])]</attribute>                
+            </xpath> -->
+        </field>
+    </record>
+
+    <record id="inherit_view_sales_order_filter" model="ir.ui.view">
+        <field name="name">view.sales.order.filter</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_sales_order_filter"/>
+        <field name="arch" type="xml">
+            <xpath expr="//search" position="inside">
+                <field name="order_line" string="SKU" filter_domain="[('order_line.product_code', 'ilike', self)]"/>
+                <field name="customer_code" string="Customer Code" />
+                <field name="terms_and_conditions" string="Terms and Conditions" />
+                <field name="company_id" string="Company" />
+            </xpath>
+        </field>
+    </record>
+
+    <record id="fischerbell_sale_order_inherited_form_purchase" model="ir.ui.view">
+        <field name="name">fischerbell.sale.order.inherited.form.purchase</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale_purchase.sale_order_inherited_form_purchase" />
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='button_box']//button[@name='action_view_purchase_orders']" position="replace">
+                <button class="oe_stat_button" name="action_view_purchase_order" type="object" icon="fa-credit-card" groups='purchase.group_purchase_user' attrs="{'invisible': [('purchase_order_count', '=', 0)]}">
+                    <div class="o_field_widget o_stat_info">
+                        <span class="o_stat_value">
+                            <field name="purchase_order_count" />
+                        </span>
+                        <span class="o_stat_text">Purchase</span>
+                    </div>
+                </button>
+            </xpath>
+        </field>
+    </record>
+    <record id="sale_temporal.sale_subscription_order_view_form" model="ir.ui.view">
+        <field name="name">sale.subscription.order.form</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <page name="customer_signature" position="after">
+                <page string="Special Remark" name="notes">
+                    <field name="internal_note" nolabel="1" placeholder="Special Remark...."/>
+                </page>
+            </page>
+        </field>
+    </record>
+    <record id="fischerbell_view_order_form_inherit_sale_stock" model="ir.ui.view">
+        <field name="name">fischerbell.sale.order.form.sale.stock</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale_stock.view_order_form_inherit_sale_stock"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='delivery_status']" position="after">
+                <field name="delivery_type" required="1"/>
+                <field name="route_id" readonly="1" force_save="1" options="{'no_create_edit': True, 'no_create':True, 'no_open':True}"/>
+            </xpath>
+        </field>
+    </record>
+    <record id="fischerbell_sales_view_order_tree" model="ir.ui.view">
+        <field name="name">fischerbell.sale.order.tree</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_tree" />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='state']" position="after">
+                <field name="approval_state" widget="badge" decoration-danger="approval_state == 'reject'" decoration-warning="approval_state == 'waiting_approval'" decoration-success="approval_state == 'approved'" decoration-info="approval_state == 'no'" />
+            </xpath>
+        </field>
+    </record>
+    <record id="fischerbell_view_quotation_tree" model="ir.ui.view">
+        <field name="name">fischerbell.sale.order.tree</field>
+        <field name="model">sale.order</field>
+        <field name="priority">4</field>
+        <field name="inherit_id" ref="sale.view_quotation_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='state']" position="after">
+                <field name="approval_state" widget="badge" decoration-danger="approval_state == 'reject'" decoration-warning="approval_state == 'waiting_approval'" decoration-success="approval_state == 'approved'" decoration-info="approval_state == 'no'" />
+            </xpath>
+        </field>
+    </record>
+    <record id="fischerbell_loan_order" model="ir.actions.act_window">
+        <field name="name">Loan Orders</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">sale.order</field>
+        <field name="view_mode">tree,kanban,form,pivot,graph,activity</field>
+        <field name="search_view_id" ref="sale.sale_order_view_search_inherit_sale" />
+        <field name="context">{'default_type': 'loan'}</field>
+        <field name="domain">[('type', '=', 'loan')]</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a new loan orders
+            </p>
+        </field>
+    </record>
+    <menuitem id="menu_loan_orders"
+        action="fischerbell_loan_order"
+        parent="sale.sale_order_menu"
+        sequence="21" groups="sales_team.group_sale_salesman" />
+    <record id="fischerbell_exchange_order" model="ir.actions.act_window">
+        <field name="name">Exchange Orders</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">sale.order</field>
+        <field name="view_mode">tree,kanban,form,pivot,graph,activity</field>
+        <field name="search_view_id" ref="sale.sale_order_view_search_inherit_sale" />
+        <field name="context">{'default_type': 'exchange'}</field>
+        <field name="domain">[('type', '=', 'exchange')]</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a new exchange orders
+            </p>
+        </field>
+    </record>
+    <menuitem id="menu_exchange_orders"
+        action="fischerbell_exchange_order"
+        parent="sale.sale_order_menu"
+        sequence="22" groups="sales_team.group_sale_salesman" />
+    <record id="fischerbell_replacement_order" model="ir.actions.act_window">
+        <field name="name">Replacement Orders</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">sale.order</field>
+        <field name="view_mode">tree,kanban,form,pivot,graph,activity</field>
+        <field name="search_view_id" ref="sale.sale_order_view_search_inherit_sale" />
+        <field name="context">{'default_type': 'replacement'}</field>
+        <field name="domain">[('type', '=', 'replacement')]</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a new replacement orders
+            </p>
+        </field>
+    </record>
+    <menuitem id="menu_replacement_orders"
+        action="fischerbell_replacement_order"
+        parent="sale.sale_order_menu"
+        sequence="23" groups="sales_team.group_sale_salesman" />
+    <record id="fischerbell_action_order_report_all" model="ir.actions.act_window">
+        <field name="name">Sales Analysis</field>
+        <field name="res_model">sale.report</field>
+        <field name="view_mode">graph,pivot</field>
+        <field name="view_id"></field>
+        <field name="search_view_id" ref="sale.view_order_product_search"/>
+        <field name="context">{'search_default_Sales':1, 'group_by_no_leaf':1,'group_by':[]}</field>
+        <field name="help">This report performs analysis on your quotations and sales orders. Analysis check your sales revenues and sort it by different group criteria (salesman, partner, product, etc.) Use this report to perform analysis on sales not having invoiced yet. If you want to analyse your turnover, you should use the Invoice Analysis report in the Accounting application.</field>
+    </record>
+    <menuitem id="fischerbell_menu_sale_report"
+        name="Reporting"
+        action="fischerbell_custom.fischerbell_action_order_report_all"
+        groups="sales_team.group_sale_manager"
+        parent="sale.menu_sale_report"
+        sequence="40"/>
+    <record id="action_all_report_loan_item" model="ir.actions.act_window">
+        <field name="name">Loan Items</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">report.loan.item</field>
+        <field name="view_mode">form</field>
+        <field name="context">{}</field>
+        <field name="domain">[]</field>
+        <field name="target">new</field>
+    </record>
+    <menuitem id="menu_sale_loan_item_report"
+        name="Loan Items"
+        action="fischerbell_custom.action_all_report_loan_item"
+        groups="sales_team.group_sale_salesman"
+        parent="sale.menu_sale_report"
+        sequence="41"/>
+</odoo>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<record id="fischerbell_wizard_all_report_loan_item_form" model="ir.ui.view">
+		<field name="name">fischerbell.wizard.all.report.loan.item.form</field>
+		<field name="model">report.loan.item</field>
+		<field name="arch" type="xml">
+			<form String="Report Loan Items">
+				<sheet>
+					<group>
+						<group>
+							<field name="start_date" required="1"/>
+						</group>
+						<group>
+							<field name="end_date" required="1"/>
+						</group>
+					</group>
+				</sheet>
+				<footer>
+					<button name="print_loan_item" string="Print" type="object" class="btn-primary"/>
+					<button string="Cancel" class="btn-default" special="cancel"/>
+				</footer>
+			</form>
+		</field>
+	</record>
+</odoo>

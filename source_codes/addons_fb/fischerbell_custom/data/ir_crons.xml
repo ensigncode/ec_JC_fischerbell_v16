@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <data>
+    
+        <record id="order_followup_cron" model="ir.cron">
+            <field name="name">Set First Followup Date In Quotation</field>
+            <field name="model_id" ref="sale.model_sale_order"/>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+            <field name="state">code</field>
+            <field name="code">model.cron_set_followup_date()</field>
+        </record>
+    
+        <record id="order_sec_followup_cron" model="ir.cron">
+            <field name="name">Set Sec Followup Date In Quotation</field>
+            <field name="model_id" ref="sale.model_sale_order"/>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+            <field name="state">code</field>
+            <field name="code">model.cron_set_sec_followup_date()</field>
+        </record>
+    
+    </data>
+    
+
+</odoo>

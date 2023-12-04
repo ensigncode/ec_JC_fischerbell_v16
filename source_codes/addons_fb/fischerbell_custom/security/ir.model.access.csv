@@ -1,0 +1,15 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_fischerbell_product_brand,fischerbell.product.brand,model_fischerbell_product_brand,,1,1,1,1
+access_fischerbell_sale_terms_and_conditions,fischerbell.sale.terms.and.conditions,model_fischerbell_sale_terms_and_conditions,,1,1,1,1
+access_fischerbell_product_terms_and_conditions,fischerbell.product.terms.and.conditions,model_fischerbell_product_terms_and_conditions,,1,1,1,1
+access_report_loan_item,report.loan.item,model_report_loan_item,,1,1,1,1
+access_report_statement_of_account,report.statement.of.account,model_report_statement_of_account,,1,1,1,1
+access_customer_sku,customer.sku,model_customer_sku,,1,1,1,1
+access_fischerbell_user_training,fischerbell.user.training,model_fischerbell_user_training,,1,1,1,1
+access_fischerbell_manufacture_lot,fischerbell.manufacture.lot,model_fischerbell_manufacture_lot,,1,1,1,1
+access_fischerbell_manufacture_lot_line,fischerbell.manufacture.lot.line,model_fischerbell_manufacture_lot_line,,1,1,1,1
+access_fischerbell_configuration_note,fischerbell.configuration.note,model_fischerbell_configuration_note,,1,1,1,1
+access_fischerbell_delivery_route,fischerbell.delivery.route,model_fischerbell_delivery_route,,1,1,1,1
+access_fischerbell_delivery_route_line,fischerbell.delivery.route.line,model_fischerbell_delivery_route_line,,1,1,1,1
+access_download_report_wizard,download.report.wizard,model_download_report_wizard,,1,1,1,1
+access_weekly_report_wizard,weekly.report.wizard,model_weekly_report_wizard,,1,1,1,1

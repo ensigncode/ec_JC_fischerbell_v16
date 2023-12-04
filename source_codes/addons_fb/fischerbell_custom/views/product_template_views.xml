@@ -1,0 +1,196 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<odoo>
+    <record id="fischerbell_product_template_form_view_inherit" model="ir.ui.view">
+        <field name="name">fischerbell.product.template.form.view.inherit</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_form_view" />
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='general_information']//group//group[@name='group_standard_price']//div[@name='pricing']" position="after">
+                <field name="min_price" required="1"/>
+                <field name="max_price" required="1"/>
+            </xpath>
+            <xpath expr="//page[@name='general_information']//group//group[@name='group_general']//field[@name='detailed_type']" position="after">
+                <field name="product_brand_id"/>
+                <field name="use_bp_code" invisible="1"/>
+                <field name="use_product_batch_number" invisible="1"/>
+                <field name="bp_code" attrs="{'invisible': [('use_bp_code','=',False)]}"/>
+                <field name="batch_number" invisible="1"/>
+                <field name="model" string="Model#"/>
+            </xpath>
+            <xpath expr="//page[@name='sales']" position="before">
+                <field name="use_customer_sku" invisible="1"/>
+                <page string="Customer SKU" attrs="{'invisible': [('use_customer_sku','=',False)]}">
+                    <field name="customer_sku_ids">
+                        <tree editable="bottom">
+                            <field name="product_tmpl_id" invisible="1"/>
+                            <field name="customer_id"/>
+                            <field name="customer_sku"/>
+                        </tree>
+                    </field>
+                </page>
+            </xpath>
+            <xpath expr="//page[@name='purchase']" position="before">
+                <page string="Sale History">
+                    <field name="sales_line_ids">
+                        <tree string="Sale History">
+                            <field name="create_date" string="Last Sales" />
+                            <field name="order_partner_id" string="Customer" />
+                            <field name="price_total" string="Amount" />
+                            <field name="order_id" string="Sale Order" />
+                        </tree>
+                    </field>
+                </page>
+            </xpath>
+            <xpath expr="//page[@name='purchase']" position="after">
+                <page string="Purchase History">
+                    <field name="purchase_line_ids">
+                        <tree string="Purchase History">
+                            <field name="date_order" string="Last Purchase" />
+                            <field name="partner_id" string="Supplier" />
+                            <field name="price_unit"/>
+                            <field name="price_total" string="Amount" />
+                            <field name="order_id" string="Purchase Order" />
+                        </tree>
+                    </field>
+                </page>
+            </xpath>
+        </field>
+    </record>
+    <record id="product.product_template_only_form_view" model="ir.ui.view">
+        <field name="name">product.template.product.form</field>
+        <field name="model">product.template</field>
+        <field name="mode">primary</field>
+        <field name="priority" eval="8" />
+        <field name="inherit_id" ref="product.product_template_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="attributes">
+                <attribute name="name">Product Template</attribute>
+            </xpath>
+            <field name="categ_id" position="after">
+                <field name="default_code" attrs="{'invisible': [('product_variant_count', '>', 1)]}"/>
+                <field name="barcode" attrs="{'invisible': [('product_variant_count', '>', 1)]}"/>
+                <field name="qr_code_image" widget="image" options="{'size': [80, 80]}" attrs="{'invisible': [('product_variant_count', '>', 1)]}"/>
+            </field>
+            <div name="button_box" position="inside">
+                <button name="%(product.product_variant_action)d" type="action"
+                    icon="fa-sitemap" class="oe_stat_button"
+                    attrs="{'invisible': [('product_variant_count', '&lt;=', 1)]}"
+                    groups="product.group_product_variant">
+                    <field string="Variants" name="product_variant_count" widget="statinfo" />
+                </button>
+            </div>
+            <xpath expr="//page[@name='general_information']" position="after">
+                <page name="variants" string="Attributes &amp; Variants" groups="product.group_product_variant">
+                    <field name="attribute_line_ids" widget="one2many" context="{'show_attribute': False}">
+                        <tree string="Variants" editable="bottom" decoration-info="value_count &lt;= 1">
+                            <field name="value_count" invisible="1"/>
+                            <field name="attribute_id" attrs="{'readonly': [('id', '!=', False)]}"/>
+                            <field name="value_ids" widget="many2many_tags" options="{'no_create_edit': True, 'color_field': 'color'}" context="{'default_attribute_id': attribute_id, 'show_attribute': False}"/>
+                            <button string="Configure" class="float-end btn-secondary"
+                                type="object" name="action_open_attribute_values"
+                                groups="product.group_product_variant"/>
+                        </tree>
+                    </field>
+                    <p class="oe_grey oe_edit_only">
+                        <strong>Warning</strong>: adding or deleting attributes
+                        will delete and recreate existing variants and lead
+                        to the loss of their possible customizations.
+                    </p>
+                </page>
+            </xpath>
+        </field>
+    </record>
+    <record id="product.product_normal_form_view" model="ir.ui.view">
+        <field name="name">product.product.form</field>
+        <field name="model">product.product</field>
+        <field name="mode">primary</field>
+        <field eval="7" name="priority"/>
+        <field name="inherit_id" ref="product.product_template_form_view"/>
+        <field name="arch" type="xml">
+            <form position="attributes">
+                <attribute name="string">Product Variant</attribute>
+                <attribute name="duplicate">false</attribute>
+            </form>
+            <xpath expr="//div[@name='standard_price_uom']" position="after">
+                <field name="default_code"/>
+                <field name="barcode"/>
+                <field name="qr_code_image" widget="image" options="{'size': [80, 80]}"/>
+            </xpath>
+            <xpath expr="//field[@name='priority']" position="attributes">
+                <attribute name="readonly">1</attribute>
+            </xpath>
+            <field name="list_price" position="attributes">
+                <attribute name="attrs">{'readonly': [('product_variant_count', '&gt;', 1)]}</attribute>
+                <attribute name="invisible">1</attribute>
+            </field>
+            <xpath expr="//label[@for='list_price']" position="replace">
+                <label for="lst_price"/>
+            </xpath>
+            <field name="list_price" position="after">
+                <field name="lst_price" class="oe_inline" widget='monetary' options="{'currency_field': 'currency_id', 'field_digits': True}"/>
+            </field>
+            <group name="packaging" position="attributes">
+                <attribute name="attrs">{'invisible': 0}</attribute>
+            </group>
+            <field name="name" position="after">
+                <field name="product_tmpl_id" class="oe_inline" readonly="1" invisible="1" attrs="{'required': [('id', '!=', False)]}"/>
+            </field>
+            <xpath expr="//div[hasclass('oe_title')]" position="inside">
+                <field name="product_template_variant_value_ids" widget="many2many_tags" readonly="1" groups="product.group_product_variant"/>
+            </xpath>
+            <field name="product_tag_ids" position="attributes">
+                <attribute name="options">{'no_open': true}</attribute>
+            </field>
+            <field name="product_tag_ids" position="after">
+                <field name="additional_product_tag_ids" options="{'color_field': 'color', 'no_edit_color': 1}"/>
+            </field>
+        </field>
+    </record>
+    <record id="fischerbell_product_template_view_form_recurring" model="ir.ui.view">
+        <field name="name">fischerbell.sale.subscription.product.template.form.inherit</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="sale_subscription.product_template_view_form_recurring"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='general_information']/group[last()]" position="before">
+                <group string="Terms &amp; Conditions">
+                    <field name="terms_and_condition_ids" nolabel="1" colspan="2">
+                        <tree editable="bottom">
+                            <field name="name" readonly="1"/>
+                            <field name="description" readonly="1"/>
+                        </tree>
+                    </field>
+                </group>
+            </xpath>
+            <xpath expr="//label[@for='recurring_invoice']" position="after">
+                <span class="d-inline-block">
+                    <field name="use_customer_sku"/>
+                    <label for="recurring_invoice" string="Use Customer SKU"/>
+                    <field name="use_bp_code"/>
+                    <label for="use_bp_code" string="Use BP Code"/>
+                    <field name="use_training" invisible="1"/>
+                    <label for="use_training" string="Use For Training" invisible="1"/>
+                </span>
+            </xpath>
+        </field>
+    </record>
+    <record id="fischerbell_product_supplierinfo_tree_view" model="ir.ui.view">
+        <field name="name">fischerbell.product.supplierinfo.tree.view</field>
+        <field name="model">product.supplierinfo</field>
+        <field name="inherit_id" ref="product.product_supplierinfo_tree_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='partner_id']" position="after">
+                <field name="supplier_code"/>
+            </xpath>
+        </field>
+    </record>
+    <record id="fischerbell_product_category_form_view_inherit" model="ir.ui.view">
+        <field name="name">fischerbell.product.category.form.view.inherit</field>
+        <field name="model">product.category</field>
+        <field name="inherit_id" ref="product.product_category_form_view" />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='parent_id']" position="after">
+                <field name="is_training" />
+            </xpath>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,203 @@
+# -*- coding: utf-8 -*-
+# Part of Odoo. See LICENSE file for full copyright and licensing details.
+
+from odoo import api,fields, models
+from odoo.exceptions import UserError, ValidationError
+from datetime import datetime, date
+from dateutil.relativedelta import relativedelta
+import calendar
+
+class AccountMove(models.Model):
+	_inherit = "account.move"
+
+	purchase_order_id = fields.Many2one('purchase.order', 'Purchase Order')
+	move_ids = fields.One2many('account.move','account_move_id','Freight Charge')
+	account_move_id = fields.Many2one('account.move','Bill')
+	move_count = fields.Integer('Move Count', compute="_compute_move_ids")
+	is_freight_charge = fields.Boolean('Is Freight Charge Bill', default=False)
+	sale_id = fields.Many2one('sale.order', 'Sale Order')
+	current_month = fields.Monetary('Current Month', compute="_compute_outstanding_amount", store=True)
+	over_1month = fields.Monetary('Current Month', store=True, compute="_compute_outstanding_amount")
+	over_2month = fields.Monetary('Current Month', store=True, compute="_compute_outstanding_amount")
+	over_3month = fields.Monetary('Current Month', store=True, compute="_compute_outstanding_amount")
+	over_4month = fields.Monetary('Current Month', store=True, compute="_compute_outstanding_amount")
+	total_balance_due = fields.Monetary('Balance Due')
+	user = fields.Many2one('res.users', default=lambda self: self.env.user)
+	today = fields.Datetime('Date and Time', default=datetime.now())
+	amount_undiscounted = fields.Float(
+		string="Amount Before Discount",
+		compute='_compute_amount_undiscounted', digits=0)
+	internal_note = fields.Char('')
+	len_note = fields.Char('Length Internal Notee', compute="_compute_internal_note", store=True)
+	partner_note = fields.Text('Note')
+
+	@api.onchange('partner_id')
+	def _inverse_partner_id(self):
+		super()._inverse_partner_id()
+		for order in self:
+			if order.partner_id:
+				config_note = self.env['fischerbell.configuration.note'].search([
+					('type', '=', 'account'),
+					('partner_ids', 'in', [order.partner_id.id])  # Use a list to compare with a Many2many field
+				], limit=1)
+				order.partner_note = config_note.note
+
+	@api.depends('partner_note')
+	def _compute_internal_note(self):
+		self.len_note = False
+		for inv in self:
+			if inv.partner_note:
+				inv.len_note = len(inv.partner_note)
+			else:
+				inv.len_note = False
+
+	def _compute_amount_undiscounted(self):
+		for order in self:
+			total = 0.0
+			for line in order.invoice_line_ids:
+				total += (line.price_subtotal * 100)/(100-line.discount) if line.discount != 100 else (line.price_unit * line.quantity)
+			order.amount_undiscounted = total
+
+
+	@api.depends('state','payment_state')
+	def _compute_outstanding_amount(self):
+		self.current_month = False
+		self.over_1month = False
+		self.over_2month = False
+		self.over_3month = False
+		self.over_4month = False
+		month = False
+		over_1month = False
+		over_2month = False
+		over_3month = False
+		over_4month = False
+		outstanding_amount = 0
+		outstanding_amount1 = 0
+		outstanding_amount2 = 0
+		outstanding_amount3 = 0
+		outstanding_amount4 = 0
+		invoices = False
+		for inv in self:
+			if inv.state == 'posted' and inv.payment_state not in ['in_payment','paid']:
+				date_current = inv.invoice_date_due
+				month_current = datetime.strftime(date_current,'%m')
+				year_current = datetime.strftime(date_current,'%Y')
+				data = calendar.monthrange(int(year_current),int(month_current))
+				datestart = datetime.strptime(year_current+'-'+month_current+'-01','%Y-%m-%d')
+				enddate = datetime.strptime(year_current+'-'+month_current+'-'+"%02d" % (data[1]),'%Y-%m-%d')
+
+				domain = [
+						('account_id', '=', self.env.ref('l10n_generic_coa.1_receivable').id),
+						('move_id.state', '=', 'posted'),
+						('partner_id', '=', inv.partner_id.id),
+						('reconciled', '=', False),
+						('balance', '<', 0.0),
+						'|', ('amount_residual', '!=', 0.0), ('amount_residual_currency', '!=', 0.0),
+					]
+				for line in self.env['account.move.line'].search(domain):
+					date = line.move_id.date.strftime('%m')
+
+					#Current Month
+					inv_month = month_current
+
+					# Current 1 Month
+					current_1month = int(month_current) - 1
+					if len(str(current_1month)) == 1:
+						over_1month = str(current_1month).zfill(2)
+					else:
+						over_1month = current_1month
+
+
+					# Current 2 Month
+					current_2month = int(month_current) - 2
+					if len(str(current_2month)) == 1:
+						over_2month = str(current_2month).zfill(2)
+					else:
+						over_2month = current_2month
+
+
+					# Current 3 Month
+					current_3month = int(month_current) - 3
+					if len(str(current_3month)) == 1:
+						over_3month = str(current_3month).zfill(2)
+					else:
+						over_3month = current_3month
+
+
+					# Current 4 Month
+					current_4month = int(month_current) - 4
+					if len(str(current_4month)) == 1:
+						over_4month = str(current_4month).zfill(2)
+					else:
+						over_4month = current_4month
+
+					if line.date and line.date.strftime('%m') == inv_month:
+						outstanding_amount += line.amount_residual_currency
+
+					if line.date and line.date.strftime('%m') == over_1month:
+						outstanding_amount1 += line.amount_residual_currency
+
+					if line.date and line.date.strftime('%m') == over_2month:
+						outstanding_amount2 += line.amount_residual_currency
+
+					if line.date and line.date.strftime('%m') == over_3month:
+						outstanding_amount3 += line.amount_residual_currency
+
+					if line.date and line.date.strftime('%m') == over_4month:
+						outstanding_amount4 += line.amount_residual_currency
+
+			invoices = self.env['account.move'].search([('partner_id','=',inv.partner_id.id)])
+
+		if invoices:
+			for invoice in invoices:
+				invoice.current_month = abs(outstanding_amount)
+				invoice.over_1month = abs(outstanding_amount + outstanding_amount1)
+				invoice.over_2month = abs(outstanding_amount + outstanding_amount1 + outstanding_amount2)
+				invoice.over_3month = abs(outstanding_amount + outstanding_amount1 + outstanding_amount2 + outstanding_amount3)
+				invoice.over_4month = abs(outstanding_amount + outstanding_amount1 + outstanding_amount2 + outstanding_amount3 + outstanding_amount4)
+
+
+
+	def create_freight_charge(self):
+		product_id = int(self.env['ir.config_parameter'].sudo().get_param('fischerbell_custom.freight_charge_id'))
+		for bill in self:
+			bill_state = bill.move_ids.filtered(lambda x: x.state not in 'cancel')
+			if bill.move_ids and bill_state:
+				raise UserError("The vendor bills already have the freight charges. Please cancel the first freight charge bill to create a new one.")
+			
+			if product_id:
+				move = bill.copy()
+				move.write({'account_move_id': bill.id, 'is_freight_charge': True, 'ref': bill.name})
+				move.update({'invoice_line_ids': False})
+				move.update({'invoice_line_ids': [(0,0,{'product_id': product_id})]})
+			else:
+				raise UserError("There is no product for Freight Charge. Please check your configuration.")
+
+		return
+
+
+	def action_view_freight_charge(self):
+		self.ensure_one()
+		return {
+			'type': 'ir.actions.act_window',
+			'name': 'Freight Charges',
+			'view_mode': 'tree,form',
+			'res_model': 'account.move',
+			'domain': [('account_move_id', '=', self.id),('move_type','=','in_invoice'),('is_freight_charge','=',True)],
+			'context': {'move_type': 'in_invoice', 'form_view_ref': 'account.view_move_form', 'tree_view_ref':'account.view_in_invoice_bill_tree'}
+		}
+
+
+	@api.depends('move_ids')
+	def _compute_move_ids(self):
+		for bill in self:
+			move_ids = list(filter(lambda x: (x.move_type == 'in_invoice' and x.account_move_id == bill.id and x.is_freight_charge == True, x.ref == bill.name), bill.move_ids))
+			bill.move_count = len(move_ids)
+
+
+	def _get_name_invoice_report(self):
+		""" This method need to be inherit by the localizations if they want to print a custom invoice report instead of
+		the default one. For example please review the l10n_ar module """
+		self.ensure_one()
+		return 'fischerbell_custom.fischerbell_report_invoice_document'
+

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<record id="fischerbell_wizard_report_statement_of_account_form" model="ir.ui.view">
+		<field name="name">fischerbell.wizard.report.statement.of.account.form</field>
+		<field name="model">report.statement.of.account</field>
+		<field name="arch" type="xml">
+			<form String="Report Statement Of Account">
+				<sheet>
+					<group>
+						<group>
+							<field name="partner_id" required="1"/>
+						</group>
+						<group>
+							<field name="start_date" required="1"/>
+							<field name="end_date" required="1"/>
+						</group>
+					</group>
+				</sheet>
+				<footer>
+					<button name="print_statement_of_account" string="Print" type="object" class="btn-primary"/>
+					<button string="Cancel" class="btn-default" special="cancel"/>
+				</footer>
+			</form>
+		</field>
+	</record>
+
+    <record id="action_account_report_statement_of_account" model="ir.actions.act_window">
+        <field name="name">Statement Of Account</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">report.statement.of.account</field>
+        <field name="view_mode">form</field>
+        <field name="context">{}</field>
+        <field name="domain">[]</field>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem id="menu_statement_of_account_report"
+        name="Statement Of Account"
+        action="fischerbell_custom.action_account_report_statement_of_account"
+        parent="account.account_reports_legal_statements_menu"/>
+</odoo>

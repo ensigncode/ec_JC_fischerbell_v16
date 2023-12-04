@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="report_custom">
+            <t t-call="report.report_document">
+                <t t-foreach="docs" t-as="doc">
+                    <t t-call="fischerbell_custom.fischerbell_report_deliveryorder_document" />
+                </t>
+            </t>
+            <t t-call="report.report_document">
+                <t t-foreach="docs" t-as="doc">
+                    <t t-call="fischerbell_custom.fischerbell_report_deliveryorder_rx_frame_document" />
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>

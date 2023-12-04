@@ -1,0 +1,49 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<odoo>
+	<record id="fischerbell_purchase_order_form_inherit" model="ir.ui.view">
+		<field name="name">fischerbell.purchase.order.form.inherit</field>
+		<field name="model">purchase.order</field>
+		<field name="inherit_id" ref="purchase.purchase_order_form"/>
+		<field name="arch" type="xml">
+			<xpath expr="//group//group//field[@name='partner_id']" position="after">
+				<field name="supplier_code"/>
+			</xpath>
+			<xpath expr="//field[@name='order_line']//field[@name='name']" position="after">
+				<field name="comments" sting="Comments"/>
+				<field name="customer_id" />
+				<field name="customer_sku"/>
+				<field name="manufacture_lot_id"/>
+				<field name="batch_number" invisible="1"/>
+				<field name="lot_id"/>
+				<field name="sale_line_id" invisible="1"/>
+			</xpath>
+			<xpath expr="//notebook//page[@name='purchase_delivery_invoice']" position="after">
+				<page string="Special Remark">
+					<field name="internal_note" nolabel="1" placeholder="Special Remark...."/>
+				</page>
+			</xpath>
+			<xpath expr="//page[@name='purchase_delivery_invoice']//group//group[@name='invoice_info']//field[@name='invoice_status']" position="before">
+				<field name="journal_id" domain="[('type','in',['cash','bank'])]"/>
+			</xpath>
+			<xpath expr="//page[@name='purchase_delivery_invoice']//group//group[@name='other_info']//field[@name='user_id']" position="after">
+				<field name="purchase_team_id"/>
+			</xpath>
+			<xpath expr="//page[@name='products']//group//group//field[@name='notes']" position="after">
+				<field name="po_comments" />
+				<field name="is_default_terms" invisible="1"/>
+				<button colspan="2" name="action_is_default_terms_purchase" string="Set Defaults" type="object"/>
+			</xpath>
+		</field>
+	</record>
+
+	<record id="fischerbell_purchase_order_view_form_inherit" model="ir.ui.view">
+        <field name="name">fischerbell.purchase.order.form.inherit</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase_stock.purchase_order_view_form_inherit"/>
+        <field name="arch" type="xml">
+        	<xpath expr="//field[@name='picking_type_id']" position="after">
+        		<field name="partner_note"/>
+        	</xpath>
+        </field>
+    </record>
+</odoo>

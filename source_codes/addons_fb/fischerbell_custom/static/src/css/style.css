@@ -1,0 +1,233 @@
+* {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    letter-spacing: 0;
+}
+
+body {
+    font-size: 13px;
+}
+
+p {
+    margin: 0;
+}
+
+p.terms {
+    font-weight: bold;
+}
+
+h5 {
+    font-weight: bold;
+}
+
+h6 {
+    font-weight: bold;
+    margin-bottom: 0;
+}
+
+table.order-line {
+    width: 100%;
+    margin: 8px 5px 0 5px;
+}
+
+table.order-line thead tr th {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border-top: #000 1px solid;
+    border-bottom: #000 1px solid;
+}
+
+table.order-line tbody tr td {
+    margin-top: 20px;
+}
+
+.product-image {
+    width: 120px;
+}
+
+table thead tr th.amount {
+    padding-right: 15px;
+}
+
+table tbody tr td.amount {
+    padding-right: 15px;
+}
+
+table.table-subtotal {
+    width: 100%;
+    margin-right: -10px;
+}
+
+table.table-gst {
+    width: 100%;
+    margin-right: -10px;
+    border: none;
+}
+
+.table-balance {
+    border-top: #000 1px solid;
+    border-bottom: #000 1px solid;
+}
+
+pre.description-note {
+    font-family: Arial, Helvetica, sans-serif !important;
+    font-style: normal;
+    font-size: 13px;
+    color: black !important;
+    letter-spacing: 0;
+}
+
+.header_wrapper {
+    padding: 0 15px;
+    border-bottom: 2px solid;
+    margin-bottom: 10px;
+}
+
+.logo {
+    width: 25%;
+    margin-bottom: 20px;
+}
+
+.img-qr-code {
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.header_wrapper .row .company-address {
+    width: 67%;
+    padding: 0 5px;
+}
+
+.header_wrapper .row .company-service-info {
+    width: 33%;
+    padding: 0 5px;
+}
+
+.header_wrapper .row .company-logo {
+    width: 33%;
+    text-align: end;
+    padding: 0 5px;
+}
+
+.header_wrapper .row .company-logo h5 .sales-order-number {
+    color: red;
+    margin-left: 20px;
+}
+
+.document-title {
+    border-top: #000 1px solid;
+    border-bottom: #000 1px solid;
+    padding-top: 5px;
+    width: 100%;
+}
+
+.product-image {
+    width: 90%;
+}
+
+.variant-image {
+    margin-top: 20px;
+    width: 60%;
+}
+
+.image-container {
+    vertical-align: top;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.order-line td {
+    vertical-align: top;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.page {
+    margin-top: 10px;
+    padding: 0 15px;
+}
+
+.row .bill-to {
+    width: 33%;
+    padding: 0 5px;
+}
+
+.row .deliver-to {
+    width: 33%;
+    padding: 0 5px;
+}
+
+.row .doc-detail {
+    width: 33%;
+    padding: 0 5px;
+}
+
+.row .review {
+    width: 20%;
+    padding: 0 5px;
+}
+
+.row .qr_code {
+    width: 14%;
+    padding: 0 5px;
+}
+
+.row .remark {
+    width: 65%;
+    margin-right: 5px;
+    margin: 0 5px;
+    font-size: 14px;
+}
+
+.row .subtotal {
+    width: 35%;
+    margin-left: 5px;
+    padding-left: 5px;
+    padding-right: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.address-page {
+    display: flex;
+    flex-direction: row;
+    align-content: space-between;
+}
+
+.address {
+    width: 85%;
+    font-size: 10px;
+    padding-left: 18px;
+}
+
+.do-footer {
+    width: 85%;
+    font-size: 14px;
+}
+
+.page-number {
+    width: 15%;
+}
+
+.signature {
+    margin-top: 75px;
+    min-width: 45%;
+    font-size: 16px;
+}
+
+.border-under {
+    margin-top: 15px;
+    border-bottom: #000 solid 1px;
+}
+
+.page-break {
+    page-break-inside: avoid;
+}
+
+.o_button_icon.fa-minus-square {
+    color: #f12424;
+}
+.o_button_icon.fa-plus-square {
+    color: #94f76c;
+}

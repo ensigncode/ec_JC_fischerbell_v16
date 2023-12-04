@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="action_open_weekly_report_wizard" model="ir.actions.act_window">
+            <field name="name">Weekly Report</field>
+            <field name="res_model">weekly.report.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="fischerbell_custom.weekly_report_wizard_view_form"/>
+            <field name="target">new</field>
+        </record>
+        <menuitem action="action_open_weekly_report_wizard" id="menu_weekly_report" name="Weekly Report" parent="crm.crm_menu_report" />
+    </data>
+</odoo>
