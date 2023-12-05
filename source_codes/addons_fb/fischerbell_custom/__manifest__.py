@@ -66,7 +66,7 @@
         'views/sale_order_views.xml',
         'views/stock_lot_views.xml',
         'views/stock_picking_views.xml',
-        'views/crm_lead_view.xml',
+        # 'views/crm_lead_view.xml',
         
 
         # 'wizard/fischerbell_wizard_report_delivery_with_training.xml',
