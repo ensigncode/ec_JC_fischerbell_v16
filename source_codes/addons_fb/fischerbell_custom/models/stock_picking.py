@@ -47,8 +47,6 @@ class Picking(models.Model):
 	], string='Type Of Purchase', compute="_compute_po_type", store=True)
 	terms_and_conditions = fields.Text('Terms and Conditions')
 	is_default_terms = fields.Boolean('Is Default Terms')
-	request_delivery_date = fields.Datetime("Request Delivery Date")
-	estimated_delivery_date = fields.Datetime("Estimated Delivery Date")
 	# total_qty_line = fields.Float('Total', compute="_compute_total_qty", store=True)
 
 

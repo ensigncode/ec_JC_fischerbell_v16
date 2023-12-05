@@ -92,6 +92,8 @@ class SaleOrder(models.Model):
 	email_to_customer = fields.Datetime(string="Email To Customer")
 	first_followup_date = fields.Datetime(string="First Follow Up")
 	sec_followup_date = fields.Datetime(string="Sec Follow Up")
+	scheduled_delivery_date = fields.Datetime(string="Scheduled Delivery Date")
+	requested_delivery_date = fields.Datetime(string="Requested Delivery Date")
 
 	def _update_approval_state(self):
 		orders = self.env['sale.order'].search([('approval_state','=','no')])
@@ -708,6 +710,20 @@ class SaleOrderLine(models.Model):
 	use_product_batch_number = fields.Boolean('Use Product Batch Number', related="product_template_id.use_product_batch_number")
 	lead_time_stock = fields.Char('Lead Time Stock', compute="_compute_lead_time_stock", store=True)
 	terms_and_condition_ids = fields.Many2many('fischerbell.product.terms.and.conditions', string="Terms & Conditions", related="product_id.terms_and_condition_ids")
+	last_invoice_date = fields.Datetime(string="Last Invoice Date",compute="_compute_get_last_invoice_date")
+	last_invoice_price = fields.Float(string="Last Invoice Price",compute="_compute_get_last_invoice_date")
+
+	def _compute_get_last_invoice_date(self):
+		move_line_obj = self.env['account.move.line']
+		for rec in self:
+			invoice_ids = move_line_obj.search([('product_id','=',rec.product_id.id),('move_id.state','=','posted')]).mapped('move_id')
+			rec.last_invoice_date = False
+			rec.last_invoice_price = False
+			if invoice_ids:
+				last_invoice_date = min(invoice_ids.mapped('create_date'))
+				last_invoice_id = self.env['account.move'].search([('create_date','=',last_invoice_date)])
+				rec.last_invoice_date = last_invoice_id.create_date
+				rec.last_invoice_price = move_line_obj.search([('product_id','=',rec.product_id.id),('move_id','=',last_invoice_id.id)],limit=1).price_unit
 
 	@api.depends('product_template_id.virtual_available')
 	def _compute_lead_time_stock(self):
@@ -737,7 +753,6 @@ class SaleOrderLine(models.Model):
 			self.bp_code = self.product_template_id.bp_code
 		else:
 			self.bp_code = ''
-
 
 
 	@api.onchange('price_unit')

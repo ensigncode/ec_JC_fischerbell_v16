@@ -139,28 +139,28 @@ class WeeklyReportwizard(models.TransientModel):
                 wrksht.cell(row=table_row, column=table_col+6).value = order.team_id.name or ''
                 wrksht.cell(row=table_row, column=table_col+6).alignment = table_header_alignment
 
-                wrksht.cell(row=table_row, column=table_col+7).value = order.reviewed_by.name or ''  # Quotation Review by
+                wrksht.cell(row=table_row, column=table_col+7).value = order.reviewed_by.name or ''
                 wrksht.cell(row=table_row, column=table_col+7).alignment = table_header_alignment
 
-                wrksht.cell(row=table_row, column=table_col+8).value = order.write_uid.name or '' # Submit for Review
+                wrksht.cell(row=table_row, column=table_col+8).value = order.write_uid.name or ''
                 wrksht.cell(row=table_row, column=table_col+8).alignment = table_header_alignment
 
-                wrksht.cell(row=table_row, column=table_col+9).value = order.email_to_customer or ''  # Email date
+                wrksht.cell(row=table_row, column=table_col+9).value = order.email_to_customer or ''
                 wrksht.cell(row=table_row, column=table_col+9).alignment = table_header_alignment
 
-                wrksht.cell(row=table_row, column=table_col+10).value = order.first_followup_date.date() if order.first_followup_date else '' # Follow Up
+                wrksht.cell(row=table_row, column=table_col+10).value = order.first_followup_date.date() if order.first_followup_date else ''
                 wrksht.cell(row=table_row, column=table_col+10).alignment = table_header_alignment
 
-                wrksht.cell(row=table_row, column=table_col+11).value = order.sec_followup_date.date() if order.sec_followup_date else '' # 2nd Follow Up
+                wrksht.cell(row=table_row, column=table_col+11).value = order.sec_followup_date.date() if order.sec_followup_date else ''
                 wrksht.cell(row=table_row, column=table_col+11).alignment = table_header_alignment
 
-                wrksht.cell(row=table_row, column=table_col+12).value = dict(order._fields['state'].selection).get(order.state) or '' # Status
+                wrksht.cell(row=table_row, column=table_col+12).value = dict(order._fields['state'].selection).get(order.state) or ''
                 wrksht.cell(row=table_row, column=table_col+12).alignment = table_header_alignment
 
-                wrksht.cell(row=table_row, column=table_col+13).value = order.opportunity_id.stage_id.name or '' # Win / Lost / Pending
+                wrksht.cell(row=table_row, column=table_col+13).value = order.opportunity_id.stage_id.name or ''
                 wrksht.cell(row=table_row, column=table_col+13).alignment = table_header_alignment
 
-                wrksht.cell(row=table_row, column=table_col+14).value = order.opportunity_id.lost_reason_id.name or '' # Reason for Lost
+                wrksht.cell(row=table_row, column=table_col+14).value = order.opportunity_id.lost_reason_id.name or ''
                 wrksht.cell(row=table_row, column=table_col+14).alignment = table_header_alignment
 
                  

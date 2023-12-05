@@ -110,7 +110,6 @@
             </xpath> -->
         </field>
     </record>
-
     <record id="inherit_view_sales_order_filter" model="ir.ui.view">
         <field name="name">view.sales.order.filter</field>
         <field name="model">sale.order</field>
@@ -124,7 +123,6 @@
             </xpath>
         </field>
     </record>
-
     <record id="fischerbell_sale_order_inherited_form_purchase" model="ir.ui.view">
         <field name="name">fischerbell.sale.order.inherited.form.purchase</field>
         <field name="model">sale.order</field>
@@ -162,6 +160,10 @@
             <xpath expr="//field[@name='delivery_status']" position="after">
                 <field name="delivery_type" required="1"/>
                 <field name="route_id" readonly="1" force_save="1" options="{'no_create_edit': True, 'no_create':True, 'no_open':True}"/>
+            </xpath>
+            <xpath expr="//field[@name='effective_date']" position="before">
+                <field name="scheduled_delivery_date" />
+                <field name="requested_delivery_date" />
             </xpath>
         </field>
     </record>
@@ -240,7 +242,7 @@
         action="fischerbell_replacement_order"
         parent="sale.sale_order_menu"
         sequence="23" groups="sales_team.group_sale_salesman" />
-    <record id="fischerbell_action_order_report_all" model="ir.actions.act_window">
+    <!-- <record id="fischerbell_action_order_report_all" model="ir.actions.act_window">
         <field name="name">Sales Analysis</field>
         <field name="res_model">sale.report</field>
         <field name="view_mode">graph,pivot</field>
@@ -248,6 +250,36 @@
         <field name="search_view_id" ref="sale.view_order_product_search"/>
         <field name="context">{'search_default_Sales':1, 'group_by_no_leaf':1,'group_by':[]}</field>
         <field name="help">This report performs analysis on your quotations and sales orders. Analysis check your sales revenues and sort it by different group criteria (salesman, partner, product, etc.) Use this report to perform analysis on sales not having invoiced yet. If you want to analyse your turnover, you should use the Invoice Analysis report in the Accounting application.</field>
+    </record> -->
+
+    <!-- Custom order line view. -->
+    <record id="sale_order_analysis_report_tree_view" model="ir.ui.view">
+        <field name="name">sale.order.analysis.report.tree.view</field>
+        <field name="model">sale.order.line</field>
+        <field name="arch" type="xml">
+            <tree string="Sales Order Lines" create="false">
+                <field name="order_id"/>
+                <field name="product_id" string="Product"/>
+                <field name="name"/>
+                <field name="salesman_id"/>
+                <field name="product_uom_qty" string="Qty"/>
+                <field name="qty_delivered"/>
+                <field name="qty_invoiced"/>
+                <field name="qty_to_invoice"/>
+                <field name="product_uom" string="Unit of Measure" groups="uom.group_uom"/>
+                <field name="last_invoice_date" />
+                <field name="last_invoice_price" />
+                <field name="price_subtotal" sum="Total" widget="monetary"/>
+                <field name="currency_id" invisible="1"/>
+            </tree>
+        </field>
+    </record>
+    <record id="fischerbell_action_order_report_all" model="ir.actions.act_window">
+        <field name="name">Sales Analysis</field>
+        <field name="res_model">sale.order.line</field>
+        <field name="view_mode">tree</field>
+        <field name="target">current</field>
+        <field name="search_view_id" ref="fischerbell_custom.sale_order_analysis_report_tree_view" />
     </record>
     <menuitem id="fischerbell_menu_sale_report"
         name="Reporting"

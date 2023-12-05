@@ -20,6 +20,8 @@ class PurchaseOrder(models.Model):
 	partner_note = fields.Text('Note')
 	is_default_terms = fields.Boolean('Is Default Terms')
 	po_comments = fields.Char(string="Comments")
+	request_delivery_date = fields.Datetime("Request Delivery Date")
+	estimated_delivery_date = fields.Datetime("Estimated Delivery Date")
 
 	def action_is_default_terms_purchase(self):
 		purchase = self.env['stock.picking'].search([('is_default_terms','=',True)], limit=1)
