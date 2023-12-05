@@ -47,6 +47,7 @@
         'wizard/fischerbell_wizard_report_all_loan_item_views.xml',
         'wizard/fischerbell_wizard_report_statement_of_account_views.xml',
         'wizard/weekly_report_wizard_view.xml',
+        'wizard/fischerbell_wizard_avaliable_qty_views.xml',
 
         'views/account_move_views.xml',
         'views/fischerbell_aging_report_views.xml',

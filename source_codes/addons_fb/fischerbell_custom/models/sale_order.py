@@ -5,7 +5,7 @@ from itertools import groupby
 
 from odoo import api,fields, models
 from odoo.exceptions import UserError, ValidationError
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 from odoo.fields import Command
 import re
 import itertools
@@ -109,16 +109,34 @@ class SaleOrder(models.Model):
 
 	def action_to_approve(self):
 		for order in self:
-			if order.state == 'waiting_approval' and order.approval_state == 'waiting_approval' and self.env.user.has_group("fischerbell_custom.group_sales_order_approver"):
-				order.write({
-					'state': 'sale',
-					'approval_state': 'approved',
-					'reviewed_by': self.env.user.id
-				})
-				order.action_confirm()
+			if any(line.product_uom_qty > line.product_id.qty_available for line in order.order_line):
+				# if order.state == 'waiting_approval' and order.approval_state == 'waiting_approval' and self.env.user.has_group("fischerbell_custom.group_sales_order_approver"):
+				# 	order.write({
+				# 		'state': 'sale',
+				# 		'approval_state': 'approved'
+				# 	})
+				return {
+					'name': "Product Avaliable",
+					'type': 'ir.actions.act_window',
+					'view_type': 'form',
+					'view_mode': 'form',
+					'res_model': 'avaliable.product.qty',
+					'view_id': self.env.ref('fischerbell_custom.avaliable_product_qty_form_view').id,
+					'target': 'new'
+				}
+				# order.action_confirm()
+				# else:
+				# 	raise ValidationError("Sorry, you are not allowed to approve this order.")
 			else:
-				raise ValidationError("Sorry, you are not allowed to approve this order.")
-
+				if order.state == 'waiting_approval' and order.approval_state == 'waiting_approval' and self.env.user.has_group("fischerbell_custom.group_sales_order_approver"):
+					order.write({
+						'state': 'sale',
+						'approval_state': 'approved',
+						'reviewed_by': self.env.user.id
+					})
+					order.action_confirm()
+				else:
+					raise ValidationError("Sorry, you are not allowed to approve this order.")
 		return True
 
 
@@ -712,6 +730,14 @@ class SaleOrderLine(models.Model):
 	terms_and_condition_ids = fields.Many2many('fischerbell.product.terms.and.conditions', string="Terms & Conditions", related="product_id.terms_and_condition_ids")
 	last_invoice_date = fields.Datetime(string="Last Invoice Date",compute="_compute_get_last_invoice_date")
 	last_invoice_price = fields.Float(string="Last Invoice Price",compute="_compute_get_last_invoice_date")
+	last_price = fields.Float('Last Order Price', compute="_compute_last_order_price", store=True)
+	picking_id = fields.Many2one('stock.picking', 'Picking')
+
+	@api.depends('customer_id','product_id')
+	def _compute_last_order_price(self):
+		for price in self:
+			last_price = self.search([('customer_id','=', price.customer_id.id),('product_id','=',price.product_id.id ),('state','=','sale')],limit=1)
+			price.last_price = last_price.price_unit if last_price else 0
 
 	def _compute_get_last_invoice_date(self):
 		move_line_obj = self.env['account.move.line']

@@ -11,5 +11,8 @@ access_fischerbell_manufacture_lot_line,fischerbell.manufacture.lot.line,model_f
 access_fischerbell_configuration_note,fischerbell.configuration.note,model_fischerbell_configuration_note,,1,1,1,1
 access_fischerbell_delivery_route,fischerbell.delivery.route,model_fischerbell_delivery_route,,1,1,1,1
 access_fischerbell_delivery_route_line,fischerbell.delivery.route.line,model_fischerbell_delivery_route_line,,1,1,1,1
+fischerbell_custom.access_avaliable_product_qty,access_avaliable_product_qty,fischerbell_custom.model_avaliable_product_qty,base.group_user,1,1,1,1
+fischerbell_custom.access_avaliable_product_qty_line,access_avaliable_product_qty_line,fischerbell_custom.model_avaliable_product_qty_line,base.group_user,1,1,1,1
+fischerbell_custom.access_service_type_product_line,access_service_type_product_line,fischerbell_custom.model_service_type_product_line,base.group_user,1,1,1,1
 access_download_report_wizard,download.report.wizard,model_download_report_wizard,,1,1,1,1
 access_weekly_report_wizard,weekly.report.wizard,model_weekly_report_wizard,,1,1,1,1

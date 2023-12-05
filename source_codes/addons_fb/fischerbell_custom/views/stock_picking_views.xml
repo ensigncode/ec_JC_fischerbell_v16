@@ -69,6 +69,18 @@
                     <div class="clearfix"/>
                 </group>
             </xpath>
+			<xpath expr="//page[@name='operations']" position="after">
+				<page string="Service" name="service">
+					<field name="order_lines">
+						<tree string="Stock Moves" editable="bottom">
+							 <field name="product_id"/>
+							 <field name="product_uom_qty"/>
+							 <field name="product_uom"/>
+							<field name="price_unit"/>
+						</tree>
+					</field>
+				</page>
+			</xpath>
 		</field>
 	</record>
 

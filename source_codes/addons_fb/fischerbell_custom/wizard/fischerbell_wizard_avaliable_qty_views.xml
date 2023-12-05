@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<record id="avaliable_product_qty_form_view" model="ir.ui.view">
+		<field name="name">avaliable.product.qty.form.view</field>
+		<field name="model">avaliable.product.qty</field>
+		<field name="arch" type="xml">
+			<form String="Avaliable Qty">
+				<sheet>
+					<field name="avaliable_product_qty_line" readonly="1" nolabel="1" style="width: 100%" >
+						<tree style="width: 100%" scope="col">
+							<field name="product_id"/>
+							<field name="demand_qty"/>
+							<field name="avaliable_qty"/>
+						</tree>
+					</field>
+					 <div class="alert alert-warning" role="alert">
+						Currently, the order quantity is not immediately available. If you would like to proceed with the available quantity, please press 'Confirm.' Otherwise, kindly wait until the stock is fully replenished.
+					 </div>
+				</sheet>
+				<footer>
+					<button name="action_confirm" string="Confirm" type="object" class="btn-primary"/>
+					<button string="Cancel" class="btn-default" special="cancel"/>
+				</footer>
+			</form>
+		</field>
+	</record>
+</odoo>

@@ -105,6 +105,9 @@
             <xpath expr="//field[@name='order_line']//tree//field[@name='name']" position="after">
                 <field name="terms_and_condition_ids" widget="many2many_tags" />
             </xpath>
+             <xpath expr="//field[@name='order_line']//tree//field[@name='price_unit']" position="after">
+                <field name="last_price"/>
+            </xpath>
             <!-- <xpath expr="//field[@name='partner_id']" position="attributes">
                 <attribute name="domain">[('company_type','=','person'),('type','!=','private'),('company_id','in',[False,company_id])]</attribute>                
             </xpath> -->
