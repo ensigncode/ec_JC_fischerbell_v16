@@ -422,3 +422,20 @@ class Picking(models.Model):
 
 		return res
 
+	def send_email_to_customer(self):
+		backorders = self.search([('backorder_id', '!=', False)], order='scheduled_date')
+		sale_order_obj = self.env['sale.order']
+		sale_orders = []
+		for record in backorders:
+			sale_order = sale_order_obj.search([('name', '=', record.origin)])
+			for product_line in record.move_ids_without_package:
+				if product_line.product_id:
+					if product_line.product_uom_qty <= product_line.product_id.qty_available:
+						if sale_order.partner_id.email not in sale_orders and sale_order.partner_id.email:
+							sale_orders.append(sale_order.id)
+
+		for order in sale_orders:
+			sale_order_ref = sale_order_obj.search([('id', '=', order)])
+			template = self.env.ref('fischerbell_custom.email_template_to_customer')
+			email_values = {'email_to': sale_order_ref.partner_id.email}
+			template.sudo().send_mail(sale_order_ref.id, email_values=email_values)

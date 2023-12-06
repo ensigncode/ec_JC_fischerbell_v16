@@ -22,7 +22,16 @@
             <field name="state">code</field>
             <field name="code">model.cron_set_sec_followup_date()</field>
         </record>
-    
+
+        <record id="cron_send_email_to_customer" model="ir.cron">
+			<field name="name">Send Email to Customer</field>
+			<field name="model_id" ref="stock.model_stock_picking"/>
+			<field name="state">code</field>
+			<field name="code">model.send_email_to_customer()</field>
+			<field name='interval_number'>1</field>
+			<field name='interval_type'>days</field>
+			<field name="numbercall">-1</field>
+		</record>
     </data>
     
 
