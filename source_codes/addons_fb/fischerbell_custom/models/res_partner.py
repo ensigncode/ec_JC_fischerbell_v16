@@ -33,5 +33,3 @@ class Partner(models.Model):
 			self.currency_type = 'overseas'
 		else:
 			self.currency_type = 'no'
-
-

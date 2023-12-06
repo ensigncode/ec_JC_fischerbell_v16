@@ -15,7 +15,7 @@ READONLY_FIELD_STATES = {
     for state in {'sale', 'done', 'cancel'}
 }
 
-ORDER_LINE_FIELDS = ['product_template_id','product_uom_qty','price_unit','price_subtotal','tax_id']
+ORDER_LINE_FIELDS = ['product_uom_qty','price_unit','price_subtotal','tax_id']
 
 class SaleOrder(models.Model):
 	_inherit = "sale.order"
@@ -85,6 +85,9 @@ class SaleOrder(models.Model):
         tracking=3,
         default='draft')
 	contact_person_id = fields.Many2one('res.partner', string='Contact Person')
+	contact_person_comp_id = fields.Many2one('res.partner', string='Contact Person Company',compute="_get_contact_person_company")
+	# contact_person_comp_id = fields.Many2one('res.partner', string='Contact Person Company',related="contact_person_id.parent_id")
+	contact_per_name = fields.Char(string="Contact Person Name",readonly=True)
 	revision_order_count = fields.Float(sting="Revision Order Count",default=1.0)
 	revision_order_name = fields.Char(sting="Revision Order Name")
 	is_order_revise = fields.Boolean(default=False)
@@ -94,6 +97,14 @@ class SaleOrder(models.Model):
 	sec_followup_date = fields.Datetime(string="Sec Follow Up")
 	scheduled_delivery_date = fields.Datetime(string="Scheduled Delivery Date")
 	requested_delivery_date = fields.Datetime(string="Requested Delivery Date")
+
+	def _get_contact_person_company(self):
+		for rec in self:
+			if rec.contact_person_id:
+				rec.contact_person_comp_id = rec.contact_person_id.parent_id.id
+				rec.contact_per_name = rec.contact_person_id.name
+			else:
+				rec.contact_person_comp_id = False
 
 	def _update_approval_state(self):
 		orders = self.env['sale.order'].search([('approval_state','=','no')])
@@ -554,6 +565,7 @@ class SaleOrder(models.Model):
 				order_line_vals = list(map(lambda y:list(y[-1].keys()),filter(lambda x:isinstance(x,list) and isinstance(x[-1],dict),vals.get('order_line'))))
 				if any(field in ORDER_LINE_FIELDS for field in list(itertools.chain(*order_line_vals))):
 					vals['revision_order_name'] = (order.name.split('-')[0] if not order.revision_order_name else order.revision_order_name.split('-')[0]) + '-R%s'%(int(order.revision_order_count + 1) if int(order.revision_order_count) == 0 else int(order.revision_order_count))
+					vals['name'] = (order.name.split('-')[0] if not order.revision_order_name else order.revision_order_name.split('-')[0]) + '-R%s'%(int(order.revision_order_count + 1) if int(order.revision_order_count) == 0 else int(order.revision_order_count))
 					vals['revision_order_count'] = order.revision_order_count + 1
 					vals['is_order_revise'] = True
 
@@ -690,11 +702,11 @@ class SaleOrder(models.Model):
 
 	def get_report_name(self):
 		self.ensure_one()
-		return '%s - %s %s'%(datetime.now().year,self.name or '',self.company_id.name or '')
+		return '%s - %s %s'%(datetime.now().year,self.name or '',self.partner_id.name or '')
 	
 	def get_order_template_subject(self):
 		self.ensure_one()
-		if self.is_order_revise:
+		if self.is_order_revise and self.user_id.id == self.env.user.id:
 			return "This is a revised quotation %s."%(self.revision_order_name)
 		else:
 			return "%s %s (%s)"%(self.company_id.name,self.state in ('draft', 'sent') and (self._context.get('proforma') and 'Proforma' or 'Quotation') or 'Order',self.name or 'n/a')		

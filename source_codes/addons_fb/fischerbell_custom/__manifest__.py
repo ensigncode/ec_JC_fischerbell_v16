@@ -13,6 +13,7 @@
         'data/fischerbell_consignment_note_send_email_templates.xml',
         'data/ir_server_actions.xml',
         'data/ir_crons.xml',
+        'data/ir_sequence.xml',
 
         'report/fischerbell_aging_report.xml',
         'report/fischerbell_bill_report.xml',

@@ -21,6 +21,8 @@
             <xpath expr="//field[@name='partner_invoice_id']" position="before">
                 <field name="attn_to"/>
                 <field name="contact_person_id" options="{'no_create_edit': True, 'no_create': True}" domain="[('is_company','=',False)]"/>
+                <field name="contact_person_comp_id"/>
+                <field name="contact_per_name"/>
                 <field name="user" invisible="1"/>
                 <field name="today" invisible="1"/>
                 <field name="purchase_ref" invisible="1"/>
@@ -280,9 +282,8 @@
     <record id="fischerbell_action_order_report_all" model="ir.actions.act_window">
         <field name="name">Sales Analysis</field>
         <field name="res_model">sale.order.line</field>
-        <field name="view_mode">tree</field>
+        <field name="view_mode">tree,form</field>
         <field name="target">current</field>
-        <field name="search_view_id" ref="fischerbell_custom.sale_order_analysis_report_tree_view" />
     </record>
     <menuitem id="fischerbell_menu_sale_report"
         name="Reporting"
