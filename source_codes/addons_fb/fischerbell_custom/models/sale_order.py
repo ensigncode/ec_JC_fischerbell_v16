@@ -189,6 +189,19 @@ class SaleOrder(models.Model):
 				inv.len_note = len(inv.partner_note)
 			else:
 				inv.len_note = False
+	
+	def action_confirm(self):
+		for rec in self.order_line:
+			if not rec.product_id.seller_ids:
+				return {'type': 'ir.actions.act_window',
+				        'name': _('Product wizard'),
+				        'res_model': 'update.product.vendor',
+				        'view_mode': 'form',
+				        'context': {'order_id': self.id},
+				        'target': 'new',
+				        }
+		return super(SaleOrder, self).action_confirm()
+
 
 	# def action_confirm(self):
 	# 	res = super().action_confirm()

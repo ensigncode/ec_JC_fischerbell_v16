@@ -16,3 +16,4 @@ fischerbell_custom.access_avaliable_product_qty_line,access_avaliable_product_qt
 fischerbell_custom.access_service_type_product_line,access_service_type_product_line,fischerbell_custom.model_service_type_product_line,base.group_user,1,1,1,1
 access_download_report_wizard,download.report.wizard,model_download_report_wizard,,1,1,1,1
 access_weekly_report_wizard,weekly.report.wizard,model_weekly_report_wizard,,1,1,1,1
+cs_vendor.access_update_product_vendor,access_update_product_vendor,cs_vendor.model_update_product_vendor,,1,1,1,1
