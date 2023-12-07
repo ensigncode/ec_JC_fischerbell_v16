@@ -715,7 +715,7 @@ class SaleOrder(models.Model):
 
 	def get_report_name(self):
 		self.ensure_one()
-		return '%s - %s %s'%(datetime.now().year,self.name or '',self.partner_id.parent_id.name or '')
+		return '%s - %s %s'%(datetime.now().year,self.name or '',self.partner_id.parent_id.name or self.partner_id.name)
 	
 	def get_order_template_subject(self):
 		self.ensure_one()

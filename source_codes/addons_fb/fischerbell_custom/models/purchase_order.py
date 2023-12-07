@@ -100,12 +100,15 @@ class PurchaseOrder(models.Model):
 
 
 	def button_confirm(self):
-		res = super().button_confirm()
-		for order in self:
-			if order.picking_ids:
-				for pick in order.picking_ids:
-					pick.user = self.env.user.id
-		return res
+		if self.request_delivery_date and self.estimated_delivery_date:
+			res = super().button_confirm()
+			for order in self:
+				if order.picking_ids:
+					for pick in order.picking_ids:
+						pick.user = self.env.user.id
+			return res
+		else:
+			raise ValidationError("Request Delivery Date And Estimated Delivery Date are required")
 
 
 

@@ -32,6 +32,15 @@
 			<field name='interval_type'>days</field>
 			<field name="numbercall">-1</field>
 		</record>
+        <record id="min_qty_re_order_cron" model="ir.cron">
+            <field name="name">Re Order for min Quantity </field>
+            <field name="model_id" ref="stock.model_stock_warehouse_orderpoint"/>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+            <field name="state">code</field>
+            <field name="code">model.cron_min_qty_alert()</field>
+        </record>
     </data>
     
 

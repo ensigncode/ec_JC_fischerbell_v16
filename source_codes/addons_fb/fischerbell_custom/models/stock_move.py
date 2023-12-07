@@ -51,3 +51,31 @@ class StockMove(models.Model):
 						move.mrp_line_id = line.id
 						move.mrp_customer_id = line.customer_id.id
 						move.mrp_phone = line.phone
+
+
+class StockWarehouseOrderpoint(models.Model):
+	_inherit = "stock.warehouse.orderpoint"
+
+	qty_on_hand = fields.Float('On Hand', readonly=True, compute='_compute_qty', digits='Product Unit of Measure',store=False)
+
+	def cron_min_qty_alert(self):
+		self.action_send_email_for_min_qty()
+		return True
+
+	def action_send_email_for_min_qty(self):
+		order = self.search([]).filtered(lambda line: line.qty_on_hand and line.product_min_qty and line.qty_on_hand <= line.product_min_qty)
+		reorder_orderpoint_products = '<br/>'.join([f"<li>Product : {orderpoint_id.product_id.name}, On Hand :{str(orderpoint_id.qty_on_hand)}, Min Qty : {str(orderpoint_id.product_min_qty)}</li>" for orderpoint_id in order])
+		if reorder_orderpoint_products:
+			body = f"""<p><b>Reminder To Reorder This Products</b></p><br/>{reorder_orderpoint_products}"""
+			subject = (f""" Reminder To Reorder """)
+			email_to_user = self.env['res.users'].search([('groups_id','in',self.env.ref('purchase.group_purchase_manager').id)],limit=1)
+			email_to = email_to_user.email_formatted
+			mails = {
+				'subject': subject,
+				'email_from': self.env.user.email_formatted,
+				'email_to': email_to,
+				'body_html': body,
+				'auto_delete': True,
+			}
+			mail = self.env['mail.mail'].create(mails)
+			mail.send()
