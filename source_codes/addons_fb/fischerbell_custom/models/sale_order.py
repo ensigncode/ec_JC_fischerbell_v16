@@ -3,7 +3,7 @@
 
 from itertools import groupby
 
-from odoo import api,fields, models
+from odoo import api,fields, models, _
 from odoo.exceptions import UserError, ValidationError
 from datetime import datetime, timedelta, date
 from odoo.fields import Command
