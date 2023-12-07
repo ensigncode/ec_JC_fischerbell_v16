@@ -37,13 +37,16 @@
                                                     </tr>
                                                 </t>
                                                 <t t-elif="line.display_type == 'line_note'">
-                                                    <tr>
-                                                        <td></td>
+                                                    <tr class="fst-italic o_line_note">
+                                                        <td name="td_note_line" colspan="99">
+                                                            <span t-field="line.name"/>
+                                                        </td>
+                                                        <!-- <td></td>
                                                         <td></td>
                                                         <td><em><span t-field="line.name" /></em></td>
                                                         <td></td>
                                                         <td></td>
-                                                        <td></td>
+                                                        <td></td> -->
                                                     </tr>
                                                 </t>
                                                 <t t-elif="str(line.product_id.id) == down_payment_id" >
