@@ -98,6 +98,12 @@ class SaleOrder(models.Model):
 	scheduled_delivery_date = fields.Datetime(string="Scheduled Delivery Date")
 	requested_delivery_date = fields.Datetime(string="Requested Delivery Date")
 
+	@api.onchange('contact_person_id')
+	def _onchange_set_customer(self):
+		for rec in self:
+			# if not rec.partner_id:
+			rec.partner_id = rec.contact_person_id.id
+
 	def _get_contact_person_company(self):
 		for rec in self:
 			if rec.contact_person_id:
@@ -192,12 +198,13 @@ class SaleOrder(models.Model):
 	
 	def action_confirm(self):
 		for rec in self.order_line:
+			line_ids = self.order_line.filtered(lambda line:not line.product_id.seller_ids)
 			if not rec.product_id.seller_ids:
 				return {'type': 'ir.actions.act_window',
 				        'name': _('Product wizard'),
 				        'res_model': 'update.product.vendor',
 				        'view_mode': 'form',
-				        'context': {'order_id': self.id},
+				        'context': {'order_id': self.id,'line_ids':line_ids.ids},
 				        'target': 'new',
 				        }
 		return super(SaleOrder, self).action_confirm()

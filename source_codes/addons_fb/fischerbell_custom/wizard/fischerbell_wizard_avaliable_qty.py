@@ -52,7 +52,7 @@ class AvaliableProductQty(models.TransientModel):
 class AvaliableProductQtyLine(models.TransientModel):
     _name = 'avaliable.product.qty.line'
 
-    avaliable_product_qty_id = fields.Many2one("avaliable.product.qty.line")
+    avaliable_product_qty_id = fields.Many2one("avaliable.product.qty")
     product_id = fields.Many2one("product.product")
     demand_qty = fields.Float("Demand Qty")
     avaliable_qty = fields.Float("Avaliable Qty")

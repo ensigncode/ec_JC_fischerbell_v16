@@ -137,9 +137,8 @@
                                                         <td width="28%">
                                                             <span t-field="line.name"/>
                                                         </td>
-                                                        <td width="28%">
+                                                        <td>
                                                             <t t-foreach="line.terms_and_condition_ids" t-as="term_condition">
-                                                                <!-- <b><span t-esc="term_condition.name"/></b><br/> -->
                                                                 <span style="text-align: left;" t-esc="term_condition.description"/><br/>
                                                             </t>
                                                         </td>
@@ -147,7 +146,7 @@
                                                         <td width="7%" class="text-center"><t t-esc="line.product_uom.name"/></td>
                                                         <td width="5%" class="text-center"><t t-esc="line.lead_time_stock"/></td>
                                                         <td width="10%" class="text-center"><t t-esc="'{:0,.2f}'.format(float(line.price_unit))"/></td>
-                                                        <td width="10%" style="text-align: right;"><span style="text-align: right;" t-esc="'{:0,.2f}'.format(float(line.price_unit*int(line.product_uom_qty)))"/></td>
+                                                        <td width="10%" class="text-center" style="text-align: right;"><span style="text-align: right;" t-esc="'{:0,.2f}'.format(float(line.price_unit*int(line.product_uom_qty)))"/></td>
                                                     </tr>
                                                 </t>
                                             </t>
@@ -570,7 +569,7 @@
                                             <th width="10%"><span>PRODUCT</span><br/><span>CODE</span></th>
                                             <th width="10%" style="margin-left: 0px; text-align: center;">IMAGE</th>
                                             <th width="28%" style="margin-left: 0px; text-align: left;">DESCRIPTION</th>
-                                            <th width="28%" style="margin-left: 0px; text-align: left;">T&amp;C</th>
+                                            <th style="margin-left: 0px; text-align: left;">T&amp;C</th>
                                             <th width="5%"><span>QTY</span></th>
                                             <th width="7%"><span>UOM</span></th>
                                             <th width="5%"><span>LEAD TIME</span></th>
