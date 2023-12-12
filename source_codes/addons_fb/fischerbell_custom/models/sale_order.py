@@ -97,6 +97,14 @@ class SaleOrder(models.Model):
 	sec_followup_date = fields.Datetime(string="Sec Follow Up")
 	scheduled_delivery_date = fields.Datetime(string="Scheduled Delivery Date")
 	requested_delivery_date = fields.Datetime(string="Requested Delivery Date")
+	no_enough_stock = fields.Boolean(compute='_compute_order_stock')
+
+	def _compute_order_stock(self):
+		for order in self:
+			order.no_enough_stock = True
+			no_stock = any(line.product_uom_qty > line.product_template_id.qty_available for line in order.order_line)
+			if no_stock:
+				order.no_enough_stock = False
 
 	@api.onchange('contact_person_id')
 	def _onchange_set_customer(self):
@@ -124,38 +132,60 @@ class SaleOrder(models.Model):
 
 
 
+	# def action_to_approve(self):
+	# 	for order in self:
+	# 		if any(line.product_uom_qty > line.product_id.qty_available for line in order.order_line):
+	# 			# if order.state == 'waiting_approval' and order.approval_state == 'waiting_approval' and self.env.user.has_group("fischerbell_custom.group_sales_order_approver"):
+	# 			# 	order.write({
+	# 			# 		'state': 'sale',
+	# 			# 		'approval_state': 'approved'
+	# 			# 	})
+	# 			return {
+	# 				'name': "Product Avaliable",
+	# 				'type': 'ir.actions.act_window',
+	# 				'view_type': 'form',
+	# 				'view_mode': 'form',
+	# 				'res_model': 'avaliable.product.qty',
+	# 				'view_id': self.env.ref('fischerbell_custom.avaliable_product_qty_form_view').id,
+	# 				'target': 'new'
+	# 			}
+	# 			# order.action_confirm()
+	# 			# else:
+	# 			# 	raise ValidationError("Sorry, you are not allowed to approve this order.")
+	# 		else:
+	# 			if order.state == 'waiting_approval' and order.approval_state == 'waiting_approval' and self.env.user.has_group("fischerbell_custom.group_sales_order_approver"):
+	# 				order.write({
+	# 					'state': 'sale',
+	# 					'approval_state': 'approved',
+	# 					'reviewed_by': self.env.user.id
+	# 				})
+	# 				order.action_confirm()
+	# 			else:
+	# 				raise ValidationError("Sorry, you are not allowed to approve this order.")
+	# 	return True
+
 	def action_to_approve(self):
 		for order in self:
-			if any(line.product_uom_qty > line.product_id.qty_available for line in order.order_line):
-				# if order.state == 'waiting_approval' and order.approval_state == 'waiting_approval' and self.env.user.has_group("fischerbell_custom.group_sales_order_approver"):
-				# 	order.write({
-				# 		'state': 'sale',
-				# 		'approval_state': 'approved'
-				# 	})
-				return {
-					'name': "Product Avaliable",
-					'type': 'ir.actions.act_window',
-					'view_type': 'form',
-					'view_mode': 'form',
-					'res_model': 'avaliable.product.qty',
-					'view_id': self.env.ref('fischerbell_custom.avaliable_product_qty_form_view').id,
-					'target': 'new'
-				}
-				# order.action_confirm()
-				# else:
-				# 	raise ValidationError("Sorry, you are not allowed to approve this order.")
+			if order.state == 'waiting_approval' and order.approval_state == 'waiting_approval' and self.env.user.has_group("fischerbell_custom.group_sales_order_approver"):
+				order.write({
+					'state': 'sale',
+					'approval_state': 'approved',
+					'reviewed_by': self.env.user.id
+				})
+				order.action_confirm()
+				not_enough_stock = any(line.product_uom_qty > line.product_id.qty_available for line in order.order_line)
+				if not_enough_stock:
+					pass
 			else:
-				if order.state == 'waiting_approval' and order.approval_state == 'waiting_approval' and self.env.user.has_group("fischerbell_custom.group_sales_order_approver"):
-					order.write({
-						'state': 'sale',
-						'approval_state': 'approved',
-						'reviewed_by': self.env.user.id
-					})
-					order.action_confirm()
-				else:
-					raise ValidationError("Sorry, you are not allowed to approve this order.")
+				raise ValidationError("Sorry, you are not allowed to approve this order.")
+
 		return True
 
+	def action_stock_confirm(self):
+		self.ensure_one()
+		outgoing_delivery_ids = self.picking_ids.filtered(lambda delivery: delivery.picking_type_code == 'outgoing')
+		for delivery in outgoing_delivery_ids:
+			delivery.enough_stock = False
 
 	def action_to_reject(self):
 		for order in self:
@@ -198,8 +228,8 @@ class SaleOrder(models.Model):
 	
 	def action_confirm(self):
 		for rec in self.order_line:
-			line_ids = self.order_line.filtered(lambda line:not line.product_id.seller_ids)
-			if not rec.product_id.seller_ids:
+			line_ids = self.order_line.filtered(lambda line:not line.product_template_id.seller_ids)
+			if not rec.product_template_id.seller_ids:
 				return {'type': 'ir.actions.act_window',
 				        'name': _('Product wizard'),
 				        'res_model': 'update.product.vendor',
