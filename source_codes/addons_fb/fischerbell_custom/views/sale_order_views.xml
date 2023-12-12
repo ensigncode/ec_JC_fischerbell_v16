@@ -6,13 +6,13 @@
         <field name="inherit_id" ref="sale.view_order_form"/>
         <field name="priority">17</field>
         <field name="arch" type="xml">
-            <xpath expr="//sheet" position="before">
+            <!-- <xpath expr="//sheet" position="before">
                 <field name="no_enough_stock" invisible="1"/>
                 <div class="alert alert-warning oe_edit_only" role="alert" attrs="{'invisible': ['|',('no_enough_stock', '=', True),('state','in',['draft','sent','waiting_approval'])]}">
                     Currently, the order quantity is not immediately available. If you would like to proceed with the available quantity, please press 'Confirm.' Otherwise, kindly wait until the stock is fully replenished.
                     <button name="action_stock_confirm" string="Confirm" type="object" class="oe_highlight"/>
                 </div>
-            </xpath>
+            </xpath> -->
             <xpath expr="//group[@name='sale_header']//group[@name='order_details']//field[@name='payment_term_id']" position="after">
                 <field name="reference" invisible="1"/>
             </xpath>
