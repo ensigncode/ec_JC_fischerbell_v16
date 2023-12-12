@@ -12,6 +12,13 @@ from io import BytesIO
 class Picking(models.Model):
 	_inherit = "stock.picking"
 
+	def _get_stock_status_from_so(self):
+		for rec in self:
+			if rec.sale_id:
+				return rec.sale_id.no_enough_stock
+			else:
+				True
+
 	is_to_check = fields.Boolean('Check Pick Transfer')
 	is_return_loan = fields.Boolean("Is Return Loan", default=False)
 	partner_address = fields.Char('Address')
@@ -49,6 +56,7 @@ class Picking(models.Model):
 	is_default_terms = fields.Boolean('Is Default Terms')
 	order_lines = fields.One2many('service.type.product.line', 'picking_id', string="Order Line")
 	# total_qty_line = fields.Float('Total', compute="_compute_total_qty", store=True)
+	enough_stock = fields.Boolean(default=_get_stock_status_from_so)
 
 
 	def action_is_default_terms(self):
@@ -215,6 +223,10 @@ class Picking(models.Model):
 
 	def button_validate(self):
 		for picking in self:
+			if not picking.enough_stock:
+				no_stock_line_ids = any(line.product_uom_qty > line.product_template_id.qty_available for line in picking.sale_id.order_line)
+				if no_stock_line_ids:
+					raise UserError('Product stock is not enough as demand. Customers wants wait till all stocks be ready for shipment.')
 			if picking.picking_type_code == 'internal' and not picking.is_to_check:
 				raise ValidationError("Sorry you cannot validate, as this transfer is not yet check.")
 			if picking.picking_type_code == 'incoming':

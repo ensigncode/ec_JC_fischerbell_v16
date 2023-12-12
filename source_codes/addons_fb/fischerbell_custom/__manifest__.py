@@ -14,6 +14,7 @@
         'data/ir_server_actions.xml',
         'data/ir_crons.xml',
         'data/ir_sequence.xml',
+        'data/email_template.xml',
 
         'report/fischerbell_aging_report.xml',
         'report/fischerbell_bill_report.xml',
