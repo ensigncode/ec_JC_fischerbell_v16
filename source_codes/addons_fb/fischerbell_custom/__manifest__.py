@@ -8,7 +8,7 @@
         Fischerbell Custom
     """,
     'website': 'https://www.sgeede.com/',
-    'depends': ['sale','purchase', 'stock', 'report_xlsx','contacts','mrp','crm','sale_subscription','account_accountant','industry_fsm','helpdesk','marketing_automation','mrp','quality_control','stock_barcode','maintenance','hr','hr_appraisal'],
+    'depends': ['account','sale','purchase', 'stock', 'report_xlsx','contacts','mrp','crm','sale_subscription','account_accountant','industry_fsm','helpdesk','marketing_automation','mrp','quality_control','stock_barcode','maintenance','hr','hr_appraisal'],
     'data': [
         'data/fischerbell_consignment_note_send_email_templates.xml',
         'data/ir_server_actions.xml',
@@ -50,6 +50,7 @@
         'wizard/weekly_report_wizard_view.xml',
         'wizard/fischerbell_wizard_avaliable_qty_views.xml',
         'wizard/update_vendor.xml',
+	'wizard/weekly_product_report_wizard_view.xml',
 
         'views/account_move_views.xml',
         'views/fischerbell_aging_report_views.xml',

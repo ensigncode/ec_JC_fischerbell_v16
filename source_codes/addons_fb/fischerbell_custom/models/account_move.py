@@ -31,6 +31,32 @@ class AccountMove(models.Model):
 	len_note = fields.Char('Length Internal Notee', compute="_compute_internal_note", store=True)
 	partner_note = fields.Text('Note')
 
+	@api.depends('posted_before', 'state', 'journal_id', 'date')
+	def _compute_name(self):
+		res = super(AccountMove, self)._compute_name()
+		credit_note = ["CN"]
+		debit_note = ["DN"]
+		journal_entry = ["JE"]
+		if self.name:
+			name_get = self.name.split('/')
+			name_get.pop(0)
+		if self._context.get('default_move_type') == 'out_refund':
+			new_name = credit_note + name_get
+			if new_name[1]:
+				nm = '/'.join(new_name)
+				self.name = nm
+		if self._context.get('default_move_type') == 'in_refund':
+			new_name = debit_note + name_get
+			if new_name[1]:
+				nm = '/'.join(new_name)
+				self.name = nm
+		if self._context.get('default_move_type') == 'entry':
+			new_name = abb + name_get
+			if new_name[1]:
+				nm = '/'.join(new_name)
+				self.name = nm
+		return True
+
 	@api.onchange('partner_id')
 	def _inverse_partner_id(self):
 		super()._inverse_partner_id()

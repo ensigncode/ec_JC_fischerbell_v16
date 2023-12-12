@@ -6,3 +6,4 @@ from . import weekly_report_wizard
 # from . import fischerbell_wizard_report_delivery_with_training
 from . import fischerbell_wizard_avaliable_qty
 from . import update_vendor
+from . import weekly_product_report_wizard

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="weekly_product_report_wizard_view_form" model="ir.ui.view">
+            <field name="name">weekly.product.report.wizard.view.form</field>
+            <field name="model">weekly.product.report.wizard</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <field name="year" />
+                        </group>
+                    </sheet>
+                    <footer>
+                        <button name="action_create_weekly_report" type="object" class="btn-primary" string="Print"/>
+                        <button string="Cancel" class="btn-default" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+    </data>
+</odoo>

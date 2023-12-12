@@ -1,12 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <data>
+    <data noupdate="1">
         <record id="sale.seq_sale_order" model="ir.sequence">
             <field name="name">Sales Order</field>
             <field name="code">sale.order</field>
             <field name="prefix">%(year)s/SQ</field>
             <field name="padding">5</field>
             <field name="company_id" eval="False"/>
+        </record>
+
+<!--        <record id="credit_not_seq" model="ir.sequence">-->
+<!--              <field name="name">Customer Credit Seq</field>-->
+<!--              <field name="code">credit_note_seq</field>-->
+<!--              <field name="prefix">CN/%(year)s/</field>-->
+<!--              <field name="padding">5</field>-->
+<!--              <field name="company_id" eval="False"/>-->
+<!--        </record>-->
+
+<!--         <record id="debit_not_seq" model="ir.sequence">-->
+<!--              <field name="name">Debit Note Seq</field>-->
+<!--              <field name="code">debit_note_seq</field>-->
+<!--              <field name="prefix">DN/%(year)s/</field>-->
+<!--              <field name="padding">5</field>-->
+<!--              <field name="company_id" eval="False"/>-->
+<!--        </record>-->
+
+        <record id="customer_payment_seq" model="ir.sequence">
+              <field name="name">Customer Payment Seq</field>
+              <field name="code">customer_payment_seq</field>
+              <field name="prefix">RV/%(year)s/</field>
+              <field name="padding">5</field>
+              <field name="company_id" eval="False"/>
+        </record>
+
+         <record id="supplier_payment_seq" model="ir.sequence">
+              <field name="name">Supplier Payment Seq</field>
+              <field name="code">supplier_payment_seq</field>
+              <field name="prefix">PV/%(year)s/</field>
+              <field name="padding">5</field>
+              <field name="company_id" eval="False"/>
         </record>
     </data>
 </odoo>
