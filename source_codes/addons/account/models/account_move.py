@@ -2546,8 +2546,10 @@ class AccountMove(models.Model):
             starting_sequence = "%s/%04d/%02d/0000" % (self.journal_id.code, self.date.year, self.date.month)
         if self.journal_id.refund_sequence and self.move_type in ('out_refund', 'in_refund'):
             starting_sequence = "R" + starting_sequence
+            print("---starting_sequence----111-",starting_sequence)
         if self.journal_id.payment_sequence and is_payment:
             starting_sequence = "P" + starting_sequence
+            print("---starting_sequence----222-", starting_sequence)
         return starting_sequence
 
     # -------------------------------------------------------------------------

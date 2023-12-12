@@ -193,4 +193,12 @@
             </xpath>
         </field>
     </record>
+     <record id="action_open_weekly_product_report_wizard" model="ir.actions.act_window">
+            <field name="name">Weekly product Report</field>
+            <field name="res_model">weekly.product.report.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="fischerbell_custom.weekly_product_report_wizard_view_form"/>
+            <field name="target">new</field>
+     </record>
+    <menuitem action="action_open_weekly_product_report_wizard" id="menu_weekly_product_report" name="Sales Product Report" parent="sale.menu_sale_report" />
 </odoo>
