@@ -33,10 +33,9 @@ class AccountMove(models.Model):
 
 	@api.depends('posted_before', 'state', 'journal_id', 'date')
 	def _compute_name(self):
-		res = super(AccountMove, self)._compute_name()
-		credit_note = ["CN"]
-		debit_note = ["DN"]
-		journal_entry = ["JE"]
+		super(AccountMove, self)._compute_name()
+		credit_note, debit_note, journal_entry = (["CN"], ["DN"], ["JE"])
+		# name_get = self.name.split('/')[::-2]
 		if self.name:
 			name_get = self.name.split('/')
 			name_get.pop(0)
@@ -48,10 +47,15 @@ class AccountMove(models.Model):
 		if self._context.get('default_move_type') == 'in_refund':
 			new_name = debit_note + name_get
 			if new_name[1]:
-				nm = '/'.join(new_name)
-				self.name = nm
+				if len(new_name) > 3:
+					new_name.pop(-2)
+					nm = '/'.join(new_name)
+					self.name = nm
+				else:
+					nm = '/'.join(new_name)
+					self.name = nm
 		if self._context.get('default_move_type') == 'entry':
-			new_name = abb + name_get
+			new_name = journal_entry + name_get
 			if new_name[1]:
 				nm = '/'.join(new_name)
 				self.name = nm
