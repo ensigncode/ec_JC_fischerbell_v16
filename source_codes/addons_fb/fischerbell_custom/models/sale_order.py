@@ -228,13 +228,13 @@ class SaleOrder(models.Model):
 	
 	def action_confirm(self):
 		for rec in self.order_line:
-			line_ids = self.order_line.filtered(lambda line:not line.product_template_id.seller_ids)
-			if not rec.product_template_id.seller_ids:
+			# line_ids = self.order_line.filtered(lambda line:not line.product_template_id.seller_ids)
+			if not rec.product_template_id.seller_ids and not self._context.get('vendor_wizard'):
 				return {'type': 'ir.actions.act_window',
 				        'name': _('Product wizard'),
 				        'res_model': 'update.product.vendor',
 				        'view_mode': 'form',
-				        'context': {'order_id': self.id,'line_ids':line_ids.ids},
+				        # 'context': {'order_id': self.id,'line_ids':line_ids},
 				        'target': 'new',
 				        }
 		return super(SaleOrder, self).action_confirm()
