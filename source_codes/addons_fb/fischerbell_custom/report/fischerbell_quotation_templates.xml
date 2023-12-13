@@ -146,7 +146,7 @@
                                                         <td width="7%" class="text-center"><t t-esc="line.product_uom.name"/></td>
                                                         <td width="5%" class="text-center"><t t-esc="line.lead_time_stock"/></td>
                                                         <td width="10%" class="text-center"><t t-esc="'{:0,.2f}'.format(float(line.price_unit))"/></td>
-                                                        <td width="10%" class="text-center" style="text-align: right;"><span style="text-align: right;" t-esc="'{:0,.2f}'.format(float(line.price_unit*int(line.product_uom_qty)))"/></td>
+                                                        <td width="10%" class="text-center" style="text-align: right;"><t style="text-align: right;" t-esc="'{:0,.2f}'.format(float(line.price_unit*int(line.product_uom_qty)))"/></td>
                                                     </tr>
                                                 </t>
                                             </t>
