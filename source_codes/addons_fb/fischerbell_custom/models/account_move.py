@@ -61,6 +61,22 @@ class AccountMove(models.Model):
 				self.name = nm
 		return True
 
+	# credit_note, debit_note, journal_entry = ["CN"], ["DN"], ["JE"]
+	#
+	# if self.name and 'default_move_type' in self._context:
+	# 	name_get = self.name.split('/')[1:]
+	# 	move_type = self._context['default_move_type']
+	#
+	# 	if move_type == 'out_refund':
+	# 		self.name = '/'.join(credit_note + name_get[1:]) if name_get[1] else self.name
+	#
+	# 	elif move_type == 'in_refund':
+	# 		self.name = '/'.join(debit_note + name_get[1:-1]) if name_get[1] and len(name_get) > 3 else '/'.join(
+	# 			debit_note + name_get[1:])
+	#
+	# 	elif move_type == 'entry':
+	# 		self.name = '/'.join(journal_entry + name_get[1:]) if name_get[1] else self.name
+
 	@api.onchange('partner_id')
 	def _inverse_partner_id(self):
 		super()._inverse_partner_id()
