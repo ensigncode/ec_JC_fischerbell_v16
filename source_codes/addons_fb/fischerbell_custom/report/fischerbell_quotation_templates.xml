@@ -236,7 +236,7 @@
                         </style>
                         <!-- Header -->
                         <div class="header">
-                            <div style="border-bottom: 2px solid white; margin-bottom:10px;">
+                            <div style="border-bottom: 0px solid white; margin-bottom:10px;">
                                 <table style="border: 0px solid white;" width="100%">
                                     <tr>
                                         <td width="70%">
