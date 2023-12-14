@@ -20,7 +20,7 @@ ORDER_LINE_FIELDS = ['product_uom_qty','price_unit','price_subtotal','tax_id']
 class SaleOrder(models.Model):
 	_inherit = "sale.order"
 
-	attn_to = fields.Char('Attn To', related="partner_id.attn_to")
+	# attn_to = fields.Char('Attn To', related="partner_id.attn_to")
 	type = fields.Selection([
 		('sale', 'Sale Order'),
 		('loan', 'Loan Order'),

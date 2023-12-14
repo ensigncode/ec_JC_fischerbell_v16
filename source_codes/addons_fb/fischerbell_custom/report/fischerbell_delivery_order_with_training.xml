@@ -204,7 +204,7 @@
                                                                     <span style="font-family: 'Unitext Pro Regular'; line-height: 1em;">:</span>
                                                                 </td>
                                                                 <td width="55%" >
-                                                                    <span style="font-family: 'Unitext Pro Regular'; line-height: 1em;" t-esc="doc.sale_id.attn_to"/>
+                                                                    <span style="font-family: 'Unitext Pro Regular'; line-height: 1em;" t-esc="doc.sale_id.contact_person_id"/>
                                                                 </td>
                                                             </tr>
                                                             <tr>
