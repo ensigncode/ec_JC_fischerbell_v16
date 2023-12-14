@@ -247,3 +247,4 @@ class AccountMove(models.Model):
 		self.ensure_one()
 		return 'fischerbell_custom.fischerbell_report_invoice_document'
 
+
