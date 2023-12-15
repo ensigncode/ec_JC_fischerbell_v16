@@ -6,12 +6,11 @@
         <field name="inherit_id" ref="sale.view_order_form"/>
         <field name="priority">17</field>
         <field name="arch" type="xml">
-            <!-- <xpath expr="//sheet" position="before">
-                <field name="no_enough_stock" invisible="1"/>
-                <div class="alert alert-warning oe_edit_only" role="alert" attrs="{'invisible': ['|',('no_enough_stock', '=', True),('state','in',['draft','sent','waiting_approval'])]}">
-                    Currently, the order quantity is not immediately available. If you would like to proceed with the available quantity, please press 'Confirm.' Otherwise, kindly wait until the stock is fully replenished.
-                    <button name="action_stock_confirm" string="Confirm" type="object" class="oe_highlight"/>
-                </div>
+            <xpath expr="//group[@name='sale_shipping']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <!-- <xpath expr="//field[@name='commitment_date']" position="attributes">
+                <attribute name="invisible">1</attribute>
             </xpath> -->
             <xpath expr="//group[@name='sale_header']//group[@name='order_details']//field[@name='payment_term_id']" position="after">
                 <field name="reference" invisible="1"/>
@@ -120,6 +119,10 @@
             <!-- <xpath expr="//field[@name='partner_id']" position="attributes">
                 <attribute name="domain">[('company_type','=','person'),('type','!=','private'),('company_id','in',[False,company_id])]</attribute>                
             </xpath> -->
+            <xpath expr="//field[@name='origin']" position="before">
+                <field name="scheduled_delivery_date" />
+                <field name="requested_delivery_date" />
+            </xpath>
         </field>
     </record>
     <record id="inherit_view_sales_order_filter" model="ir.ui.view">
@@ -172,10 +175,6 @@
             <xpath expr="//field[@name='delivery_status']" position="after">
                 <field name="delivery_type" required="1"/>
                 <field name="route_id" readonly="1" force_save="1" options="{'no_create_edit': True, 'no_create':True, 'no_open':True}"/>
-            </xpath>
-            <xpath expr="//field[@name='effective_date']" position="before">
-                <field name="scheduled_delivery_date" />
-                <field name="requested_delivery_date" />
             </xpath>
         </field>
     </record>
