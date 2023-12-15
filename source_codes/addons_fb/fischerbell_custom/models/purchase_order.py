@@ -1,9 +1,13 @@
 # -*- coding: utf-8 -*-
 
+import itertools
+
 from odoo import api, fields, models
 from odoo.exceptions import UserError, ValidationError
 from datetime import datetime, date
 from odoo.tools.float_utils import float_round
+
+PURCHASE_LINE_FIELDS = ['product_qty','price_unit','price_subtotal','taxes_id']
 
 class PurchaseOrder(models.Model):
 	_inherit = "purchase.order"
@@ -22,6 +26,9 @@ class PurchaseOrder(models.Model):
 	po_comments = fields.Char(string="Comments")
 	request_delivery_date = fields.Datetime("Request Delivery Date")
 	estimated_delivery_date = fields.Datetime("Estimated Delivery Date")
+	revision_purchase_count = fields.Float(sting="Revision Purchase Count",default=1.0)
+	revision_purchase_name = fields.Char(sting="Revision Purchase Name")
+	is_purchase_revise = fields.Boolean(default=False)
 
 	def action_is_default_terms_purchase(self):
 		purchase = self.env['stock.picking'].search([('is_default_terms','=',True)], limit=1)
@@ -42,6 +49,18 @@ class PurchaseOrder(models.Model):
 
 		res = super(PurchaseOrder, self).create(vals)
 		return res
+	
+	def write(self,vals):
+		for purchase in self:
+			if vals.get('order_line'):
+				order_line_vals = list(map(lambda y:list(y[-1].keys()),filter(lambda x:isinstance(x,list) and isinstance(x[-1],dict),vals.get('order_line'))))
+				if any(field in PURCHASE_LINE_FIELDS for field in list(itertools.chain(*order_line_vals))):
+					vals['revision_purchase_name'] = (purchase.name.split('-')[0] if not purchase.revision_purchase_name else purchase.revision_purchase_name.split('-')[0]) + '-R%s'%(int(purchase.revision_purchase_count + 1) if int(purchase.revision_purchase_count) == 0 else int(purchase.revision_purchase_count))
+					vals['name'] = (purchase.name.split('-')[0] if not purchase.revision_purchase_name else purchase.revision_purchase_name.split('-')[0]) + '-R%s'%(int(purchase.revision_purchase_count + 1) if int(purchase.revision_purchase_count) == 0 else int(purchase.revision_purchase_count))
+					vals['revision_purchase_count'] = purchase.revision_purchase_count + 1
+					vals['is_purchase_revise'] = True
+
+		return super(PurchaseOrder,self).write(vals)
 
 	@api.depends('partner_note')
 	def _compute_purchase_internal_note(self):
