@@ -111,7 +111,6 @@ class PurchaseOrder(models.Model):
 			raise ValidationError("Request Delivery Date And Estimated Delivery Date are required")
 
 
-
 class PurchaseOrderLine(models.Model):
 	_inherit = "purchase.order.line"
 
@@ -177,6 +176,3 @@ class PurchaseOrderLine(models.Model):
 
 		res.update({'sale_ids': sale_ids,'move_ids': move_ids, 'picking_ids': picking_ids})
 		return res
-
-
-			

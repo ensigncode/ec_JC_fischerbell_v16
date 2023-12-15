@@ -1,44 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <data noupdate="1">
+    <data>
+        <!-- Sequences for sale.order -->
+        <function name = "write" model = "ir.model.data">
+            <function name = "search" model = "ir.model.data">
+                <value eval = "[('module', '=', 'sale'),('name','=','seq_sale_order')]"/>
+            </function>
+            <value eval =" {'noupdate': False} "/>
+        </function>
         <record id="sale.seq_sale_order" model="ir.sequence">
             <field name="name">Sales Order</field>
             <field name="code">sale.order</field>
-            <field name="prefix">%(year)s/SQ</field>
+            <field name="prefix">SQ/%(year)s/</field>
             <field name="padding">5</field>
             <field name="company_id" eval="False"/>
         </record>
+        <function name = "write" model = "ir.model.data">
+            <function name = "search" model = "ir.model.data">
+                <value eval = "[('module', '=', 'sale'),('name','=','seq_sale_order')]"/>
+            </function>
+            <value eval =" {'noupdate': True} "/>
+        </function>
 
-<!--        <record id="credit_not_seq" model="ir.sequence">-->
-<!--              <field name="name">Customer Credit Seq</field>-->
-<!--              <field name="code">credit_note_seq</field>-->
-<!--              <field name="prefix">CN/%(year)s/</field>-->
-<!--              <field name="padding">5</field>-->
-<!--              <field name="company_id" eval="False"/>-->
-<!--        </record>-->
-
-<!--         <record id="debit_not_seq" model="ir.sequence">-->
-<!--              <field name="name">Debit Note Seq</field>-->
-<!--              <field name="code">debit_note_seq</field>-->
-<!--              <field name="prefix">DN/%(year)s/</field>-->
-<!--              <field name="padding">5</field>-->
-<!--              <field name="company_id" eval="False"/>-->
-<!--        </record>-->
-
-        <record id="customer_payment_seq" model="ir.sequence">
-              <field name="name">Customer Payment Seq</field>
-              <field name="code">customer_payment_seq</field>
-              <field name="prefix">RV/%(year)s/</field>
-              <field name="padding">5</field>
-              <field name="company_id" eval="False"/>
+        <!-- Sequences for purchase.order -->
+        <function name = "write" model = "ir.model.data">
+            <function name = "search" model = "ir.model.data">
+                <value eval = "[('module', '=', 'purchase'),('name','=','seq_purchase_order')]"/>
+            </function>
+            <value eval =" {'noupdate': False} "/>
+        </function>
+        <record id="purchase.seq_purchase_order" model="ir.sequence">
+            <field name="name">Purchase Order</field>
+            <field name="code">purchase.order</field>
+            <field name="prefix">PO/%(year)s/</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
         </record>
-
-         <record id="supplier_payment_seq" model="ir.sequence">
-              <field name="name">Supplier Payment Seq</field>
-              <field name="code">supplier_payment_seq</field>
-              <field name="prefix">PV/%(year)s/</field>
-              <field name="padding">5</field>
-              <field name="company_id" eval="False"/>
+        <function name = "write" model = "ir.model.data">
+            <function name = "search" model = "ir.model.data">
+                <value eval = "[('module', '=', 'purchase'),('name','=','seq_purchase_order')]"/>
+            </function>
+            <value eval =" {'noupdate': False} "/>
+        </function>
+        <!--        <record id="credit_not_seq" model="ir.sequence">-->
+        <!--              <field name="name">Customer Credit Seq</field>-->
+        <!--              <field name="code">credit_note_seq</field>-->
+        <!--              <field name="prefix">CN/%(year)s/</field>-->
+        <!--              <field name="padding">5</field>-->
+        <!--              <field name="company_id" eval="False"/>-->
+        <!--        </record>-->
+        <!--         <record id="debit_not_seq" model="ir.sequence">-->
+        <!--              <field name="name">Debit Note Seq</field>-->
+        <!--              <field name="code">debit_note_seq</field>-->
+        <!--              <field name="prefix">DN/%(year)s/</field>-->
+        <!--              <field name="padding">5</field>-->
+        <!--              <field name="company_id" eval="False"/>-->
+        <!--        </record>-->
+        <record id="customer_payment_seq" model="ir.sequence">
+            <field name="name">Customer Payment Seq</field>
+            <field name="code">customer_payment_seq</field>
+            <field name="prefix">RV/%(year)s/</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+        <record id="supplier_payment_seq" model="ir.sequence">
+            <field name="name">Supplier Payment Seq</field>
+            <field name="code">supplier_payment_seq</field>
+            <field name="prefix">PV/%(year)s/</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
         </record>
     </data>
 </odoo>
