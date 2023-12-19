@@ -9,7 +9,7 @@ class Partner(models.Model):
 	attn_to = fields.Char('Attn To')
 	type = fields.Selection(selection_add=[('followup', 'Pickup Address'),('dept_staff','Department Staff')], copy=True)
 	batch_number = fields.Char('Batch Number')
-	customer_code = fields.Char('Customer Code')
+	customer_code = fields.Char('Customer Code', store=True)
 	fax = fields.Char('Fax')
 	# customer_sku = fields.Char('Customer SKU')
 	supplier_code = fields.Char('Supplier Code')
@@ -33,3 +33,20 @@ class Partner(models.Model):
 			self.currency_type = 'overseas'
 		else:
 			self.currency_type = 'no'
+
+	@api.model
+	def create(self, vals):
+		if vals.get('parent_id'):
+			parent_id = self.browse(vals.get('parent_id'))
+			vals['customer_code'] = parent_id.customer_code
+		res = super(Partner, self).create(vals)
+		return res
+
+
+	def write(self, vals):
+		if vals.get('customer_code'):
+			for customer in self.child_ids:
+				customer.customer_code = vals.get('customer_code')
+		res = super().write(vals)
+		return res
+
