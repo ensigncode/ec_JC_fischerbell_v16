@@ -57,7 +57,7 @@
 			</xpath>
 			<xpath expr="//group//group//field[@name='backorder_id']" position="before">
 				<field name="delivery_type" attrs="{'invisible': [('picking_type_code','!=','outgoing')]}"/>
-				<field name="route_id" attrs="{'invisible': [('picking_type_code','!=','outgoing')]}"/>
+				<field name="route_id" context="{'picking_id': id}" attrs="{'invisible': [('picking_type_code','!=','outgoing')]}"/>
 			</xpath>
 			<xpath expr="//page[@name='extra']//group//group[@name='other_infos']//field[@name='user_id']" position="after">
 				<field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color', 'no_create_edit': True}" />

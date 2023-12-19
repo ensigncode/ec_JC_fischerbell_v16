@@ -12,6 +12,19 @@ class FischerbellDeliveryRoute(models.Model):
 	zone_line_ids = fields.One2many('fischerbell.delivery.route.line','route_id')
 
 
+	def name_get(self):
+		if self._context.get('picking_id'):
+			partner_shipping_id = self.env['stock.picking'].browse(self._context.get('picking_id')[0])
+			partner_zip = '{:.2}'.format(partner_shipping_id.partner_id.zip)
+			result = []
+			for rec in self:
+				result.append((rec.id, '%s - %s' % (rec.name, partner_zip)))
+			return result
+		else:
+			return super().name_get()
+
+
+
 class FischerbellDeliveryRouteLine(models.Model):
 	_name = 'fischerbell.delivery.route.line'
 	_description = 'Fischerbell Delivery Zone Line'

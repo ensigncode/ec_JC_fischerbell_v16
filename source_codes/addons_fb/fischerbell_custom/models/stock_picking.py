@@ -451,3 +451,4 @@ class Picking(models.Model):
 			template = self.env.ref('fischerbell_custom.email_template_to_customer')
 			email_values = {'email_to': sale_order_ref.partner_id.email}
 			template.sudo().send_mail(sale_order_ref.id, email_values=email_values)
+

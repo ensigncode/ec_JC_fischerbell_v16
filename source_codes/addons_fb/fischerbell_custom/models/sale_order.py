@@ -2,6 +2,7 @@
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 
 from itertools import groupby
+from odoo.exceptions import MissingError, ValidationError, AccessError
 
 from odoo import api,fields, models, _
 from odoo.exceptions import UserError, ValidationError
@@ -98,6 +99,21 @@ class SaleOrder(models.Model):
 	scheduled_delivery_date = fields.Datetime(string="Scheduled Delivery Date")
 	requested_delivery_date = fields.Datetime(string="Requested Delivery Date")
 	no_enough_stock = fields.Boolean(compute='_compute_order_stock')
+
+	@api.depends('partner_id')
+	def _compute_partner_shipping_id(self):
+		for order in self:
+			order.partner_shipping_id = order.partner_id.address_get(['delivery'])['delivery'] if order.partner_id else False
+			order.route_id = order.get_route_id(order.partner_shipping_id)
+
+
+	def get_route_id(self, partner_shipping_id):
+		if partner_shipping_id and partner_shipping_id.zip:
+			postal_code = '{:.2}'.format(partner_shipping_id.zip)
+			zip_number = self.env['fischerbell.delivery.route.line'].search([('name','=',postal_code)], limit=1)
+			return zip_number.route_id.id if zip_number else False
+		else:
+			return False
 
 	def _compute_order_stock(self):
 		for order in self:
@@ -199,23 +215,6 @@ class SaleOrder(models.Model):
 				raise ValidationError("Sorry, you are not allowed to reject this order.")
 
 		return True
-
-
-	@api.onchange('partner_shipping_id')
-	def onchange_get_route_id(self):
-		self.ensure_one()
-		postal_code = None
-		for rec in self:
-			if rec.partner_shipping_id and rec.partner_shipping_id.zip:
-				postal_code = '{:.2}'.format(rec.partner_shipping_id.zip)
-				zip_number = self.env['fischerbell.delivery.route.line'].search([('name','=',postal_code)], limit=1)
-				if zip_number:
-					rec.route_id = zip_number.route_id.id
-				else:
-					rec.route_id = False
-			else:
-				rec.route_id = False
-
 
 	@api.depends('partner_note')
 	def _compute_sale_internal_note(self):
@@ -552,7 +551,8 @@ class SaleOrder(models.Model):
 			'type': 'ir.actions.act_window',
 			'view_mode': 'tree,form,calendar',
 			'res_model': 'stock.picking',
-			'domain': [('id', 'in', self.mapped('picking_ids').ids)]
+			'domain': [('id', 'in', self.mapped('picking_ids').ids)],
+			'context': {'picking_id': self.mapped('picking_ids').ids}
 		}
 
 
