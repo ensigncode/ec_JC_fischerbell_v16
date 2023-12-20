@@ -99,6 +99,7 @@ class SaleOrder(models.Model):
 	scheduled_delivery_date = fields.Datetime(string="Scheduled Delivery Date")
 	requested_delivery_date = fields.Datetime(string="Requested Delivery Date")
 	no_enough_stock = fields.Boolean(compute='_compute_order_stock')
+	submited_date = fields.Date('Submited Date')
 
 	@api.depends('partner_id')
 	def _compute_partner_shipping_id(self):
@@ -189,12 +190,26 @@ class SaleOrder(models.Model):
 					'reviewed_by': self.env.user.id
 				})
 				order.action_confirm()
+				purchase_order_ids = self._get_purchase_orders()
+				if purchase_order_ids:
+					purchase_id = purchase_order_ids[0]
+					return {
+						'name': "Low Stock Alert",
+						'type': 'ir.actions.act_window',
+						'view_type': 'form',
+						'view_mode': 'form',
+						'res_model': 'purchase.order.ref',
+						'context': {
+							'default_name' : f"Sale order - {order.name} has some products which are having low stock, please find the details below:\n{','.join(purchase_id.order_line.mapped('product_id.name'))}\nPurchase Order Ref: {purchase_id.name}"
+						},
+						'view_id': self.env.ref('fischerbell_custom.purchase_order_ref_form_view').id,
+						'target': 'new'
+					}
 				not_enough_stock = any(line.product_uom_qty > line.product_id.qty_available for line in order.order_line)
 				if not_enough_stock:
 					pass
 			else:
 				raise ValidationError("Sorry, you are not allowed to approve this order.")
-
 		return True
 
 	def action_stock_confirm(self):
@@ -226,6 +241,7 @@ class SaleOrder(models.Model):
 				inv.len_note = False
 	
 	def action_confirm(self):
+		self.submited_date = date.today()
 		for rec in self.order_line:
 			# line_ids = self.order_line.filtered(lambda line:not line.product_template_id.seller_ids)
 			if not rec.product_template_id.seller_ids and not self._context.get('vendor_wizard'):

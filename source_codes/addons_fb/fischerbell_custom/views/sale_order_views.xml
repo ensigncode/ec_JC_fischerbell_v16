@@ -9,6 +9,12 @@
             <xpath expr="//group[@name='sale_shipping']" position="attributes">
                 <attribute name="invisible">1</attribute>
             </xpath>
+             <xpath expr="//header//button[@name='action_confirm'][2]" position="attributes">
+                 <attribute name="string">Submit For Review</attribute>
+            </xpath>
+             <xpath expr="//field[@name='date_order']" position="after">
+                <field name="submited_date" readonly="1"/>
+            </xpath>
             <!-- <xpath expr="//field[@name='commitment_date']" position="attributes">
                 <attribute name="invisible">1</attribute>
             </xpath> -->
