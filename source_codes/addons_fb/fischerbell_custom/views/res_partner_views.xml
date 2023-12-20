@@ -31,6 +31,13 @@
                         </tree>
                     </field>
                 </page>
+                <page string="Platform Link">
+                    <group>
+                        <field name="platform_name"/>
+                        <field name="platform_login"/>
+                        <field name="platform_pwd" password="True"/>
+                    </group>
+                </page>
             </xpath>
         </field>
     </record>
