@@ -8,7 +8,7 @@
                 <form>
                     <sheet>
                         <group>
-                            <field name="purchase_order_type"/>
+                            <field name="purchase_order_type" widget="radio"/>
                         </group>
                     </sheet>
                     <footer>
