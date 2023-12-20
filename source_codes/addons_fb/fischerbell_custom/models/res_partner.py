@@ -21,6 +21,9 @@ class Partner(models.Model):
 	dept_code = fields.Char('Dept Code')
 	product_tmpl_id = fields.Many2one('product.template', 'Product Template')
 	user_training_ids = fields.One2many('fischerbell.user.training', 'partner_id', string="User Training")
+	platform_name = fields.Char(string='Platform Name')
+	platform_login = fields.Char(string='Login')
+	platform_pwd = fields.Char(string='Password')
 
 
 	@api.onchange('property_purchase_currency_id')

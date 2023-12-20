@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<record id="purchase_order_ref_form_view" model="ir.ui.view">
+		<field name="name">purchase.order.ref.form.view</field>
+		<field name="model">purchase.order.ref</field>
+		<field name="arch" type="xml">
+			<form String="Purchase Order Number">
+				<sheet>
+					<h3><field name="name" readonly="1"/></h3>
+				</sheet>
+				<footer>
+					<button name="action_confirm_purchase_ref" string="Confirm" type="object" class="btn-primary"/>
+				</footer>
+			</form>
+		</field>
+	</record>
+</odoo>
