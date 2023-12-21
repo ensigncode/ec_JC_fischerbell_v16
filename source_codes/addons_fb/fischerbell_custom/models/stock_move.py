@@ -86,3 +86,4 @@ class StockWarehouseOrderpoint(models.Model):
 			rec.send_email_reorder = False
 		return super(StockWarehouseOrderpoint, self).action_replenish()
 
+
