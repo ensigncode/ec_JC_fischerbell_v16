@@ -29,6 +29,7 @@ class PurchaseOrder(models.Model):
 	revision_purchase_count = fields.Float(sting="Revision Purchase Count",default=1.0)
 	revision_purchase_name = fields.Char(sting="Revision Purchase Name")
 	is_purchase_revise = fields.Boolean(default=False)
+	artwork_attachment_ids = fields.Many2many('ir.attachment', string="ArtWork")
 
 	def action_is_default_terms_purchase(self):
 		purchase = self.env['stock.picking'].search([('is_default_terms','=',True)], limit=1)
@@ -128,6 +129,12 @@ class PurchaseOrder(models.Model):
 			return res
 		else:
 			raise ValidationError("Request Delivery Date And Estimated Delivery Date are required")
+
+
+	def _prepare_picking(self):
+		res = super(PurchaseOrder, self)._prepare_picking()
+		res.update({"artwork_attachment_ids": [(6, 0, self.artwork_attachment_ids.ids)]})
+		return res
 
 
 class PurchaseOrderLine(models.Model):
