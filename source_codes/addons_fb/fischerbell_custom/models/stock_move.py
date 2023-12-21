@@ -14,6 +14,7 @@ class StockMove(models.Model):
 	mrp_line_id = fields.Many2one('stock.move', compute="_compute_mrp_line_id", store=True)
 	mrp_customer_id = fields.Many2one('res.partner', compute="_compute_mrp_line_id", store=True)
 	mrp_phone = fields.Char('Phone Number', compute="_compute_mrp_line_id", store=True)
+	send_email_reorder = fields.Boolean('Send Email To Reorder', default=False)
 
 	@api.onchange('customer_id')
 	def onchange_batch_number(self):
@@ -63,19 +64,25 @@ class StockWarehouseOrderpoint(models.Model):
 		return True
 
 	def action_send_email_for_min_qty(self):
-		order = self.search([]).filtered(lambda line: line.qty_on_hand and line.product_min_qty and line.qty_on_hand <= line.product_min_qty)
+		order = self.search([('send_email_reorder','=',False)]).filtered(lambda line: line.qty_on_hand and line.product_min_qty and line.qty_on_hand <= line.product_min_qty)
+		order.write({'send_email_reorder' : True})
 		reorder_orderpoint_products = '<br/>'.join([f"<li>Product : {orderpoint_id.product_id.name}, On Hand :{str(orderpoint_id.qty_on_hand)}, Min Qty : {str(orderpoint_id.product_min_qty)}</li>" for orderpoint_id in order])
 		if reorder_orderpoint_products:
 			body = f"""<p><b>Reminder To Reorder This Products</b></p><br/>{reorder_orderpoint_products}"""
 			subject = (f""" Reminder To Reorder """)
-			email_to_user = self.env['res.users'].search([('groups_id','in',self.env.ref('purchase.group_purchase_manager').id)],limit=1)
-			email_to = email_to_user.email_formatted
+			email_to_partner = self.env.ref('purchase.group_purchase_manager').users.partner_id
 			mails = {
 				'subject': subject,
 				'email_from': self.env.user.email_formatted,
-				'email_to': email_to,
+				'recipient_ids': email_to_partner.ids,
 				'body_html': body,
 				'auto_delete': True,
 			}
 			mail = self.env['mail.mail'].create(mails)
 			mail.send()
+
+	def action_replenish(self):
+		for rec in self:
+			rec.send_email_reorder = False
+		return super(StockWarehouseOrderpoint, self).action_replenish()
+
