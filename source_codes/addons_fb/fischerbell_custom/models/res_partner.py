@@ -26,6 +26,8 @@ class Partner(models.Model):
 	platform_pwd = fields.Char(string='Password')
 	delivery_instruction = fields.Html(string="Delivery Instruction")
 	invoice_instruction = fields.Html(string="Invoice Instruction")
+	credit_limit = fields.Float(string='Credit Limit')
+
 
 
 	@api.onchange('property_purchase_currency_id')
