@@ -24,6 +24,7 @@ class Partner(models.Model):
 	platform_name = fields.Char(string='Platform Name')
 	platform_login = fields.Char(string='Login')
 	platform_pwd = fields.Char(string='Password')
+	credit_limit = fields.Float(string='Credit Limit')
 
 
 	@api.onchange('property_purchase_currency_id')
