@@ -84,7 +84,7 @@
 					</field>
 				</page>
 			</xpath>
-			
+
 			<xpath expr="//group[@name='other_infos']" position="inside">
 				 <field name="artwork_attachment_ids" widget="many2many_binary"/>
 <!--				  <field name="artwork_attachment_ids" widget="many2many_kanban">-->
