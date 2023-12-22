@@ -258,7 +258,6 @@
                                     <td colspan="3">
                                         <div class="row">
                                             <div class="document-title">
-
                                                 <table style="width:100%; border: 0px solid white;">
                                                     <br/>
                                                      <div style="padding:0; margin:0px; padding-top:10px; padding-bottom:10px; text-align:center; margin-left: 32%;">
@@ -621,6 +620,7 @@
                                                     <th width="10%" style="text-align: right;"><span>TOTAL SGD</span></th>
                                                 </tr>
                                             </thead>
+
                                         </table>
                                     </td>
                                 </tr>
@@ -629,7 +629,14 @@
                     </div>
                 </t>
                 <t>
-                    <div class="page">
+                    <div>
+                        <br/>
+                        <br/>
+                        <br/>
+                        <br/>
+                        <br/>
+                        <br/>
+                        <br/>
                         <t t-call="fischerbell_custom.page_invoices_template"/>
                     </div>
                     <!-- <div class="footer">
