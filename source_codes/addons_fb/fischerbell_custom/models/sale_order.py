@@ -100,6 +100,7 @@ class SaleOrder(models.Model):
 	requested_delivery_date = fields.Datetime(string="Requested Delivery Date")
 	no_enough_stock = fields.Boolean(compute='_compute_order_stock')
 	submited_date = fields.Date('Submited Date')
+	artwork_attachment_ids = fields.Many2many('ir.attachment',string="ArtWork")
 
 	@api.depends('partner_id')
 	def _compute_partner_shipping_id(self):
@@ -193,6 +194,7 @@ class SaleOrder(models.Model):
 				purchase_order_ids = self._get_purchase_orders()
 				if purchase_order_ids:
 					purchase_id = purchase_order_ids[0]
+					purchase_id.write({"artwork_attachment_ids": [(6, 0, order.artwork_attachment_ids.ids)]})
 					return {
 						'name': "Low Stock Alert",
 						'type': 'ir.actions.act_window',
