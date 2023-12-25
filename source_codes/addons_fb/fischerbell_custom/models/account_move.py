@@ -30,6 +30,9 @@ class AccountMove(models.Model):
 	internal_note = fields.Char('')
 	len_note = fields.Char('Length Internal Notee', compute="_compute_internal_note", store=True)
 	partner_note = fields.Text('Note')
+	type_of_invoice = fields.Selection(selection=[('e_invoice', 'E-Invoice'), ('paper_invoice', 'Paper Invoice')],
+	    string='Type Of Invoice', required=True)
+	    
 
 	@api.depends('posted_before', 'state', 'journal_id', 'date')
 	def _compute_name(self):
