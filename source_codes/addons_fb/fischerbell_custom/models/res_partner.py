@@ -24,6 +24,8 @@ class Partner(models.Model):
 	platform_name = fields.Char(string='Platform Name')
 	platform_login = fields.Char(string='Login')
 	platform_pwd = fields.Char(string='Password')
+	delivery_instruction = fields.Html(string="Delivery Instruction")
+	invoice_instruction = fields.Html(string="Invoice Instruction")
 
 
 	@api.onchange('property_purchase_currency_id')

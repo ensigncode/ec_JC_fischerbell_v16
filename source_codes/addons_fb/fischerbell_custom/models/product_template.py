@@ -167,6 +167,22 @@ class ProductProduct(models.Model):
 	_inherit = 'product.product'
 
 	qr_code_image = fields.Binary(string='QR Code', attachment=True, readonly=True)
+	product_detail_sheet = fields.Many2one('ir.attachment')
+	product_detail_sheet_url = fields.Char('Sheet Url',compute="_compute_sheet_url")
+
+
+
+	def _compute_sheet_url(self):
+		base_url = self.env.company.get_base_url()
+		for rec in self:
+			if rec.product_detail_sheet:
+				access_token = rec.product_detail_sheet.generate_access_token()
+				url = f"{base_url}/web/content/?model=ir.attachment&id={rec.product_detail_sheet.id}&filename_field=name&access_token={access_token[0]}&field=datas&download=true"
+				rec.product_detail_sheet_url = url
+			else:
+				rec.product_detail_sheet_url = ''
+
+
 
 	def get_product_multiline_description_sale(self):
 		""" Compute a multiline description of this product, in the context of sales
