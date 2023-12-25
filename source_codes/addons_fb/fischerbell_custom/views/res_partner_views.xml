@@ -42,6 +42,16 @@
                     </group>
                 </page>
             </xpath>
+            <xpath expr="//field[@name='child_ids']//form//field[@name='comment']" position="after">
+                 <field  name="delivery_instruction" placeholder="Delivery instruction..." nolabel="1" colspan="2" attrs="{'invisible': [('type','!=','delivery')]}"/>
+                 <field name="invoice_instruction" placeholder="Inovice instruction..." nolabel="1" colspan="2" attrs="{'invisible': [('type','!=','invoice')]}"/>
+            </xpath>
+            <xpath expr="//page[@name='sales_purchases']//group[@name='misc']" position="after">
+                <group name="instruction" string="Instruction">
+                    <field name="delivery_instruction" placeholder="Delivery instruction..." nolabel="1" colspan="2" attrs="{'invisible': [('type','!=','delivery')]}" />
+                    <field name="invoice_instruction" placeholder="Inovice instruction..." nolabel="1" colspan="2" attrs="{'invisible': [('type','!=','invoice')]}"/>
+                </group>
+            </xpath>
         </field>
     </record>
 

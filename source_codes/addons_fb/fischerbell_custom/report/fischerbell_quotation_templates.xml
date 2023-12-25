@@ -142,6 +142,15 @@
                                                                 <span style="text-align: left;" t-esc="term_condition.description"/><br/>
                                                             </t>
                                                         </td>
+                                                        <style>
+                                                            .truncate {
+                                                              white-space: nowrap;
+                                                              overflow: hidden;
+                                                              text-overflow: ellipsis;
+                                                              max-width: 50px; /* Adjust the maximum width as needed */
+                                                            }
+                                                          </style>
+                                                        <td width="7%" class="truncate text-center"><a t-att-href="line.product_detail_sheet_url" t-att-title="line.product_detail_sheet_url"><t t-esc="line.product_detail_sheet_url"/> </a></td>
                                                         <td width="5%" class="text-center"><t t-esc="int(line.product_uom_qty)"/></td>
                                                         <td width="7%" class="text-center"><t t-esc="line.product_uom.name"/></td>
                                                         <td width="5%" class="text-center"><t t-esc="line.lead_time_stock"/></td>
@@ -570,6 +579,7 @@
                                             <th width="10%" style="margin-left: 0px; text-align: center;">IMAGE</th>
                                             <th width="28%" style="margin-left: 0px; text-align: left;">DESCRIPTION</th>
                                             <th style="margin-left: 0px; text-align: left;">T&amp;C</th>
+                                            <th width="7%"><span>Product Sheet Link</span></th>
                                             <th width="5%"><span>QTY</span></th>
                                             <th width="7%"><span>UOM</span></th>
                                             <th width="5%"><span>LEAD TIME</span></th>
