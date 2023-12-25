@@ -115,6 +115,8 @@
                 <field name="default_code"/>
                 <field name="barcode"/>
                 <field name="qr_code_image" widget="image" options="{'size': [80, 80]}"/>
+                <field name="product_detail_sheet"/>
+                <field name="product_detail_sheet_url" widget="url"/>
             </xpath>
             <xpath expr="//field[@name='priority']" position="attributes">
                 <attribute name="readonly">1</attribute>

@@ -101,6 +101,8 @@ class SaleOrder(models.Model):
 	no_enough_stock = fields.Boolean(compute='_compute_order_stock')
 	submited_date = fields.Date('Submited Date')
 	artwork_attachment_ids = fields.Many2many('ir.attachment',string="ArtWork")
+	e_invoice_email = fields.Char("E-Invoice Email")
+	soa_email = fields.Char("Soa Email")
 
 	@api.depends('partner_id')
 	def _compute_partner_shipping_id(self):
@@ -812,6 +814,8 @@ class SaleOrderLine(models.Model):
 	last_invoice_price = fields.Float(string="Last Invoice Price",compute="_compute_get_last_invoice_date")
 	last_price = fields.Float('Last Order Price', compute="_compute_last_order_price", store=True)
 	picking_id = fields.Many2one('stock.picking', 'Picking')
+	product_detail_sheet_url = fields.Char(related="product_id.product_detail_sheet_url")
+
 
 	@api.depends('customer_id','product_id')
 	def _compute_last_order_price(self):
