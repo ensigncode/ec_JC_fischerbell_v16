@@ -216,7 +216,7 @@ class SaleOrder(models.Model):
 					raise ValidationError("Sorry, you are not allowed to approve this order.")
 
 			else:
-				raise ValidationError("Sorry, you are exceed the credit limit.")
+				raise ValidationError("Customer exceeded the credit limit.")
 		return True
 
 	def action_stock_confirm(self):
