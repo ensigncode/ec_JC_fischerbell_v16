@@ -10,6 +10,7 @@ from datetime import datetime, timedelta, date
 from odoo.fields import Command
 import re
 import itertools
+import pytz
 
 READONLY_FIELD_STATES = {
     state: [('readonly', True)]
@@ -800,6 +801,62 @@ class SaleOrder(models.Model):
 				('first_followup_date', '<=', fields.Date.today() - timedelta(days=7))
 			]):
 			rec.sec_followup_date = datetime.now()
+
+	def cron_reminder_customer_to_status(self):
+		user_tz = pytz.timezone(self.env.context.get('tz') or self.env.user.tz or 'UTC')
+		today = user_tz.localize(fields.Datetime.from_string(fields.Date.context_today(self))) - timedelta(days=7)
+		date_start = today.astimezone(pytz.timezone('UTC'))
+		date_stop = date_start + timedelta(days=1, seconds=-1)
+		for rec in self.env['sale.order'].search([
+									('state', '!=', 'sale'),
+									('create_date', '>=', date_start),
+									('create_date', '<=', date_stop),
+				]):
+			if rec:
+				print("------rec",rec)
+				display_message = """
+	            						<p>We noticed that your order with reference number """ + rec.name + """ is still pending confirmation. 
+	            						If you have any inquiries or concerns regarding this order, please feel free to reach out. 
+	            						We are here to assist you and ensure a smooth process.</p>
+	            						"""
+				subject = (f""" Inquiry about Order  %s  Confirmation Status""" % rec.name)
+				email_to = rec.partner_id.email
+				mails = {
+					'subject': subject,
+					'email_from': self.env.user.email_formatted,
+					'email_to': email_to,
+					'body_html': display_message,
+					'auto_delete': False,
+				}
+				mail = self.env['mail.mail'].create(mails)
+				mail.send()
+	def cron_reminder_processing_team_to_followup(self):
+		user_tz = pytz.timezone(self.env.context.get('tz') or self.env.user.tz or 'UTC')
+		today = user_tz.localize(fields.Datetime.from_string(fields.Date.context_today(self))) - timedelta(days=14)
+		date_start = today.astimezone(pytz.timezone('UTC'))
+		date_stop = date_start + timedelta(days=1, seconds=-1)
+		for rec in self.env['sale.order'].search([
+									('state', '!=', 'sale'),
+									('create_date', '>=', date_start),
+									('create_date', '<=', date_stop),
+				]):
+			if rec:
+				print("------rec",rec)
+				display_message = """
+	            						<p>For this order """ + rec.name + """, since the customer has not responded, kindly proceed with a follow-up, meeting, or phone call to engage with the customer.</p>
+	            						"""
+				subject = (f""" Action Required for Quotation %s Customer Follow-Up Needed """ % rec.name)
+				email_to = rec.user_id.email
+				mails = {
+					'subject': subject,
+					'email_from': self.env.user.email_formatted,
+					'email_to': email_to,
+					'body_html': display_message,
+					'auto_delete': False,
+				}
+				mail = self.env['mail.mail'].create(mails)
+				mail.send()
+
 
 class SaleOrderLine(models.Model):
 	_inherit = "sale.order.line"
