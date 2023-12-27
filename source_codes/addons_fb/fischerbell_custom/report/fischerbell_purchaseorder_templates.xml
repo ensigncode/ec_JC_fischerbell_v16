@@ -56,15 +56,16 @@
                                                     <tr>
                                                         <td width="5%" class="text-center"><span t-esc="count"/></td>
                                                         <td width="15%" class="text-left"><span t-esc="line.product_id.default_code"/></td>
-                                                        <td width="10%">
+                                                        <td width="10%" t-if="line.product_id.image_1920">
                                                             <div>
                                                                 <t t-if="line.product_id.image_1920" >
                                                                     <img class="variant-image" t-attf-src="data:image/*;base64,{{line.product_id.image_1920}}" align="center" style='margin:0px;padding-top:0px; max-width: 40px; max-height: 50px;'/>
                                                                 </t>
                                                             </div>
                                                         </td>
-                                                        <td width="28%">
-                                                            <span t-field="line.name"/>
+                                                        <td width="28%" >
+                                                            <span t-field="line.name"/><br></br>
+                                                            <span t-field="line.comments"/>
                                                         </td>
                                                         <td width="5%" class="text-center"><t t-esc="int(line.product_uom_qty)"/></td>
                                                         <td width="7%" class="text-center"><t t-esc="line.product_uom.name"/></td>
