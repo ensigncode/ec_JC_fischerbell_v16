@@ -27,6 +27,8 @@ class Partner(models.Model):
 	delivery_instruction = fields.Html(string="Delivery Instruction")
 	invoice_instruction = fields.Html(string="Invoice Instruction")
 	credit_limit = fields.Float(string='Credit Limit')
+	type_of_invoice = fields.Selection(selection=[('e_invoice', 'E-Invoice'), ('paper_invoice', 'Paper Invoice')],
+	    string='Type Of Invoice', required=True)
 	no_delivery_days_selection = fields.Selection([('days', 'Days'), ('date', 'By Date')], string="Delivery Restriction")
 	no_delivery_days = fields.Selection([
 		('0', 'Sunday'),
@@ -38,6 +40,7 @@ class Partner(models.Model):
 		('6', 'Saturday')], string="Delivery Restriction")
 	delivery_restriction_start_date = fields.Date(string="Delivery Restriction Start")
 	delivery_restriction_end_date = fields.Date(string="Delivery Restriction End")
+
 
 	@api.onchange('property_purchase_currency_id')
 	def _onchange_currency_type(self):

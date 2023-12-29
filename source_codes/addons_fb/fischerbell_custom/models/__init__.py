@@ -22,3 +22,5 @@ from . import stock_picking
 from . import crm_lead
 from . import service_type_product_line
 from . import account_payment
+from . import mail_compose_message
+from . import res_users

@@ -130,7 +130,7 @@ class WeeklyReportwizard(models.TransientModel):
                 wrksht.cell(row=table_row, column=table_col+3).value = order.user_id.name or ''
                 wrksht.cell(row=table_row, column=table_col+3).alignment = table_header_alignment
 
-                wrksht.cell(row=table_row, column=table_col+4).value = order.name or ''
+                wrksht.cell(row=table_row, column=table_col+4).value = order.name.split('-')[0] or ''
                 wrksht.cell(row=table_row, column=table_col+4).alignment = table_header_alignment
 
                 wrksht.cell(row=table_row, column=table_col+5).value = order.revision_order_name or ''

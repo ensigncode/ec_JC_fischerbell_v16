@@ -127,13 +127,13 @@
                                                         <td width="10%" class="text-center">
                                                             <span t-esc="line.product_id.default_code"/>
                                                         </td>
-                                                        <td width="10%">
-                                                            <div style="text-align: center;">
-                                                                <t t-if="line.product_id.image_1920">
-                                                                    <img class="variant-image" t-attf-src="data:image/*;base64,{{line.product_id.image_1920}}" align="center" style="margin:0px;padding-top:0px; max-width: 40px; max-height: 50px;"/>
-                                                                </t>
-                                                            </div>
-                                                        </td>
+<!--                                                        <td width="10%">-->
+<!--                                                            <div style="text-align: center;">-->
+<!--                                                                <t t-if="line.product_id.image_1920">-->
+<!--                                                                    <img class="variant-image" t-attf-src="data:image/*;base64,{{line.product_id.image_1920}}" align="center" style="margin:0px;padding-top:0px; max-width: 40px; max-height: 50px;"/>-->
+<!--                                                                </t>-->
+<!--                                                            </div>-->
+<!--                                                        </td>-->
                                                         <td width="28%">
                                                             <span t-field="line.name"/>
                                                         </td>
@@ -576,7 +576,7 @@
                                         <tr>
                                             <th width="5%">NO</th>
                                             <th width="10%"><span>PRODUCT</span><br/><span>CODE</span></th>
-                                            <th width="10%" style="margin-left: 0px; text-align: center;">IMAGE</th>
+<!--                                            <th width="10%" style="margin-left: 0px; text-align: center;">IMAGE</th>-->
                                             <th width="28%" style="margin-left: 0px; text-align: left;">DESCRIPTION</th>
                                             <th style="margin-left: 0px; text-align: left;">T&amp;C</th>
                                             <th width="7%"><span>Product Sheet Link</span></th>
