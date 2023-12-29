@@ -27,6 +27,8 @@ class Partner(models.Model):
 	delivery_instruction = fields.Html(string="Delivery Instruction")
 	invoice_instruction = fields.Html(string="Invoice Instruction")
 	credit_limit = fields.Float(string='Credit Limit')
+	type_of_invoice = fields.Selection(selection=[('e_invoice', 'E-Invoice'), ('paper_invoice', 'Paper Invoice')],
+	    string='Type Of Invoice', required=True)
 
 
 
