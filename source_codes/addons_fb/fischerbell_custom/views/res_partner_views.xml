@@ -12,6 +12,17 @@
             <xpath expr="//field[@name='user_ids']" position="before">
                 <field name="fax" widget="phone"/>
             </xpath>
+            <xpath expr="//field[@name='vat']" position="after">
+                <field name="no_delivery_days_selection"/>
+                <field name="no_delivery_days" attrs="{'invisible':[('no_delivery_days_selection','in',['date',False])]}"/>
+                <label for="delivery_restriction_start_date" string="Date" attrs="{'invisible':[('no_delivery_days_selection','in',['days',False])]}"/>
+                <div name="dates" class="o_row" attrs="{'invisible':[('no_delivery_days_selection','in',['days',False])]}">
+                    <field name="delivery_restriction_start_date" widget="daterange" options='{"related_end_date": "delivery_restriction_end_date"}'/>
+                    <i class="fa fa-long-arrow-right mx-2 oe_edit_only" aria-label="Arrow icon" title="Arrow"/>
+                    <i class="fa fa-long-arrow-right mx-2 oe_read_only" aria-label="Arrow icon" title="Arrow" attrs="{'invisible': [('delivery_restriction_start_date', '=', False), ('delivery_restriction_end_date', '=', False)]}"/>
+                    <field name="delivery_restriction_end_date" widget="daterange" options='{"related_start_date": "delivery_restriction_start_date"}'/>
+                </div>
+            </xpath>
             <xpath expr="//group[@name='sale']" position="inside">
         		<field name="attn_to"/>
                 <field name="customer_code" attrs="{'readonly': [('parent_id','!=', False)]}"/>

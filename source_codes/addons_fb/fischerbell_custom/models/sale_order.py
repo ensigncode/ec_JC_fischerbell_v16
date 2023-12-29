@@ -246,7 +246,7 @@ class SaleOrder(models.Model):
 				inv.len_note = len(inv.partner_note)
 			else:
 				inv.len_note = False
-	
+
 	def action_confirm(self):
 		self.submited_date = date.today()
 		for rec in self.order_line:
@@ -259,7 +259,11 @@ class SaleOrder(models.Model):
 				        # 'context': {'order_id': self.id,'line_ids':line_ids},
 				        'target': 'new',
 				        }
-		return super(SaleOrder, self).action_confirm()
+		super_call = super(SaleOrder, self).action_confirm()
+		for order in self:
+			# Sent email to customer based on the state
+			order.send_mail_triggers_based_on_state()
+		return super_call
 
 
 	# def action_confirm(self):
@@ -311,7 +315,7 @@ class SaleOrder(models.Model):
 	# 			production.write({'sale_id': order.id})
 
 	# 	return res
-	
+
 	@api.onchange('partner_id','type')
 	def _onchange_trainer_desc(self):
 		for order in self:
@@ -347,8 +351,8 @@ class SaleOrder(models.Model):
 					pass
 					# line[0].update({'name': 'state no. of trainess : '})
 			else:
-				self.update({'order_line': False})		
-				
+				self.update({'order_line': False})
+
 			if order.partner_id:
 				config_note = self.env['fischerbell.configuration.note'].search([
 			        ('type', '=', 'sale'),
@@ -585,10 +589,25 @@ class SaleOrder(models.Model):
 			self.check_partner_address = False
 		else:
 			self.check_partner_address = True
-			
+
 		if not self.partner_invoice_id:
 			self.check_partner_address = False
 
+	# ---------------------------------------------------------------------------------
+	# ----------------- SEND MAIL TRIGGERS --------------------------------------------
+	# ---------------------------------------------------------------------------------
+
+	def send_mail_triggers_based_on_state(self):
+		"""
+			Send email based on the order's state
+		"""
+		sale_draft_trigger_templ = self.env.ref('fischerbell_custom.email_template_sale_draft_trigger')
+		sale_sale_state_trigger_templ = self.env.ref('fischerbell_custom.email_template_sale_sale_state_trigger')
+		if self.state == 'draft':
+			sale_draft_trigger_templ.send_mail(res_id=self.id)
+		elif self.state == 'sale':
+			sale_sale_state_trigger_templ.send_mail(res_id=self.id)
+		return True
 
 	@api.model
 	def create(self, vals):
@@ -602,7 +621,20 @@ class SaleOrder(models.Model):
 				vals['partner_invoice_address'] = name
 
 		res = super().create(vals)
+		# Send email to customer
+		res.send_mail_triggers_based_on_state()
 		return res
+
+	@api.depends('picking_ids', 'picking_ids.state')
+	def _compute_delivery_status(self):
+		super(SaleOrder, self)._compute_delivery_status()
+		sale_picking_pending_state_trigger_templ = self.env.ref('fischerbell_custom.email_template_sale_picking_pending_state_trigger')
+		sale_picking_done_state_trigger_templ = self.env.ref('fischerbell_custom.email_template_sale_picking_done_state_trigger')
+		for order in self:
+			if order.delivery_status == 'pending':
+				sale_picking_pending_state_trigger_templ.send_mail(res_id=order.id)
+			elif order.delivery_status == 'full':
+				sale_picking_done_state_trigger_templ.send_mail(res_id=order.id)
 
 	def write(self, vals):
 		name = ''
@@ -630,7 +662,7 @@ class SaleOrder(models.Model):
 
 			if vals.get('state') == 'draft':
 				vals['approval_state'] = 'no'
-			
+
 			if vals.get('state') == 'sent':
 				vals['email_to_customer'] = datetime.now()
 
@@ -649,6 +681,7 @@ class SaleOrder(models.Model):
 					pick.tag_ids = vals['tag_ids']
 
 		return res
+
 
 	@api.depends('type','picking_ids', 'picking_ids.state')
 	def _compute_loan_state(self):
@@ -716,7 +749,7 @@ class SaleOrder(models.Model):
 				'type': 'exchange',
 				'state': 'draft',
 			})
-		
+
 		return
 
 	@api.depends('exchange_order_ids')
@@ -776,13 +809,13 @@ class SaleOrder(models.Model):
 	def get_report_name(self):
 		self.ensure_one()
 		return '%s - %s %s'%(datetime.now().year,self.name or '',self.partner_id.parent_id.name or self.partner_id.name)
-	
+
 	def get_order_template_subject(self):
 		self.ensure_one()
 		if self.is_order_revise and self.user_id.id == self.env.user.id:
 			return "This is a revised quotation %s."%(self.revision_order_name)
 		else:
-			return "%s %s (%s)"%(self.company_id.name,self.state in ('draft', 'sent') and (self._context.get('proforma') and 'Proforma' or 'Quotation') or 'Order',self.name or 'n/a')		
+			return "%s %s (%s)"%(self.company_id.name,self.state in ('draft', 'sent') and (self._context.get('proforma') and 'Proforma' or 'Quotation') or 'Order',self.name or 'n/a')
 
 	# Set first followup date in order cron.
 	def cron_set_followup_date(self):
@@ -792,7 +825,7 @@ class SaleOrder(models.Model):
 				('first_followup_date', '=', False)
 			]):
 			rec.first_followup_date = datetime.now()
-			
+
 	def cron_set_sec_followup_date(self):
 		for rec in self.search([
 				('state', '=', 'draft'),  # Assuming 'draft' is the status of quotations
