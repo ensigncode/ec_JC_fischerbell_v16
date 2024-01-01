@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import itertools
+import calendar
 
 from odoo import api, fields, models
 from odoo.exceptions import UserError, ValidationError
@@ -136,6 +137,25 @@ class PurchaseOrder(models.Model):
 		res.update({"artwork_attachment_ids": [(6, 0, self.artwork_attachment_ids.ids)]})
 		return res
 
+	def check_planned_date(self, order_date_planned):
+		if order_date_planned:
+			if self.partner_id:
+				if self.partner_id.no_delivery_days_selection == 'days':
+					if eval(self.partner_id.no_delivery_days) == order_date_planned.weekday():
+						raise UserError('The customer %s is not available at this day %s, please change it as per the customers availability' % (self.partner_id.name,calendar.day_name[eval(self.partner_id.no_delivery_days)]))
+				elif self.partner_id.no_delivery_days_selection == 'date':
+					if self.partner_id.delivery_restriction_start_date <= order_date_planned.date() <= self.partner_id.delivery_restriction_end_date:
+						raise UserError('The customer %s is not available at this date %s, please change it as per the customers availability' % (self.partner_id.name,order_date_planned))
+	@api.depends('order_line.date_planned')
+	def _compute_date_planned(self):
+		""" date_planned = the earliest date_planned across all order lines. """
+		for order in self:
+			dates_list = order.order_line.filtered(lambda x: not x.display_type and x.date_planned).mapped('date_planned')
+			if dates_list:
+				order.date_planned = min(dates_list)
+			else:
+				order.date_planned = False
+			self.check_planned_date(order.date_planned)
 
 class PurchaseOrderLine(models.Model):
 	_inherit = "purchase.order.line"
