@@ -9,6 +9,12 @@
                 <field name="min_price" required="1"/>
                 <field name="max_price" required="1"/>
             </xpath>
+            <xpath expr="//field[@name='tracking']" position="after">
+                <field name="manufacturing_date"/>
+                <field name="expiration_date"/>
+                <field name="batch_number"/>
+                <field name="serial_number"/>
+            </xpath>
             <xpath expr="//page[@name='general_information']//group//group[@name='group_general']//field[@name='detailed_type']" position="after">
                 <field name="product_brand_id"/>
                 <field name="use_bp_code" invisible="1"/>
