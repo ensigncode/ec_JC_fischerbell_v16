@@ -29,7 +29,10 @@ class Partner(models.Model):
 	credit_limit = fields.Float(string='Credit Limit')
 	type_of_invoice = fields.Selection(selection=[('e_invoice', 'E-Invoice'), ('paper_invoice', 'Paper Invoice')],
 	    string='Type Of Invoice', required=True)
+<<<<<<< HEAD
 
+=======
+>>>>>>> 84e3602b3b155ff304a6e94394c2bcf96e707155
 
 
 	@api.onchange('property_purchase_currency_id')
