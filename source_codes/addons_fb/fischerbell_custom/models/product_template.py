@@ -38,6 +38,9 @@ class ProductTemplate(models.Model):
 		comodel_name='fischerbell.product.terms.and.conditions', 
 		string='Terms & Conditions'
 		)
+	manufacturing_date = fields.Date('manufacturing date')
+	expiration_date = fields.Date('expiration date')
+	serial_number = fields.Char('Serial Number')
 
 
 	@api.depends_context('company')
