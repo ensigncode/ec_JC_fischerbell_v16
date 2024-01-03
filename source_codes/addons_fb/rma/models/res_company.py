@@ -1,6 +1,3 @@
-# Copyright 2020 Tecnativa - Ernesto Tejeda
-# Copyright 2023 Tecnativa - Pedro M. Baeza
-# License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
 from odoo import _, api, fields, models
 
@@ -14,17 +11,19 @@ class ResCompany(models.Model):
         except ValueError:
             return False
 
+    def _default_rma_mail_draft_template(self):
+        try:
+            return self.env.ref("rma.mail_template_rma_draft_notification").id
+        except ValueError:
+            return False
+
     def _default_rma_mail_receipt_template(self):
         try:
             return self.env.ref("rma.mail_template_rma_receipt_notification").id
         except ValueError:
             return False
 
-    def _default_rma_mail_draft_template(self):
-        try:
-            return self.env.ref("rma.mail_template_rma_draft_notification").id
-        except ValueError:
-            return False
+
 
     rma_return_grouping = fields.Boolean(
         string="Group RMA returns by customer address and warehouse",

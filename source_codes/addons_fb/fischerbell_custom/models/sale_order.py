@@ -739,75 +739,6 @@ class SaleOrder(models.Model):
 			'tag': 'reload'
 		}
 
-<<<<<<< Updated upstream
-	def create_exchange_order(self):
-		for sale in self:
-			sale_id = sale.create({
-				'sale_id': sale.id,
-				'partner_id': sale.partner_id.id,
-				'partner_invoice_id': sale.partner_invoice_id.id,
-				'partner_shipping_id': sale.partner_shipping_id.id,
-				'pricelist_id': sale.pricelist_id.id,
-				'type': 'exchange',
-				'state': 'draft',
-			})
-
-		return
-
-	@api.depends('exchange_order_ids')
-	def _compute_exchange_order_ids(self):
-		for order in self:
-			exchange = list(filter(lambda x: (x.type == 'exchange'), order.exchange_order_ids))
-			order.exchange_order_count = len(exchange)
-
-
-	def action_view_exchange_order(self, order=False):
-		self.ensure_one()
-
-		return {
-			'type': 'ir.actions.act_window',
-			'name': 'Exchange Order',
-			'view_mode': 'tree,form',
-			'res_model': 'sale.order',
-			'domain': [('sale_id', '=', self.id),('type','=','exchange')],
-			'context': {'default_sale_id':self.id, 'default_type': 'exchange', 'form_view_ref': 'sale.view_order_form', 'tree_view_ref':'sale.view_order_tree'}
-		}
-
-
-	def create_replacement_orders(self):
-		for sale in self:
-			sale_id = sale.create({
-				'sale_id': sale.id,
-				'partner_id': sale.partner_id.id,
-				'partner_invoice_id': sale.partner_invoice_id.id,
-				'partner_shipping_id': sale.partner_shipping_id.id,
-				'pricelist_id': sale.pricelist_id.id,
-				'type': 'replacement',
-				'state': 'draft',
-			})
-
-		return
-
-
-	@api.depends('replacement_order_ids')
-	def _compute_replacement_order_ids(self):
-		for order in self:
-			replacement = list(filter(lambda x: (x.type == 'replacement'), order.replacement_order_ids))
-			order.replacement_order_count = len(replacement)
-
-
-	def action_view_replacement_order(self, order=False):
-		self.ensure_one()
-
-		return {
-			'type': 'ir.actions.act_window',
-			'name': 'Replacement Order',
-			'view_mode': 'tree,form',
-			'res_model': 'sale.order',
-			'domain': [('sale_id', '=', self.id),('type','=','replacement')],
-			'context': {'default_sale_id':self.id, 'default_type': 'replacement', 'form_view_ref': 'sale.view_order_form', 'tree_view_ref':'sale.view_order_tree'}
-		}
-=======
 	# def create_exchange_order(self):
 	# 	for sale in self:
 	# 		sale_id = sale.create({
@@ -875,7 +806,6 @@ class SaleOrder(models.Model):
 	# 		'domain': [('sale_id', '=', self.id),('type','=','replacement')],
 	# 		'context': {'default_sale_id':self.id, 'default_type': 'replacement', 'form_view_ref': 'sale.view_order_form', 'tree_view_ref':'sale.view_order_tree'}
 	# 	}
->>>>>>> Stashed changes
 
 	def get_report_name(self):
 		self.ensure_one()

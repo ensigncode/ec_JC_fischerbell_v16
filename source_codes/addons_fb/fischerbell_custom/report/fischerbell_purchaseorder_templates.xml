@@ -316,7 +316,9 @@
                                                                     <span style="font-family: 'Unitext Pro Regular'; line-height: 1em; font-size: 12px;">:</span>
                                                                 </td>
                                                                 <td width="65%" style="padding-left: 5px;">
-                                                                    <span style="font-family: 'Unitext Pro Regular'; line-height: 1em; font-size: 12px;" t-esc="doc.date_planned.strftime('%d-%m-%Y')"/>
+                                                                    <t t-if="doc.date_planned">
+                                                                        <span style="font-family: 'Unitext Pro Regular'; line-height: 1em; font-size: 12px;" t-esc="doc.date_planned.strftime('%d-%m-%Y')"/>
+                                                                    </t>
                                                                 </td>
                                                             </tr>
                                                             <tr>

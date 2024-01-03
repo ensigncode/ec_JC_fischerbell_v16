@@ -1,6 +1,4 @@
-# Copyright 2020 Tecnativa - Ernesto Tejeda
-# Copyright 2023 Tecnativa - Pedro M. Baeza
-# License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
+
 
 from odoo import api, fields, models
 from odoo.tools import float_compare
@@ -47,6 +45,18 @@ class Rma(models.Model):
     # Add index to this field, as we perform a search on it
     refund_id = fields.Many2one(index=True)
 
+
+    @api.depends("order_id", "picking_id")
+    def _compute_allowed_move_ids(self):
+        for rec in self:
+            if rec.order_id:
+                order_move = rec.order_id.order_line.mapped("move_ids")
+                rec.allowed_move_ids = order_move.filtered(
+                    lambda r: r.picking_id == self.picking_id and r.state == "done"
+                ).ids
+            else:
+                rec.allowed_move_ids = self.picking_id.move_ids.ids
+
     @api.depends("partner_id", "order_id")
     def _compute_allowed_picking_ids(self):
         domain = [("state", "=", "done"), ("picking_type_id.code", "=", "outgoing")]
@@ -62,17 +72,6 @@ class Rma(models.Model):
             else:
                 rec.allowed_picking_ids = False  # don't populate a big list
 
-    @api.depends("order_id", "picking_id")
-    def _compute_allowed_move_ids(self):
-        for rec in self:
-            if rec.order_id:
-                order_move = rec.order_id.order_line.mapped("move_ids")
-                rec.allowed_move_ids = order_move.filtered(
-                    lambda r: r.picking_id == self.picking_id and r.state == "done"
-                ).ids
-            else:
-                rec.allowed_move_ids = self.picking_id.move_ids.ids
-
     @api.depends("order_id")
     def _compute_allowed_product_ids(self):
         for rec in self:
@@ -84,14 +83,17 @@ class Rma(models.Model):
             else:
                 rec.allowed_product_ids = False  # don't populate a big list
 
-    @api.depends("partner_id")
-    def _compute_order_id(self):
-        """Empty sales order when changing partner."""
-        self.order_id = False
+
 
     @api.onchange("order_id")
     def _onchange_order_id(self):
         self.product_id = self.picking_id = False
+
+
+    @api.depends("partner_id")
+    def _compute_order_id(self):
+        """Empty sales order when changing partner."""
+        self.order_id = False
 
     def _link_refund_with_reception_move(self):
         """Perform the internal operations for linking the RMA reception move with the

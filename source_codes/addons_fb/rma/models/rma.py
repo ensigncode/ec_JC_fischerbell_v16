@@ -1,6 +1,4 @@
-# Copyright 2020 Tecnativa - Ernesto Tejeda
-# Copyright 2023 Tecnativa - Pedro M. Baeza
-# License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
+
 import logging
 from collections import Counter
 
@@ -460,6 +458,13 @@ class Rma(models.Model):
             else:
                 r.can_be_split = False
 
+    @api.depends("location_id")
+    def _compute_warehouse_id(self):
+        for record in self.filtered("location_id"):
+            record.warehouse_id = self.env["stock.warehouse"].search(
+                [("rma_loc_id", "parent_of", record.location_id.id)], limit=1
+            )
+
     @api.depends("remaining_qty_to_done", "state")
     def _compute_can_be_locked(self):
         for r in self:
@@ -468,13 +473,6 @@ class Rma(models.Model):
                 "waiting_return",
                 "waiting_replacement",
             ]
-
-    @api.depends("location_id")
-    def _compute_warehouse_id(self):
-        for record in self.filtered("location_id"):
-            record.warehouse_id = self.env["stock.warehouse"].search(
-                [("rma_loc_id", "parent_of", record.location_id.id)], limit=1
-            )
 
     @api.depends("user_id")
     def _compute_team_id(self):
@@ -519,16 +517,17 @@ class Rma(models.Model):
                 record.move_id = record.picking_id.move_ids.id
 
     @api.depends("move_id")
+    def _compute_product_uom_qty(self):
+        self.product_uom_qty = False
+        for record in self.filtered("move_id"):
+            record.product_uom_qty = record.move_id.product_uom_qty
+
+    @api.depends("move_id")
     def _compute_product_id(self):
         self.product_id = False
         for record in self.filtered("move_id"):
             record.product_id = record.move_id.product_id.id
 
-    @api.depends("move_id")
-    def _compute_product_uom_qty(self):
-        self.product_uom_qty = False
-        for record in self.filtered("move_id"):
-            record.product_uom_qty = record.move_id.product_uom_qty
 
     @api.depends("move_id", "product_id")
     def _compute_product_uom(self):

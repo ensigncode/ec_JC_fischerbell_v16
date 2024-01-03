@@ -31,6 +31,7 @@ class PurchaseOrder(models.Model):
 	revision_purchase_name = fields.Char(sting="Revision Purchase Name")
 	is_purchase_revise = fields.Boolean(default=False)
 	artwork_attachment_ids = fields.Many2many('ir.attachment', string="ArtWork")
+	mail_sended = fields.Boolean(default=False)
 
 	def action_is_default_terms_purchase(self):
 		purchase = self.env['stock.picking'].search([('is_default_terms','=',True)], limit=1)
@@ -121,7 +122,7 @@ class PurchaseOrder(models.Model):
 
 
 	def button_confirm(self):
-		if self.request_delivery_date and self.estimated_delivery_date:
+		if self.request_delivery_date and self.estimated_delivery_date and self.mail_sended:
 			res = super().button_confirm()
 			for order in self:
 				if order.picking_ids:
@@ -129,7 +130,10 @@ class PurchaseOrder(models.Model):
 						pick.user = self.env.user.id
 			return res
 		else:
-			raise ValidationError("Request Delivery Date And Estimated Delivery Date are required")
+			if not self.request_delivery_date and not self.estimated_delivery_date:
+				raise ValidationError("Request Delivery Date And Estimated Delivery Date are required")
+			if not self.mail_sended:
+				raise ValidationError("Please Send Mail First")
 
 
 	def _prepare_picking(self):

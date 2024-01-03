@@ -1,5 +1,4 @@
-# Copyright 2020 Tecnativa - Ernesto Tejeda
-# License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
+
 
 from odoo import _, api, fields, models
 from odoo.exceptions import ValidationError
@@ -58,6 +57,13 @@ class SaleOrder(models.Model):
             "target": "new",
         }
 
+    def get_delivery_rma_data(self):
+        self.ensure_one()
+        data = []
+        for line in self.order_line:
+            data += line.prepare_sale_rma_data()
+        return data
+
     def action_view_rma(self):
         self.ensure_one()
         action = self.sudo().env.ref("rma.rma_action").read()[0]
@@ -74,12 +80,7 @@ class SaleOrder(models.Model):
         action["context"] = {}
         return action
 
-    def get_delivery_rma_data(self):
-        self.ensure_one()
-        data = []
-        for line in self.order_line:
-            data += line.prepare_sale_rma_data()
-        return data
+
 
     @api.depends("rma_ids.refund_id")
     def _get_invoiced(self):

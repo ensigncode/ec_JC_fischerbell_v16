@@ -46,6 +46,7 @@
 		<field name="inherit_id" ref="purchase_stock.purchase_order_view_form_inherit"/>
 		<field name="arch" type="xml">
 			<xpath expr="//field[@name='picking_type_id']" position="after">
+				<field name="mail_sended" readonly="1"/>
 				<field name="partner_note"/>
 			</xpath>
 		</field>
