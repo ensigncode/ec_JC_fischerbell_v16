@@ -1,5 +1,3 @@
-/* Copyright 2021 Tecnativa - David Vidal
-   License LGPL-3.0 or later (https://www.gnu.org/licenses/lgpl). */
 
 odoo.define("rma_sale.animation", function (require) {
     "use strict";

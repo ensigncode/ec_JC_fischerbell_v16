@@ -1,7 +1,3 @@
-/** @odoo-module */
-/* Copyright 2021 Tecnativa - David Vidal
-   License LGPL-3.0 or later (https://www.gnu.org/licenses/lgpl). */
-
 import tour from "web_tour.tour";
 
 tour.register(

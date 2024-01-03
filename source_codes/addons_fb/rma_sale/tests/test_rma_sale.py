@@ -1,7 +1,3 @@
-# Copyright 2020 Tecnativa - Ernesto Tejeda
-# Copyright 2022 Tecnativa - Víctor Martínez
-# Copyright 2023 Tecnativa - Pedro M. Baeza
-# License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
 from odoo.tests import Form, TransactionCase
 from odoo.tests.common import users
