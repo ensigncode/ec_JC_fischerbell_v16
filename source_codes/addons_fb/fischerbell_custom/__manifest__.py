@@ -16,6 +16,7 @@
         'data/ir_sequence.xml',
         'data/sale_email_template.xml',
         'data/purchase_email_template.xml',
+        'data/sale_triggers.xml',
 
         'report/fischerbell_aging_report.xml',
         'report/fischerbell_bill_report.xml',
