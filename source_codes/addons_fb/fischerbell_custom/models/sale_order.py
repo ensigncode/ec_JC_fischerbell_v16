@@ -42,12 +42,12 @@ class SaleOrder(models.Model):
 		('no_invoice','No Invoice')
 	], compute="_compute_billing_state")
 	sale_id = fields.Many2one('sale.order', 'Sale')
-	exchange_order_ids = fields.One2many('sale.order', 'sale_id', string="Exchange Order")
-	exchange_order_count = fields.Integer('Exchange Order Count', compute="_compute_exchange_order_ids")
+	# exchange_order_ids = fields.One2many('sale.order', 'sale_id', string="Exchange Order")
+	# exchange_order_count = fields.Integer('Exchange Order Count', compute="_compute_exchange_order_ids")
 	loan_ids = fields.One2many('sale.order','sale_id',string="Loan Order")
 	loan_order_count = fields.Integer('Loan Order Count', compute="_compute_loan_ids")
-	replacement_order_ids = fields.One2many('sale.order', 'sale_id', string="Replacement Order")
-	replacement_order_count = fields.Integer('Replacement Order Count', compute="_compute_replacement_order_ids")
+	# replacement_order_ids = fields.One2many('sale.order', 'sale_id', string="Replacement Order")
+	# replacement_order_count = fields.Integer('Replacement Order Count', compute="_compute_replacement_order_ids")
 	partner_invoice_address = fields.Char()
 	check_partner_address = fields.Boolean('Check Partner Address', default=False)
 	customer_code = fields.Char('Customer Code', related="partner_id.customer_code")
@@ -739,73 +739,73 @@ class SaleOrder(models.Model):
 			'tag': 'reload'
 		}
 
-	def create_exchange_order(self):
-		for sale in self:
-			sale_id = sale.create({
-				'sale_id': sale.id,
-				'partner_id': sale.partner_id.id,
-				'partner_invoice_id': sale.partner_invoice_id.id,
-				'partner_shipping_id': sale.partner_shipping_id.id,
-				'pricelist_id': sale.pricelist_id.id,
-				'type': 'exchange',
-				'state': 'draft',
-			})
+	# def create_exchange_order(self):
+	# 	for sale in self:
+	# 		sale_id = sale.create({
+	# 			'sale_id': sale.id,
+	# 			'partner_id': sale.partner_id.id,
+	# 			'partner_invoice_id': sale.partner_invoice_id.id,
+	# 			'partner_shipping_id': sale.partner_shipping_id.id,
+	# 			'pricelist_id': sale.pricelist_id.id,
+	# 			'type': 'exchange',
+	# 			'state': 'draft',
+	# 		})
+	#
+	# 	return
 
-		return
-
-	@api.depends('exchange_order_ids')
-	def _compute_exchange_order_ids(self):
-		for order in self:
-			exchange = list(filter(lambda x: (x.type == 'exchange'), order.exchange_order_ids))
-			order.exchange_order_count = len(exchange)
-
-
-	def action_view_exchange_order(self, order=False):
-		self.ensure_one()
-
-		return {
-			'type': 'ir.actions.act_window',
-			'name': 'Exchange Order',
-			'view_mode': 'tree,form',
-			'res_model': 'sale.order',
-			'domain': [('sale_id', '=', self.id),('type','=','exchange')],
-			'context': {'default_sale_id':self.id, 'default_type': 'exchange', 'form_view_ref': 'sale.view_order_form', 'tree_view_ref':'sale.view_order_tree'}
-		}
+	# @api.depends('exchange_order_ids')
+	# def _compute_exchange_order_ids(self):
+	# 	for order in self:
+	# 		exchange = list(filter(lambda x: (x.type == 'exchange'), order.exchange_order_ids))
+	# 		order.exchange_order_count = len(exchange)
 
 
-	def create_replacement_orders(self):
-		for sale in self:
-			sale_id = sale.create({
-				'sale_id': sale.id,
-				'partner_id': sale.partner_id.id,
-				'partner_invoice_id': sale.partner_invoice_id.id,
-				'partner_shipping_id': sale.partner_shipping_id.id,
-				'pricelist_id': sale.pricelist_id.id,
-				'type': 'replacement',
-				'state': 'draft',
-			})
-
-		return
+	# def action_view_exchange_order(self, order=False):
+	# 	self.ensure_one()
+	#
+	# 	return {
+	# 		'type': 'ir.actions.act_window',
+	# 		'name': 'Exchange Order',
+	# 		'view_mode': 'tree,form',
+	# 		'res_model': 'sale.order',
+	# 		'domain': [('sale_id', '=', self.id),('type','=','exchange')],
+	# 		'context': {'default_sale_id':self.id, 'default_type': 'exchange', 'form_view_ref': 'sale.view_order_form', 'tree_view_ref':'sale.view_order_tree'}
+	# 	}
 
 
-	@api.depends('replacement_order_ids')
-	def _compute_replacement_order_ids(self):
-		for order in self:
-			replacement = list(filter(lambda x: (x.type == 'replacement'), order.replacement_order_ids))
-			order.replacement_order_count = len(replacement)
+	# def create_replacement_orders(self):
+	# 	for sale in self:
+	# 		sale_id = sale.create({
+	# 			'sale_id': sale.id,
+	# 			'partner_id': sale.partner_id.id,
+	# 			'partner_invoice_id': sale.partner_invoice_id.id,
+	# 			'partner_shipping_id': sale.partner_shipping_id.id,
+	# 			'pricelist_id': sale.pricelist_id.id,
+	# 			'type': 'replacement',
+	# 			'state': 'draft',
+	# 		})
+	#
+	# 	return
 
 
-	def action_view_replacement_order(self, order=False):
-		self.ensure_one()
+	# @api.depends('replacement_order_ids')
+	# def _compute_replacement_order_ids(self):
+	# 	for order in self:
+	# 		replacement = list(filter(lambda x: (x.type == 'replacement'), order.replacement_order_ids))
+	# 		order.replacement_order_count = len(replacement)
 
-		return {
-			'type': 'ir.actions.act_window',
-			'name': 'Replacement Order',
-			'view_mode': 'tree,form',
-			'res_model': 'sale.order',
-			'domain': [('sale_id', '=', self.id),('type','=','replacement')],
-			'context': {'default_sale_id':self.id, 'default_type': 'replacement', 'form_view_ref': 'sale.view_order_form', 'tree_view_ref':'sale.view_order_tree'}
-		}
+
+	# def action_view_replacement_order(self, order=False):
+	# 	self.ensure_one()
+	#
+	# 	return {
+	# 		'type': 'ir.actions.act_window',
+	# 		'name': 'Replacement Order',
+	# 		'view_mode': 'tree,form',
+	# 		'res_model': 'sale.order',
+	# 		'domain': [('sale_id', '=', self.id),('type','=','replacement')],
+	# 		'context': {'default_sale_id':self.id, 'default_type': 'replacement', 'form_view_ref': 'sale.view_order_form', 'tree_view_ref':'sale.view_order_tree'}
+	# 	}
 
 	def get_report_name(self):
 		self.ensure_one()
