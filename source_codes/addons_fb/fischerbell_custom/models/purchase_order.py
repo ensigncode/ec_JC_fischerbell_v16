@@ -32,6 +32,15 @@ class PurchaseOrder(models.Model):
 	is_purchase_revise = fields.Boolean(default=False)
 	artwork_attachment_ids = fields.Many2many('ir.attachment', string="ArtWork")
 	mail_sended = fields.Boolean(default=False)
+	state = fields.Selection(
+		selection_add=[
+			("approved", "Approved"),
+		]
+	)
+
+	def sc_approved(self):
+		for rec in self:
+			rec.state = "approved"
 
 	def action_is_default_terms_purchase(self):
 		purchase = self.env['stock.picking'].search([('is_default_terms','=',True)], limit=1)

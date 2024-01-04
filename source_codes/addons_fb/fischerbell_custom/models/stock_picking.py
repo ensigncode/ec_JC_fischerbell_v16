@@ -58,6 +58,7 @@ class Picking(models.Model):
 	# total_qty_line = fields.Float('Total', compute="_compute_total_qty", store=True)
 	enough_stock = fields.Boolean(default=_get_stock_status_from_so)
 	artwork_attachment_ids = fields.Many2many('ir.attachment', string="ArtWork")
+	next_delivery_date = fields.Datetime('Next Delivery Date')
 
 
 	def action_is_default_terms(self):
