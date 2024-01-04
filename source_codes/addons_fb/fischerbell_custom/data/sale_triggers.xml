@@ -72,7 +72,7 @@
                     <p style="margin: 0px; padding: 0px; font-size: 13px;">
                         Dear <t t-out="object.partner_id.name or ''"></t>,
                         <br/>
-                        Your order <t t-out="object.name"/>has been packed and scheduled for delivery on <strong><t t-out="object.scheduled_delivery_date"  t-options='{"format": "MMM d, yyyy"}' />.</strong> We will contact you shortly to make the necessary arrangements.
+                        Your order <t t-out="object.name"/>has been packed and scheduled for delivery on <strong><t t-out="object.scheduled_delivery_date" t-options="{'widget': 'date', 'format': 'MMM d, yyyy'}" />.</strong> We will contact you shortly to make the necessary arrangements.
                         <br/>
                         If you have any concerns or special instructions, please contact us immediately.
                         <br/>
@@ -101,7 +101,7 @@
                     <p style="margin: 0px; padding: 0px; font-size: 13px;">
                         Dear <t t-out="object.partner_id.name or ''"></t>,
                         <br/>
-                        Your order <t t-out="object.name"/>has been delivered on <strong><t t-out="object.scheduled_delivery_date"  t-options='{"format": "MMM d, yyyy"}' />.</strong> Attached is the Delivery Order <t t-out="','.join(object.picking_ids.filtered(lambda p: p.state == 'done').mapped('name'))" />  for your reference.
+                        Your order <t t-out="object.name"/>has been delivered on <strong><t t-out="object.scheduled_delivery_date" t-options="{'widget': 'date', 'format': 'MMM d, yyyy'}"/>.</strong> Attached is the Delivery Order <t t-out="','.join(object.picking_ids.filtered(lambda p: p.state == 'done').mapped('name'))" />  for your reference.
                         <br/>
                         <t t-set="invoice" t-value="object.invoice_ids"/>
                         <t t-if="invoice">
