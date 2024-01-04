@@ -43,6 +43,7 @@ class Partner(models.Model):
 	delivery_restriction_end_date = fields.Date(string="Delivery Restriction End")
 
 
+
 	@api.onchange('property_purchase_currency_id')
 	def _onchange_currency_type(self):
 		self.currency_type = 'no'
