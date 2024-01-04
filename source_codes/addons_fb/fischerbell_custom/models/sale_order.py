@@ -189,8 +189,40 @@ class SaleOrder(models.Model):
 
 	def action_to_approve(self):
 		for order in self:
-			if order.amount_total < order.partner_id.credit_limit:
-				if order.state == 'waiting_approval' and order.approval_state == 'waiting_approval' and self.env.user.has_group("fischerbell_custom.group_sales_order_approver"):
+			if order.partner_id.credit_limit > 0:
+				if order.amount_total < order.partner_id.credit_limit:
+					if order.state == 'waiting_approval' and order.approval_state == 'waiting_approval' and self.env.user.has_group("fischerbell_custom.group_sales_order_approver"):
+						order.write({
+							'state': 'sale',
+							'approval_state': 'approved',
+							'reviewed_by': self.env.user.id
+						})
+						order.action_confirm()
+						purchase_order_ids = self._get_purchase_orders()
+						if purchase_order_ids:
+							purchase_id = purchase_order_ids[0]
+							return {
+								'name': "Low Stock Alert",
+								'type': 'ir.actions.act_window',
+								'view_type': 'form',
+								'view_mode': 'form',
+								'res_model': 'purchase.order.ref',
+								'context': {
+									'default_name' : f"Sale order - {order.name} has some products which are having low stock, please find the details below:\n{','.join(purchase_id.order_line.mapped('product_id.name'))}\nPurchase Order Ref: {purchase_id.name}"
+								},
+								'view_id': self.env.ref('fischerbell_custom.purchase_order_ref_form_view').id,
+								'target': 'new'
+							}
+						not_enough_stock = any(line.product_uom_qty > line.product_id.qty_available for line in order.order_line)
+						if not_enough_stock:
+							pass
+					else:
+						raise ValidationError("Sorry, you are not allowed to approve this order.")
+				else:
+					raise ValidationError("Customer exceeded the credit limit.")
+			else:
+				if order.state == 'waiting_approval' and order.approval_state == 'waiting_approval' and self.env.user.has_group(
+						"fischerbell_custom.group_sales_order_approver"):
 					order.write({
 						'state': 'sale',
 						'approval_state': 'approved',
@@ -207,19 +239,17 @@ class SaleOrder(models.Model):
 							'view_mode': 'form',
 							'res_model': 'purchase.order.ref',
 							'context': {
-								'default_name' : f"Sale order - {order.name} has some products which are having low stock, please find the details below:\n{','.join(purchase_id.order_line.mapped('product_id.name'))}\nPurchase Order Ref: {purchase_id.name}"
+								'default_name': f"Sale order - {order.name} has some products which are having low stock, please find the details below:\n{','.join(purchase_id.order_line.mapped('product_id.name'))}\nPurchase Order Ref: {purchase_id.name}"
 							},
 							'view_id': self.env.ref('fischerbell_custom.purchase_order_ref_form_view').id,
 							'target': 'new'
 						}
-					not_enough_stock = any(line.product_uom_qty > line.product_id.qty_available for line in order.order_line)
+					not_enough_stock = any(
+						line.product_uom_qty > line.product_id.qty_available for line in order.order_line)
 					if not_enough_stock:
 						pass
 				else:
 					raise ValidationError("Sorry, you are not allowed to approve this order.")
-
-			else:
-				raise ValidationError("Customer exceeded the credit limit.")
 		return True
 
 	def action_stock_confirm(self):
