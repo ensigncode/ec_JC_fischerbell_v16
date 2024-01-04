@@ -38,6 +38,12 @@
 				<field name="is_default_terms" invisible="1"/>
 				<button colspan="2" name="action_is_default_terms_purchase" string="Set Defaults" type="object"/>
 			</xpath>
+			<xpath expr="//header//button[@name='button_cancel']" position="before">
+				<button name="sc_approved" string="Approved" type="object" attrs="{'invisible': [('state','=','approved')]}" class="btn-primary"/>
+			</xpath>
+			<xpath expr="//header//button[@name='button_cancel']" position="attributes">
+				 <attribute name="states">draft,to approve,sent,purchase,approved</attribute>
+			</xpath>
 		</field>
 	</record>
 	<record id="fischerbell_purchase_order_view_form_inherit" model="ir.ui.view">

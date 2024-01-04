@@ -104,6 +104,8 @@ class SaleOrder(models.Model):
 	artwork_attachment_ids = fields.Many2many('ir.attachment',string="ArtWork")
 	e_invoice_email = fields.Char("E-Invoice Email")
 	soa_email = fields.Char("Soa Email")
+	delivery_instruction = fields.Html(related="partner_shipping_id.delivery_instruction")
+	invoice_instruction = fields.Html(related="partner_invoice_id.invoice_instruction")
 
 	@api.depends('partner_id')
 	def _compute_partner_shipping_id(self):
