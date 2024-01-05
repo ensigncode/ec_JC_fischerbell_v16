@@ -142,7 +142,7 @@ class PurchaseOrder(models.Model):
 			if not self.request_delivery_date and not self.estimated_delivery_date:
 				raise ValidationError("Request Delivery Date And Estimated Delivery Date are required")
 			if not self.mail_sended:
-				raise ValidationError("Please Send Mail First")
+				raise ValidationError("Please Send Email First")
 
 
 	def _prepare_picking(self):
