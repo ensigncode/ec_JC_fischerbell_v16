@@ -106,6 +106,10 @@ class SaleOrder(models.Model):
 	soa_email = fields.Char("Soa Email")
 	delivery_instruction = fields.Html(related="partner_shipping_id.delivery_instruction")
 	invoice_instruction = fields.Html(related="partner_invoice_id.invoice_instruction")
+	delivery_option = fields.Selection(
+		selection=[('partial_delivery', 'Partial Delivery'),
+			('full_delivery', 'Full Delivery')],
+		string="Delivery Option", default='partial_delivery')
 
 	@api.depends('partner_id')
 	def _compute_partner_shipping_id(self):
