@@ -7,8 +7,8 @@ class MailComposerMessage(models.TransientModel):
     @api.onchange('template_id')
     def _onchange_template_id_wrapper(self):
         self.ensure_one()
-        atrwork = self.env['purchase.order'].browse(self._context.get("active_id"))
-        if self._context.get("active_model") == 'purchase.order' and atrwork.artwork_attachment_ids:
+        atrwork = self.env[self._context.get("active_model")].browse(self._context.get("active_id"))
+        if atrwork.artwork_attachment_ids:
             values = self._onchange_template_id(self.template_id.id, self.composition_mode, self.model, self.res_id)[
                 'value']
             if values.get('attachment_ids'):
@@ -58,6 +58,7 @@ class MailComposerMessage(models.TransientModel):
                 'author_id': self.author_id.id,
                 'email_from': self.email_from,
                 'record_name': self.record_name,
+                'email_cc': 'test@gmail.com',
                 'reply_to_force_new': self.reply_to_force_new,
                 'mail_server_id': self.mail_server_id.id,
                 'mail_activity_type_id': self.mail_activity_type_id.id,
@@ -65,11 +66,12 @@ class MailComposerMessage(models.TransientModel):
             }
 
             # mass mailing: rendering override wizard static values
-            if self._context.get("active_model") == 'purchase.order':
-                mail_values['email_cc'] = purchase_order.user_id.email
+            # if self._context.get("active_model") == 'purchase.order':
+            #     mail_values['email_cc'] = purchase_order.user_id.email
             if mass_mail_mode and self.model:
                 record = self.env[self.model].browse(res_id)
                 mail_values['headers'] = repr(record._notify_by_email_get_headers())
+                # mail_values['email_cc'] = record.user_id.email
                 # keep a copy unless specifically requested, reset record name (avoid browsing records)
                 mail_values.update(is_notification=not self.auto_delete_message, model=self.model, res_id=res_id, record_name=False)
                 # auto deletion of mail_mail
@@ -101,7 +103,7 @@ class MailComposerMessage(models.TransientModel):
                     attachment_ids,
                     {'model': 'mail.message', 'res_id': 0}
                 )['attachment_ids']
-
+            print("--->>>mail_values",mail_values)
             results[res_id] = mail_values
 
         results = self._process_state(results)
