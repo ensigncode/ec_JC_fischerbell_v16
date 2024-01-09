@@ -121,10 +121,10 @@ class WeeklyReportwizard(models.TransientModel):
                 wrksht.cell(row=table_row, column=table_col).value = order.date_order.date() if order.date_order else ''
                 wrksht.cell(row=table_row, column=table_col).alignment = table_header_alignment
 
-                wrksht.cell(row=table_row, column=table_col+1).value = order.contact_person_id.parent_id.name or ''
+                wrksht.cell(row=table_row, column=table_col+1).value = order.contact_person_id.parent_id.name if order.contact_person_id else order.partner_id.parent_id.name or ''
                 wrksht.cell(row=table_row, column=table_col+1).alignment = table_header_alignment
 
-                wrksht.cell(row=table_row, column=table_col+2).value = order.contact_person_id.name or ''
+                wrksht.cell(row=table_row, column=table_col+2).value = order.contact_person_id.name if order.contact_person_id else order.partner_id.name or ''
                 wrksht.cell(row=table_row, column=table_col+2).alignment = table_header_alignment
 
                 wrksht.cell(row=table_row, column=table_col+3).value = order.user_id.name or ''
@@ -157,7 +157,7 @@ class WeeklyReportwizard(models.TransientModel):
                 wrksht.cell(row=table_row, column=table_col+12).value = dict(order._fields['state'].selection).get(order.state) or ''
                 wrksht.cell(row=table_row, column=table_col+12).alignment = table_header_alignment
 
-                wrksht.cell(row=table_row, column=table_col+13).value = order.opportunity_id.stage_id.name == '' or ''
+                wrksht.cell(row=table_row, column=table_col+13).value = order.opportunity_id.stage_id.name or ''
                 wrksht.cell(row=table_row, column=table_col+13).alignment = table_header_alignment
 
                 wrksht.cell(row=table_row, column=table_col+14).value = order.opportunity_id.lost_reason_id.name or ''

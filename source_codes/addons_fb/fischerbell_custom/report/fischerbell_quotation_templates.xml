@@ -23,56 +23,101 @@
                     <table width="100%" style="vertical-align: center; border: 1px solid white;">
                         <tbody>
                             <tr>
-                              <td width="50%">
-                                <table width="100%" style="vertical-align: center; border: 1px solid white;">
-                                    <tr>
-                                        <td style="font-size: 12px; font-family: 'Arial'; text-align: left; padding-top: 0px;">
-                                            <span>
-                                                <p t-field="docs.terms_and_conditions"/>
-                                            </span>
-                                        </td>
-                                    </tr>
-                                </table>
-                              </td>
-                              <td width="10%">
-                                <span>
-                                  <br/>
-                                </span>
-                              </td>
-                              <td width="40%">
-                                <table width="100%" style="vertical-align: center; border: 1px solid white;">
-                                    <tr>
-                                        <td width="45%" style="font-size: 13px; font-family: 'Arial'; text-align: left;"><strong>SUBTOTAL</strong></td>
-                                        <td width="5%" style="font-size: 13px; font-family: 'Arial'; text-align: center;"><span t-field="docs.currency_id.name"/></td>
-                                        <td width="50%" style="font-size: 13px; font-family: 'Arial'; text-align: right;"><span t-esc="'{:0,.2f}'.format(float(docs.amount_undiscounted))"/></td>      
-                                    </tr>
-                                    <tr>
-                                        <td width="45%" style="font-size: 13px; font-family: 'Arial'; text-align: left;"><strong>DISCOUNT</strong></td>
-                                        <td width="5%" style="font-size: 13px; font-family: 'Arial'; text-align: center;"><span t-field="docs.currency_id.name"/></td>
-                                        <td width="50%" style="font-size: 13px; font-family: 'Arial'; text-align: right; border-bottom: 1px solid black;">
-                                            <t t-set="total_discount" t-value="'{:0,.2f}'.format(float(docs.amount_undiscounted - docs.amount_untaxed))"/>
-                                            <span t-esc="total_discount"/>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td width="45%" style="font-size: 13px; font-family: 'Arial'; text-align: left;"><strong>NET AMOUNT</strong></td>
-                                        <td width="5%" style="font-size: 13px; font-family: 'Arial'; text-align: center;"><span t-field="docs.currency_id.name"/></td>
-                                        <td width="50%" style="font-size: 13px; font-family: 'Arial'; text-align: right;"><span t-esc="'{:0,.2f}'.format(float(docs.amount_untaxed))"/></td>
-                                    </tr>
-                                    <tr t-if="docs.amount_tax">
-                                        <td width="45%" style="font-size: 13px; font-family: 'Arial'; text-align: left;">
-                                            <strong>GST @ <span t-esc="int(round((float(docs.amount_tax)/float(docs.amount_untaxed))*100,0))"/>%:</strong>
-                                        </td>
-                                        <td width="5%" style="font-size: 13px; font-family: 'Arial'; text-align: center;"><span t-field="docs.currency_id.name"/></td>
-                                        <td width="50%" style="font-size: 13px; font-family: 'Arial'; text-align: right; border-bottom: 1px solid black;"><span t-esc="'{:0,.2f}'.format(float(docs.amount_tax))"/></td>
-                                    </tr>  
-                                    <tr>
-                                        <td width="45%" style="font-size: 13px; font-family: 'Arial'; text-align: left;"><strong>GROSS TOTAL</strong></td>
-                                        <td width="5%" style="font-size: 13px; font-family: 'Arial'; text-align: center;"><span t-field="docs.currency_id.name"/></td>
-                                        <td width="50%" style="font-size: 13px; font-family: 'Arial'; text-align: right; border-bottom: 1px solid black;"><span t-esc="'{:0,.2f}'.format(float(docs.amount_total))"/></td>
-                                    </tr>
-                                </table>
-                              </td>
+                                <td width="50%">
+                                    <table width="100%" style="vertical-align: center; border: 1px solid white;">
+                                        <tr>
+                                            <td style="font-size: 12px; font-family: 'Arial'; text-align: left; padding-top: 0px;">
+                                                <span>
+                                                    <p t-field="docs.terms_and_conditions"/>
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                                <td width="10%">
+                                    <span>
+                                        <br/>
+                                    </span>
+                                </td>
+                                <td width="40%">
+                                    <table width="100%" style="vertical-align: center; border: 1px solid white;">
+                                        <tr>
+                                            <td width="45%"
+                                                style="font-size: 13px; font-family: 'Arial'; text-align: left;">
+                                                <strong>SUBTOTAL</strong>
+                                            </td>
+                                            <td width="5%"
+                                                style="font-size: 13px; font-family: 'Arial'; text-align: center;">
+                                                <span t-field="docs.currency_id.name"/>
+                                            </td>
+                                            <td width="50%"
+                                                style="font-size: 13px; font-family: 'Arial'; text-align: right;">
+                                                <span t-esc="'{:0,.2f}'.format(float(docs.amount_undiscounted))"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td width="45%"
+                                                style="font-size: 13px; font-family: 'Arial'; text-align: left;">
+                                                <strong>DISCOUNT</strong>
+                                            </td>
+                                            <td width="5%"
+                                                style="font-size: 13px; font-family: 'Arial'; text-align: center;">
+                                                <span t-field="docs.currency_id.name"/>
+                                            </td>
+                                            <td width="50%"
+                                                style="font-size: 13px; font-family: 'Arial'; text-align: right; border-bottom: 1px solid black;">
+                                                <t t-set="total_discount"
+                                                   t-value="'{:0,.2f}'.format(float(docs.amount_undiscounted - docs.amount_untaxed))"/>
+                                                <span t-esc="total_discount"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td width="45%"
+                                                style="font-size: 13px; font-family: 'Arial'; text-align: left;">
+                                                <strong>NET AMOUNT</strong>
+                                            </td>
+                                            <td width="5%"
+                                                style="font-size: 13px; font-family: 'Arial'; text-align: center;">
+                                                <span t-field="docs.currency_id.name"/>
+                                            </td>
+                                            <td width="50%"
+                                                style="font-size: 13px; font-family: 'Arial'; text-align: right;">
+                                                <span t-esc="'{:0,.2f}'.format(float(docs.amount_untaxed))"/>
+                                            </td>
+                                        </tr>
+                                        <tr t-if="docs.amount_tax">
+                                            <td width="45%"
+                                                style="font-size: 13px; font-family: 'Arial'; text-align: left;">
+                                                <strong>GST @<span
+                                                        t-esc="int(round((float(docs.amount_tax)/float(docs.amount_untaxed))*100,0))"/>
+                                                    %:
+                                                </strong>
+                                            </td>
+                                            <td width="5%"
+                                                style="font-size: 13px; font-family: 'Arial'; text-align: center;">
+                                                <span t-field="docs.currency_id.name"/>
+                                            </td>
+                                            <td width="50%"
+                                                style="font-size: 13px; font-family: 'Arial'; text-align: right; border-bottom: 1px solid black;">
+                                                <span t-esc="'{:0,.2f}'.format(float(docs.amount_tax))"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td width="45%"
+                                                style="font-size: 13px; font-family: 'Arial'; text-align: left;">
+                                                <strong>GROSS TOTAL</strong>
+                                            </td>
+                                            <td width="5%"
+                                                style="font-size: 13px; font-family: 'Arial'; text-align: center;">
+                                                <span t-field="docs.currency_id.name"/>
+                                            </td>
+                                            <td width="50%"
+                                                style="font-size: 13px; font-family: 'Arial'; text-align: right; border-bottom: 1px solid black;">
+                                                <span t-esc="'{:0,.2f}'.format(float(docs.amount_total))"/>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
                             </tr>
                         </tbody>
                     </table>
@@ -81,7 +126,9 @@
             <div class="footer">
                 <div class="hide_lastpage">
                     <t t-set="datetime_now" t-value="(datetime.datetime.today())"/>
-                    <span t-esc="docs.user.name" style="font-size: 12px; font-family: 'Arial'; text-align: left;"/> <span style="font-size: 12px; font-family: 'Arial'; text-align: left;" t-esc="datetime_now" t-options="{'widget': 'datetime'}"/>
+                    <span t-esc="docs.user.name" style="font-size: 12px; font-family: 'Arial'; text-align: left;"/>
+                    <span style="font-size: 12px; font-family: 'Arial'; text-align: left;" t-esc="datetime_now"
+                          t-options="{'widget': 'datetime'}"/>
                 </div>
             </div>
         </template>
@@ -102,7 +149,11 @@
                                                 </t>
                                                 <t t-if="line.display_type == 'line_section'">
                                                     <tr>
-                                                        <td colspan="6"><strong><span t-field="line.name"/></strong></td>
+                                                        <td colspan="6">
+                                                            <strong>
+                                                                <span t-field="line.name"/>
+                                                            </strong>
+                                                        </td>
                                                     </tr>
                                                 </t>
                                                 <t t-elif="line.display_type == 'line_note'">
@@ -123,39 +174,63 @@
                                                 </t>
                                                 <t t-else="">
                                                     <tr>
-                                                        <td width="5%" class="text-center"><span t-esc="count"/></td>
+                                                        <td width="5%" class="text-center">
+                                                            <span t-esc="count"/>
+                                                        </td>
                                                         <td width="10%" class="text-center">
                                                             <span t-esc="line.product_id.default_code"/>
                                                         </td>
-                                                        <td width="5%">
-<!--                                                            <div style="text-align: center;">-->
-<!--                                                                <t t-if="line.product_id.image_1920">-->
-<!--                                                                    <img class="variant-image" t-attf-src="data:image/*;base64,{{line.product_id.image_1920}}" align="center" style="margin:0px;padding-top:0px; max-width: 40px; max-height: 50px;"/>-->
-<!--                                                                </t>-->
-<!--                                                            </div>-->
-                                                        </td>
-                                                        <td width="28%">
-                                                            <span t-field="line.name"/>
-                                                        </td>
-                                                        <td>
-                                                            <t t-foreach="line.terms_and_condition_ids" t-as="term_condition">
-                                                                <span style="text-align: left;" t-esc="term_condition.description"/><br/>
-                                                            </t>
-                                                        </td>
+<!--                                                        <td width="5%">-->
+<!--                                                            &lt;!&ndash;                                                            <div style="text-align: center;">&ndash;&gt;-->
+<!--                                                            &lt;!&ndash;                                                                <t t-if="line.product_id.image_1920">&ndash;&gt;-->
+<!--                                                            &lt;!&ndash;                                                                    <img class="variant-image" t-attf-src="data:image/*;base64,{{line.product_id.image_1920}}" align="center" style="margin:0px;padding-top:0px; max-width: 40px; max-height: 50px;"/>&ndash;&gt;-->
+<!--                                                            &lt;!&ndash;                                                                </t>&ndash;&gt;-->
+<!--                                                            &lt;!&ndash;                                                            </div>&ndash;&gt;-->
+<!--                                                        </td>-->
                                                         <style>
                                                             .truncate {
-                                                              white-space: nowrap;
-                                                              overflow: hidden;
-                                                              text-overflow: ellipsis;
-                                                              max-width: 50px; /* Adjust the maximum width as needed */
+                                                            white-space: nowrap;
+                                                            overflow: hidden;
+                                                            text-overflow: ellipsis;
+                                                            max-width: 50px; /* Adjust the maximum width as needed */
                                                             }
-                                                          </style>
-                                                        <td width="7%" class="truncate text-center"><a t-att-href="line.product_detail_sheet_url" t-att-title="line.product_detail_sheet_url"><t t-esc="line.product_detail_sheet_url"/> </a></td>
-                                                        <td width="5%" class="text-center"><t t-esc="int(line.product_uom_qty)"/></td>
-                                                        <td width="7%" class="text-center"><t t-esc="line.product_uom.name"/></td>
-                                                        <td width="5%" class="text-center"><t t-esc="line.lead_time_stock"/></td>
-                                                        <td width="10%" class="text-center"><t t-esc="'{:0,.2f}'.format(float(line.price_unit))"/></td>
-                                                        <td width="10%" class="text-center" style="text-align: right;"><t style="text-align: right;" t-esc="'{:0,.2f}'.format(float(line.price_unit*int(line.product_uom_qty)))"/></td>
+                                                        </style>
+                                                        <td width="30%" class="text-center truncate">
+                                                            <span t-field="line.name"/>
+                                                            <t t-foreach="line.terms_and_condition_ids"
+                                                               t-as="term_condition">
+                                                                <span t-esc="term_condition.description"/>
+<!--                                                                <br/>-->
+
+                                                                <a class="truncate" t-att-href="line.product_detail_sheet_url"
+                                                                   t-att-title="line.product_detail_sheet_url">
+                                                                    <t t-esc="line.product_detail_sheet_url"/>
+                                                                </a>
+                                                            </t>
+                                                        </td>
+                                                        <!--                                                        <td>-->
+                                                        <!--                                                            <t t-foreach="line.terms_and_condition_ids" t-as="term_condition">-->
+                                                        <!--                                                                <span style="text-align: left;" t-esc="term_condition.description"/><br/>-->
+                                                        <!--                                                            </t>-->
+                                                        <!--                                                        </td>-->
+
+<!--                                                        <td width="7%" class="truncate text-center"></td>-->
+                                                        <td width="5%" class="text-center">
+                                                            <t t-esc="int(line.product_uom_qty)"/>
+                                                        </td>
+                                                        <td width="10%" class="text-center">
+                                                            <t t-esc="line.product_uom.name"/>
+                                                        </td>
+                                                        <td width="10%" class="text-center">
+                                                            <t t-esc="line.lead_time_stock"/>
+                                                        </td>
+                                                        <td width="10%" class="text-center">
+                                                            <t t-esc="'{:0,.2f}'.format(float(line.price_unit))"/>
+                                                        </td>
+                                                        <td width="10%" class="text-center" style="text-align: right;">
+                                                            <t style="text-align: right;"
+                                                               t-esc="'{:0,.2f}'.format(float(line.price_unit*int(line.product_uom_qty)))"/>
+                                                        </td>
                                                     </tr>
                                                 </t>
                                             </t>
@@ -174,10 +249,13 @@
                     </td>
                 </tr>
             </table>
-            <table width="100%" style="border-top: 0px solid white; border-left: 0px solid white; border-right: 0px solid white; border-bottom: 2px solid black;">
+            <table width="100%"
+                   style="border-top: 0px solid white; border-left: 0px solid white; border-right: 0px solid white; border-bottom: 2px solid black;">
                 <tr>
                     <td>
-                        <span><br/></span>
+                        <span>
+                            <br/>
+                        </span>
                     </td>
                 </tr>
             </table>
@@ -191,56 +269,56 @@
                 <t t-call="web.basic_layout">
                     <t t-foreach="docs" t-as="doc">
                         <style>
-                            .page { 
-                                font-family: 'Arial';
-                                font-size: 13px;
+                            .page {
+                            font-family: 'Arial';
+                            font-size: 13px;
                             }
                             .page td {
-                                vertical-align: top;
-                                padding-top: 10px;
+                            vertical-align: top;
+                            padding-top: 10px;
                             }
                             .footer {
-                                font-size: 35px;
-                                font-weight: bold;
+                            font-size: 35px;
+                            font-weight: bold;
                             }
                             .text-wrap {
-                                font-weight: bold;
-                                font-size: 13px;
-                                font-family: 'Tara SC Black';
-                                padding: 5px;
+                            font-weight: bold;
+                            font-size: 13px;
+                            font-family: 'Tara SC Black';
+                            padding: 5px;
                             }
                             .text-style {
-                                font-size: 13px;
-                                font-family: 'Arial';
+                            font-size: 13px;
+                            font-family: 'Arial';
                             }
                             .text-note {
-                                font-size: 13px;
-                                font-family: 'Arial';
+                            font-size: 13px;
+                            font-family: 'Arial';
                             }
                             table.order-line {
-                                width: 100%;
-                                border: 0px solid white;
-                                margin: 8px 5px 0 5px;
+                            width: 100%;
+                            border: 0px solid white;
+                            margin: 8px 5px 0 5px;
                             }
 
                             table.order-line thead tr th {
-                                font-size: 13px;
-                                font-family: 'Tara SC Black';
-                                font-weight: bold;
-                                padding-top: 10px;
-                                padding-bottom: 10px;
-                                border-top: 2px solid black;
-                                border-bottom: 2px solid black;
+                            font-size: 13px;
+                            font-family: 'Tara SC Black';
+                            font-weight: bold;
+                            padding-top: 10px;
+                            padding-bottom: 10px;
+                            border-top: 2px solid black;
+                            border-bottom: 2px solid black;
                             }
                             .variant-image {
-                                margin-top: 20px;
-                                width: 60%;
+                            margin-top: 20px;
+                            width: 60%;
                             }
                             .table table-total {
-                                border: 1px solid black;
-                                min-height: 200px; 
-                                position: absolute; 
-                                bottom: 0px;"
+                            border: 1px solid black;
+                            min-height: 200px;
+                            position: absolute;
+                            bottom: 0px;"
                             }
                         </style>
                         <!-- Header -->
@@ -249,13 +327,16 @@
                                 <table style="border: 0px solid white;" width="100%">
                                     <tr>
                                         <td width="70%">
-                                            <img src="/fischerbell_custom/static/src/img/fischerbell_header.jpeg" width="400" height="100" style="margin-bottom: 10px;"/>
+                                            <img src="/fischerbell_custom/static/src/img/fischerbell_header.jpeg"
+                                                 width="400" height="100" style="margin-bottom: 10px;"/>
                                         </td>
                                         <td>
-                                            <img src="/fischerbell_custom/static/src/img/fischerbell_header2.jpeg" width="180" height="100" style="margin-bottom: 10px;"/>
+                                            <img src="/fischerbell_custom/static/src/img/fischerbell_header2.jpeg"
+                                                 width="180" height="100" style="margin-bottom: 10px;"/>
                                         </td>
                                         <td>
-                                            <img src="/fischerbell_custom/static/src/img/fischerbell_header3.jpeg" width="130" height="100" style="margin-bottom: 10px;"/>
+                                            <img src="/fischerbell_custom/static/src/img/fischerbell_header3.jpeg"
+                                                 width="130" height="100" style="margin-bottom: 10px;"/>
                                         </td>
                                         <br/>
                                     </tr>
@@ -267,13 +348,17 @@
                                                         <tr>
                                                             <td width="50%" class="text-wrap">
                                                                 <span style="font-weight: bold; margin-left: 10px; font-size: 20px; font-family: 'Tara SC Black'; padding: 5px;">
-                                                                    Sales Quotation No. <t style="font-weight: bold; margin-left: 10px; font-size: 20px; font-family: 'Tara SC Black'; padding: 5px;" t-esc="doc.name"/>
+                                                                    Sales Quotation No.
+                                                                    <t style="font-weight: bold; margin-left: 10px; font-size: 20px; font-family: 'Tara SC Black'; padding: 5px;"
+                                                                       t-esc="doc.name"/>
                                                                 </span>
                                                             </td>
                                                             <td width="50%" class="text-wrap">
                                                                 <t t-if="doc.client_order_ref">
                                                                     <span style="font-weight: bold; margin-left: 10px; font-size: 20px; font-family: 'Tara SC Black'; padding: 5px;">
-                                                                        Customer PO No. <t style="font-weight: bold; margin-left: 10px; font-size: 20px; font-family: 'Tara SC Black'; padding: 5px;" t-esc="doc.client_order_ref"/>
+                                                                        Customer PO No.
+                                                                        <t style="font-weight: bold; margin-left: 10px; font-size: 20px; font-family: 'Tara SC Black'; padding: 5px;"
+                                                                           t-esc="doc.client_order_ref"/>
                                                                     </span>
                                                                 </t>
                                                             </td>
@@ -289,66 +374,138 @@
                                         <br/>
                                         <br/>
                                         <td colspan="3">
-                                            <table width="100%" style="border-top: 2px solid black; border-left: 0px solid white; border-right: 0px solid white; border-bottom: 0px solid white; margin-left: 10px;">
+                                            <table width="100%"
+                                                   style="border-top: 2px solid black; border-left: 0px solid white; border-right: 0px solid white; border-bottom: 0px solid white; margin-left: 10px;">
                                                 <tr>
                                                     <td width="46.8%">
                                                         <table style="width:100%; border: 0px solid white;">
+<!--                                                            <tr>-->
+<!--                                                                <td width="35%" class="text-wrap">-->
+<!--                                                                    <span style="font-weight: bold; font-size: 12px; font-family: 'Tara SC Black'; padding: 5px;">-->
+<!--                                                                        Customer Code-->
+<!--                                                                    </span>-->
+<!--                                                                </td>-->
+<!--                                                                <td width="5%" class="text-wrap">-->
+<!--                                                                    <span style="font-weight: bold; font-size: 12px; font-family: 'Tara SC Black'; padding: 5px;">-->
+<!--                                                                        :-->
+<!--                                                                    </span>-->
+<!--                                                                </td>-->
+<!--                                                                <td width="60%" class="text-wrap">-->
+<!--                                                                    <span style="font-size: 12px; font-family: 'Tara SC Black'; padding: 5px;"-->
+<!--                                                                          t-esc="doc.partner_id.customer_code"/>-->
+<!--                                                                </td>-->
+<!--                                                            </tr>-->
+<!--                                                            <tr>-->
+<!--                                                                <td width="35%" class="text-wrap">-->
+<!--                                                                    <span style="font-weight: bold; font-size: 12px; font-family: 'Tara SC Black'; padding: 5px;">-->
+<!--                                                                        Customer PO No.-->
+<!--                                                                    </span>-->
+<!--                                                                </td>-->
+<!--                                                                <td width="5%" class="text-wrap">-->
+<!--                                                                    <span style="font-weight: bold; font-size: 12px; font-family: 'Tara SC Black'; padding: 5px;">-->
+<!--                                                                        :-->
+<!--                                                                    </span>-->
+<!--                                                                </td>-->
+<!--                                                                <td width="60%" class="text-style">-->
+<!--                                                                    <span style="font-size: 12px; font-family: 'Arial'; margin-left: 5px;"-->
+<!--                                                                          t-esc="doc.client_order_ref"/>-->
+<!--                                                                </td>-->
+<!--                                                            </tr>-->
                                                             <tr>
-                                                                <td width="35%" class="text-wrap"><span style="font-weight: bold; font-size: 12px; font-family: 'Tara SC Black'; padding: 5px;">Customer Code</span></td>
-                                                                <td width="5%" class="text-wrap"><span style="font-weight: bold; font-size: 12px; font-family: 'Tara SC Black'; padding: 5px;">:</span></td>
-                                                                <td width="60%" class="text-wrap"><span style="font-size: 12px; font-family: 'Tara SC Black'; padding: 5px;" t-esc="doc.partner_id.customer_code"/></td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td width="35%" class="text-wrap"><span style="font-weight: bold; font-size: 12px; font-family: 'Tara SC Black'; padding: 5px;">Customer PO No.</span></td>
-                                                                <td width="5%" class="text-wrap"><span style="font-weight: bold; font-size: 12px; font-family: 'Tara SC Black'; padding: 5px;">:</span></td>
-                                                                <td width="60%" class="text-style"><span style="font-size: 12px; font-family: 'Arial'; margin-left: 5px;" t-esc="doc.client_order_ref"/></td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td width="35%" class="text-wrap"><span style="font-weight: bold; font-size: 12px; font-family: 'Tara SC Black'; padding: 5px;">Requestor</span></td>
-                                                                <td width="5%" class="text-wrap"><span style="font-weight: bold; font-size: 12px; font-family: 'Tara SC Black'; padding: 5px;">:</span></td>
+                                                                <td width="35%" class="text-wrap">
+                                                                    <span style="font-weight: bold; font-size: 12px; font-family: 'Tara SC Black'; padding: 5px;">
+                                                                        Requestor
+                                                                    </span>
+                                                                </td>
+                                                                <td width="5%" class="text-wrap">
+                                                                    <span style="font-weight: bold; font-size: 12px; font-family: 'Tara SC Black'; padding: 5px;">
+                                                                        :
+                                                                    </span>
+                                                                </td>
                                                                 <td width="60%" class="text-style">
-                                                                  <t t-if="doc.partner_id.company_type=='company'">
-                                                                    <t t-foreach="doc.partner_id.child_ids" t-as="child">
-                                                                      <t t-if="child.type == 'contact'">
-                                                                        <span style="font-size: 12px; font-family: 'Arial'; margin-left: 5px;" t-esc="child.name"/>  
-                                                                      </t>
+                                                                    <t t-if="doc.partner_id.company_type=='company'">
+                                                                        <t t-foreach="doc.partner_id.child_ids"
+                                                                           t-as="child">
+                                                                            <t t-if="child.type == 'contact'">
+                                                                                <span style="font-size: 12px; font-family: 'Arial'; margin-left: 5px;"
+                                                                                      t-esc="child.name"/>
+                                                                            </t>
+                                                                        </t>
                                                                     </t>
-                                                                  </t>
-                                                                  <t t-else="">
-                                                                    <span style="font-size: 12px; font-family: 'Arial'; margin-left: 5px;" t-esc="doc.partner_id.name"/>
-                                                                  </t>
+                                                                    <t t-else="">
+                                                                        <span style="font-size: 12px; font-family: 'Arial'; margin-left: 5px;"
+                                                                              t-esc="doc.partner_id.name"/>
+                                                                    </t>
                                                                 </td>
                                                             </tr>
                                                             <tr>
-                                                                <td width="35%" class="text-wrap"><span style="font-weight: bold; font-size: 12px; font-family: 'Tara SC Black'; padding: 5px;">Contact No</span></td>
-                                                                <td width="5%" class="text-wrap"><span style="font-weight: bold; font-size: 12px; font-family: 'Tara SC Black'; padding: 5px;">:</span></td>
+                                                                <td width="35%" class="text-wrap">
+                                                                    <span style="font-weight: bold; font-size: 12px; font-family: 'Tara SC Black'; padding: 5px;">
+                                                                        Contact No
+                                                                    </span>
+                                                                </td>
+                                                                <td width="5%" class="text-wrap">
+                                                                    <span style="font-weight: bold; font-size: 12px; font-family: 'Tara SC Black'; padding: 5px;">
+                                                                        :
+                                                                    </span>
+                                                                </td>
                                                                 <td width="60%" class="text-style">
-                                                                  <t t-if="doc.partner_id.company_type=='company'">
-                                                                    <t t-foreach="doc.partner_id.child_ids" t-as="child">
-                                                                      <t t-if="child.type == 'contact'">
-                                                                        <span style="font-size: 12px; font-family: 'Arial'; margin-left: 5px;" t-esc="child.phone"/>  
-                                                                      </t>
+                                                                    <t t-if="doc.partner_id.company_type=='company'">
+                                                                        <t t-foreach="doc.partner_id.child_ids"
+                                                                           t-as="child">
+                                                                            <t t-if="child.type == 'contact'">
+                                                                                <span style="font-size: 12px; font-family: 'Arial'; margin-left: 5px;"
+                                                                                      t-esc="child.phone"/>
+                                                                            </t>
+                                                                        </t>
                                                                     </t>
-                                                                  </t>
-                                                                  <t t-else="">
-                                                                    <span style="font-size: 12px; font-family: 'Arial'; margin-left: 5px;" t-esc="doc.partner_id.phone"/>
-                                                                  </t>
+                                                                    <t t-else="">
+                                                                        <span style="font-size: 12px; font-family: 'Arial'; margin-left: 5px;"
+                                                                              t-esc="doc.partner_id.phone"/>
+                                                                    </t>
                                                                 </td>
                                                             </tr>
                                                             <tr>
-                                                                <td width="35%" class="text-wrap"><span style="font-weight: bold; font-size: 12px; font-family: 'Tara SC Black'; padding: 5px;">Email</span></td>
-                                                                <td width="5%" class="text-wrap"><span style="font-weight: bold; font-size: 12px; font-family: 'Tara SC Black'; padding: 5px;">:</span></td>
+                                                                <td width="35%" class="text-wrap">
+                                                                    <span style="font-weight: bold; font-size: 12px; font-family: 'Tara SC Black'; padding: 5px;">
+                                                                        Email
+                                                                    </span>
+                                                                </td>
+                                                                <td width="5%" class="text-wrap">
+                                                                    <span style="font-weight: bold; font-size: 12px; font-family: 'Tara SC Black'; padding: 5px;">
+                                                                        :
+                                                                    </span>
+                                                                </td>
                                                                 <td width="60%" class="text-style">
-                                                                  <t t-if="doc.partner_id.company_type=='company'">
-                                                                    <t t-foreach="doc.partner_id.child_ids" t-as="child">
-                                                                      <t t-if="child.type == 'contact'">
-                                                                        <span style="font-size: 12px; font-family: 'Arial'; margin-left: 5px;" t-esc="child.email"/>  
-                                                                      </t>
+                                                                    <t t-if="doc.partner_id.company_type=='company'">
+                                                                        <t t-foreach="doc.partner_id.child_ids"
+                                                                           t-as="child">
+                                                                            <t t-if="child.type == 'contact'">
+                                                                                <span style="font-size: 12px; font-family: 'Arial'; margin-left: 5px;"
+                                                                                      t-esc="child.email"/>
+                                                                            </t>
+                                                                        </t>
                                                                     </t>
-                                                                  </t>
-                                                                  <t t-else="">
-                                                                    <span style="font-size: 12px; font-family: 'Arial'; margin-left: 5px;" t-esc="doc.partner_id.email"/>
-                                                                  </t>
+                                                                    <t t-else="">
+                                                                        <span style="font-size: 12px; font-family: 'Arial'; margin-left: 5px;"
+                                                                              t-esc="doc.partner_id.email"/>
+                                                                    </t>
+                                                                </td>
+                                                            </tr>
+                                                             <tr>
+                                                                <td width="35%" class="text-wrap">
+                                                                    <span style="font-weight: bold; font-size: 12px; font-family: 'Tara SC Black'; padding: 5px;">
+                                                                        Bill To
+                                                                    </span>
+                                                                </td>
+                                                                <td width="5%" class="text-wrap">
+                                                                    <span style="font-weight: bold; font-size: 12px; font-family: 'Tara SC Black'; padding: 5px;">
+                                                                        :
+                                                                    </span>
+                                                                </td>
+                                                                <td width="60%" class="text-style">
+                                                                    <span style="font-size: 12px; font-family: 'Arial'; margin-left: 5px;"
+                                                                          t-esc="doc.partner_invoice_id.name"/>
                                                                 </td>
                                                             </tr>
                                                         </table>
@@ -357,45 +514,105 @@
                                                     <td width="49.8%">
                                                         <table style="width:100%; border: 0px solid white;">
                                                             <tr>
-                                                                <td width="30%" class="text-wrap"><span style="font-weight: bold; font-size: 12px; font-family: 'Tara SC Black'; padding: 5px;">Date</span></td>
-                                                                <td width="5%" class="text-wrap"><span style="font-weight: bold; font-size: 12px; font-family: 'Tara SC Black'; padding: 5px;">:</span></td>
-                                                                <td width="65%" class="text-style"><span style="font-size: 12px; font-family: 'Arial'; margin-left: 5px;" t-esc="doc.date_order.strftime('%d-%m-%Y')"/></td>
+                                                                <td width="30%" class="text-wrap">
+                                                                    <span style="font-weight: bold; font-size: 12px; font-family: 'Tara SC Black'; padding: 5px;">
+                                                                        Date
+                                                                    </span>
+                                                                </td>
+                                                                <td width="5%" class="text-wrap">
+                                                                    <span style="font-weight: bold; font-size: 12px; font-family: 'Tara SC Black'; padding: 5px;">
+                                                                        :
+                                                                    </span>
+                                                                </td>
+                                                                <td width="65%" class="text-style">
+                                                                    <span style="font-size: 12px; font-family: 'Arial'; margin-left: 5px;"
+                                                                          t-esc="doc.date_order.strftime('%d-%m-%Y')"/>
+                                                                </td>
                                                             </tr>
-                                                            <t t-if="doc.payment_term_id">
+                                                            <tr>
+                                                                <td width="30%" class="text-wrap">
+                                                                    <span style="font-weight: bold; font-size: 12px; font-family: 'Tara SC Black'; padding: 5px;">
+                                                                        Salesperson
+                                                                    </span>
+                                                                </td>
+                                                                <td width="5%" class="text-wrap">
+                                                                    <span style="font-weight: bold; font-size: 12px; font-family: 'Tara SC Black'; padding: 5px;">
+                                                                        :
+                                                                    </span>
+                                                                </td>
+                                                                <td width="65%" class="text-style">
+                                                                    <span style="font-size: 12px; font-family: 'Arial'; margin-left: 5px;"
+                                                                          t-esc="doc.user_id.name"/>
+                                                                    /
+                                                                    <span style="font-size: 12px; font-family: 'Arial'; margin-left: 5px;"
+                                                                          t-esc="doc.user_id.partner_id.phone"/>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td width="30%" class="text-wrap">
+                                                                    <span style="font-weight: bold; font-size: 12px; font-family: 'Tara SC Black'; padding: 5px;">
+                                                                        Processor
+                                                                    </span>
+                                                                </td>
+                                                                <td width="5%" class="text-wrap">
+                                                                    <span style="font-weight: bold; font-size: 12px; font-family: 'Tara SC Black'; padding: 5px;">
+                                                                        :
+                                                                    </span>
+                                                                </td>
+                                                                <td width="65%" class="text-style">
+                                                                    <span style="font-size: 12px; font-family: 'Arial'; margin-left: 5px;"
+                                                                          t-esc="doc.team_id.name"/>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td width="30%" class="text-wrap">
+                                                                    <span style="font-weight: bold; font-size: 12px; font-family: 'Tara SC Black'; padding: 5px;">
+                                                                        Payment Terms
+                                                                    </span>
+                                                                </td>
+                                                                <td width="5%" class="text-wrap">
+                                                                    <span style="font-weight: bold; font-size: 12px; font-family: 'Tara SC Black'; padding: 5px;">
+                                                                        :
+                                                                    </span>
+                                                                </td>
+                                                                <td width="65%" class="text-style">
+                                                                    <span style="font-size: 12px; font-family: 'Arial'; margin-left: 5px;"
+                                                                          t-esc="doc.payment_term_id.name"/>
+                                                                </td>
+                                                            </tr>
+                                                            <t t-if="doc.validity_date">
                                                                 <tr>
                                                                     <td width="30%" class="text-wrap">
-                                                                        <span style="font-weight: bold; font-size: 12px; font-family: 'Tara SC Black'; padding: 5px;">Payment Terms</span>
+                                                                        <span style="font-weight: bold; font-size: 12px; font-family: 'Tara SC Black'; padding: 5px;">
+                                                                            Validity
+                                                                        </span>
                                                                     </td>
                                                                     <td width="5%" class="text-wrap">
-                                                                        <span style="font-weight: bold; font-size: 12px; font-family: 'Tara SC Black'; padding: 5px;">:</span>
+                                                                        <span style="font-weight: bold; font-size: 12px; font-family: 'Tara SC Black'; padding: 5px;">
+                                                                            :
+                                                                        </span>
                                                                     </td>
                                                                     <td width="65%" class="text-style">
-                                                                        <span style="font-size: 12px; font-family: 'Arial'; margin-left: 5px;" t-esc="doc.payment_term_id.name"/>
+                                                                        <span style="font-size: 12px; font-family: 'Arial'; margin-left: 5px;"
+                                                                              t-esc="doc.validity_date"/>
                                                                     </td>
                                                                 </tr>
                                                             </t>
                                                             <tr>
-                                                                <td width="30%" class="text-wrap"><span style="font-weight: bold; font-size: 12px; font-family: 'Tara SC Black'; padding: 5px;">Salesperson</span></td>
-                                                                <td width="5%" class="text-wrap"><span style="font-weight: bold; font-size: 12px; font-family: 'Tara SC Black'; padding: 5px;">:</span></td>
-                                                                <td width="65%" class="text-style">
-                                                                    <span style="font-size: 12px; font-family: 'Arial'; margin-left: 5px;" t-esc="doc.user_id.name"/> / 
-                                                                    <span style="font-size: 12px; font-family: 'Arial'; margin-left: 5px;" t-esc="doc.user_id.partner_id.phone"/>
+                                                                <td width="30%" class="text-wrap">
+                                                                    <span style="font-weight: bold; font-size: 12px; font-family: 'Tara SC Black'; padding: 5px;">
+                                                                        Page No.
+                                                                    </span>
                                                                 </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td width="30%" class="text-wrap"><span style="font-weight: bold; font-size: 12px; font-family: 'Tara SC Black'; padding: 5px;">Processor</span></td>
-                                                                <td width="5%" class="text-wrap"><span style="font-weight: bold; font-size: 12px; font-family: 'Tara SC Black'; padding: 5px;">:</span></td>
-                                                                <td width="65%" class="text-style"><span style="font-size: 12px; font-family: 'Arial'; margin-left: 5px;" t-esc="doc.team_id.name"/></td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td width="30%" class="text-wrap"><span style="font-weight: bold; font-size: 12px; font-family: 'Tara SC Black'; padding: 5px;">Payment Terms</span></td>
-                                                                <td width="5%" class="text-wrap"><span style="font-weight: bold; font-size: 12px; font-family: 'Tara SC Black'; padding: 5px;">:</span></td>
-                                                                <td width="65%" class="text-style"><span style="font-size: 12px; font-family: 'Arial'; margin-left: 5px;" t-esc="doc.payment_term_id.name"/></td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td width="30%" class="text-wrap"><span style="font-weight: bold; font-size: 12px; font-family: 'Tara SC Black'; padding: 5px;">Page No.</span></td>
-                                                                <td width="5%" class="text-wrap"><span style="font-weight: bold; font-size: 12px; font-family: 'Tara SC Black'; padding: 5px;">:</span></td>
-                                                                <td width="65%" class="text-style"><span style="font-size: 12px; font-family: 'Arial'; margin-left: 5px;" class="page"/></td>
+                                                                <td width="5%" class="text-wrap">
+                                                                    <span style="font-weight: bold; font-size: 12px; font-family: 'Tara SC Black'; padding: 5px;">
+                                                                        :
+                                                                    </span>
+                                                                </td>
+                                                                <td width="65%" class="text-style">
+                                                                    <span style="font-size: 12px; font-family: 'Arial'; margin-left: 5px;"
+                                                                          class="page"/>
+                                                                </td>
                                                             </tr>
                                                         </table>
                                                     </td>
@@ -563,7 +780,9 @@
                                                 <tr>
                                                     <td width="100%">
                                                         <p style="font-size: 12px; font-family: 'Arial';">
-                                                            Thank you for your enquiry, we are pleased to quote you our best price and please feel free to contact us for further queries.
+                                                            Thank you for your enquiry, we are pleased to quote you our
+                                                            best price and please feel free to contact us for further
+                                                            queries.
                                                         </p>
                                                     </td>
                                                 </tr>
@@ -571,21 +790,40 @@
                                         </td>
                                     </tr>
                                 </table>
-                                <table width="100%" class="table-head" style="font-size: 12px; font-family: 'Tara SC Black'; font-weight: bold; padding-top: 10px; padding-bottom: 10px; border-left: 2px solid white; border-bottom: 2px solid black; border-top: 2px solid black; border-right: 2px solid white; margin-bottom: 10px;">
+                                <table width="100%" class="table-head"
+                                       style="font-size: 12px; font-family: 'Tara SC Black'; font-weight: bold; padding-top: 10px; padding-bottom: 10px; border-left: 2px solid white; border-bottom: 2px solid black; border-top: 2px solid black; border-right: 2px solid white; margin-bottom: 10px;">
                                     <thead>
                                         <tr>
                                             <th width="5%">NO</th>
-                                            <th width="10%"><span>PRODUCT</span><br/><span>CODE</span></th>
-<!--                                            <th width="10%" style="margin-left: 0px; text-align: center;">IMAGE</th>-->
-                                            <th width="5%"></th>
-                                            <th width="28%" style="margin-center: 0px; text-align: center;">DESCRIPTION</th>
-                                            <th style="margin-left: 0px; text-align: left;">T&amp;C</th>
-                                            <th width="7%"><span>Product Sheet Link</span></th>
-                                            <th width="5%"><span>QTY</span></th>
-                                            <th width="7%"><span>UOM</span></th>
-                                            <th width="5%"><span>LEAD TIME</span></th>
-                                            <th width="10%" style="margin-left: 20px;"><span>U.PRICE</span><br/><span>SGD</span></th>
-                                            <th width="10%" style="text-align: right;"><span>TOTAL SGD</span></th>
+                                            <th width="10%">
+                                                <span>PRODUCT</span>
+                                                <br/>
+                                                <span>CODE</span>
+                                            </th>
+                                            <!--                                            <th width="10%" style="margin-left: 0px; text-align: center;">IMAGE</th>-->
+<!--                                            <th width="5%"></th>-->
+                                            <th width="30%" style="margin-center: 0px; text-align: center;">
+                                                DESCRIPTION
+                                            </th>
+                                            <!--                                            <th style="margin-left: 0px; text-align: left;">T&amp;C</th>-->
+                                            <!--                                            <th width="7%"><span>Product Sheet Link</span></th>-->
+                                            <th width="5%">
+                                                <span>QTY</span>
+                                            </th>
+                                            <th width="10%">
+                                                <span>UOM</span>
+                                            </th>
+                                            <th width="10%">
+                                                <span>LEAD TIME</span>
+                                            </th>
+                                            <th width="10%" style="margin-left: 20px;">
+                                                <span>U.PRICE</span>
+                                                <br/>
+                                                <span>SGD</span>
+                                            </th>
+                                            <th width="10%" style="text-align: right;">
+                                                <span>TOTAL SGD</span>
+                                            </th>
                                         </tr>
                                     </thead>
                                 </table>
