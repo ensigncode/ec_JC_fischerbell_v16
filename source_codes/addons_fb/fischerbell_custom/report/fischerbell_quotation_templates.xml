@@ -205,7 +205,7 @@
                                                             <t>
                                                             <a t-att-href="line.product_detail_sheet_url"
                                                                    t-att-title="line.product_detail_sheet_url">
-                                                                <span>Download Product Sheet</span>
+                                                                <span>Download for Product Information</span>
 <!--                                                                    <t t-esc="line.product_detail_sheet_url"/>-->
                                                                 </a>
                                                             </t>
@@ -597,7 +597,7 @@
                                                                     </td>
                                                                     <td width="65%" class="text-style">
                                                                         <span style="font-size: 12px; font-family: 'Arial'; margin-left: 5px;"
-                                                                              t-esc="doc.validity_date"/>
+                                                                              t-esc="doc.validity_date.strftime('%d-%m-%Y')"/>
                                                                     </td>
                                                                 </tr>
                                                             </t>
