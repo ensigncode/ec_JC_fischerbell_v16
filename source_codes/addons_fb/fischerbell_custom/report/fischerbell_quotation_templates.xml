@@ -195,18 +195,21 @@
                                                             max-width: 50px; /* Adjust the maximum width as needed */
                                                             }
                                                         </style>
-                                                        <td width="30%" class="text-center truncate">
+                                                        <td width="30%" class="text-center">
+<!--                                                            <span style="width: 100%; max-width: 100%;">-->
                                                             <span t-field="line.name"/>
                                                             <t t-foreach="line.terms_and_condition_ids"
                                                                t-as="term_condition">
                                                                 <span t-esc="term_condition.description"/>
-<!--                                                                <br/>-->
-
-                                                                <a class="truncate" t-att-href="line.product_detail_sheet_url"
+                                                            </t>
+                                                            <t>
+                                                            <a t-att-href="line.product_detail_sheet_url"
                                                                    t-att-title="line.product_detail_sheet_url">
-                                                                    <t t-esc="line.product_detail_sheet_url"/>
+                                                                <span>Download Product Sheet</span>
+<!--                                                                    <t t-esc="line.product_detail_sheet_url"/>-->
                                                                 </a>
                                                             </t>
+<!--                                                            </span>-->
                                                         </td>
                                                         <!--                                                        <td>-->
                                                         <!--                                                            <t t-foreach="line.terms_and_condition_ids" t-as="term_condition">-->
