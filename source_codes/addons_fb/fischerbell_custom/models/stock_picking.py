@@ -59,6 +59,8 @@ class Picking(models.Model):
 	enough_stock = fields.Boolean(default=_get_stock_status_from_so)
 	artwork_attachment_ids = fields.Many2many('ir.attachment', string="ArtWork")
 	next_delivery_date = fields.Datetime('Next Delivery Date')
+	delivery_instruction = fields.Html(string="Delivery Instruction")
+	invoice_instruction = fields.Html(string="Invoice Instruction")
 
 
 	def action_is_default_terms(self):

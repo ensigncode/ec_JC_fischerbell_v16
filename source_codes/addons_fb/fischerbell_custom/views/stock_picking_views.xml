@@ -32,6 +32,7 @@
 				<field name="is_to_check" attrs="{'invisible': [('picking_type_code','!=','internal')], 'readonly': [('state','=','done')]}"/>
 				<field name="pick_id" string="Pick Number" readonly="1" attrs="{'invisible': [('picking_type_code','!=','outgoing')]}"/>
 				<field name="partner_note"/>
+				<field name="delivery_instruction"/>
 				<field name="user" invisible="1"/>
 			</xpath>
 			<xpath expr="//page[@name='operations']//field[@name='move_ids_without_package']//tree//field[@name='product_id']" position="after">

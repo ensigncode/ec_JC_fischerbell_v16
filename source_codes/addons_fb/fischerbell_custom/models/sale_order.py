@@ -104,8 +104,8 @@ class SaleOrder(models.Model):
 	artwork_attachment_ids = fields.Many2many('ir.attachment',string="ArtWork")
 	e_invoice_email = fields.Char("E-Invoice Email")
 	soa_email = fields.Char("Soa Email")
-	delivery_instruction = fields.Html(related="partner_shipping_id.delivery_instruction")
-	invoice_instruction = fields.Html(related="partner_invoice_id.invoice_instruction")
+	delivery_instruction = fields.Html(string="Delivery Instruction")
+	invoice_instruction = fields.Html(string="Invoice Instruction")
 	delivery_option = fields.Selection(
 		selection=[('partial_delivery', 'Partial Delivery'),
 			('full_delivery', 'Full Delivery')],
@@ -573,6 +573,7 @@ class SaleOrder(models.Model):
 	def _prepare_invoice(self):
 		invoice_vals = super()._prepare_invoice()
 		invoice_vals['sale_id'] = self.id
+		invoice_vals['invoice_instruction'] = self.invoice_instruction
 		return invoice_vals
 
 	def action_view_purchase_order(self):
@@ -622,6 +623,10 @@ class SaleOrder(models.Model):
 
 	@api.onchange('partner_id')
 	def onchange_partner_invoice_id(self):
+		if self.partner_invoice_id:
+			self.invoice_instruction = self.partner_invoice_id.invoice_instruction
+		if self.partner_shipping_id:
+			self.delivery_instruction = self.partner_shipping_id.delivery_instruction
 		if self.partner_invoice_id and not self.partner_invoice_id.street and not self.partner_invoice_id.street2 and not self.partner_invoice_id.city and not self.partner_invoice_id.state_id and not self.partner_invoice_id.zip and not self.partner_invoice_id.country_id:
 			self.check_partner_address = False
 		else:
