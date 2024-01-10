@@ -227,7 +227,7 @@ class Picking(models.Model):
 
 	def button_validate(self):
 		for picking in self:
-			if not picking.enough_stock:
+			if not picking.enough_stock and picking.sale_id.delivery_option != 'partial_delivery':
 				no_stock_line_ids = any(line.product_uom_qty > line.product_template_id.qty_available for line in picking.sale_id.order_line)
 				if no_stock_line_ids:
 					raise UserError('Product stock is not enough as demand. Customers wants wait till all stocks be ready for shipment.')
