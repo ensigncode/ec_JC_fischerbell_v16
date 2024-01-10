@@ -57,4 +57,37 @@
 			</xpath>
 		</field>
 	</record>
+
+<!--	 <record id="purchase_order_analysis_report_tree_view" model="ir.ui.view">-->
+<!--        <field name="name">purchase.order.analysis.report.tree.view</field>-->
+<!--        <field name="model">purchase.order.line</field>-->
+<!--        <field name="arch" type="xml">-->
+<!--            <tree string="Purchase Order Lines" create="false">-->
+<!--                <field name="order_id"/>-->
+<!--                <field name="product_id" string="Product"/>-->
+<!--                <field name="name"/>-->
+<!--&lt;!&ndash;                <field name="salesman_id"/>&ndash;&gt;-->
+<!--                <field name="product_uom_qty" string="Qty"/>-->
+<!--&lt;!&ndash;                <field name="qty_delivered"/>&ndash;&gt;-->
+<!--                <field name="qty_invoiced"/>-->
+<!--                <field name="qty_to_invoice"/>-->
+<!--                <field name="product_uom" string="Unit of Measure" groups="uom.group_uom"/>-->
+<!--&lt;!&ndash;                <field name="last_invoice_date" />&ndash;&gt;-->
+<!--&lt;!&ndash;                <field name="last_invoice_price" />&ndash;&gt;-->
+<!--                <field name="price_subtotal" sum="Total" widget="monetary"/>-->
+<!--                <field name="currency_id" invisible="1"/>-->
+<!--            </tree>-->
+<!--        </field>-->
+<!--    </record>-->
+    <record id="fischerbell_action_purchase_order_report_all" model="ir.actions.act_window">
+        <field name="name">Purchase Analysis</field>
+        <field name="res_model">purchase.order.line</field>
+        <field name="view_mode">tree,form</field>
+        <field name="target">current</field>
+    </record>
+    <menuitem id="fischerbell_menu_purchase_report"
+        name="Reporting"
+        action="fischerbell_custom.fischerbell_action_purchase_order_report_all"
+        parent="purchase.menu_purchase_root"
+        sequence="999"/>
 </odoo>

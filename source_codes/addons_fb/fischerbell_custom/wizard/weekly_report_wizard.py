@@ -117,14 +117,21 @@ class WeeklyReportwizard(models.TransientModel):
             wrksht.cell(row=table_header, column=15).border = border_bottom
 
             for order in filter(lambda ord:ord.date_order.month == month,order_ids):
-                
+                if not order.contact_person_id:
+                    if order.partner_id.parent_id:
+                        company = order.partner_id.parent_id.name or ''
+                        partner = order.partner_id.name or ''
+                    else:
+                        company = order.partner_id.name if order.partner_id.company_type == 'company' else ''
+                        partner = order.partner_id.name if order.partner_id.company_type == 'person' else ''
+
                 wrksht.cell(row=table_row, column=table_col).value = order.date_order.date() if order.date_order else ''
                 wrksht.cell(row=table_row, column=table_col).alignment = table_header_alignment
 
-                wrksht.cell(row=table_row, column=table_col+1).value = order.contact_person_id.parent_id.name if order.contact_person_id else order.partner_id.parent_id.name or ''
+                wrksht.cell(row=table_row, column=table_col+1).value = order.contact_person_id.parent_id.name if order.contact_person_id.name else company
                 wrksht.cell(row=table_row, column=table_col+1).alignment = table_header_alignment
 
-                wrksht.cell(row=table_row, column=table_col+2).value = order.contact_person_id.name if order.contact_person_id else order.partner_id.name or ''
+                wrksht.cell(row=table_row, column=table_col+2).value = order.contact_person_id.name if order.contact_person_id.name else partner
                 wrksht.cell(row=table_row, column=table_col+2).alignment = table_header_alignment
 
                 wrksht.cell(row=table_row, column=table_col+3).value = order.user_id.name or ''
