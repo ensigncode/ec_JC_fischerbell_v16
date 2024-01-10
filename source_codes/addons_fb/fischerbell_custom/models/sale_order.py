@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
-
+import calendar
 from itertools import groupby
 from odoo.exceptions import MissingError, ValidationError, AccessError
 
@@ -284,10 +284,28 @@ class SaleOrder(models.Model):
 			else:
 				inv.len_note = False
 
+	def check_planned_date(self):
+		for rec in self:
+			if rec.scheduled_delivery_date:
+				if rec.partner_id:
+					if rec.partner_id.no_delivery_days_selection == 'days':
+						if eval(rec.partner_id.no_delivery_days) == rec.scheduled_delivery_date.weekday():
+							raise UserError(
+								'The customer %s is not available at this day %s, please change it as per the customers availability' % (
+								self.partner_id.name, calendar.day_name[eval(self.partner_id.no_delivery_days)]))
+					elif rec.partner_id.no_delivery_days_selection == 'date':
+						if self.partner_id.delivery_restriction_start_date <= rec.scheduled_delivery_date.date() <= self.partner_id.delivery_restriction_end_date:
+							raise UserError(
+								'The customer %s is not available at this date %s, please change it as per the customers availability' % (
+								self.partner_id.name, rec.scheduled_delivery_date))
+
+
 	def action_confirm(self):
 		self.submited_date = date.today()
+		self.check_planned_date()
 		for rec in self.order_line:
 			# line_ids = self.order_line.filtered(lambda line:not line.product_template_id.seller_ids)
+
 			if not rec.product_template_id.seller_ids and not self._context.get('vendor_wizard'):
 				return {'type': 'ir.actions.act_window',
 				        'name': _('Product wizard'),
