@@ -36,6 +36,7 @@
                 </xpath>
                 <xpath expr="//group//group[@id='header_left_group']//field[@name='invoice_vendor_bill_id']" position="after">
                     <field name="partner_note"/>
+                    <field name="invoice_instruction"/>
                 </xpath>
             </field>
         </record>

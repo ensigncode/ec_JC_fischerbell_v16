@@ -16,6 +16,12 @@ class StockMove(models.Model):
 	mrp_phone = fields.Char('Phone Number', compute="_compute_mrp_line_id", store=True)
 	send_email_reorder = fields.Boolean('Send Email To Reorder', default=False)
 
+	def _get_new_picking_values(self):
+		"""Inherit method for pass value from sale order to delivery order."""
+		res = super(StockMove, self)._get_new_picking_values()
+		res["delivery_instruction"] = self.group_id.sale_id.delivery_instruction
+		return res
+
 	@api.onchange('customer_id')
 	def onchange_batch_number(self):
 		if self.customer_id:

@@ -30,6 +30,8 @@ class AccountMove(models.Model):
 	internal_note = fields.Char('')
 	len_note = fields.Char('Length Internal Notee', compute="_compute_internal_note", store=True)
 	partner_note = fields.Text('Note')
+	delivery_instruction = fields.Html(string="Delivery Instruction")
+	invoice_instruction = fields.Html(string="Invoice Instruction")
 
 	    
 
