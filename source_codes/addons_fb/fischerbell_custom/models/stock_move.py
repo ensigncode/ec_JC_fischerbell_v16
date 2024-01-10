@@ -20,6 +20,7 @@ class StockMove(models.Model):
 		"""Inherit method for pass value from sale order to delivery order."""
 		res = super(StockMove, self)._get_new_picking_values()
 		res["delivery_instruction"] = self.group_id.sale_id.delivery_instruction
+		res["artwork_attachment_ids"] = [(6, 0, self.group_id.sale_id.artwork_attachment_ids.ids)]
 		return res
 
 	@api.onchange('customer_id')
