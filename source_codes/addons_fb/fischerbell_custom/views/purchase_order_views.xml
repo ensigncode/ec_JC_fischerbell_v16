@@ -79,15 +79,46 @@
 <!--            </tree>-->
 <!--        </field>-->
 <!--    </record>-->
-    <record id="fischerbell_action_purchase_order_report_all" model="ir.actions.act_window">
+
+	<record id="purchase_order_report_sg_tree_view" model="ir.ui.view">
+        <field name="name">purchase.order.report.sg.tree.view</field>
+        <field name="model">purchase.order</field>
+        <field name="arch" type="xml">
+            <tree string="Purchase Order" create="false">
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+
+	<record id="fischerbell_action_purchase_order_sg" model="ir.actions.act_window">
+        <field name="name">Freight Charges</field>
+        <field name="res_model">purchase.order</field>
+        <field name="view_mode">tree</field>
+		<field name="domain">[('partner_id.country_code', '=', 'SG')]</field>
+		<field name="view_id" ref="fischerbell_custom.purchase_order_report_sg_tree_view"/>
+        <field name="target">current</field>
+    </record>
+
+	 <record id="fischerbell_action_purchase_order_report_all" model="ir.actions.act_window">
         <field name="name">Purchase Analysis</field>
         <field name="res_model">purchase.order.line</field>
         <field name="view_mode">tree,form</field>
         <field name="target">current</field>
     </record>
-    <menuitem id="fischerbell_menu_purchase_report"
+
+    <menuitem id="fischerbell_menu_purchase"
         name="Reporting"
-        action="fischerbell_custom.fischerbell_action_purchase_order_report_all"
         parent="purchase.menu_purchase_root"
         sequence="999"/>
+
+	<menuitem id="fischerbell_menu_purchase_report"
+        name="Reporting"
+        action="fischerbell_custom.fischerbell_action_purchase_order_report_all"
+        parent="fischerbell_custom.fischerbell_menu_purchase" />
+
+	<menuitem id="fischerbell_menu_freight_charges"
+        name="Freight Charges"
+	    action="fischerbell_custom.fischerbell_action_purchase_order_sg"
+		parent="fischerbell_custom.fischerbell_menu_purchase" />
+
 </odoo>
