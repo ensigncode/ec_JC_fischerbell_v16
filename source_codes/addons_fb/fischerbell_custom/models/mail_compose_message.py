@@ -1,5 +1,5 @@
 from odoo import models, fields,api
-
+import base64
 
 class MailComposerMessage(models.TransientModel):
     _inherit = 'mail.compose.message'

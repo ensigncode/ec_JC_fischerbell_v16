@@ -131,7 +131,8 @@ class PurchaseOrder(models.Model):
 
 
 	def button_confirm(self):
-		if self.request_delivery_date and self.estimated_delivery_date and self.mail_sended:
+		# if self.request_delivery_date and self.estimated_delivery_date and self.mail_sended:
+		if self.mail_sended:
 			res = super().button_confirm()
 			for order in self:
 				if order.picking_ids:
@@ -139,8 +140,8 @@ class PurchaseOrder(models.Model):
 						pick.user = self.env.user.id
 			return res
 		else:
-			if not self.request_delivery_date and not self.estimated_delivery_date:
-				raise ValidationError("Request Delivery Date And Estimated Delivery Date are required")
+			# if not self.request_delivery_date and not self.estimated_delivery_date:
+			# 	raise ValidationError("Request Delivery Date And Estimated Delivery Date are required")
 			if not self.mail_sended:
 				raise ValidationError("Please Send Email First")
 
