@@ -173,7 +173,7 @@
                                                     <t t-set="down_payment" t-value="down_payment + line.price_unit"/>
                                                 </t>
                                                 <t t-else="">
-                                                    <tr>
+                                                    <tr style="border-bottom: 1px solid blue;">
                                                         <td width="5%" class="text-center">
                                                             <span t-esc="count"/>
                                                         </td>
@@ -195,14 +195,16 @@
                                                             max-width: 50px; /* Adjust the maximum width as needed */
                                                             }
                                                         </style>
-                                                        <td width="30%" class="text-center">
+                                                        <td width="30%" class="text-left">
 <!--                                                            <span style="width: 100%; max-width: 100%;">-->
                                                             <span t-field="line.name"/>
                                                             <t t-foreach="line.terms_and_condition_ids"
                                                                t-as="term_condition">
                                                                 <span t-esc="term_condition.description"/>
                                                             </t>
-                                                            <t>
+
+                                                            <t t-if="line.product_detail_sheet_url">
+                                                                <br/>
                                                             <a t-att-href="line.product_detail_sheet_url"
                                                                    t-att-title="line.product_detail_sheet_url">
                                                                 <span>Download for Product Information</span>
@@ -583,7 +585,7 @@
                                                                           t-esc="doc.payment_term_id.name"/>
                                                                 </td>
                                                             </tr>
-                                                            <t t-if="doc.validity_date">
+
                                                                 <tr>
                                                                     <td width="30%" class="text-wrap">
                                                                         <span style="font-weight: bold; font-size: 12px; font-family: 'Tara SC Black'; padding: 5px;">
@@ -595,12 +597,14 @@
                                                                             :
                                                                         </span>
                                                                     </td>
-                                                                    <td width="65%" class="text-style">
-                                                                        <span style="font-size: 12px; font-family: 'Arial'; margin-left: 5px;"
-                                                                              t-esc="doc.validity_date.strftime('%d-%m-%Y')"/>
-                                                                    </td>
+                                                                    <t t-if="doc.validity_date">
+                                                                        <td width="65%" class="text-style">
+                                                                            <span style="font-size: 12px; font-family: 'Arial'; margin-left: 5px;"
+                                                                                  t-esc="doc.validity_date.strftime('%d-%m-%Y')"/>
+                                                                        </td>
+                                                                    </t>
                                                                 </tr>
-                                                            </t>
+
                                                             <tr>
                                                                 <td width="30%" class="text-wrap">
                                                                     <span style="font-weight: bold; font-size: 12px; font-family: 'Tara SC Black'; padding: 5px;">

@@ -35,13 +35,13 @@ class Partner(models.Model):
 
 	no_delivery_days_selection = fields.Selection([('days', 'Days'), ('date', 'By Date')], string="Delivery Restriction")
 	no_delivery_days = fields.Selection([
-		('0', 'Sunday'),
-		('1', 'Monday'),
-		('2', 'Tuesday'),
-		('3', 'Wednesday'),
-		('4', 'Thursday'),
-		('5', 'Friday'),
-		('6', 'Saturday')], string="Delivery Restriction")
+		('0', 'Monday'),
+		('1', 'Tuesday'),
+		('2', 'Wednesday'),
+		('3', 'Thursday'),
+		('4', 'Friday'),
+		('5', 'Saturday'),
+		('6', 'Sunday')], string="Delivery Restriction")
 	delivery_restriction_start_date = fields.Date(string="Delivery Restriction Start")
 	delivery_restriction_end_date = fields.Date(string="Delivery Restriction End")
 

@@ -109,6 +109,7 @@ class SaleOrder(models.Model):
 			('full_delivery', 'Full Delivery')],
 		string="Delivery Option", default='partial_delivery')
 
+
 	@api.depends('partner_id')
 	def _compute_partner_shipping_id(self):
 		for order in self:
@@ -130,6 +131,15 @@ class SaleOrder(models.Model):
 			no_stock = any(line.product_uom_qty > line.product_template_id.qty_available for line in order.order_line)
 			if no_stock:
 				order.no_enough_stock = False
+
+	@api.onchange('scheduled_delivery_date')
+	def _onchange_partner_not_avalibale(self):
+		if self.partner_id.no_delivery_days_selection == 'days':
+			if int(self.partner_id.no_delivery_days) == self.scheduled_delivery_date.weekday():
+				raise ValidationError("Customer is not avaliable during this date")
+		if self.partner_id.no_delivery_days_selection == 'date':
+			if self.partner_id.delivery_restriction_start_date <= self.scheduled_delivery_date.date() <= self.partner_id.delivery_restriction_end_date:
+				raise ValidationError(f"Customer is not avaliable from {self.partner_id.delivery_restriction_start_date} to {self.partner_id.delivery_restriction_end_date}")
 
 	@api.onchange('contact_person_id')
 	def _onchange_set_customer(self):
