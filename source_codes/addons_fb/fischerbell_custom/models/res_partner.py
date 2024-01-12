@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 
-from odoo import api,fields, models
+from odoo import api,fields, models, _
 
 class Partner(models.Model):
 	_inherit = "res.partner"
@@ -29,6 +29,9 @@ class Partner(models.Model):
 	credit_limit = fields.Float(string='Credit Limit')
 	type_of_invoice = fields.Selection(selection=[('e_invoice', 'E-Invoice'), ('paper_invoice', 'Paper Invoice')],
 	    string='Type Of Invoice', required=True)
+	partner_seq = fields.Char('Sequence', copy=False, default=lambda self: _('New'))
+	e_invoice_email = fields.Char("E-Invoice Email")
+	soa_email = fields.Char("Soa Email")
 
 	no_delivery_days_selection = fields.Selection([('days', 'Days'), ('date', 'By Date')], string="Delivery Restriction")
 	no_delivery_days = fields.Selection([

@@ -4,7 +4,7 @@
 from odoo import _, api, fields, models
 from odoo.exceptions import UserError, ValidationError
 from odoo.tools.float_utils import float_round
-
+import base64
 class ReportStatementOfAccount(models.TransientModel):
     _name = 'report.statement.of.account'
 
@@ -60,4 +60,22 @@ class ReportStatementOfAccount(models.TransientModel):
         for move2 in account_move_ids:
             move2.write({'total_balance_due': total})
 
+        # self.env.ref('fischerbell_custom.action_report_statement_of_account').report_action(account_move_ids.ids)
+        if account_move_ids:
+            pdf_data = self.env["ir.actions.report"].sudo()._render_qweb_pdf('fischerbell_custom.action_report_statement_of_account', account_move_ids.ids,
+                                                                     data={'report_type': 'pdf'})[0]
+            attachment_data = {
+                'name': 'Statement Of Account.pdf',
+                # 'datas': pdf_data[0] if pdf_data else False,
+                'datas': base64.encodebytes(pdf_data),
+            }
+            mail = self.env['mail.mail'].create({
+                'subject': 'Statement Of Account',
+                'body_html': 'Statement Of Account',
+                'email_to': self.partner_id.soa_email,
+                'partner_ids': [(4, self.partner_id.id)],
+                'attachment_ids': [(0, 0, attachment_data)],
+            })
+            mail.send()
         return self.env.ref('fischerbell_custom.action_report_statement_of_account').report_action(account_move_ids.ids)
+

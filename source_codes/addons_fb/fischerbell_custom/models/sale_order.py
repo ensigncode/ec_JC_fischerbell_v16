@@ -102,8 +102,6 @@ class SaleOrder(models.Model):
 	no_enough_stock = fields.Boolean(compute='_compute_order_stock')
 	submited_date = fields.Date('Submited Date')
 	artwork_attachment_ids = fields.Many2many('ir.attachment',string="ArtWork")
-	e_invoice_email = fields.Char("E-Invoice Email")
-	soa_email = fields.Char("Soa Email")
 	delivery_instruction = fields.Html(string="Delivery Instruction")
 	invoice_instruction = fields.Html(string="Invoice Instruction")
 	delivery_option = fields.Selection(
@@ -191,6 +189,13 @@ class SaleOrder(models.Model):
 	# 				raise ValidationError("Sorry, you are not allowed to approve this order.")
 	# 	return True
 
+
+	# @api.model_create_multi
+	# def create(self, vals_list):
+	# 	for vals in vals_list:
+	# 		if 'partner_seq' not in vals or vals['partner_seq'] == _('New'):
+	# 			vals['partner_seq'] = self.env['ir.sequence'].next_by_code('quality.point') or _('New')
+	# 	return super().create(vals_list)
 	def action_to_approve(self):
 		for order in self:
 			if order.partner_id.credit_limit > 0:
@@ -201,6 +206,11 @@ class SaleOrder(models.Model):
 							'approval_state': 'approved',
 							'reviewed_by': self.env.user.id
 						})
+						if order.partner_id.partner_seq == _('New'):
+							partner = self.env['res.partner'].browse(order.partner_id.id)
+							partner.update({
+								'partner_seq' : self.env['ir.sequence'].next_by_code('res.partner') or _('New')
+							})
 						order.action_confirm()
 						purchase_order_ids = self._get_purchase_orders()
 						if purchase_order_ids:
@@ -232,6 +242,11 @@ class SaleOrder(models.Model):
 						'approval_state': 'approved',
 						'reviewed_by': self.env.user.id
 					})
+					if order.partner_id.partner_seq == _('New'):
+						partner = self.env['res.partner'].browse(order.partner_id.id)
+						partner.update({
+							'partner_seq': self.env['ir.sequence'].next_by_code('res.partner') or _('New')
+						})
 					order.action_confirm()
 					purchase_order_ids = self._get_purchase_orders()
 					if purchase_order_ids:

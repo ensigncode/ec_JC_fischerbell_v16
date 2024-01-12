@@ -1,52 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data noupdate="0">
-        <function name = "write" model = "ir.model.data">
-            <function name = "search" model = "ir.model.data">
-                <value eval = "[('module', '=', 'sale'),('name','=','email_template_edi_sale')]"/>
+        <function name="write" model="ir.model.data">
+            <function name="search" model="ir.model.data">
+                <value eval="[('module', '=', 'sale'),('name','=','email_template_edi_sale')]"/>
             </function>
-            <value eval =" {'noupdate': False} "/>
+            <value eval=" {'noupdate': False} "/>
         </function>
         <record id="sale.email_template_edi_sale" model="mail.template">
             <field name="name">Sales: Send Quotation</field>
             <field name="model_id" ref="sale.model_sale_order"/>
             <field name="subject">{{object.get_order_template_subject()}}</field>
             <!-- <field name="subject">{{ object.company_id.name }} {{ object.state in ('draft', 'sent') and (ctx.get('proforma') and 'Proforma' or 'Quotation') or 'Order' }} (Ref {{ object.name or 'n/a' }})</field> -->
-            <field name="email_from">{{ (object.user_id.email_formatted or object.company_id.email_formatted or user.email_formatted) }}</field>
+            <field name="email_from">{{ (object.user_id.email_formatted or object.company_id.email_formatted or
+                user.email_formatted) }}
+            </field>
             <field name="partner_to">{{ object.partner_id.id }}</field>
             <field name="description">Used by salespeople when they send quotations or proforma to prospects</field>
             <field name="body_html" type="html">
                 <div style="margin: 0px; padding: 0px;">
                     <p style="margin: 0px; padding: 0px; font-size: 13px;">
                         <t t-set="doc_name" t-value="'quotation' if object.state in ('draft', 'sent') else 'order'"/>
-        Hello,
+                        Hello,
                         <br/>
                         <br/>
-        Your
+                        Your
                         <t t-if="ctx.get('proforma')">
-            Pro forma invoice for
+                            Pro forma invoice for
                             <t t-out="doc_name or ''">quotation</t>
-                            <span style="font-weight: bold;"  t-out="object.name or ''">S00052</span>
+                            <span style="font-weight: bold;" t-out="object.name or ''">S00052</span>
                             <t t-if="object.origin">
-                (with reference:
-                                <t t-out="object.origin or ''"></t> )
+                                (with reference:
+                                <t t-out="object.origin or ''"></t>
+                                )
                             </t>
-            amounting in
-                            <span style="font-weight: bold;"  t-out="format_amount(object.amount_total, object.pricelist_id.currency_id) or ''">$ 10.00</span> is available.
+                            amounting in
+                            <span style="font-weight: bold;"
+                                  t-out="format_amount(object.amount_total, object.pricelist_id.currency_id) or ''">$
+                                10.00
+                            </span>
+                            is available.
                         </t>
                         <t t-else="">
                             <t t-out="doc_name or ''">quotation</t>
                             <span style="font-weight: bold;" t-out="object.name or ''"></span>
                             <t t-if="object.origin">
-                (with reference:
-                                <t t-out="object.origin or ''">S00052</t> )
+                                (with reference:
+                                <t t-out="object.origin or ''">S00052</t>
+                                )
                             </t>
-            amounting in
-                            <span style="font-weight: bold;" t-out="format_amount(object.amount_total, object.pricelist_id.currency_id) or ''">$ 10.00</span> is ready for review.
+                            amounting in
+                            <span style="font-weight: bold;"
+                                  t-out="format_amount(object.amount_total, object.pricelist_id.currency_id) or ''">$
+                                10.00
+                            </span>
+                            is ready for review.
                         </t>
                         <br/>
                         <br/>
-        Do not hesitate to contact us if you have any questions.
+                        Do not hesitate to contact us if you have any questions.
                         <t t-if="not is_html_empty(object.user_id.signature)">
                             <br/>
                             <br/>
@@ -64,11 +76,30 @@
             <field name="lang">{{ object.partner_id.lang }}</field>
             <field name="auto_delete" eval="True"/>
         </record>
-        <function name = "write" model = "ir.model.data">
-            <function name = "search" model = "ir.model.data">
-                <value eval = "[('module', '=', 'sale'),('name','=','email_template_edi_sale')]"/>
+        <function name="write" model="ir.model.data">
+            <function name="search" model="ir.model.data">
+                <value eval="[('module', '=', 'sale'),('name','=','email_template_edi_sale')]"/>
             </function>
-            <value eval =" {'noupdate': True} "/>
+            <value eval=" {'noupdate': True} "/>
         </function>
+
+
+<!--        <record id="email_template_statement_of_account" model="mail.template">-->
+<!--            <field name="name">Your Email Template Statement Of Account</field>-->
+<!--            <field name="subject">Subject: ${object.name}</field>-->
+<!--            <field name="email_from">${user.email or ''}</field>-->
+<!--            <field name="email_to">${object.email_field or ''}</field>-->
+<!--            <field name="lang">${object.lang}</field>-->
+<!--            <field name="model_id" ref="your_module.model_your_model"/>-->
+<!--            <field name="auto_delete" eval="True"/>-->
+<!--            <field name="report_template" ref="your_module.report_template_id"/>-->
+<!--            <field name="report_name">${object.name}</field>-->
+<!--            <field name="body_html">-->
+<!--                <![CDATA[-->
+<!--                        <div>Your email body goes here. You can use placeholders like ${object.field_name}.</div>-->
+<!--                    ]]>-->
+<!--            </field>-->
+<!--        </record>-->
+
     </data>
 </odoo>

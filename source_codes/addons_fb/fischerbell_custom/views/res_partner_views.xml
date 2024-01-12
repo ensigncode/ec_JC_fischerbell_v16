@@ -13,6 +13,11 @@
                 <field name="fax" widget="phone"/>
             </xpath>
             <xpath expr="//field[@name='vat']" position="after">
+                <field name="partner_seq"/>
+                <field name="e_invoice_email" widget="email"/>
+                <field name="soa_email" widget="email"/>
+            </xpath>
+            <xpath expr="//field[@name='vat']" position="after">
                 <field name="no_delivery_days_selection"/>
                 <field name="no_delivery_days" attrs="{'invisible':[('no_delivery_days_selection','in',['date',False])]}"/>
                 <label for="delivery_restriction_start_date" string="Date" attrs="{'invisible':[('no_delivery_days_selection','in',['days',False])]}"/>

@@ -6,10 +6,16 @@
         <field name="model">res.company</field>
         <field name="inherit_id" ref="base.view_company_form"/>
         <field name="arch" type="xml">
-            <xpath expr="//field[@name='social_twitter']" position="after">
+            <xpath expr="//group[@name='social_media']" position="inside">
                     <field name="social_lazada"/>
                     <field name="social_store"/>
                     <field name="social_shopee"/>
+            </xpath>
+            <xpath expr="//field[@name='social_twitter']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='social_github']" position="attributes">
+                <attribute name="invisible">1</attribute>
             </xpath>
         </field>
     </record>
