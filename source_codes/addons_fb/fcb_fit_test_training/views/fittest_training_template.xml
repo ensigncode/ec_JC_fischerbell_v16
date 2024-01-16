@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="tmp_fittest_training_page_form" name="Fit Test Training Form">
+        <t t-call="website.layout" class="oe_structure oe_empty">
+            <div id="wrap">
+                <section class="s_title parallax s_parallax_is_fixed bg-black-50 pt24 pb24" data-vcss="001"
+                         data-snippet="s_title" data-scroll-background-ratio="1">
+                    <div class="o_we_bg_filter bg-black-50"/>
+                    <div class="container">
+                        <h1>Fit Test Training</h1>
+                    </div>
+                </section>
+                <section class="s_text_block pt40 pb40 o_colored_level " data-snippet="s_text_block">
+                    <div class="container s_allow_columns">
+                        <div class="row">
+                            <div class="col-lg-8 mt-4 mt-lg-0">
+                                <p>
+                                    Fit Test Training about anything related to our company or services or
+                                    Training.
+                                    <br/>
+                                    We'll do our best to get back to you as soon as possible.
+                                </p>
+                                <section class="s_website_form" data-vcss="001" data-snippet="s_website_form">
+                                    <div class="container">
+                                        <form id="fitestraining_form" action="/fittest_training/submit"
+                                              class="o_mark_required"
+                                              data-mark="*" data-success-mode="redirect">
+                                            <div class="s_website_form_rows row s_col_no_bgcolor">
+                                                <div class="mb-0 py-2 col-12 s_website_form_field s_website_form_custom
+                                                                                                                s_website_form_required"
+                                                     data-type="char" data-name="Field">
+                                                    <div class="row s_col_no_resize s_col_no_bgcolor">
+                                                        <label class="col-form-label col-sm-auto s_website_form_label"
+                                                               style="width: 200px" for="fitestraining1">
+                                                            <span class="s_website_form_label_content">Name of
+                                                                Trainer
+                                                            </span>
+                                                            <span class="s_website_form_mark">*</span>
+                                                        </label>
+                                                        <div class="col-sm">
+                                                            <input id="name" type="text"
+                                                                   class="form-control s_website_form_input"
+                                                                   name="name" required="true"
+                                                                   />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="mb-0 py-2 col-12 s_website_form_field s_website_form_custom s_website_form_required"
+                                                 data-type="date" data-name="Field">
+                                                <div class="row s_col_no_resize s_col_no_bgcolor">
+                                                    <label class="col-form-label col-sm-auto s_website_form_label"
+                                                           style="width: 200px" for="fitestraining2">
+                                                        <span class="s_website_form_label_content">
+                                                            Date of Training
+                                                        </span>
+                                                        <span class="s_website_form_mark">*</span>
+                                                    </label>
+                                                    <div class="col-sm">
+                                                        <input id="fitestraining2" type="date"
+                                                               class="form-control s_website_form_input"
+                                                               name="date" required="true"
+                                                        />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="mb-0 py-2 col-12 s_website_form_field s_website_form_custom"
+                                                 data-type="char" data-name="Field">
+                                                <div class="row s_col_no_resize s_col_no_bgcolor">
+                                                    <label class="col-form-label col-sm-auto s_website_form_label"
+                                                           style="width: 200px" for="fitestraining3">
+                                                        <span class="s_website_form_label_content">Person
+                                                            In-charge
+                                                        </span>
+                                                    </label>
+                                                    <div class="col-sm">
+                                                        <input id="fitestraining3" type="text"
+                                                               class="form-control s_website_form_input"
+                                                               name="charge_name"
+                                                               data-fill-with="charge_name"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="mb-0 py-2 col-12 s_website_form_field s_website_form_custom"
+                                                 data-type="char" data-name="Field">
+                                                <div class="row s_col_no_resize s_col_no_bgcolor">
+                                                    <label class="col-form-label col-sm-auto s_website_form_label"
+                                                           style="width: 200px" for="fitestraining4">
+                                                        <span class="s_website_form_label_content">
+                                                            Contact No.
+                                                        </span>
+                                                    </label>
+                                                    <div class="col-sm">
+                                                        <input id="fitestraining4" type="tel"
+                                                               class="form-control s_website_form_input"
+                                                               name="phone"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="mb-0 py-2 col-12 s_website_form_field s_website_form_custom"
+                                                 data-type="char" data-name="Field">
+                                                <div class="row s_col_no_resize s_col_no_bgcolor">
+                                                    <label class="col-form-label col-sm-auto s_website_form_label"
+                                                           style="width: 200px" for="contact4">
+                                                        <span class="s_website_form_label_content">Name Of
+                                                            Company
+                                                        </span>
+                                                    </label>
+                                                    <div class="col-sm">
+                                                        <input id="contact4" type="text"
+                                                               class="form-control s_website_form_input"
+                                                               name="company"
+                                                               data-fill-with="commercial_company_name"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="mb-0 py-2 col-12 s_website_form_field s_website_form_required s_website_form_model_required"
+                                                 data-type="char" data-name="Field">
+                                                <div class="row s_col_no_resize s_col_no_bgcolor">
+                                                    <label class="col-form-label col-sm-auto s_website_form_label"
+                                                           style="width: 200px" for="contact5">
+                                                        <span class="s_website_form_label_content">Type of
+                                                            Training
+                                                        </span>
+                                                        <span class="s_website_form_mark">*</span>
+                                                    </label>
+                                                    <div class="col-sm">
+                                                        <input id="contact5" type="text"
+                                                               class="form-control s_website_form_input"
+                                                               name="training_type" required=""/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <button type="submit" class="btn btn-primary">Submit</button>
+                                        </form>
+                                    </div>
+                                </section>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </t>
+    </template>
+
+    <template id="tmp_fittest_training_form_success" name="Fit Test Training Form Successfully Submitted">
+        <t t-call="website.layout">
+            <div id="wrap">
+                <div class="container">
+                    <div class="col-md-12">
+                        <div class="alert alert-success">
+                            Training created successfully.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+</odoo>

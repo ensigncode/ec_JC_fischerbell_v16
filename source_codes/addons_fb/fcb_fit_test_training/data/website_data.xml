@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="menu_fittest_training_page" model="website.menu">
+            <field name="name">Fit test Training</field>
+            <field name="url">/fittest_training</field>
+            <field name="parent_id" ref="website.main_menu"/>
+            <field name="sequence" type="int">46</field>
+        </record>
+    </data>
+</odoo>
