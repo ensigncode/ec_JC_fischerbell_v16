@@ -6,9 +6,12 @@
     'category': 'Account',
     'summary': '',
     'website': '',
-    'depends': ['account'],
+    'depends': ['account','l10n_in','account_asset','account_reports'],
     'data': [
-    "data/demo_data.xml"
+    "data/demo_data.xml",
+    "views/res_partner_view.xml",
+    "views/cash_flow_report.xml",
+    "views/account_asset_views.xml",
     ],
     'demo': [
     ],
