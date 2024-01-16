@@ -817,6 +817,17 @@
                                                                       t-esc="doc.note"/>
                                                             </td>
                                                         </tr>
+                                                        <tr>
+                                                                <td width="40%">
+                                                                    <span style="font-family: 'Unitext Pro Regular'; line-height: 1em;">Delivery Instruction</span>
+                                                                </td>
+                                                                <td width="5%" >
+                                                                    <span style="font-family: 'Unitext Pro Regular'; line-height: 1em;">:</span>
+                                                                </td>
+                                                                <td width="55%" >
+                                                                    <span style="font-family: 'Unitext Pro Regular'; line-height: 1em;" t-esc="doc.delivery_instruction"/>
+                                                                </td>
+                                                            </tr>
 
                                                     </table>
                                                 </td>

@@ -29,7 +29,7 @@ class Partner(models.Model):
 	credit_limit = fields.Float(string='Credit Limit')
 	type_of_invoice = fields.Selection(selection=[('e_invoice', 'E-Invoice'), ('paper_invoice', 'Paper Invoice')],
 	    string='Type Of Invoice', required=True)
-	partner_seq = fields.Char('Sequence', copy=False, default=lambda self: _('New'))
+	partner_seq = fields.Char('Customer Code', copy=False, default=lambda self: _('New'))
 	e_invoice_email = fields.Char("E-Invoice Email")
 	soa_email = fields.Char("Soa Email")
 
