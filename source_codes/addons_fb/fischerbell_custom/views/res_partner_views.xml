@@ -13,7 +13,7 @@
                 <field name="fax" widget="phone"/>
             </xpath>
             <xpath expr="//field[@name='vat']" position="after">
-                <field name="partner_seq"/>
+<!--                <field name="partner_seq"/>-->
                 <field name="e_invoice_email" widget="email"/>
                 <field name="soa_email" widget="email"/>
             </xpath>
@@ -31,6 +31,7 @@
             <xpath expr="//group[@name='sale']" position="inside">
         		<field name="attn_to"/>
                 <field name="customer_code" attrs="{'readonly': [('parent_id','!=', False)]}"/>
+                <field name="partner_seq"/>
             </xpath>
             <xpath expr="//group[@name='purchase']" position="inside">
                 <field name="supplier_code"/>

@@ -106,7 +106,7 @@ class SaleOrder(models.Model):
 	invoice_instruction = fields.Html(string="Invoice Instruction")
 	delivery_option = fields.Selection(
 		selection=[('partial_delivery', 'Partial Delivery'),
-			('full_delivery', 'Full Delivery')],
+			('full_delivery', 'Wait for the receival of all goods')],
 		string="Delivery Option", default='partial_delivery')
 
 
@@ -209,41 +209,41 @@ class SaleOrder(models.Model):
 	def action_to_approve(self):
 		for order in self:
 			if order.partner_id.credit_limit > 0:
-				if order.amount_total < order.partner_id.credit_limit:
-					if order.state == 'waiting_approval' and order.approval_state == 'waiting_approval' and self.env.user.has_group("fischerbell_custom.group_sales_order_approver"):
-						order.write({
-							'state': 'sale',
-							'approval_state': 'approved',
-							'reviewed_by': self.env.user.id
+				# if order.amount_total < order.partner_id.credit_limit:
+				if order.state == 'waiting_approval' and order.approval_state == 'waiting_approval' and self.env.user.has_group("fischerbell_custom.group_sales_order_approver"):
+					order.write({
+						'state': 'sale',
+						'approval_state': 'approved',
+						'reviewed_by': self.env.user.id
+					})
+					if order.partner_id.partner_seq == _('New'):
+						partner = self.env['res.partner'].browse(order.partner_id.id)
+						partner.update({
+							'partner_seq' : self.env['ir.sequence'].next_by_code('res.partner') or _('New')
 						})
-						if order.partner_id.partner_seq == _('New'):
-							partner = self.env['res.partner'].browse(order.partner_id.id)
-							partner.update({
-								'partner_seq' : self.env['ir.sequence'].next_by_code('res.partner') or _('New')
-							})
-						order.action_confirm()
-						purchase_order_ids = self._get_purchase_orders()
-						if purchase_order_ids:
-							purchase_id = purchase_order_ids[0]
-							return {
-								'name': "Low Stock Alert",
-								'type': 'ir.actions.act_window',
-								'view_type': 'form',
-								'view_mode': 'form',
-								'res_model': 'purchase.order.ref',
-								'context': {
-									'default_name' : f"Sale order - {order.name} has some products which are having low stock, please find the details below:\n{','.join(purchase_id.order_line.mapped('product_id.name'))}\nPurchase Order Ref: {purchase_id.name}"
-								},
-								'view_id': self.env.ref('fischerbell_custom.purchase_order_ref_form_view').id,
-								'target': 'new'
-							}
-						not_enough_stock = any(line.product_uom_qty > line.product_id.qty_available for line in order.order_line)
-						if not_enough_stock:
-							pass
-					else:
-						raise ValidationError("Sorry, you are not allowed to approve this order.")
+					order.action_confirm()
+					purchase_order_ids = self._get_purchase_orders()
+					if purchase_order_ids:
+						purchase_id = purchase_order_ids[0]
+						return {
+							'name': "Low Stock Alert",
+							'type': 'ir.actions.act_window',
+							'view_type': 'form',
+							'view_mode': 'form',
+							'res_model': 'purchase.order.ref',
+							'context': {
+								'default_name' : f"Sale order - {order.name} has some products which are having low stock, please find the details below:\n{','.join(purchase_id.order_line.mapped('product_id.name'))}\nPurchase Order Ref: {purchase_id.name}"
+							},
+							'view_id': self.env.ref('fischerbell_custom.purchase_order_ref_form_view').id,
+							'target': 'new'
+						}
+					not_enough_stock = any(line.product_uom_qty > line.product_id.qty_available for line in order.order_line)
+					if not_enough_stock:
+						pass
 				else:
-					raise ValidationError("Customer exceeded the credit limit.")
+					raise ValidationError("Sorry, you are not allowed to approve this order.")
+				# else:
+				# 	raise ValidationError("Customer exceeded the credit limit.")
 			else:
 				if order.state == 'waiting_approval' and order.approval_state == 'waiting_approval' and self.env.user.has_group(
 						"fischerbell_custom.group_sales_order_approver"):

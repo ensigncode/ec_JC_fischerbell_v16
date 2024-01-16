@@ -69,7 +69,7 @@ class ResUser(models.Model):
                         </tr>
                          <tr>
                             <td colspan="4">
-                                <p><img alt="fischerbell_3" id="fischerbell_3" src="/fischerbell_custom/static/src/img/fischerbell3.png" style="height:120px; width:745px" /></p>
+                                <p><img alt="fischerbell_3" id="fischerbell_3" src="/fischerbell_custom/static/src/img/footer_img.png" style="height:120px; width:745px" /></p>
                             </td>
                         </tr>
                     </tbody>
