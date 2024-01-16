@@ -36,6 +36,14 @@
             <field name="payment_type">outbound</field>
         </record>
 
+        <record id="gst_freight" model="account.tax">
+            <field name="name">GST freight 0%</field>
+            <field name="description">0%</field>
+            <field name="price_include" eval="0"/>
+            <field name="amount">0</field>
+            <field name="amount_type">percent</field>
+            <field name="type_tax_use">sale</field>
+        </record>
     </data>
 </odoo>
         

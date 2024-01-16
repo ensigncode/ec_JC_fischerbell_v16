@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="account_reports.cash_flow_report" model="account.report">
+        <field name="filter_period_comparison" eval="True"/>
+    </record>
+</odoo>
