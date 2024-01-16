@@ -311,11 +311,9 @@ class MailComposer(models.TransientModel):
                 # to create lots of emails in sudo as it is consdiered as a technical model.
                 batch_mails_sudo = self.env['mail.mail'].sudo()
                 all_mail_values = wizard.get_mail_values(res_ids)
-                print("$$$$$$$$$$$$$$$$$$$$$",all_mail_values)
                 for res_id, mail_values in all_mail_values.items():
                     if wizard.composition_mode == 'mass_mail':
                         batch_mails_sudo += self.env['mail.mail'].sudo().create(mail_values)
-                        print("$$$$$$$$$$$$$$batch_mails_sudo$$$$$$$", batch_mails_sudo)
 
                     else:
                         post_params = dict(
