@@ -62,6 +62,17 @@ class Picking(models.Model):
 	delivery_instruction = fields.Html(string="Delivery Instruction")
 	invoice_instruction = fields.Html(string="Invoice Instruction")
 
+	@api.depends('move_ids.state', 'move_ids.date', 'move_type')
+	def _compute_scheduled_date(self):
+		for picking in self:
+			if picking.sale_id:
+				picking.scheduled_date =  picking.sale_id.scheduled_delivery_date
+			else:
+				moves_dates = picking.move_ids.filtered(lambda move: move.state not in ('done', 'cancel')).mapped('date')
+				if picking.move_type == 'direct':
+					picking.scheduled_date = min(moves_dates, default=picking.scheduled_date or fields.Datetime.now())
+				else:
+					picking.scheduled_date = max(moves_dates, default=picking.scheduled_date or fields.Datetime.now())
 
 	def action_is_default_terms(self):
 		picking = self.env['stock.picking'].search([('is_default_terms','=',True)], limit=1)

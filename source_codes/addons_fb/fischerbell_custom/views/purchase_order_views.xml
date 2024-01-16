@@ -106,19 +106,14 @@
         <field name="target">current</field>
     </record>
 
-    <menuitem id="fischerbell_menu_purchase"
-        name="Reporting"
-        parent="purchase.menu_purchase_root"
-        sequence="999"/>
-
 	<menuitem id="fischerbell_menu_purchase_report"
         name="Reporting"
         action="fischerbell_custom.fischerbell_action_purchase_order_report_all"
-        parent="fischerbell_custom.fischerbell_menu_purchase" />
+        parent="purchase.purchase_report_main" />
 
 	<menuitem id="fischerbell_menu_freight_charges"
         name="Freight Charges"
 	    action="fischerbell_custom.fischerbell_action_purchase_order_sg"
-		parent="fischerbell_custom.fischerbell_menu_purchase" />
+		parent="purchase.purchase_report_main" />
 
 </odoo>

@@ -148,7 +148,7 @@
                                                     <t t-set="count" t-value="count+1"/>
                                                 </t>
                                                 <t t-if="line.display_type == 'line_section'">
-                                                    <tr>
+                                                    <tr style="border-bottom: 1px solid blue;">
                                                         <td colspan="6">
                                                             <strong>
                                                                 <span t-field="line.name"/>
@@ -157,7 +157,7 @@
                                                     </tr>
                                                 </t>
                                                 <t t-elif="line.display_type == 'line_note'">
-                                                    <tr class="fst-italic o_line_note">
+                                                    <tr class="fst-italic o_line_note" style="border-bottom: 1px solid blue;">
                                                         <td name="td_note_line" colspan="99">
                                                             <span t-field="line.name"/>
                                                         </td>
@@ -586,24 +586,24 @@
                                                                 </td>
                                                             </tr>
 
-                                                                <tr>
-                                                                    <td width="30%" class="text-wrap">
-                                                                        <span style="font-weight: bold; font-size: 12px; font-family: 'Tara SC Black'; padding: 5px;">
-                                                                            Validity
-                                                                        </span>
+                                                            <tr>
+                                                                <td width="30%" class="text-wrap">
+                                                                    <span style="font-weight: bold; font-size: 12px; font-family: 'Tara SC Black'; padding: 5px;">
+                                                                        Validity
+                                                                    </span>
+                                                                </td>
+                                                                <td width="5%" class="text-wrap">
+                                                                    <span style="font-weight: bold; font-size: 12px; font-family: 'Tara SC Black'; padding: 5px;">
+                                                                        :
+                                                                    </span>
+                                                                </td>
+                                                                <t t-if="doc.validity_date">
+                                                                    <td width="65%" class="text-style">
+                                                                        <span style="font-size: 12px; font-family: 'Arial'; margin-left: 5px;"
+                                                                              t-esc="doc.validity_date.strftime('%d-%m-%Y')"/>
                                                                     </td>
-                                                                    <td width="5%" class="text-wrap">
-                                                                        <span style="font-weight: bold; font-size: 12px; font-family: 'Tara SC Black'; padding: 5px;">
-                                                                            :
-                                                                        </span>
-                                                                    </td>
-                                                                    <t t-if="doc.validity_date">
-                                                                        <td width="65%" class="text-style">
-                                                                            <span style="font-size: 12px; font-family: 'Arial'; margin-left: 5px;"
-                                                                                  t-esc="doc.validity_date.strftime('%d-%m-%Y')"/>
-                                                                        </td>
-                                                                    </t>
-                                                                </tr>
+                                                                </t>
+                                                            </tr>
 
                                                             <tr>
                                                                 <td width="30%" class="text-wrap">
