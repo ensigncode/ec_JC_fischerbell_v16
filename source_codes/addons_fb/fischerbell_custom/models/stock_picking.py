@@ -66,7 +66,7 @@ class Picking(models.Model):
 	def _compute_scheduled_date(self):
 		for picking in self:
 			if picking.sale_id:
-				picking.scheduled_date =  picking.sale_id.scheduled_delivery_date
+				picking.scheduled_date =  picking.sale_id.scheduled_delivery_date or fields.Datetime.now()
 			else:
 				moves_dates = picking.move_ids.filtered(lambda move: move.state not in ('done', 'cancel')).mapped('date')
 				if picking.move_type == 'direct':
