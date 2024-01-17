@@ -23,13 +23,22 @@
             <field name="payment_type">outbound</field>
         </record>
 
-        
+        <record id="account_payment_method_giro_in" model="account.payment.method">
+            <field name="name">Giro</field>
+            <field name="code">giro</field>
+            <field name="payment_type">inbound</field>
+        </record>
         <record id="account_payment_method_giro_out" model="account.payment.method">
             <field name="name">Giro</field>
             <field name="code">giro</field>
             <field name="payment_type">outbound</field>
         </record>
        
+        <record id="account_payment_method_paynow_in" model="account.payment.method">
+            <field name="name">Paynow</field>
+            <field name="code">paynow</field>
+            <field name="payment_type">inbound</field>
+        </record>
         <record id="account_payment_method_paynow_out" model="account.payment.method">
             <field name="name">Paynow</field>
             <field name="code">paynow</field>

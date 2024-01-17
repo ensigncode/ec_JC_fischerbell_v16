@@ -74,10 +74,11 @@
             </xpath>
             <xpath expr="//button[@name='action_quotation_send']" position="before">
 <!--                <button name="create_exchange_order" type="object" string="Create Exchange Order" attrs="{'invisible':['|',('state','in',['draft','done','waiting_approval']),('type','not in','sale')]}" />-->
-                <button name="create_loan_orders" type="object" string="Create Loan Order" attrs="{'invisible':['|',('state','in',['draft','done','waiting_approval']),('type','not in','sale')]}" />
+                <button name="create_loan_orders" type="object" string="Create Loan Order" attrs="{'invisible':['|',('state','in',['draft','done','waiting_approval','waiting_approval_user']),('type','not in','sale')]}" />
 <!--                <button name="create_replacement_orders" type="object" string="Create Replacement Order" attrs="{'invisible':['|',('state','in',['draft','done','waiting_approval']),('type','not in','sale')]}" />-->
                 <field name="approval_state" invisible="1"/>
-                <button name="action_to_approve" type="object" string="Approve" attrs="{'invisible': [('approval_state','!=','waiting_approval')]}" class="btn-primary"/>
+                <button name="action_to_approve" type="object" string="Customer Approve" attrs="{'invisible': [('state','!=','waiting_approval')]}" class="btn-primary"/>
+                <button name="action_to_approve_user" type="object" string="User Approve" attrs="{'invisible': [('state','!=','waiting_approval_user')]}" class="btn-primary"/>
                 <button name="action_to_reject" type="object" string="Reject" attrs="{'invisible': [('approval_state','!=','waiting_approval')]}" class="btn-primary"/>
             </xpath>
             <xpath expr="//field[@name='validity_date']" position="after">
