@@ -21,19 +21,23 @@ class AccountJournal(models.Model):
     def _default_inbound_payment_methods(self):
         res = super()._default_inbound_payment_methods()
         if self._is_payment_method_available('cash'):
-            res |= self.env.ref('FCB_accounting.account_payment_method_cash_in')
+            res |= self.env.ref('fcb_accounting.account_payment_method_cash_in')
         if self._is_payment_method_available('cheque'):
-            res |= self.env.ref('FCB_accounting.account_payment_method_cheque_in')
+            res |= self.env.ref('fcb_accounting.account_payment_method_cheque_in')
+        if self._is_payment_method_available('giro'):
+            res |= self.env.ref('fcb_accounting.account_payment_method_giro_in')
+        if self._is_payment_method_available('paynow'):
+            res |= self.env.ref('fcb_accounting.account_payment_method_paynow_in')
         return res
     
     def _default_outbound_payment_methods(self):
         res = super()._default_outbound_payment_methods()
         if self._is_payment_method_available('cash'):
-            res |= self.env.ref('FCB_accounting.account_payment_method_cash_out')
+            res |= self.env.ref('fcb_accounting.account_payment_method_cash_out')
         if self._is_payment_method_available('cheque'):
-            res |= self.env.ref('FCB_accounting.account_payment_method_cheque_out')
+            res |= self.env.ref('fcb_accounting.account_payment_method_cheque_out')
         if self._is_payment_method_available('giro'):
-            res |= self.env.ref('FCB_accounting.account_payment_method_giro_out')
+            res |= self.env.ref('fcb_accounting.account_payment_method_giro_out')
         if self._is_payment_method_available('paynow'):
-            res |= self.env.ref('FCB_accounting.account_payment_method_paynow_out')
+            res |= self.env.ref('fcb_accounting.account_payment_method_paynow_out')
         return res

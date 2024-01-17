@@ -80,7 +80,8 @@ class SaleOrder(models.Model):
             ('sale', "Sales Order"),
             ('done', "Locked"),
             ('cancel', "Cancelled"),
-            ('waiting_approval', 'Waiting Approval')
+            ('waiting_approval', 'Waiting Customer Approval'),
+            ('waiting_approval_user', 'Waiting User Approval')
         ],
         string="Status",
         readonly=True, copy=True, index=True,
@@ -208,9 +209,15 @@ class SaleOrder(models.Model):
 	# 	return super().create(vals_list)
 	def action_to_approve(self):
 		for order in self:
+			order.write({
+				'state': 'waiting_approval_user'
+			})
+		return True
+	def action_to_approve_user(self):
+		for order in self:
 			if order.partner_id.credit_limit > 0:
 				# if order.amount_total < order.partner_id.credit_limit:
-				if order.state == 'waiting_approval' and order.approval_state == 'waiting_approval' and self.env.user.has_group("fischerbell_custom.group_sales_order_approver"):
+				if order.state == 'waiting_approval_user' and order.approval_state == 'waiting_approval' and self.env.user.has_group("fischerbell_custom.group_sales_order_approver"):
 					order.write({
 						'state': 'sale',
 						'approval_state': 'approved',
@@ -245,7 +252,7 @@ class SaleOrder(models.Model):
 				# else:
 				# 	raise ValidationError("Customer exceeded the credit limit.")
 			else:
-				if order.state == 'waiting_approval' and order.approval_state == 'waiting_approval' and self.env.user.has_group(
+				if order.state == 'waiting_approval_user' and order.approval_state == 'waiting_approval' and self.env.user.has_group(
 						"fischerbell_custom.group_sales_order_approver"):
 					order.write({
 						'state': 'sale',
@@ -290,6 +297,12 @@ class SaleOrder(models.Model):
 	def action_to_reject(self):
 		for order in self:
 			if order.state == 'waiting_approval' and order.approval_state == 'waiting_approval' and self.env.user.has_group("fischerbell_custom.group_sales_order_approver"):
+				order.write({
+					'state': 'cancel',
+					'approval_state': 'reject',
+					'reviewed_by': self.env.user.id
+				})
+			elif order.state == 'waiting_approval_user' and order.approval_state == 'waiting_approval' and self.env.user.has_group("fischerbell_custom.group_sales_order_approver"):
 				order.write({
 					'state': 'cancel',
 					'approval_state': 'reject',
