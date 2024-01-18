@@ -106,7 +106,6 @@ class MailComposerMessage(models.TransientModel):
                     attachment_ids,
                     {'model': 'mail.message', 'res_id': 0}
                 )['attachment_ids']
-            print("--->>>mail_values",mail_values)
             results[res_id] = mail_values
 
         results = self._process_state(results)

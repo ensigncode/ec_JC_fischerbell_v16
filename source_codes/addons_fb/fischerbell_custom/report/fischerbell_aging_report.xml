@@ -10,5 +10,16 @@
 			file="Aging Report"
 			attachment_use="False"
 		/>
+
+<!--		<record id="fischerbell_aging_report_action" model="ir.actions.report">-->
+<!--            <field name="name">Aging Report</field>-->
+<!--            <field name="model">product.product</field>-->
+<!--            <field name="report_type">xlsx</field>-->
+<!--            <field name="report_name">fischerbell_custom.aging_report</field>-->
+<!--            <field name="report_file">fischerbell_custom.aging_report</field>-->
+<!--            <field name="binding_model_id" ref="model_product_product"/>-->
+<!--        </record>-->
+
+
 	</data>
 </odoo>

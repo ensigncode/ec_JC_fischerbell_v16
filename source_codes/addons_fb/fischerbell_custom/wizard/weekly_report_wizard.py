@@ -32,7 +32,7 @@ class WeeklyReportwizard(models.TransientModel):
         bold_text = Font(name="Calibri", size=11, bold=True)
         border_bottom = Border(bottom=Side(style='thin'))
 
-        order_ids = [x  for x in self.env['sale.order'].search([]) if x.date_order.year == eval(self.year)]
+        order_ids = [x  for x in self.env['sale.order'].sudo().search([]) if x.date_order.year == eval(self.year)]
         
         table_header = 1
 
@@ -164,11 +164,19 @@ class WeeklyReportwizard(models.TransientModel):
                 wrksht.cell(row=table_row, column=table_col+12).value = dict(order._fields['state'].selection).get(order.state) or ''
                 wrksht.cell(row=table_row, column=table_col+12).alignment = table_header_alignment
 
-                wrksht.cell(row=table_row, column=table_col+13).value = order.opportunity_id.stage_id.name or ''
+                if order.opportunity_id.lost_reason_id:
+                    stage = "Lost"
+                else:
+                    stage = order.opportunity_id.lost_reason_id.name or ''
+
+                wrksht.cell(row=table_row, column=table_col+13).value = stage
                 wrksht.cell(row=table_row, column=table_col+13).alignment = table_header_alignment
 
                 wrksht.cell(row=table_row, column=table_col+14).value = order.opportunity_id.lost_reason_id.name or ''
                 wrksht.cell(row=table_row, column=table_col+14).alignment = table_header_alignment
+
+
+
 
                  
                 wrksht.column_dimensions['A'].width = 16
