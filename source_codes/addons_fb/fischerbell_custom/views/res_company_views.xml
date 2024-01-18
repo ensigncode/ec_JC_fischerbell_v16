@@ -14,10 +14,25 @@
             <xpath expr="//field[@name='social_twitter']" position="attributes">
                 <attribute name="invisible">1</attribute>
             </xpath>
+            <xpath expr="//field[@name='social_youtube']" position="attributes">
+                <attribute name="string">Website</attribute>
+            </xpath>
             <xpath expr="//field[@name='social_github']" position="attributes">
                 <attribute name="invisible">1</attribute>
             </xpath>
         </field>
     </record>
+
+    <record id="view_users_form_fcb" model="ir.ui.view">
+            <field name="name">res.users.form.inherit.fcb</field>
+            <field name="model">res.users</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="base.view_users_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='signature']" position="before">
+                            <field name="email_signature_option"/>
+                </xpath>
+            </field>
+        </record>
 
 </odoo>
