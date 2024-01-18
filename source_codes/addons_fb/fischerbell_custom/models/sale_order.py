@@ -134,12 +134,26 @@ class SaleOrder(models.Model):
 
 	@api.onchange('scheduled_delivery_date')
 	def _onchange_partner_not_avalibale(self):
-		if self.partner_id.no_delivery_days_selection == 'days':
-			if int(self.partner_id.no_delivery_days) == self.scheduled_delivery_date.weekday():
-				raise ValidationError("Customer is not avaliable during this date")
-		if self.partner_id.no_delivery_days_selection == 'date':
-			if self.partner_id.delivery_restriction_start_date <= self.scheduled_delivery_date.date() <= self.partner_id.delivery_restriction_end_date:
-				raise ValidationError(f"Customer is not avaliable from {self.partner_id.delivery_restriction_start_date} to {self.partner_id.delivery_restriction_end_date}")
+		partner = self.partner_id.parent_id if self.partner_id.parent_id else self.partner_id
+		if partner.no_delivery_days_selection == 'days' and int(partner.no_delivery_days) == self.scheduled_delivery_date.weekday():
+			raise ValidationError("Customer is not available during this date")
+		if partner.no_delivery_days_selection == 'date' and partner.delivery_restriction_start_date <= self.scheduled_delivery_date.date() <= partner.delivery_restriction_end_date:
+			raise ValidationError(f"Customer is not available from {partner.delivery_restriction_start_date.strftime('%d-%m-%Y')} to {partner.delivery_restriction_end_date.strftime('%d-%m-%Y')}")
+		# if self.partner_id.parent_id:
+		# 	if self.partner_id.parent_id.no_delivery_days_selection == 'days':
+		# 		if int(self.partner_id.parent_id.no_delivery_days) == self.scheduled_delivery_date.weekday():
+		# 			raise ValidationError("Customer is not avaliable during this date")
+		# 	if self.partner_id.parent_id.no_delivery_days_selection == 'date':
+		# 		if self.partner_id.parent_id.delivery_restriction_start_date <= self.scheduled_delivery_date.date() <= self.partner_id.parent_id.delivery_restriction_end_date:
+		# 			raise ValidationError(f"Customer is not avaliable from {self.partner_id.parent_id.delivery_restriction_start_date} to {self.partner_id.parent_id.delivery_restriction_end_date}")
+		# else:
+		# 	if self.partner_id.no_delivery_days_selection == 'days':
+		# 		if int(self.partner_id.no_delivery_days) == self.scheduled_delivery_date.weekday():
+		# 			raise ValidationError("Customer is not avaliable during this date")
+		# 	if self.partner_id.no_delivery_days_selection == 'date':
+		# 		if self.partner_id.delivery_restriction_start_date <= self.scheduled_delivery_date.date() <= self.partner_id.delivery_restriction_end_date:
+		# 			raise ValidationError(f"Customer is not avaliable from {self.partner_id.delivery_restriction_start_date} to {self.partner_id.delivery_restriction_end_date}")
+
 
 	@api.onchange('contact_person_id')
 	def _onchange_set_customer(self):

@@ -10,5 +10,14 @@
 			file="Bill Report"
 			attachment_use="False"
 		/>
+
+<!--			<record id="fischerbell_bill_report_action" model="ir.actions.report">-->
+<!--					<field name="name">Bills</field>-->
+<!--					<field name="model">account.move</field>-->
+<!--					<field name="report_type">xlsx</field>-->
+<!--					<field name="report_name">fischerbell_custom.bill_report</field>-->
+<!--					<field name="report_file">fischerbell_custom.bill_report</field>-->
+<!--					<field name="binding_model_id" ref="model_account_move"/>-->
+<!--			</record>-->
 	</data>
 </odoo>

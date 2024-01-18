@@ -116,4 +116,16 @@
 	    action="fischerbell_custom.fischerbell_action_purchase_order_sg"
 		parent="purchase.purchase_report_main" />
 
+	<record id="fischerbell_purchase_history_tree_inherit" model="ir.ui.view">
+		<field name="name">fischerbell.purchase.history.tree.inherit</field>
+		<field name="model">purchase.order.line</field>
+		<field name="inherit_id" ref="purchase.purchase_history_tree"/>
+		<field name="arch" type="xml">
+			<xpath expr="//field[@name='order_id']" position="after">
+				<field name="product_id"/>
+				<field name="name"/>
+			</xpath>
+		</field>
+	</record>
+
 </odoo>
