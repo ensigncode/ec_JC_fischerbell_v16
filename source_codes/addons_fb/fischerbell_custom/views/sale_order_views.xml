@@ -40,6 +40,12 @@
                 <field name="purchase_ref" invisible="1"/>
                 <field name="procurement_group_id" invisible="1"/>
             </xpath>
+             <xpath expr="//header" position="after">
+                 <field name="over_credit_limit" invisible="1"/>
+                 <div class="alert alert-warning mb-0" role="alert" attrs="{'invisible': [('over_credit_limit', '!=', True)]}">
+                        Warning: Customer exceeded the credit limit
+                    </div>
+                </xpath>
             <xpath expr="//field[@name='partner_invoice_id']" position="replace">
                 <field name="partner_invoice_id" context="{'default_type':'invoice', 'show_address': 1}" options="{&quot;always_reload&quot;: True}" readonly="1"/>
             </xpath>
