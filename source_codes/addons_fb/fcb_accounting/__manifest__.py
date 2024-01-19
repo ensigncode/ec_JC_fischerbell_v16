@@ -9,6 +9,8 @@
     'depends': ['account','l10n_in','account_asset','account_reports'],
     'data': [
     "data/demo_data.xml",
+    "data/ir_cron_data.xml",
+    "data/exchange_rate_alert_mail_template.xml",
     "views/res_partner_view.xml",
     "views/cash_flow_report.xml",
     "views/account_asset_views.xml",

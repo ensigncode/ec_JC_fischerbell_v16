@@ -16,6 +16,7 @@ class SaleOrder(models.Model):
         ('return', 'Picked-up'),
         ('returned', 'Returned'),
         ('cancel', 'Cancelled'),
+        ('waiting_approval', 'Waiting Approval'),
     ], string="Rental Status", compute='_compute_rental_status', store=True)
     # rental_status = next action to do basically, but shown string is action done.
 

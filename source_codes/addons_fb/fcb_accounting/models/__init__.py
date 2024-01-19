@@ -8,3 +8,4 @@ from . import sale_order
 from . import purchase_order
 from . import account_asset
 from . import partner_ledger_report
+from . import res_currency_rate
