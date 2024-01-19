@@ -101,6 +101,7 @@ class SaleOrder(models.Model):
 	scheduled_delivery_date = fields.Datetime(string="Scheduled Delivery Date")
 	requested_delivery_date = fields.Datetime(string="Requested Delivery Date")
 	no_enough_stock = fields.Boolean(compute='_compute_order_stock')
+	over_credit_limit = fields.Boolean(compute='_compute_credit_limit', store=True)
 	submited_date = fields.Date('Submited Date')
 	artwork_attachment_ids = fields.Many2many('ir.attachment',string="ArtWork")
 	delivery_instruction = fields.Html(string="Delivery Instruction")
@@ -132,6 +133,14 @@ class SaleOrder(models.Model):
 			no_stock = any(line.product_uom_qty > line.product_template_id.qty_available for line in order.order_line)
 			if no_stock:
 				order.no_enough_stock = False
+
+	@api.depends('partner_id', 'amount_total')
+	def _compute_credit_limit(self):
+		for order in self:
+			order.over_credit_limit = False
+			if order.amount_total > order.partner_id.credit_limit and order.partner_id.credit_limit != 0:
+				order.over_credit_limit = True
+
 
 	@api.onchange('scheduled_delivery_date')
 	def _onchange_partner_not_avalibale(self):
