@@ -1,0 +1,15 @@
+<data>
+    <record id="email_template_exchange_rate_alert" model="mail.template">
+        <field name="name">Exchange Rate Alert</field>
+        <field name="email_from">{{(object.partner_id.email)}}</field>
+        <field name="subject">Exchange Rate Alert</field>
+        <field name="partner_to">{{(object.id)}}</field>
+        <field name="model_id" ref="base.model_res_users"/>
+        <field name="auto_delete" eval="True"/>
+        <field name="body_html" type="html">
+            <p>Dear  <t t-out="object.name or ''"/>,</p>
+            <p>This is to inform you that the exchange rate for the current month has not been configured. Please take necessary action.</p>
+            <p>Thank you.</p>
+        </field>
+    </record>
+</data>

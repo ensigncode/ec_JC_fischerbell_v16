@@ -86,6 +86,7 @@ class SaleOrder(models.Model):
         readonly=True, copy=True, index=True,
         tracking=3,
         default='draft')
+
 	contact_person_id = fields.Many2one('res.partner', string='Contact Person')
 	contact_person_comp_id = fields.Many2one('res.partner', string='Contact Person Company',compute="_get_contact_person_company")
 	# contact_person_comp_id = fields.Many2one('res.partner', string='Contact Person Company',related="contact_person_id.parent_id")
