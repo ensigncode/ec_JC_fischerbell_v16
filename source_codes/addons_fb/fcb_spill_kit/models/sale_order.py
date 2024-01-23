@@ -51,7 +51,7 @@ class SaleOrderLine(models.Model):
                 )
             mrp_route_id = self.env.ref('mrp.route_warehouse0_manufacture')
             mto_route_id = self.env.ref('stock.route_warehouse0_mto')
-            if mrp_route_id and mto_route_id and (mrp_route_id in line.product_id.route_ids) or (mto_route_id in line.product_id.route_ids) and line.product.bom_ids:
+            if mrp_route_id and mto_route_id and (mrp_route_id in line.product_id.route_ids) or (mto_route_id in line.product_id.route_ids) and line.product_id.bom_ids:
                 boms = line.product_id.bom_ids._bom_find(line.product_id, company_id=line.company_id.id, bom_type='phantom')[line.product_id]
                 if boms:
                     product_price = 0
