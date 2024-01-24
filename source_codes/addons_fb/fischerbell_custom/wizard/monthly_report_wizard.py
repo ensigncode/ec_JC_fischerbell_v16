@@ -8,9 +8,9 @@ from openpyxl.styles import Border, Side, Alignment, Font
 from io import BytesIO
 
 
-class WeeklyReportwizard(models.TransientModel):
-    _name = "weekly.report.wizard"
-    _description = "Weekly Report Wizard"
+class MonthlyReportwizard(models.TransientModel):
+    _name = "monthly.report.wizard"
+    _description = "Monthly Report Wizard"
 
     years = {'2015':'2015'}
 

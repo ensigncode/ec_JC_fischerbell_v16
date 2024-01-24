@@ -50,7 +50,7 @@
         
         'wizard/fischerbell_wizard_report_all_loan_item_views.xml',
         'wizard/fischerbell_wizard_report_statement_of_account_views.xml',
-        'wizard/weekly_report_wizard_view.xml',
+        'wizard/monthly_report_wizard_view.xml',
         'wizard/fischerbell_wizard_avaliable_qty_views.xml',
         'wizard/update_vendor.xml',
 	    'wizard/weekly_product_report_wizard_view.xml',

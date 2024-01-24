@@ -14,7 +14,7 @@ class StockMove(models.Model):
 	mrp_line_id = fields.Many2one('stock.move', compute="_compute_mrp_line_id", store=True)
 	mrp_customer_id = fields.Many2one('res.partner', compute="_compute_mrp_line_id", store=True)
 	mrp_phone = fields.Char('Phone Number', compute="_compute_mrp_line_id", store=True)
-	send_email_reorder = fields.Boolean('Send Email To Reorder', default=False)
+
 
 	def _get_new_picking_values(self):
 		"""Inherit method for pass value from sale order to delivery order."""
@@ -65,6 +65,7 @@ class StockWarehouseOrderpoint(models.Model):
 	_inherit = "stock.warehouse.orderpoint"
 
 	qty_on_hand = fields.Float('On Hand', readonly=True, compute='_compute_qty', digits='Product Unit of Measure',store=False)
+	send_email_reorder = fields.Boolean('Send Email To Reorder', default=False)
 
 	def cron_min_qty_alert(self):
 		self.action_send_email_for_min_qty()
