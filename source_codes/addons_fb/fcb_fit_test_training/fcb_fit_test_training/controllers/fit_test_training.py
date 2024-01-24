@@ -18,6 +18,8 @@ class FitTestTrainingController(http.Controller):
 			'training_type': kw.get('training_type'),
 			'company': kw.get('company'),
 			'phone': kw.get('phone'),
+			'number_of_person': kw.get('number_of_person'),
+			'location': kw.get('location'),
 		})
 		vals = {
 			'trainer_id': trainer_id

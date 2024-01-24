@@ -36,8 +36,28 @@
                         <group>
                             <field name="date"/>
                             <field name="phone"/>
+                            <field name="number_of_person"/>
+                            <field name="location"/>
                         </group>
                     </group>
+                    <notebook>
+                        <page string="Fits Lines" name="fit_lines">
+                            <field name="fit_ids">
+                                <tree string="Fits Lines" editable="top"
+                                      widget="section_and_note_one2many" mode="tree,kanban">
+                                    <control>
+                                        <create string="Add a Line"/>
+                                    </control>
+                                     <field name="fit_id" invisible="1"/>
+                                     <field name="trainee"/>
+                                     <field name="passport_no"/>
+                                     <field name="size"/>
+                                     <field name="is_pass_fail"/>
+                                     <field name="tested_on"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
                 </sheet>
             </form>
         </field>
