@@ -333,13 +333,16 @@ class MailMail(models.Model):
         body_alternative = tools.html2plaintext(body)
         if partner:
             email_to = [tools.formataddr((partner.name or 'False', partner.email or 'False'))]
+            print("---->>>>>>>email_to",email_to)
         else:
             email_to = tools.email_split_and_format(self.email_to)
+            print("---->>>>>>>email_to22222222222", email_to)
         res = {
             'body': body,
             'body_alternative': body_alternative,
             'email_to': email_to,
         }
+        print("#############res",res)
         return res
 
     def _split_by_mail_configuration(self):

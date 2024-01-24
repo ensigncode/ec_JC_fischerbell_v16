@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
-        <record id="weekly_report_wizard_view_form" model="ir.ui.view">
-            <field name="name">weekly.report.wizard.view.form</field>
-            <field name="model">weekly.report.wizard</field>
+        <record id="monthly_report_wizard_view_form" model="ir.ui.view">
+            <field name="name">monthly.report.wizard.view.form</field>
+            <field name="model">monthly.report.wizard</field>
             <field name="arch" type="xml">
                 <form>
                     <sheet>
