@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="rx_eyewear_menu" name="RX Eyewear"
+        web_icon="rx_eyewear,static/description/icon.svg" sequence="110"/>
+
+    <menuitem id="rx_eyewear_menu_optician" name="Optician"
+        parent="rx_eyewear_menu"
+        sequence="1"
+        />
+   
+    <menuitem id="optician_detail_menu"
+        action="rx_eyewear.optician_detail_action"
+        parent="rx_eyewear_menu_optician"
+        sequence="1"
+        />
+</odoo>

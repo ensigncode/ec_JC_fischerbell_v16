@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="opptician_detail_page_template" name="Optician Detail Form">
+            <t t-call="website.layout">
+                <div id="optician_detail_form">
+                    <div class="oe_structure ">
+                        <section class="s_header_title pb32 o_colored_level pt32 bg-black"
+                            data-vcss="001" data-snippet="s_title" data-name="Title">
+                            <div class="container s_allow_columns">
+                                <h1 style="text-align: center;">
+                                    <font style="font-size: 62px;">Optician Detail</font>
+                                </h1>
+                            </div>
+                        </section>
+
+                        <section class="s_optician_detail_form">
+                            <div class="container form-section">
+                                <form method="post" enctype="multipart/form-data" action="/optician-detail">
+                                    <input type="hidden" name="leave_hours" id="leave_hours" />
+                                    <input type="hidden" name="csrf_token"
+                                        t-att-value="request.csrf_token()" />
+                                    <h2 class="form_title">Optician Detail Form</h2>
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <div class="input-group">
+                                                <label for="name">Name:</label>
+                                                <input type="text" placeholder="Your Name" name="name" required="true"
+                                                    id="name"></input>
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="input-group">
+                                                <label for="mobile">Mobile:</label>
+                                                <input type="text" placeholder="Your Mobile" name="mobile" required="true"
+                                                    id="mobile"></input>
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="input-group">
+                                                <label for="product_id">Frame:</label>
+                                                <select id="product_id" name="product_id" required="true">
+                                                    <t t-foreach="optic_product_ids" t-as="optic_product">
+                                                        <option t-att-value="optic_product.id" t-att-id="optic_product.id">
+                                                            <span t-esc="optic_product.name"></span>
+                                                        </option>
+                                                    </t>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="input-group">
+                                                <label for="group">Group:</label>
+                                                <input type="text" placeholder="Group" name="group"
+                                                    id="group"></input>
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="input-group">
+                                                <label for="sphere_left">SPHERE:</label>
+                                                <input type="text" placeholder="SPHERE" name="sphere_left"
+                                                    id="sphere_left"></input>
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="input-group">
+                                                <label for="cyl_left">CYL:</label>
+                                                <input type="text" placeholder="CYL" name="cyl_left"
+                                                    id="cyl_left"></input>
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="input-group">
+                                                <label for="axis_left">AXIS:</label>
+                                                <input type="text" placeholder="AXIS" name="axis_left"
+                                                    id="axis_left"></input>
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="input-group">
+                                                <label for="sphere_right">SPHERE:</label>
+                                                <input type="text" placeholder="SPHERE" name="sphere_right"
+                                                    id="sphere_right"></input>
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="input-group">
+                                                <label for="cyl_right">CYL:</label>
+                                                <input type="text" placeholder="CYL" name="cyl_right"
+                                                    id="cyl_right"></input>
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="input-group">
+                                                <label for="axis_right">AXIS:</label>
+                                                <input type="text" placeholder="AXIS" name="axis_right"
+                                                    id="axis_right"></input>
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="input-group">
+                                                <label for="add">ADD:</label>
+                                                <input type="text" placeholder="ADD" name="add"
+                                                    id="add"></input>
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="input-group">
+                                                <label for="pd">PD:</label>
+                                                <input type="text" placeholder="PD" name="pd"
+                                                    id="pd"></input>
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="input-group">
+                                                <label for="requirements">REQUIRMENTS:</label>
+                                                <textarea name="requirements" rows="4" cols="50" id="Requirements"></textarea>
+                                               
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <input class="submit_btn" type="submit" id="leave_submit"
+                                        value="Submit" />
+                                </form>
+
+
+                            </div>
+                        </section>
+                    </div>
+                </div>
+            </t>
+        </template>
+
+        <record id="optician_detail_page" model="website.page">
+            <field name="url">/optician-detail</field>
+            <field name="is_published">True</field>
+            <field name="view_id" ref="opptician_detail_page_template" />
+            <field name="track">True</field>
+        </record>
+        <record id="menu_optician_detail_web" model="website.menu">
+            <field name="name">Optician</field>
+            <field name="url">/optician-detail</field>
+            <field name="page_id" ref="optician_detail_page" />
+            <field name="parent_id" ref="website.main_menu" />
+            <field name="sequence" type="int">60</field>
+        </record>
+
+
+    </data>
+</odoo>
+        
