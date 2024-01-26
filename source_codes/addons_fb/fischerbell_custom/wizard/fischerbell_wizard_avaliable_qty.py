@@ -26,9 +26,9 @@ class AvaliableProductQty(models.TransientModel):
             sale_id.write({
                 'state': 'sale',
                 'approval_state': 'approved',
-		'reviewed_by': self.env.user.id
+		          'reviewed_by': self.env.user.id
             })
-            sale_id.action_confirm()
+            sale_id.with_context(vendor_wizard=True).action_confirm()
             for move in sale_id.picking_ids.move_ids_without_package:
                 available_product_qty_lines = self.avaliable_product_qty_line.filtered(
                     lambda ap: ap.product_id == move.product_id)
