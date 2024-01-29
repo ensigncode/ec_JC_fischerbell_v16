@@ -699,7 +699,7 @@
                 <tree string="Purchase Order Lines" create="false">
                     <field name="order_id"/>
                     <field name="name"/>
-                    <field name="is_price_zero" />
+<!--                    <field name="is_price_zero" />-->
                     <field name="partner_id" string="Vendor" />
                     <field name="product_id"/>
                     <field name="price_unit"/>

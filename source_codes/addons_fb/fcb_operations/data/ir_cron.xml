@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="alert_vendors_arrival_dates_cron" model="ir.cron">
+            <field name="name">Alert for vendors arrival date</field>
+            <field name="model_id" ref="stock.model_stock_picking"/>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+            <field name="state">code</field>
+            <field name="code">model.cron_alert_vendor_date()</field>
+        </record>
+    </data>
+</odoo>
