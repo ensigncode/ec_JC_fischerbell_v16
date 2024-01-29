@@ -12,7 +12,7 @@
 		'purchase',
 	],
 	'data': [
-		"data/email_template_alert_reminder.xml"
+		"data/email_template_alert_reminder.xml",
 		"data/ir_cron.xml"
 	],
 	'demo': [
