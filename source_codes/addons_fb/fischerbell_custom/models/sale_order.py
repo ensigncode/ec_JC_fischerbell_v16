@@ -13,11 +13,24 @@ import itertools
 import pytz
 
 READONLY_FIELD_STATES = {
-    state: [('readonly', True)]
-    for state in {'sale', 'done', 'cancel'}
+	state: [('readonly', True)]
+	for state in {'sale', 'done', 'cancel'}
 }
 
 ORDER_LINE_FIELDS = ['product_uom_qty','price_unit','price_subtotal','tax_id']
+
+
+class ProductVendorConf(models.Model):
+	_name = "product.vendor.conf"
+	_description = "Product Vendor Conf"
+
+	product_id = fields.Many2one('product.product',string="Product")
+	partner_id = fields.Many2one('res.partner',string="Vendor")
+	sale_id = fields.Many2one('sale.order',string="Order")
+	sale_line_id = fields.Many2one('sale.order.line',string="Sale Order Line")
+	supplier_info_id = fields.Many2one('product.supplierinfo')
+	bom_line_id = fields.Many2one('mrp.bom.line')
+
 
 class SaleOrder(models.Model):
 	_inherit = "sale.order"
@@ -65,27 +78,27 @@ class SaleOrder(models.Model):
 	], default='self_collection')
 	route_id = fields.Many2one('fischerbell.delivery.route', 'Delivery Route')
 	approval_state = fields.Selection(
-        selection=[
-        	('no', 'Nothing To Approve'),
-        	('approved', 'Approved'),
-            ('waiting_approval', 'Waiting Approval'),
-            ('reject', 'Rejected')
-        ],
-        string="Approval Status", default='no', tracking=True)
+		selection=[
+			('no', 'Nothing To Approve'),
+			('approved', 'Approved'),
+			('waiting_approval', 'Waiting Approval'),
+			('reject', 'Rejected')
+		],
+		string="Approval Status", default='no', tracking=True)
 	is_approved = fields.Boolean('Is Approved')
 	state = fields.Selection(
-        selection=[
-            ('draft', "Quotation"),
-            ('sent', "Quotation Sent"),
-            ('sale', "Sales Order"),
-            ('done', "Locked"),
-            ('cancel', "Cancelled"),
-            ('waiting_approval', 'Waiting Approval'),
-        ],
-        string="Status",
-        readonly=True, copy=True, index=True,
-        tracking=3,
-        default='draft')
+		selection=[
+			('draft', "Quotation"),
+			('sent', "Quotation Sent"),
+			('sale', "Sales Order"),
+			('done', "Locked"),
+			('cancel', "Cancelled"),
+			('waiting_approval', 'Waiting Approval'),
+		],
+		string="Status",
+		readonly=True, copy=True, index=True,
+		tracking=3,
+		default='draft')
 
 	contact_person_id = fields.Many2one('res.partner', string='Contact Person')
 	contact_person_comp_id = fields.Many2one('res.partner', string='Contact Person Company',compute="_get_contact_person_company")
@@ -110,6 +123,8 @@ class SaleOrder(models.Model):
 		selection=[('partial_delivery', 'Partial Delivery'),
 			('full_delivery', 'Wait for the receival of all goods')],
 		string="Delivery Option", default='partial_delivery')
+
+	product_vendor_conf_ids = fields.One2many('product.vendor.conf','sale_id',string="Product Vendor Conf")
 
 
 	@api.depends('partner_id')
@@ -246,7 +261,7 @@ class SaleOrder(models.Model):
 						partner.update({
 							'partner_seq': self.env['ir.sequence'].next_by_code('res.partner') or _('New')
 						})
-					order.action_confirm()
+					order.with_context(vendor_wizard=True).action_confirm()
 					purchase_order_ids = self._get_purchase_orders()
 					if purchase_order_ids:
 						purchase_id = purchase_order_ids[0]
@@ -288,7 +303,7 @@ class SaleOrder(models.Model):
 						partner.update({
 							'partner_seq': self.env['ir.sequence'].next_by_code('res.partner') or _('New')
 						})
-					order.action_confirm()
+					order.with_context(vendor_wizard=True).action_confirm()
 					purchase_order_ids = self._get_purchase_orders()
 					if purchase_order_ids:
 						purchase_id = purchase_order_ids[0]
@@ -351,23 +366,79 @@ class SaleOrder(models.Model):
 			else:
 				inv.len_note = False
 
+	# def action_confirm(self):
+	# 	self.submited_date = date.today()
+	# 	for rec in self.order_line:
+	# 		# line_ids = self.order_line.filtered(lambda line:not line.product_template_id.seller_ids)
+	# 		if not rec.product_template_id.seller_ids and not self._context.get('vendor_wizard'):
+	# 			return {'type': 'ir.actions.act_window',
+	# 			        'name': _('Product wizard'),
+	# 			        'res_model': 'update.product.vendor',
+	# 			        'view_mode': 'form',
+	# 			        # 'context': {'order_id': self.id,'line_ids':line_ids},
+	# 			        'target': 'new',
+	# 			        }
+	# 	super_call = super(SaleOrder, self).action_confirm()
+	# 	for order in self:
+	# 		# Sent email to customer based on the state
+	# 		order.send_mail_triggers_based_on_state()
+	# 	return super_call
+
+
 	def action_confirm(self):
 		self.submited_date = date.today()
-		for rec in self.order_line:
-			# line_ids = self.order_line.filtered(lambda line:not line.product_template_id.seller_ids)
-			if not rec.product_template_id.seller_ids and not self._context.get('vendor_wizard'):
+		if not 'vendor_wizard' in self._context:
+			line_ids = []
+			for rec in self.order_line:
+				line = rec
+				mrp_route_id = self.env.ref('purchase_stock.route_warehouse0_buy')
+				mto_route_id = self.env.ref('stock.route_warehouse0_mto')
+				if mrp_route_id and mto_route_id and (mrp_route_id in line.product_id.route_ids) or (mto_route_id in line.product_id.route_ids) and line.product_id.bom_ids:
+					boms = line.product_id.bom_ids._bom_find(line.product_id, company_id=line.company_id.id, bom_type='phantom')[line.product_id]
+					if boms:
+						for bom_line in boms[0].bom_line_ids:
+							line_ids.append((0,0,{'product_id':bom_line.product_id.id,'demand_qty':rec.product_uom_qty,'sale_line_id':line.id,'bom_line_id':bom_line.id}))
+				if not rec.product_id.product_tmpl_id.seller_ids:
+					line_ids.append((0,0,{'product_id':bom_line.product_id.id,'demand_qty':rec.product_uom_qty,'sale_line_id':line.id}))
+			if line_ids:
 				return {'type': 'ir.actions.act_window',
-				        'name': _('Product wizard'),
-				        'res_model': 'update.product.vendor',
-				        'view_mode': 'form',
-				        # 'context': {'order_id': self.id,'line_ids':line_ids},
-				        'target': 'new',
-				        }
+						'name': _('Product wizard'),
+						'res_model': 'update.product.vendor',
+						'view_mode': 'form',
+						'context': {'order_id': self.id,'line_ids':line_ids},
+						'target': 'new',
+						}
+			else:
+				return super(SaleOrder, self).action_confirm()
+				
 		super_call = super(SaleOrder, self).action_confirm()
 		for order in self:
-			# Sent email to customer based on the state
 			order.send_mail_triggers_based_on_state()
 		return super_call
+
+
+	def update_vendor(self):
+		self.submited_date = date.today()
+		line_ids = []
+		for rec in self.order_line:
+			line = rec
+			mrp_route_id = self.env.ref('purchase_stock.route_warehouse0_buy')
+			mto_route_id = self.env.ref('stock.route_warehouse0_mto')
+			if mrp_route_id and mto_route_id and (mrp_route_id in line.product_id.route_ids) or (mto_route_id in line.product_id.route_ids) and line.product_id.bom_ids:
+				boms = line.product_id.bom_ids._bom_find(line.product_id, company_id=line.company_id.id, bom_type='phantom')[line.product_id]
+				if boms:
+					for bom_line in boms[0].bom_line_ids:
+						line_ids.append((0,0,{'product_id':bom_line.product_id.id,'demand_qty':rec.product_uom_qty}))
+			if not rec.product_id.product_tmpl_id.seller_ids:
+				line_ids.append((0,0,{'product_id':bom_line.product_id.id,'demand_qty':rec.product_uom_qty}))
+		if line_ids:
+			return {'type': 'ir.actions.act_window',
+					'name': _('Product wizard'),
+					'res_model': 'update.product.vendor',
+					'view_mode': 'form',
+					'context': {'order_id': self.id,'line_ids':line_ids},
+					'target': 'new',
+					}
 
 
 	# def action_confirm(self):
@@ -459,9 +530,9 @@ class SaleOrder(models.Model):
 
 			if order.partner_id:
 				config_note = self.env['fischerbell.configuration.note'].search([
-			        ('type', '=', 'sale'),
-			        ('partner_ids', 'in', [order.partner_id.id])  # Use a list to compare with a Many2many field
-			    ], limit=1)
+					('type', '=', 'sale'),
+					('partner_ids', 'in', [order.partner_id.id])  # Use a list to compare with a Many2many field
+				], limit=1)
 				order.partner_note = config_note.note
 
 
@@ -956,10 +1027,10 @@ class SaleOrder(models.Model):
 			if rec:
 				print("------rec",rec)
 				display_message = """
-	            						<p>We noticed that your order with reference number """ + rec.name + """ is still pending confirmation. 
-	            						If you have any inquiries or concerns regarding this order, please feel free to reach out. 
-	            						We are here to assist you and ensure a smooth process.</p>
-	            						"""
+										<p>We noticed that your order with reference number """ + rec.name + """ is still pending confirmation. 
+										If you have any inquiries or concerns regarding this order, please feel free to reach out. 
+										We are here to assist you and ensure a smooth process.</p>
+										"""
 				subject = (f""" Inquiry about Order  %s  Confirmation Status""" % rec.name)
 				email_to = rec.partner_id.email
 				mails = {
@@ -984,8 +1055,8 @@ class SaleOrder(models.Model):
 			if rec:
 				print("------rec",rec)
 				display_message = """
-	            						<p>For this order """ + rec.name + """, since the customer has not responded, kindly proceed with a follow-up, meeting, or phone call to engage with the customer.</p>
-	            						"""
+										<p>For this order """ + rec.name + """, since the customer has not responded, kindly proceed with a follow-up, meeting, or phone call to engage with the customer.</p>
+										"""
 				subject = (f""" Action Required for Quotation %s Customer Follow-Up Needed """ % rec.name)
 				email_to = rec.user_id.email
 				mails = {

@@ -49,7 +49,6 @@ class PurchaseOrder(models.Model):
 		else:
 			for po in self:
 				po.is_default_terms = True
-
 		for po in self:
 			po.is_default_terms = True
 
@@ -58,9 +57,7 @@ class PurchaseOrder(models.Model):
 		default_terms = self.env['purchase.order'].search([('is_default_terms','=',True)], limit=1).notes
 		if default_terms:
 			vals['notes'] = default_terms
-
-		res = super(PurchaseOrder, self).create(vals)
-		return res
+		return super(PurchaseOrder, self).create(vals)
 	
 	def write(self,vals):
 		for purchase in self:
@@ -71,7 +68,6 @@ class PurchaseOrder(models.Model):
 					vals['name'] = (purchase.name.split('-')[0] if not purchase.revision_purchase_name else purchase.revision_purchase_name.split('-')[0]) + '-R%s'%(int(purchase.revision_purchase_count + 1) if int(purchase.revision_purchase_count) == 0 else int(purchase.revision_purchase_count))
 					vals['revision_purchase_count'] = purchase.revision_purchase_count + 1
 					vals['is_purchase_revise'] = True
-
 		return super(PurchaseOrder,self).write(vals)
 
 	@api.depends('partner_note')
@@ -140,11 +136,8 @@ class PurchaseOrder(models.Model):
 						pick.user = self.env.user.id
 			return res
 		else:
-			# if not self.request_delivery_date and not self.estimated_delivery_date:
-			# 	raise ValidationError("Request Delivery Date And Estimated Delivery Date are required")
 			if not self.mail_sended:
 				raise ValidationError("Please Send Email First")
-
 
 	def _prepare_picking(self):
 		res = super(PurchaseOrder, self)._prepare_picking()
@@ -153,13 +146,16 @@ class PurchaseOrder(models.Model):
 
 	def check_planned_date(self, order_date_planned):
 		if order_date_planned:
-			if self.partner_id:
-				if self.partner_id.no_delivery_days_selection == 'days':
-					if eval(self.partner_id.no_delivery_days) == order_date_planned.weekday():
-						raise UserError('The customer %s is not available at this day %s, please change it as per the customers availability' % (self.partner_id.name,calendar.day_name[eval(self.partner_id.no_delivery_days)]))
-				elif self.partner_id.no_delivery_days_selection == 'date':
-					if self.partner_id.delivery_restriction_start_date <= order_date_planned.date() <= self.partner_id.delivery_restriction_end_date:
-						raise UserError('The customer %s is not available at this date %s, please change it as per the customers availability' % (self.partner_id.name,order_date_planned))
+			partner_ids = self.partner_id
+			for partner_id in partner_ids:
+				if partner_id.no_delivery_days_selection == 'days':
+					if eval(partner_id.no_delivery_days) == order_date_planned.weekday():
+						raise UserError('The customer %s is not available at this day %s, please change it as per the customers availability' % (partner_id.name,calendar.day_name[eval(partner_id.no_delivery_days)]))
+				elif partner_id.no_delivery_days_selection == 'date':
+					if partner_id.delivery_restriction_start_date <= order_date_planned.date() <= partner_id.delivery_restriction_end_date:
+						raise UserError('The customer %s is not available at this date %s, please change it as per the customers availability' % (partner_id.name,order_date_planned))
+	
+
 	@api.depends('order_line.date_planned')
 	def _compute_date_planned(self):
 		""" date_planned = the earliest date_planned across all order lines. """

@@ -65,6 +65,13 @@ class StockRule(models.Model):
                     date=procurement_date_planned.date(),
                     uom_id=procurement.product_uom)
 
+            group_id =  procurement.values.get('group_id')
+            if group_id and group_id.sale_id and 'bom_line_id' in list(procurement.values.keys()) and procurement.values.get('bom_line_id'):
+                sale_id = group_id.sale_id
+                product_vendor_conf_id = sale_id.product_vendor_conf_ids.filtered(lambda x:x.bom_line_id.id == int(procurement.values.get('bom_line_id')))
+                if product_vendor_conf_id.supplier_info_id:
+                    supplier = product_vendor_conf_id.supplier_info_id
+
             # Fall back on a supplier for which no price may be defined. Not ideal, but better than
             # blocking the user.
             supplier = supplier or procurement.product_id._prepare_sellers(False).filtered(

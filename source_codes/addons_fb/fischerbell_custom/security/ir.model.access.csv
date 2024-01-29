@@ -22,3 +22,4 @@ access_update_product_vendor_line,access_update_product_vendor_line,model_update
 access_purchase_order_ref,access_purchase_order_ref,model_purchase_order_ref,base.group_user,1,1,1,1
 access_purchase_order_wizard,access_purchase_order_wizard,model_purchase_order_wizard,base.group_user,1,1,1,1
 
+fischerbell_custom.access_product_vendor_conf,access_product_vendor_conf,fischerbell_custom.model_product_vendor_conf,base.group_user,1,1,1,1

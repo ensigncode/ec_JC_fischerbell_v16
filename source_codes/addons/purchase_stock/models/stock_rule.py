@@ -44,15 +44,30 @@ class StockRule(models.Model):
         if self.action == 'buy':
             self.location_src_id = False
 
+
+
+            # if 'sale_line_id' in list(move_values.keys()):
+            #     sale_line_id = self.env['sale.order.line'].browse(int(move_values['sale_line_id']))
+            #     # print('\n----sale_line_id-------------',sale_line_id)
+            #     if sale_line_id and sale_line_id.order_id.product_vendor_conf_ids:
+            #         product_vendor_conf_id = sale_line_id.order_id.product_vendor_conf_ids.filtered(lambda x:x.product_id.id == int(move_values['product_id']) and x.sale_line_id.id == sale_line_id.id)
+            #         # print('\n----product_vendor_conf_id-------------',product_vendor_conf_id)
+            #         if product_vendor_conf_id.supplier_info_id:
+            #             procurement.values['supplierinfo_id'] = product_vendor_conf_id.supplier_info_id.id
+            #             # print('\n---procurement.values-------------',procurement.values)
+
+            #             move_values.update({'supplierinfo_id':product_vendor_conf_id.supplier_info_id.id})
+            #             # print('\n\n\n====move_values=======PARTHHH---move_values',move_values)
+
+            #     # print('\n\n====procurement.values==BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB=',procurement.values)  
+
     @api.model
     def _run_buy(self, procurements):
         procurements_by_po_domain = defaultdict(list)
         errors = []
         for procurement, rule in procurements:
-
             # Get the schedule date in order to find a valid seller
             procurement_date_planned = fields.Datetime.from_string(procurement.values['date_planned'])
-
             supplier = False
             if procurement.values.get('supplierinfo_id'):
                 supplier = procurement.values['supplierinfo_id']
@@ -64,7 +79,15 @@ class StockRule(models.Model):
                     quantity=procurement.product_qty,
                     date=max(procurement_date_planned.date(), fields.Date.today()),
                     uom_id=procurement.product_uom)
+            
+            group_id =  procurement.values.get('group_id')
+            if group_id and group_id.sale_id and 'bom_line_id' in list(procurement.values.keys()) and procurement.values.get('bom_line_id'):
+                sale_id = group_id.sale_id
+                product_vendor_conf_id = sale_id.product_vendor_conf_ids.filtered(lambda x:x.bom_line_id.id == int(procurement.values.get('bom_line_id')))
+                if product_vendor_conf_id.supplier_info_id:
+                    supplier = product_vendor_conf_id.supplier_info_id
 
+                    
             # Fall back on a supplier for which no price may be defined. Not ideal, but better than
             # blocking the user.
             supplier = supplier or procurement.product_id._prepare_sellers(False).filtered(
@@ -129,7 +152,6 @@ class StockRule(models.Model):
             for procurement in procurements:
                 po_lines = po_lines_by_product.get(procurement.product_id.id, self.env['purchase.order.line'])
                 po_line = po_lines._find_candidate(*procurement)
-
                 if po_line:
                     # If the procurement can be merge in an existing line. Directly
                     # write the new values on it.
