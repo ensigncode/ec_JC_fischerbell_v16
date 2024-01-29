@@ -777,7 +777,7 @@ class SaleOrder(models.Model):
 			self.check_partner_address = True
 		if not self.partner_invoice_id:
 			self.check_partner_address = False
-		return {'domain': {'partner_shipping_id': [('id', 'in', child_ids)],'partner_invoice_id': [('id', 'in', relation_ids)]}}
+		return {'domain': {'partner_shipping_id': [('id', 'in', child_ids),('type','=','delivery')],'partner_invoice_id': [('id', 'in', relation_ids),('type','=','invoice')]}}
 
 	# ---------------------------------------------------------------------------------
 	# ----------------- SEND MAIL TRIGGERS --------------------------------------------
