@@ -1,0 +1,32 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <data>
+    <record id="mail_template_data_product_stock_confirmation" model="mail.template">
+        <field name="name">Inventory: Send by Email</field>
+        <field name="model_id" ref="stock.model_stock_picking"/>
+        <field name="subject">{{ object.company_id.name }} Delivery Order (Ref {{ object.name or 'n/a' }})</field>
+        <field name="partner_to">{{ object.partner_id.email and object.partner_id.id or object.partner_id.parent_id.id }}</field>
+        <field name="description">Sent to the mangers when products are in stock, if the setting is enabled</field>
+        <field name="body_html" type="html">
+<div style="margin: 0px; padding: 0px;">
+    <p>
+       <p>
+        Hello 
+        <t t-out="ctx.get('user') or ''"/>,<br/>
+        Your order <t t-out="object.purchase_id.name or ''"/> is validated.</p>
+        
+        <p>
+            The products 
+            <span t-esc="', '.join(map(lambda x: (x.product_id.name), object.move_ids_without_package))" id="line_tax_ids"/>
+            has been transfer to inventory.
+        </p>
+        <br/><br/>
+        Thank you,
+    </p>
+</div>
+        </field>
+        <field name="lang">{{ object.partner_id.lang }}</field>
+        <field name="auto_delete" eval="True"/>
+    </record>
+</data>
+</odoo>
