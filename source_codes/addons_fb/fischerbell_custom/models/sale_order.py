@@ -761,17 +761,23 @@ class SaleOrder(models.Model):
 
 	@api.onchange('partner_id')
 	def onchange_partner_invoice_id(self):
+		relation_ids = []
+		child_ids = []
 		if self.partner_invoice_id:
 			self.invoice_instruction = self.partner_invoice_id.invoice_instruction
+			relation_ids = [x.id for x in self.partner_id.child_ids]
+			# return {'domain':{'partner_invoice_id': [('id', 'in', relation_ids)],}}
 		if self.partner_shipping_id:
 			self.delivery_instruction = self.partner_shipping_id.delivery_instruction
+			child_ids = [x.id for x in self.partner_id.child_ids]
+			# return {'domain': {'partner_shipping_id': [('id', 'in', child_ids)]}}
 		if self.partner_invoice_id and not self.partner_invoice_id.street and not self.partner_invoice_id.street2 and not self.partner_invoice_id.city and not self.partner_invoice_id.state_id and not self.partner_invoice_id.zip and not self.partner_invoice_id.country_id:
 			self.check_partner_address = False
 		else:
 			self.check_partner_address = True
-
 		if not self.partner_invoice_id:
 			self.check_partner_address = False
+		return {'domain': {'partner_shipping_id': [('id', 'in', child_ids)],'partner_invoice_id': [('id', 'in', relation_ids)]}}
 
 	# ---------------------------------------------------------------------------------
 	# ----------------- SEND MAIL TRIGGERS --------------------------------------------
