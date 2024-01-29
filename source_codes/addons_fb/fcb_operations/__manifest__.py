@@ -13,7 +13,8 @@
 	],
 	'data': [
 		"data/email_template_alert_reminder.xml",
-		"data/ir_cron.xml"
+		"data/ir_cron.xml",
+		"views/product_template.xml",
 	],
 	'demo': [
 	],

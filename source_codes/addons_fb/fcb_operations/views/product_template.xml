@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="product_templates_form_views_inherit" model="ir.ui.view">
+        <field name="name">product.template.form.views.inherit</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form//sheet//notebook/page//group[@name='group_lots_and_weight']" position="inside">
+                <label for="product_length"
+                       attrs="{'invisible':[('product_variant_count', '&gt;', 1), ('is_product_variant', '=', False)]}"/>
+                <div class="o_row" name="product_length"  attrs="{'invisible':[('product_variant_count', '&gt;', 1), ('is_product_variant', '=', False)]}">
+                    <field name="product_length" class="oe_inline"/>
+                    <field name="product_length_id"/>
+                </div>
+                <label for="width"
+                       attrs="{'invisible':[('product_variant_count', '&gt;', 1), ('is_product_variant', '=', False)]}"/>
+                <div class="o_row" name="width"  attrs="{'invisible':[('product_variant_count', '&gt;', 1), ('is_product_variant', '=', False)]}">
+                    <field name="width" class="oe_inline"/>
+                    <field name="width_id"/>
+                </div>
+                <label for="height"
+                       attrs="{'invisible':[('product_variant_count', '&gt;', 1), ('is_product_variant', '=', False)]}"/>
+                <div class="o_row" name="height"  attrs="{'invisible':[('product_variant_count', '&gt;', 1), ('is_product_variant', '=', False)]}">
+                    <field name="height" class="oe_inline"/>
+                    <field name="height_id"/>
+                </div>
+            </xpath>
+        </field>
+    </record>
+</odoo>
