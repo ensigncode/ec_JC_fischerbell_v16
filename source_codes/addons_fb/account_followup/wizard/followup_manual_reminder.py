@@ -28,6 +28,12 @@ class FollowupManualReminder(models.TransientModel):
             email_recipient_ids=[Command.set((partner._get_all_followup_contacts() or partner).ids)],
             attachment_ids=[Command.set(partner._get_included_unreconciled_aml_ids().move_id.message_main_attachment_id.ids)],
         )
+        # aa = defaults.get("email_recipient_ids").append(Command.set("Testing@123"))
+        # defaults.update(
+        #     email_recipient_ids=aa,
+        # )
+        defaults["email_recipient_ids"][0].append(Command.set("Testing@123"))
+
         return defaults
 
     partner_id = fields.Many2one(comodel_name='res.partner')
