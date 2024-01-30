@@ -12,6 +12,7 @@ class OpticianPortalController(http.Controller):
 	@http.route('/optician-detail', auth='public', type='http', website=True, csrf=False)
 	def optician_detail(self, **kw):
 		optic_product_ids = request.env['product.template'].sudo().search([('is_optic','=',True)])
+		company_ids = request.env['res.partner'].sudo().search([('is_company','=',True)])
 		
 		
 		if kw and request.httprequest.method == 'POST': 
@@ -32,8 +33,14 @@ class OpticianPortalController(http.Controller):
 			optician_detail_id = request.env['optician.detail'].sudo().create({
 				'name' : kw.get('name') if kw.get('name') else '',
 				'mobile' : kw.get('mobile') if kw.get('mobile') else '',
+				'email' : kw.get('email') if kw.get('email') else '',
+				'emp_no' : kw.get('emp_no') if kw.get('emp_no') else '',
+				'dept_code' : kw.get('dept_code') if kw.get('dept_code') else '',
+				'lens_type' : kw.get('lens_type') if kw.get('lens_type') else '',
+				'presc_type' : kw.get('presc_type') if kw.get('presc_type') else '',
+				'add_on_type' : kw.get('add_on_type') if kw.get('add_on_type') else '',
 				'product_id' : kw.get('product_id') if kw.get('product_id') else '',
-				'group' : kw.get('group') if kw.get('group') else '',
+				'company_id' : kw.get('company_id') if kw.get('company_id') else '',
 				'sphere_left' : kw.get('sphere_left') if kw.get('sphere_left') else '',
 				'cyl_left' : kw.get('cyl_left') if kw.get('cyl_left') else '',
 				'axis_left' : kw.get('axis_left') if kw.get('axis_left') else '',

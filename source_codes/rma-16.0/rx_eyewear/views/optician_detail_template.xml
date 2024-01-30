@@ -38,6 +38,29 @@
                                         </div>
                                         <div class="col-6">
                                             <div class="input-group">
+                                                <label for="email">Email:</label>
+                                                <input type="text" placeholder="Your Mobile" name="email" required="true"
+                                                    id="email"></input>
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="input-group">
+                                                <label for="emp_no">
+                                                    NRIC / FIN No. / Employee No.:</label>
+                                                <input type="text" placeholder="Your Name" name="emp_no" required="true"
+                                                    id="emp_no"></input>
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="input-group">
+                                                <label for="dept_code">
+                                                    DEPARTMENT CODE:</label>
+                                                <input type="text" placeholder="Your Name" name="dept_code"
+                                                    id="dept_code"></input>
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="input-group">
                                                 <label for="product_id">Frame:</label>
                                                 <select id="product_id" name="product_id" required="true">
                                                     <t t-foreach="optic_product_ids" t-as="optic_product">
@@ -50,49 +73,82 @@
                                         </div>
                                         <div class="col-6">
                                             <div class="input-group">
-                                                <label for="group">Group:</label>
-                                                <input type="text" placeholder="Group" name="group"
-                                                    id="group"></input>
+                                                <label for="lens_type">Type of Lens:</label>
+                                                <select id="lens_type" name="lens_type" required="true">
+                                                    <option value=""></option>
+                                                    <option value="poly_carbonate_lens">POLYCARBONATE LENS​</option>
+                                                    <option value="mr_lens">MR LENS​</option>
+                                                </select>
                                             </div>
                                         </div>
                                         <div class="col-6">
                                             <div class="input-group">
-                                                <label for="sphere_left">SPHERE:</label>
+                                                <label for="presc_type">Type of Prescription:</label>
+                                                <select id="presc_type" name="presc_type" required="true">
+                                                    <option value=""></option>
+                                                    <option value="distance">DISTANCE</option>
+                                                    <option value="bifocal">BIFOCAL​</option>
+                                                    <option value="reading">READING</option>
+                                                    <option value="progressive">PROGRESSIVE</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="input-group">
+                                                <label for="add_on_type">Add on:</label>
+                                                <select id="add_on_type" name="add_on_type" required="true">
+                                                    <option value=""></option>
+                                                    <option value="blue_ray">BLUE RAY​</option>
+                                                    <option value="photo_chromic">PHOTOCHROMIC</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="input-group">
+                                                <label for="group">Group:</label>
+                                                <select id="company_id" name="company_id">
+                                                    <option value=""></option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="input-group">
+                                                <label for="sphere_left">SPHERE Left:</label>
                                                 <input type="text" placeholder="SPHERE" name="sphere_left"
                                                     id="sphere_left"></input>
                                             </div>
                                         </div>
                                         <div class="col-6">
                                             <div class="input-group">
-                                                <label for="cyl_left">CYL:</label>
+                                                <label for="cyl_left">CYL Left:</label>
                                                 <input type="text" placeholder="CYL" name="cyl_left"
                                                     id="cyl_left"></input>
                                             </div>
                                         </div>
                                         <div class="col-6">
                                             <div class="input-group">
-                                                <label for="axis_left">AXIS:</label>
+                                                <label for="axis_left">AXIS Left:</label>
                                                 <input type="text" placeholder="AXIS" name="axis_left"
                                                     id="axis_left"></input>
                                             </div>
                                         </div>
                                         <div class="col-6">
                                             <div class="input-group">
-                                                <label for="sphere_right">SPHERE:</label>
+                                                <label for="sphere_right">SPHERE Right:</label>
                                                 <input type="text" placeholder="SPHERE" name="sphere_right"
                                                     id="sphere_right"></input>
                                             </div>
                                         </div>
                                         <div class="col-6">
                                             <div class="input-group">
-                                                <label for="cyl_right">CYL:</label>
+                                                <label for="cyl_right">CYL Right:</label>
                                                 <input type="text" placeholder="CYL" name="cyl_right"
                                                     id="cyl_right"></input>
                                             </div>
                                         </div>
                                         <div class="col-6">
                                             <div class="input-group">
-                                                <label for="axis_right">AXIS:</label>
+                                                <label for="axis_right">AXIS Right:</label>
                                                 <input type="text" placeholder="AXIS" name="axis_right"
                                                     id="axis_right"></input>
                                             </div>

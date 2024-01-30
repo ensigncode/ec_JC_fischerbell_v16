@@ -399,7 +399,7 @@ class SaleOrder(models.Model):
 						for bom_line in boms[0].bom_line_ids:
 							line_ids.append((0,0,{'product_id':bom_line.product_id.id,'demand_qty':rec.product_uom_qty,'sale_line_id':line.id,'bom_line_id':bom_line.id}))
 				if not rec.product_id.product_tmpl_id.seller_ids:
-					line_ids.append((0,0,{'product_id':bom_line.product_id.id,'demand_qty':rec.product_uom_qty,'sale_line_id':line.id}))
+					line_ids.append((0,0,{'product_id':line.product_id.id,'demand_qty':rec.product_uom_qty,'sale_line_id':line.id}))
 			if line_ids:
 				return {'type': 'ir.actions.act_window',
 						'name': _('Product wizard'),

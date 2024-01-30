@@ -64,18 +64,7 @@
                         <td>
                             <t t-esc="pa.requirements"/>
                         </td>
-                        <td class="portal_btn_blocks">
-                            <t t-if="pa.sale_order_id.id">
-                                <t t-esc="pa.sale_order_id.name"/>
-                            </t>
-                            <t t-else="">
-                                <button class="btn btn-primary sale_order_create_btn" t-att-data-id="pa.id">
-                                    Create sale order
-                                </button>
-                               
-                            </t>
-                            
-                        </td>
+                        
                     </tr>
                 </t>
             </t>
