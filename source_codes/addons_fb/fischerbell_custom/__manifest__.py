@@ -56,6 +56,7 @@
 	    'wizard/weekly_product_report_wizard_view.xml',
         'wizard/purchase_order_ref_views.xml',
 	    'wizard/purchase_order_wizard_view.xml',
+        'wizard/followup_manual_reminder_views.xml',
         'views/account_move_views.xml',
         'views/fischerbell_aging_report_views.xml',
         'views/fischerbell_configuration_note_views.xml',

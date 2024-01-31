@@ -9,4 +9,5 @@ from . import update_vendor
 from . import weekly_product_report_wizard
 from . import purchase_order_ref
 from . import purchase_order_wizard
+from . import followup_manual_reminder
 

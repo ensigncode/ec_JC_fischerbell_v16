@@ -165,11 +165,11 @@ class SaleOrder(models.Model):
 		# 			raise ValidationError(f"Customer is not avaliable from {self.partner_id.delivery_restriction_start_date} to {self.partner_id.delivery_restriction_end_date}")
 
 
-	@api.onchange('contact_person_id')
-	def _onchange_set_customer(self):
-		for rec in self:
-			# if not rec.partner_id:
-			rec.partner_id = rec.contact_person_id.id
+	# @api.onchange('contact_person_id')
+	# def _onchange_set_customer(self):
+	# 	for rec in self:
+	# 		# if not rec.partner_id:
+	# 		rec.partner_id = rec.contact_person_id.id
 
 	def _get_contact_person_company(self):
 		for rec in self:
@@ -706,7 +706,7 @@ class SaleOrder(models.Model):
 			self.check_partner_address = True
 		if not self.partner_invoice_id:
 			self.check_partner_address = False
-		return {'domain': {'partner_shipping_id': [('id', 'in', child_ids),('type','=','delivery')],'partner_invoice_id': [('id', 'in', relation_ids),('type','=','invoice')]}}
+		return {'domain': {'partner_shipping_id': [('id', 'in', child_ids),('type','=','delivery')],'partner_invoice_id': [('id', 'in', relation_ids),('type','=','invoice')],'contact_person_id': [('id', 'in', child_ids),('type','=','contact')]}}
 
 	# ---------------------------------------------------------------------------------
 	# ----------------- SEND MAIL TRIGGERS --------------------------------------------
@@ -1077,5 +1077,5 @@ class SaleOrderLine(models.Model):
 		if self.price_unit:
 			if self.price_unit > self.product_template_id.max_price:
 				raise ValidationError("Sales price is greater than maximal price")
-			if  self.price_unit < self.product_template_id.min_price:
+			if self.price_unit < self.product_template_id.min_price:
 				raise ValidationError("Sales price is less than minimal price")
