@@ -6,5 +6,9 @@ from odoo import models, fields, api, _
 class SaleOrder(models.Model):
     _inherit = 'sale.order'
 
-    optician_contact = fields.Many2one("res.partner",string="Optician Contact name")
-    optician_detail_id = fields.Many2one("optician.detail",string="Optician Detail")
+    optician_detail_id = fields.Many2one('optician.detail',string="Optician Detail")
+
+class SaleOrderLine(models.Model):
+    _inherit = 'sale.order.line'
+
+    child_id = fields.Many2one("res.partner",string="Employee name")

@@ -10,7 +10,7 @@
                 <field name="name" />
                 <field name="mobile" />
                 <field name="product_id" />
-                <field name="group" />
+                <field name="company_id" />
                 <field name="sphere_left" />
                 <field name="cyl_left" />
                 <field name="axis_left" />
@@ -33,23 +33,42 @@
                     
                 </header>
                 <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button type="object"
+                            name="action_show_sale_order"
+                            class="oe_stat_button"
+                            icon="fa-pencil-square-o" attrs="{'invisible':[('sale_order_count','=', 0)]}">
+                            <field name="sale_order_count" widget="statinfo" string="Sale Order"/>
+                        </button>
+                    </div>
                     <group>
-                        <field name="user_id" />
-                        <field name="partner_id" />
-                        <field name="name" />
-                        <field name="mobile" />
-                        <field name="product_id" />
-                        <field name="group" />
-                        <field name="sphere_left" />
-                        <field name="cyl_left" />
-                        <field name="axis_left" />
-                        <field name="sphere_right" />
-                        <field name="cyl_right" />
-                        <field name="axis_right" />
-                        <field name="add" />
-                        <field name="pd" />
-                        <field name="requirements" />
+                        <group>
+                            <field name="user_id" />
+                            <field name="partner_id" />
+                            <field name="name" />
+                            <field name="mobile" />
+                            <field name="email" />
+                            <field name="emp_no" />
+                            <field name="dept_code" />
+                            <field name="lens_type" />
+                            <field name="presc_type" />
+                            <field name="add_on_type" />
+                            <field name="product_id" />
+                            <field name="company_id" />
+                        </group>
+                        <group>
+                            <field name="sphere_left" />
+                            <field name="cyl_left" />
+                            <field name="axis_left" />
+                            <field name="sphere_right" />
+                            <field name="cyl_right" />
+                            <field name="axis_right" />
+                            <field name="add" />
+                            <field name="pd" />
+                            <field name="requirements" />
+                        </group>
                     </group>
+                    <field name="sale_order_ids" invisible="1"/>
                 </sheet>
             </form>
         </field>
@@ -63,6 +82,18 @@
             <p class="o_view_nocontent_smiling_face">
                 Create Optician Details
             </p>
+        </field>
+    </record>
+    <record id="action_create_quotation_from_rx_eyewear" model="ir.actions.server">
+        <field name="name">Create Quotation</field>
+        <!-- <field name="groups_id" eval="[(4, ref('account.group_account_invoice'))]"/> -->
+        <field name="model_id" ref="rx_eyewear.model_optician_detail"/>
+        <field name="binding_model_id" ref="rx_eyewear.model_optician_detail"/>
+        <field name="binding_view_types">list,form</field>
+        <field name="state">code</field>
+        <field name="code">
+            if records:
+                action = records.action_create_quotation()
         </field>
     </record>
 
