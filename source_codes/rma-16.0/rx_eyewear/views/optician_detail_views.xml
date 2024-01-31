@@ -33,29 +33,42 @@
                     
                 </header>
                 <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button type="object"
+                            name="action_show_sale_order"
+                            class="oe_stat_button"
+                            icon="fa-pencil-square-o" attrs="{'invisible':[('sale_order_count','=', 0)]}">
+                            <field name="sale_order_count" widget="statinfo" string="Sale Order"/>
+                        </button>
+                    </div>
                     <group>
-                        <field name="user_id" />
-                        <field name="partner_id" />
-                        <field name="name" />
-                        <field name="mobile" />
-                        <field name="email" />
-                        <field name="emp_no" />
-                        <field name="dept_code" />
-                        <field name="lens_type" />
-                        <field name="presc_type" />
-                        <field name="add_on_type" />
-                        <field name="product_id" />
-                        <field name="company_id" />
-                        <field name="sphere_left" />
-                        <field name="cyl_left" />
-                        <field name="axis_left" />
-                        <field name="sphere_right" />
-                        <field name="cyl_right" />
-                        <field name="axis_right" />
-                        <field name="add" />
-                        <field name="pd" />
-                        <field name="requirements" />
+                        <group>
+                            <field name="user_id" />
+                            <field name="partner_id" />
+                            <field name="name" />
+                            <field name="mobile" />
+                            <field name="email" />
+                            <field name="emp_no" />
+                            <field name="dept_code" />
+                            <field name="lens_type" />
+                            <field name="presc_type" />
+                            <field name="add_on_type" />
+                            <field name="product_id" />
+                            <field name="company_id" />
+                        </group>
+                        <group>
+                            <field name="sphere_left" />
+                            <field name="cyl_left" />
+                            <field name="axis_left" />
+                            <field name="sphere_right" />
+                            <field name="cyl_right" />
+                            <field name="axis_right" />
+                            <field name="add" />
+                            <field name="pd" />
+                            <field name="requirements" />
+                        </group>
                     </group>
+                    <field name="sale_order_ids" invisible="1"/>
                 </sheet>
             </form>
         </field>

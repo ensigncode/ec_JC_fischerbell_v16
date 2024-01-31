@@ -13,4 +13,9 @@
         parent="rx_eyewear_menu_optician"
         sequence="1"
         />
+     <menuitem id="rx_eyewear_menu_inventory" name="RX Eyewear"
+        parent="stock.menu_warehouse_report"
+        action="rx_eyewear.optician_detail_action"
+        sequence="301"
+        />
 </odoo>

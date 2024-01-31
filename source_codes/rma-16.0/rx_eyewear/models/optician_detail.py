@@ -28,8 +28,28 @@ class OpticianDetail(models.Model):
     user_id = fields.Many2one('res.users',string="User")
     partner_id = fields.Many2one("res.partner",string="Partner")
     sale_order_id = fields.Many2one("sale.order",string="Sale Order")
+    sale_order_ids = fields.One2many("sale.order","optician_detail_id",string="Sale Order")
+    sale_order_count = fields.Integer(string="Sale Order",compute="_compute_sale_order_count")
 
-    
+    @api.depends('sale_order_ids')
+    def _compute_sale_order_count(self):
+        for record in self:
+            record.sale_order_count = len(record.sale_order_ids)
+
+
+    def action_show_sale_order(self):
+        self.ensure_one()
+        sale_order_ids = self.sale_order_ids
+        result = self.env['ir.actions.act_window']._for_xml_id('sale.action_orders')
+        if len(sale_order_ids) > 1:
+            result['domain'] = [('id', 'in', sale_order_ids.ids)]
+        elif len(sale_order_ids) == 1:
+            result['views'] = [(self.env.ref('sale.view_order_form', False).id, 'form')]
+            result['res_id'] = sale_order_ids.id
+        return result
+        
+                
+
     def action_create_quotation(self):
         company_partner_ids = self.mapped("company_id")
         sale_order_ids = []
@@ -38,6 +58,7 @@ class OpticianDetail(models.Model):
             
             sale_order_id = self.env['sale.order'].sudo().create({
                 'partner_id' : company.id,
+                'optician_detail_id':self.id,
             })
             for filter_rec in filtered_records :
                 new_line = self.env['sale.order.line'].sudo().create({
@@ -49,16 +70,16 @@ class OpticianDetail(models.Model):
                     'price_unit': filter_rec.product_id.product_variant_id.list_price,
                     "product_uom" : filter_rec.product_id.product_variant_id.uom_id.id,
                 })
-            sale_order_ids.append(sale_order_id.id)
-        view_id_list = self.env.ref('sale.view_quotation_tree').id
-        view_id_form = self.env.ref('sale.view_order_form').id
-        return {
-            'name': 'Sale Orders',
-            'type': 'ir.actions.act_window',
-            'res_model': 'sale.order',
-            'view_mode': 'tree,form',
-            'views': [[view_id_list, 'list'], [view_id_form, 'form']],
-            'view_id': self.env.ref('sale.view_quotation_tree').id,  # Adjust the view_id based on your Sale Order tree view
-            'domain': [('id','in',sale_order_ids)],
-        }
+           
+        # view_id_list = self.env.ref('sale.view_quotation_tree').id
+        # view_id_form = self.env.ref('sale.view_order_form').id
+        # return {
+        #     'name': 'Sale Orders',
+        #     'type': 'ir.actions.act_window',
+        #     'res_model': 'sale.order',
+        #     'view_mode': 'tree,form',
+        #     'views': [[view_id_list, 'list'], [view_id_form, 'form']],
+        #     'view_id': self.env.ref('sale.view_quotation_tree').id,  # Adjust the view_id based on your Sale Order tree view
+        #     'domain': [('id','in',sale_order_ids)],
+        # }
                 
