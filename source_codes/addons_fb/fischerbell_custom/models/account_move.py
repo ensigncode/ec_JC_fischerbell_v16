@@ -267,7 +267,7 @@ class AccountMove(models.Model):
 		if template:
 			lang = template._render_lang(self.ids)[self.id]
 		if self.env.ref('account.email_template_edi_invoice').id == template.id:
-			template.email_to = self.partner_id.e_invoice_email
+			template.email_to = self.partner_id.parent_id.e_invoice_email if self.partner_id.parent_id else self.partner_id.e_invoice_email
 		if not lang:
 			lang = get_lang(self.env).code
 		compose_form = self.env.ref('account.account_invoice_send_wizard_form', raise_if_not_found=False)
