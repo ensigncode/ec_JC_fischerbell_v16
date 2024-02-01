@@ -1,5 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+    <data>
+        <report
+			id="fischerbell_optician_detail_report_action"
+			model="optician.detail"
+			string="Optician detail report"
+			report_type="xlsx"
+			name="rx_eyewear.optician_detail_report"
+			file="Optician detail Report"
+			attachment_use="False"
+		/>
+    </data>
     <record id="optician_detail_view_tree" model="ir.ui.view">
         <field name="name">optician.detail.view.tree</field>
         <field name="model">optician.detail</field>
@@ -96,5 +107,6 @@
                 action = records.action_create_quotation()
         </field>
     </record>
+
 
 </odoo>

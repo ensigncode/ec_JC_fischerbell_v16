@@ -11,4 +11,5 @@ class SaleOrder(models.Model):
 class SaleOrderLine(models.Model):
     _inherit = 'sale.order.line'
 
-    child_id = fields.Many2one("res.partner",string="Employee name")
+    child_id = fields.Many2one("res.partner",string="Employee id")
+    child_name = fields.Char("Employee name")

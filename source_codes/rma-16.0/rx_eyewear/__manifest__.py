@@ -6,7 +6,7 @@
     'category': 'mrp',
     'summary': '',
     'website': '',
-    'depends': ['website','sale','stock'],
+    'depends': ['website','sale','report_xlsx','stock'],
     'data': [
         "security/ir.model.access.csv",
         "views/optician_detail_views.xml",
