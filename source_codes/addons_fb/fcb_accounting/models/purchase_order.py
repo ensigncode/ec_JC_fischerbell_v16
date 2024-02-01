@@ -85,3 +85,12 @@ class PurchaseOrderLine(models.Model):
 			'Deliver To',
 			required=True, default=_default_picking_type,
 			help="This will determine operation type of incoming shipment")
+
+
+	def _compute_tax_id(self):
+		res = super()._compute_tax_id()
+		for line in self:
+			partner_id = line.order_id.partner_id
+			if line.product_id and partner_id and partner_id.supplier_taxes and partner_id.l10n_in_gst_treatment == "overseas":
+				line.taxes_id = [(6,0,partner_id.supplier_taxes.ids)]
+		return res
