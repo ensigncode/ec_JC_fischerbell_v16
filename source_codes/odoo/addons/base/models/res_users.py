@@ -945,7 +945,6 @@ class Users(models.Model):
         self.env['res.users.deletion'].create(res_users_deletion_values)
 
     def preference_save(self):
-        import pdb; pdb.set_trace()
         return {
             'type': 'ir.actions.client',
             'tag': 'reload_context',
