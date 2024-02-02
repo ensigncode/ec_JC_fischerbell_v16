@@ -59,7 +59,7 @@
                             <t t-esc="pa.product_id.name"/>
                         </td>
                         <td>
-                            <t t-esc="pa.group"/>
+                            <t t-esc="pa.company_id.name"/>
                         </td>
                         <td>
                             <t t-esc="pa.requirements"/>
