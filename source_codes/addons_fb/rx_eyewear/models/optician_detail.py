@@ -76,17 +76,6 @@ class OpticianDetail(models.Model):
                     "product_uom" : filter_rec.product_id.product_variant_id.uom_id.id,
                 })
            
-        # view_id_list = self.env.ref('sale.view_quotation_tree').id
-        # view_id_form = self.env.ref('sale.view_order_form').id
-        # return {
-        #     'name': 'Sale Orders',
-        #     'type': 'ir.actions.act_window',
-        #     'res_model': 'sale.order',
-        #     'view_mode': 'tree,form',
-        #     'views': [[view_id_list, 'list'], [view_id_form, 'form']],
-        #     'view_id': self.env.ref('sale.view_quotation_tree').id,  # Adjust the view_id based on your Sale Order tree view
-        #     'domain': [('id','in',sale_order_ids)],
-        # }
 
 class FischerbellOpticianDetailReport(models.AbstractModel):
     _name = 'report.rx_eyewear.optician_detail_report'
@@ -100,7 +89,6 @@ class FischerbellOpticianDetailReport(models.AbstractModel):
         content1.set_bold()
         content1.set_font_size(10)
         content1.set_align('center')
-        # content1.set_align('vcenter')
         content1.set_align('Arial')
         content1.set_text_wrap()
         content1.set_font_color('#000000')
