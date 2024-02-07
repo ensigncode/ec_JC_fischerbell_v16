@@ -11,7 +11,7 @@ class ResUser(models.Model):
                                                ('custom_without_brand', 'Customize Without Brand')],
                                               string="Email Signature Option", default='base')
     # {', ' + user['company_id']['zip'] if user['company_id']['zip'] else ''}
-    @api.depends('name', 'email_signature_option')
+    @api.depends('name', 'email_signature_option', 'mobile_phone', 'work_phone', 'work_email')
     def _compute_signature(self):
         for user in self.filtered(lambda user: user.name):
 
