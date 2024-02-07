@@ -4,7 +4,6 @@
             <field name="name">res.users.form.inherits</field>
             <field name="model">res.users</field>
             <field name="type">form</field>
-<!--            <field name="inherit_id" ref="base.view_users_form"/>-->
             <field name="inherit_id" ref="hr.res_users_view_form_profile"/>
             <field name="arch" type="xml">
                 <xpath expr="//field[@name='signature']" position="before">
@@ -19,9 +18,6 @@
             <field name="inherit_id" ref="base.view_users_form_simple_modif"/>
             <field name="arch" type="xml">
 
-                    <xpath expr="//field[@name='signature']" position="before">
-                        <field name="email_signature_option"/>
-                    </xpath>
                     <xpath expr="//h1" position="after">
                         <group id="fcb_data_show">
                             <group>
