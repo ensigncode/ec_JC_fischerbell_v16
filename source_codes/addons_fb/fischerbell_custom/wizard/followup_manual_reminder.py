@@ -32,6 +32,14 @@ class FollowupManualReminder(models.TransientModel):
     email_to = fields.Char("Email To")
 
 
+    @api.onchange('email')
+    def _onchange_email(self):
+        partner = self.env['res.partner'].browse(self.env.context['active_ids'])
+        for rec in self:
+            if rec.email == True:
+                rec.email_to=partner.parent_id.soa_email if partner.parent_id else partner.soa_email
+
+
     def _get_wizard_options(self):
         """ Returns a dictionary of options, containing values from this wizard that are needed to process the followup
         """

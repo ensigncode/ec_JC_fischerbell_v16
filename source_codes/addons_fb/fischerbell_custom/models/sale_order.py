@@ -1036,7 +1036,6 @@ class SaleOrder(models.Model):
 									('create_date', '<=', date_stop),
 				]):
 			if rec:
-				print("------rec",rec)
 				display_message = """
 										<p>We noticed that your order with reference number """ + rec.name + """ is still pending confirmation. 
 										If you have any inquiries or concerns regarding this order, please feel free to reach out. 
@@ -1064,7 +1063,6 @@ class SaleOrder(models.Model):
 									('create_date', '<=', date_stop),
 				]):
 			if rec:
-				print("------rec",rec)
 				display_message = """
 										<p>For this order """ + rec.name + """, since the customer has not responded, kindly proceed with a follow-up, meeting, or phone call to engage with the customer.</p>
 										"""
