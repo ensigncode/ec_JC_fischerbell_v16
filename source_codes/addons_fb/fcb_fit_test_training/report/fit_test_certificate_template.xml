@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<template id="report_certificate">
+    <t t-call="web.basic_layout">
+        <t t-call="web.html_container">
+                <div class="page">
+<!--            <t t-foreach="docs" t-as="doc">-->
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-6">
+                                <img t-att-src="/fcb_fit_test_training/static/src/img/side_bar_image.jpeg" alt="ttttttttttttttttt"/>
+                            </div>
+                        </div>
+                    </div>
+
+<!--                <img src="/fcb_fit_test_training/static/src/img/account_ss.png" />-->
+<!--            </t>-->
+            </div>
+        </t>
+    </t>
+</template>
+<!--        <template id="report_certificate_doc">-->
+<!--            <t t-call="web.html_container">-->
+<!--                <table style="width:100%;">-->
+<!--                        <tr>-->
+<!--                            <td style="vertical-align:top;">-->
+<!--                                    <-->
+<!--                 <div class="o_label_sheet o_label_dymo" t-att-style="padding_page">-->
+<!--                 <img src="/fcb_fit_test_training/static/src/img/side_bar_image.jpg" alt=""/>-->
+<!--            </div>-->
+<!--                -->
+<!--            </t>-->
+<!--        </template>-->
+
+<!--    <template id="report_certificate">-->
+<!--    <t t-call="web.basic_layout">-->
+<!--        <div class="page">-->
+<!--            <t t-call="fcb_fit_test_training.report_certificate_doc">-->
+<!--            </t>-->
+<!--        </div>-->
+<!--    </t>-->
+<!--    </template>-->
+</odoo>

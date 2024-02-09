@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="paperformat_label_sheet_certificate" model="report.paperformat">
+            <field name="name">A4 Label Sheet</field>
+            <field name="default" eval="True" />
+            <field name="format">A4</field>
+            <field name="page_height">0</field>
+            <field name="page_width">0</field>
+            <field name="orientation">Landscape</field>
+            <field name="margin_top">0</field>
+            <field name="margin_bottom">0</field>
+            <field name="margin_left">0</field>
+            <field name="margin_right">0</field>
+            <field name="disable_shrinking" eval="True"/>
+            <field name="dpi">96</field>
+        </record>
+
+        <record id="action_report_certificate_0" model="ir.actions.report">
+           <field name="name">Certificate</field>
+           <field name="model">fit.test.training</field>
+           <field name="report_type">qweb-pdf</field>
+           <field name="report_name">fcb_fit_test_training.report_certificate</field>
+           <field name="report_file">fcb_fit_test_training.report_certificate</field>
+<!--            <field name="paperformat_id" ref="fcb_fit_test_training.paperformat_label_sheet_certificate"/>-->
+           <field name="binding_model_id" ref="fcb_fit_test_training.model_fit_test_training" />
+           <field name="binding_type">report</field>
+        </record>
+    </data>
+</odoo>
