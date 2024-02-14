@@ -288,7 +288,9 @@ class Picking(models.Model):
 							pick_return.activity_schedule(summary='Reminder Collect Loan Item', date_deadline=deadline, user_id=user.id,  activity_type_id=self._default_activity_type().id)
 
 
-
+		for record in self:
+			if record.purchase_id:
+				record.purchase_id.action_create_invoice()
 
 		return res
 
