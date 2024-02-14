@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_certificate">
+        <t t-call="web.basic_layout">
+            <t t-call="web.html_container">
+                <t t-foreach="docs.fit_ids" t-as="doc">
+                    <div class="page">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-6">
+                                    <img src="/fcb_fit_test_training/static/src/img/side_bar_image.jpeg"
+                                         alt="certificate"/>
+                                </div>
+                                <div class="col-6">
+                                    <strong style="font-size: 40px;">Fit Test Certificate</strong>
+                                    <br/>
+                                    <br/>
+                                    <br/>
+                                    <p style="font-size: 30px;">This is to certify that
+                                        <br/>
+                                        <strong style="font-size: 30px;"><t t-if="doc.trainee"> <span t-field="doc.trainee"/> </t></strong>
+                                    </p>
+                                    <p style="font-size: 30px;">IC /FIN No. /Employee No:
+                                        <t t-if="doc.passport_no"> <span t-field="doc.passport_no"/> </t>
+                                    </p>
+                                    <p style="font-size: 30px;">From
+                                        <br/>
+                                        <strong style="font-size: 30px;">Elmer</strong>
+                                    </p>
+                                    <p style="font-size: 30px;">Passed the Training
+                                        <br/>Type of Training <t t-if="doc.fit_id.training_type"> <span t-field="doc.fit_id.training_type"/></t>
+                                        <br/>Size <t t-if="doc.size"> <span t-field="doc.size"/></t>
+                                        <br/>
+                                        <b>Result <t t-if="doc.is_pass_fail == True"> Pass </t><t t-else=""> Fail
+                                            </t></b>
+                                    </p>
+                                    <p style="font-size: 30px;">Tested On <t t-if="doc.tested_on"> <span t-field="doc.tested_on"/></t></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+</odoo>

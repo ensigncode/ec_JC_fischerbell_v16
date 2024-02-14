@@ -7,6 +7,7 @@ class SaleOrder(models.Model):
 	_inherit = 'sale.order'
 
 	product_available_date = fields.Date("Product Available Date")
+	product_buyer_id = fields.Many2one('res.users')
 
 	def action_confirm(self):
 		res = super(SaleOrder, self).action_confirm()
@@ -24,10 +25,12 @@ class SaleOrder(models.Model):
 					for po_line in po.order_line:
 						if po_line.product_id == product:
 							product_available_date = po_line.date_planned
+							product_buyer_id = po.user_id
 							self.product_available_date = product_available_date
+							self.product_buyer_id = product_buyer_id
 							if template_id and self.user_id.login:
 								template_id.sudo().send_mail(self.id, force_send=True, email_values={
-									'email_from': self.env.user.email, 'email_to': self.user_id.login})
+									'email_from': self.product_buyer_id.email, 'email_to': self.user_id.login})
 						else:
 							print("\n")
 		return res
