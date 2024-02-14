@@ -3,7 +3,7 @@
 import itertools
 import calendar
 
-from odoo import api, fields, models
+from odoo import api, fields, models, _
 from odoo.exceptions import UserError, ValidationError
 from datetime import datetime, date
 from odoo.tools.float_utils import float_round
@@ -54,10 +54,11 @@ class PurchaseOrder(models.Model):
 
 	@api.model
 	def create(self, vals):
+		res = super(PurchaseOrder, self).create(vals)
 		default_terms = self.env['purchase.order'].search([('is_default_terms','=',True)], limit=1).notes
 		if default_terms:
 			vals['notes'] = default_terms
-		return super(PurchaseOrder, self).create(vals)
+		return res
 	
 	def write(self,vals):
 		for purchase in self:

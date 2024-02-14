@@ -41,7 +41,7 @@ class WizVendors(models.TransientModel):
                 check_vendor_product_conf_line_id.update(sale_line_vals)
             else:
                 self.env['product.vendor.conf'].create(sale_line_vals)
-        sale_id.with_context(vendor_wizard=True).action_confirm()
+        sale_id.with_context(vendor_wizard=True).approval_order()
 
 class WizVendorsLine(models.TransientModel):
     _name = 'update.product.vendor.line'

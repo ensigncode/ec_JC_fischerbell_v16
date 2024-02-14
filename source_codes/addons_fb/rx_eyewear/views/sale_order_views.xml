@@ -8,10 +8,13 @@
             <field name="inherit_id" ref="sale.view_order_form" />
             <field name="arch" type="xml">
                 <field name="partner_id" position="after">
-                    <field name="optician_contact" />
-                    <field name="optician_detail_id" />
+                    <field name="optician_detail_id" invisible="1" />
                 </field>
+                <xpath expr="//field[@name='order_line']//tree//field[@name='product_id']" position="after">
+                    <field name="child_id" optional="hide" />
+                </xpath>
             </field>
         </record>
+
     </data>
 </odoo>

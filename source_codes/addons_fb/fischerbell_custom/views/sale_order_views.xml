@@ -33,8 +33,8 @@
             <xpath expr="//field[@name='partner_invoice_id']" position="before">
                 <!-- <field name="attn_to"/> -->
                 <field name="contact_person_id" options="{'no_create_edit': True, 'no_create': True}" domain="[('is_company','=',False),('type','=','contact')]"/>
-                <field name="contact_person_comp_id"/>
-                <field name="contact_per_name"/>
+<!--                <field name="contact_person_comp_id"/>-->
+<!--                <field name="contact_per_name"/>-->
                 <field name="user" invisible="1"/>
                 <field name="today" invisible="1"/>
                 <field name="purchase_ref" invisible="1"/>

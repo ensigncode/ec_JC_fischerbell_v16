@@ -180,11 +180,11 @@ class SaleOrder(models.Model):
 		# 			raise ValidationError(f"Customer is not avaliable from {self.partner_id.delivery_restriction_start_date} to {self.partner_id.delivery_restriction_end_date}")
 
 
-	@api.onchange('contact_person_id')
-	def _onchange_set_customer(self):
-		for rec in self:
-			# if not rec.partner_id:
-			rec.partner_id = rec.contact_person_id.id
+	# @api.onchange('contact_person_id')
+	# def _onchange_set_customer(self):
+	# 	for rec in self:
+	# 		# if not rec.partner_id:
+	# 		rec.partner_id = rec.contact_person_id.id
 
 	def _get_contact_person_company(self):
 		for rec in self:
@@ -246,6 +246,34 @@ class SaleOrder(models.Model):
 	# 			vals['partner_seq'] = self.env['ir.sequence'].next_by_code('quality.point') or _('New')
 	# 	return super().create(vals_list)
 	def action_to_approve(self):
+		self.submited_date = date.today()
+		if not 'vendor_wizard' in self._context:
+			line_ids = []
+			for rec in self.order_line:
+				line = rec
+				mrp_route_id = self.env.ref('purchase_stock.route_warehouse0_buy')
+				mto_route_id = self.env.ref('stock.route_warehouse0_mto')
+				if mrp_route_id and line.product_id.bom_ids and mto_route_id and (mrp_route_id in line.product_id.route_ids) or (mto_route_id in line.product_id.route_ids) and line.product_id.bom_ids:
+					boms = line.product_id.bom_ids._bom_find(line.product_id, company_id=line.company_id.id, bom_type='phantom')[line.product_id]
+					if boms:
+						for bom_line in boms[0].bom_line_ids:
+							line_ids.append((0,0,{'product_id':bom_line.product_id.id,'demand_qty':rec.product_uom_qty,'sale_line_id':line.id,'bom_line_id':bom_line.id}))
+				elif not rec.product_id.product_tmpl_id.seller_ids:
+					line_ids.append((0,0,{'product_id':line.product_id.id,'demand_qty':rec.product_uom_qty,'sale_line_id':line.id}))
+			if line_ids:
+				return {'type': 'ir.actions.act_window',
+						'name': _('Product wizard'),
+						'res_model': 'update.product.vendor',
+						'view_mode': 'form',
+						'context': {'order_id': self.id,'line_ids':line_ids},
+						'target': 'new',
+						}
+			else:
+				self.approval_order()
+		
+		return True
+
+	def approval_order(self):
 		for order in self:
 			# if order.partner_id.credit_limit > 0:
 			if order.amount_total < order.partner_id.credit_limit:
@@ -330,7 +358,6 @@ class SaleOrder(models.Model):
 						pass
 				else:
 					raise ValidationError("Sorry, you are not allowed to approve this order.")
-		return True
 
 	def action_stock_confirm(self):
 		self.ensure_one()
@@ -366,79 +393,57 @@ class SaleOrder(models.Model):
 			else:
 				inv.len_note = False
 
-	# def action_confirm(self):
-	# 	self.submited_date = date.today()
-	# 	for rec in self.order_line:
-	# 		# line_ids = self.order_line.filtered(lambda line:not line.product_template_id.seller_ids)
-	# 		if not rec.product_template_id.seller_ids and not self._context.get('vendor_wizard'):
-	# 			return {'type': 'ir.actions.act_window',
-	# 			        'name': _('Product wizard'),
-	# 			        'res_model': 'update.product.vendor',
-	# 			        'view_mode': 'form',
-	# 			        # 'context': {'order_id': self.id,'line_ids':line_ids},
-	# 			        'target': 'new',
-	# 			        }
-	# 	super_call = super(SaleOrder, self).action_confirm()
-	# 	for order in self:
-	# 		# Sent email to customer based on the state
-	# 		order.send_mail_triggers_based_on_state()
-	# 	return super_call
-
-
 	def action_confirm(self):
-		self.submited_date = date.today()
-		if not 'vendor_wizard' in self._context:
-			line_ids = []
-			for rec in self.order_line:
-				line = rec
-				mrp_route_id = self.env.ref('purchase_stock.route_warehouse0_buy')
-				mto_route_id = self.env.ref('stock.route_warehouse0_mto')
-				if mrp_route_id and mto_route_id and (mrp_route_id in line.product_id.route_ids) or (mto_route_id in line.product_id.route_ids) and line.product_id.bom_ids:
-					boms = line.product_id.bom_ids._bom_find(line.product_id, company_id=line.company_id.id, bom_type='phantom')[line.product_id]
-					if boms:
-						for bom_line in boms[0].bom_line_ids:
-							line_ids.append((0,0,{'product_id':bom_line.product_id.id,'demand_qty':rec.product_uom_qty,'sale_line_id':line.id,'bom_line_id':bom_line.id}))
-				if not rec.product_id.product_tmpl_id.seller_ids:
-					line_ids.append((0,0,{'product_id':bom_line.product_id.id,'demand_qty':rec.product_uom_qty,'sale_line_id':line.id}))
-			if line_ids:
-				return {'type': 'ir.actions.act_window',
-						'name': _('Product wizard'),
-						'res_model': 'update.product.vendor',
-						'view_mode': 'form',
-						'context': {'order_id': self.id,'line_ids':line_ids},
-						'target': 'new',
-						}
-			else:
-				return super(SaleOrder, self).action_confirm()
-				
+		# self.submited_date = date.today()
+		# for rec in self.order_line:
+		# 	# line_ids = self.order_line.filtered(lambda line:not line.product_template_id.seller_ids)
+		# 	if not rec.product_template_id.seller_ids and not self._context.get('vendor_wizard'):
+		# 		return {'type': 'ir.actions.act_window',
+		# 		        'name': _('Product wizard'),
+		# 		        'res_model': 'update.product.vendor',
+		# 		        'view_mode': 'form',
+		# 		        # 'context': {'order_id': self.id,'line_ids':line_ids},
+		# 		        'target': 'new',
+		# 		        }
 		super_call = super(SaleOrder, self).action_confirm()
 		for order in self:
+			print('>>>>>>>>>>>>>>>>>>>>>>>>>s>>>>>>>>>>>>>>')
+			# Sent email to customer based on the state
 			order.send_mail_triggers_based_on_state()
 		return super_call
 
 
-	def update_vendor(self):
-		self.submited_date = date.today()
-		line_ids = []
-		for rec in self.order_line:
-			line = rec
-			mrp_route_id = self.env.ref('purchase_stock.route_warehouse0_buy')
-			mto_route_id = self.env.ref('stock.route_warehouse0_mto')
-			if mrp_route_id and mto_route_id and (mrp_route_id in line.product_id.route_ids) or (mto_route_id in line.product_id.route_ids) and line.product_id.bom_ids:
-				boms = line.product_id.bom_ids._bom_find(line.product_id, company_id=line.company_id.id, bom_type='phantom')[line.product_id]
-				if boms:
-					for bom_line in boms[0].bom_line_ids:
-						line_ids.append((0,0,{'product_id':bom_line.product_id.id,'demand_qty':rec.product_uom_qty}))
-			if not rec.product_id.product_tmpl_id.seller_ids:
-				line_ids.append((0,0,{'product_id':bom_line.product_id.id,'demand_qty':rec.product_uom_qty}))
-		if line_ids:
-			return {'type': 'ir.actions.act_window',
-					'name': _('Product wizard'),
-					'res_model': 'update.product.vendor',
-					'view_mode': 'form',
-					'context': {'order_id': self.id,'line_ids':line_ids},
-					'target': 'new',
-					}
+	# def action_confirm(self):
+	# 	self.submited_date = date.today()
+	# 	if not 'vendor_wizard' in self._context:
+	# 		line_ids = []
+	# 		for rec in self.order_line:
+	# 			line = rec
+	# 			mrp_route_id = self.env.ref('purchase_stock.route_warehouse0_buy')
+	# 			mto_route_id = self.env.ref('stock.route_warehouse0_mto')
+	# 			if mrp_route_id and mto_route_id and (mrp_route_id in line.product_id.route_ids) or (mto_route_id in line.product_id.route_ids) and line.product_id.bom_ids:
+	# 				boms = line.product_id.bom_ids._bom_find(line.product_id, company_id=line.company_id.id, bom_type='phantom')[line.product_id]
+	# 				if boms:
+	# 					for bom_line in boms[0].bom_line_ids:
+	# 						line_ids.append((0,0,{'product_id':bom_line.product_id.id,'demand_qty':rec.product_uom_qty,'sale_line_id':line.id,'bom_line_id':bom_line.id}))
+	# 			elif not rec.product_id.product_tmpl_id.seller_ids:
+	# 				line_ids.append((0,0,{'product_id':line.product_id.id,'demand_qty':rec.product_uom_qty,'sale_line_id':line.id}))
+	# 		if line_ids:
+	# 			return {'type': 'ir.actions.act_window',
+	# 					'name': _('Product wizard'),
+	# 					'res_model': 'update.product.vendor',
+	# 					'view_mode': 'form',
+	# 					'context': {'order_id': self.id,'line_ids':line_ids},
+	# 					'target': 'new',
+	# 					}
+	# 		else:
+	# 			return super(SaleOrder, self).action_confirm()
+				
+	# 	super_call = super(SaleOrder, self).action_confirm()
+	# 	for order in self:
+	# 		order.send_mail_triggers_based_on_state()
+	# 	return super_call
+
 
 
 	# def action_confirm(self):
@@ -777,7 +782,7 @@ class SaleOrder(models.Model):
 			self.check_partner_address = True
 		if not self.partner_invoice_id:
 			self.check_partner_address = False
-		return {'domain': {'partner_shipping_id': [('id', 'in', child_ids),('type','=','delivery')],'partner_invoice_id': [('id', 'in', relation_ids),('type','=','invoice')]}}
+		return {'domain': {'partner_shipping_id': [('id', 'in', child_ids),('type','=','delivery')],'partner_invoice_id': [('id', 'in', relation_ids),('type','=','invoice')],'contact_person_id': [('id', 'in', child_ids),('type','=','contact')]}}
 
 	# ---------------------------------------------------------------------------------
 	# ----------------- SEND MAIL TRIGGERS --------------------------------------------
@@ -1031,7 +1036,6 @@ class SaleOrder(models.Model):
 									('create_date', '<=', date_stop),
 				]):
 			if rec:
-				print("------rec",rec)
 				display_message = """
 										<p>We noticed that your order with reference number """ + rec.name + """ is still pending confirmation. 
 										If you have any inquiries or concerns regarding this order, please feel free to reach out. 
@@ -1059,7 +1063,6 @@ class SaleOrder(models.Model):
 									('create_date', '<=', date_stop),
 				]):
 			if rec:
-				print("------rec",rec)
 				display_message = """
 										<p>For this order """ + rec.name + """, since the customer has not responded, kindly proceed with a follow-up, meeting, or phone call to engage with the customer.</p>
 										"""
@@ -1148,5 +1151,5 @@ class SaleOrderLine(models.Model):
 		if self.price_unit:
 			if self.price_unit > self.product_template_id.max_price:
 				raise ValidationError("Sales price is greater than maximal price")
-			if  self.price_unit < self.product_template_id.min_price:
+			if self.price_unit < self.product_template_id.min_price:
 				raise ValidationError("Sales price is less than minimal price")

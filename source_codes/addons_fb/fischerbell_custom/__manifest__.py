@@ -53,6 +53,7 @@
 	    'wizard/weekly_product_report_wizard_view.xml',
         'wizard/purchase_order_ref_views.xml',
 	    'wizard/purchase_order_wizard_view.xml',
+        'wizard/followup_manual_reminder_views.xml',
         'views/account_move_views.xml',
         'views/fischerbell_aging_report_views.xml',
         'views/fischerbell_configuration_note_views.xml',
@@ -74,6 +75,7 @@
         'views/stock_lot_views.xml',
         'views/stock_picking_views.xml',
         'views/crm_lead_view.xml',
+        'views/mail_compose_message_views.xml'
         
         # 'wizard/fischerbell_wizard_report_delivery_with_training.xml',
     ],
@@ -82,6 +84,11 @@
     'css': [
         "static/src/xml/*.xml']",
     ],
+    'assets': {
+            'web.assets_backend': [
+                # 'fischerbell_custom/static/src/js/*.js',
+            ],
+        },
 
     'installable': True,
     'auto_install': False,

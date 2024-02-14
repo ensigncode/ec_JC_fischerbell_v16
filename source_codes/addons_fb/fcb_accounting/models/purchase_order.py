@@ -14,10 +14,11 @@ class PurchaseOrder(models.Model):
 			if any(product.type in ['product', 'consu'] for product in order.order_line.product_id):
 				order = order.with_company(order.company_id)
 				picking_type_ids = order.order_line.picking_type_id
+				dest_address_id = order.order_line.dest_address_id
 				for picking_type_id in picking_type_ids:
-					pickings = order.picking_ids.filtered(lambda x: x.state not in ('done', 'cancel') and x.picking_type_id.id == picking_type_id.id)
+					pickings = order.picking_ids.filtered(lambda x: x.state not in ('done', 'cancel') and x.picking_type_id.id == picking_type_id.id and x.dest_address_id.id == dest_address_id.id)
 					if not pickings:
-						res = order.with_context(picking_type_id=picking_type_id)._prepare_picking()
+						res = order.with_context(picking_type_id=picking_type_id,dest_address_id=dest_address_id)._prepare_picking()
 						picking = StockPicking.with_user(SUPERUSER_ID).create(res)
 						pickings = picking
 					else:
@@ -42,8 +43,9 @@ class PurchaseOrder(models.Model):
 
 	def _get_destination_location(self):
 		self.ensure_one()
-		# if self.dest_address_id:
-		# 	return self.dest_address_id.property_stock_customer.id
+		if 'dest_address_id' in self._context and self._context['dest_address_id'] :
+			dest_address_id = self._context['dest_address_id']
+			return dest_address_id.property_stock_customer.id
 
 		if 'picking_type_id' in self._context and self._context['picking_type_id']:
 			picking_type_id = self._context['picking_type_id']
@@ -73,15 +75,46 @@ class PurchaseOrder(models.Model):
 			'location_id': self.partner_id.property_stock_supplier.id,
 			'company_id': self.company_id.id,
 		}
+	
+	@api.onchange('picking_type_id')
+	def onchange_picking_type_id_custom(self) :
+		for line in self.order_line :
+			line.picking_type_id = self.picking_type_id.id
 
 class PurchaseOrderLine(models.Model):
 	_inherit = 'purchase.order.line'
 
 	@api.model
+	def _get_picking_type(self, company_id):
+		picking_type = self.env['stock.picking.type'].search([('code', '=', 'incoming'), ('warehouse_id.company_id', '=', company_id)])
+		if not picking_type:
+			picking_type = self.env['stock.picking.type'].search([('code', '=', 'incoming'), ('warehouse_id', '=', False)])
+		return picking_type[:1]
+
+	@api.model
 	def _default_picking_type(self):
-		return self.order_id.picking_type_id
+		if self.order_id and self.order_id.picking_type_id : 
+			picking_type = self.order_id.picking_type_id
+		else :
+			picking_type = self._get_picking_type(self.env.context.get('company_id') or self.env.company.id)
+		return picking_type
 
 	picking_type_id = fields.Many2one('stock.picking.type',
 			'Deliver To',
 			required=True, default=_default_picking_type,
 			help="This will determine operation type of incoming shipment")
+
+	def _compute_tax_id(self):
+		res = super()._compute_tax_id()
+		for line in self:
+			partner_id = line.order_id.partner_id
+			if line.product_id and partner_id and partner_id.supplier_taxes and partner_id.l10n_in_gst_treatment == "overseas":
+				line.taxes_id = [(6,0,partner_id.supplier_taxes.ids)]
+		return res
+
+	default_location_dest_id_usage = fields.Selection(related='picking_type_id.default_location_dest_id.usage', string='Destination Location Type',
+        help="Technical field used to display the Drop Ship Address", readonly=True)
+	dest_address_id = fields.Many2one('res.partner', string='Dropship Address', 
+        help="Put an address if you want to deliver directly from the vendor to the customer. "
+             "Otherwise, keep empty to deliver to your own company.")
+

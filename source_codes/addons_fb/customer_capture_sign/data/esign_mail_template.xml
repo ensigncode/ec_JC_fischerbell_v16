@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="esign_mail_template" model="mail.template">
+            <field name="name">Sales: E-sign Mail</field>
+            <field name="model_id" ref="sale.model_sale_order"/>
+            <field name="subject">{{ object.company_id.name }} {{ object.state in ('draft', 'sent') and (ctx.get('proforma') and 'Proforma' or 'Quotation') or 'Order' }} (Ref {{ object.name or 'n/a' }})</field>
+            <field name="email_from">{{ (object.user_id.email_formatted or object.company_id.email_formatted or user.email_formatted) }}</field>
+            <field name="partner_to">{{ object.partner_id.id }}</field>
+            <field name="description">Used by salespeople when they send quotations or proforma to prospects</field>
+            <field name="body_html" type="html">
+              
+            <div style="margin: 0px; padding: 0px;">
+
+                <t t-set="button_text" t-value="'Visit Website'"/>
+                <t t-set="parameter1" t-value="'object.id'"/> 
+                <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                    Hii, <t t-out="object.partner_id.name or ''"/><br/>
+                    Please click to e-sign button and upload your signature,<br/>
+                    <center>
+                        <a t-attf-href="/customer/e-sgin?sale_id={{object.id}}" class="btn btn-primary btn-lg s_website_form_send">E-sign</a>
+                    </center>
+                </p>
+            </div>
+            </field>
+            <field name="report_name">{{ (object.name or '').replace('/','_') }}</field>
+            <field name="lang">{{ object.partner_id.lang }}</field>
+            <field name="auto_delete" eval="True"/>
+        </record>
+    </data>
+</odoo>
+
+
