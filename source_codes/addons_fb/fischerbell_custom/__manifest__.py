@@ -75,6 +75,7 @@
         'views/stock_lot_views.xml',
         'views/stock_picking_views.xml',
         'views/crm_lead_view.xml',
+        'views/mail_compose_message_views.xml'
         
         # 'wizard/fischerbell_wizard_report_delivery_with_training.xml',
     ],
@@ -86,7 +87,6 @@
     'assets': {
             'web.assets_backend': [
                 # 'fischerbell_custom/static/src/js/*.js',
-
             ],
         },
 

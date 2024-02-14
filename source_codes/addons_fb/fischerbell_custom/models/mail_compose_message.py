@@ -4,6 +4,9 @@ import base64
 class MailComposerMessage(models.TransientModel):
     _inherit = 'mail.compose.message'
 
+    email_to = fields.Char("Email To")
+
+
     @api.onchange('template_id')
     def _onchange_template_id_wrapper(self):
         self.ensure_one()
