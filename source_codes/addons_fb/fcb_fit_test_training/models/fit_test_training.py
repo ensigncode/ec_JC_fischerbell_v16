@@ -22,7 +22,7 @@ class FitTestTrainingTrainee(models.Model):
 	_description = "Fit Test Trainee"
 
 	trainee = fields.Char(string="Trainee")
-	passport_no = fields.Char(string="NRIC / Passport NO./ Employee No.")
+	passport_no = fields.Char(string="NRIC / FIN NO./ Employee No.")
 	size = fields.Integer(string="Size")
 	is_pass_fail = fields.Boolean(string="Pass / Fail")
 	tested_on = fields.Date(string="Tested On")
