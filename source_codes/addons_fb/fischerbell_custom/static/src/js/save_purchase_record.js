@@ -1,5 +1,5 @@
 /** @odoo-module **/
-
+console.log("@@@@@@@@@@@@@@@@@@@")
 import { ConfirmationDialog } from "@web/core/confirmation_dialog/confirmation_dialog";
 import { registry } from "@web/core/registry";
 import { FormController } from "@web/views/form/form_controller";
@@ -9,7 +9,7 @@ export class PurchaseOrder extends FormController {
     /**
      * @override
      **/
-    async saveRecord() {
+    saveRecord: function (recordID, options) {
             console.log("@@@@@@@@@@@@@@@@@@@@@111111")
             const res = await this._super(...arguments);
             console.log("@@@@@@@@@@@@@@@@@@@@@22222222")

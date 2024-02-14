@@ -8,7 +8,7 @@
                     <div class="container">
                         <div class="row">
                             <div class="col-6">
-                                <img t-att-src="/fcb_fit_test_training/static/src/img/side_bar_image.jpeg" alt="ttttttttttttttttt"/>
+                                <img src="/fcb_fit_test_training/static/src/img/side_bar_image.jpeg" alt="ttttttttttttttttt"/>
                             </div>
                         </div>
                     </div>
