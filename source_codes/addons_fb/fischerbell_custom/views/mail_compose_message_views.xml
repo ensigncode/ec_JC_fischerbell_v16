@@ -6,7 +6,7 @@
         <field name="inherit_id" ref="mail.email_compose_message_wizard_form"/>
         <field name="arch" type="xml">
             <xpath expr="//field[@name='subject']" position="after">
-                    <field name="email_to" />
+                    <field name="email_cc" attrs="{'invisible':[('model', '!=', 'purchase.order')]}"/>
             </xpath>
         </field>
     </record>
