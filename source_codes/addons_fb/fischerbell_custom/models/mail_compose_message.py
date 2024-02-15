@@ -4,7 +4,7 @@ import base64
 class MailComposerMessage(models.TransientModel):
     _inherit = 'mail.compose.message'
 
-    email_to = fields.Char("Email To")
+    email_cc = fields.Char('Email Cc', default='purchasing@fischerbell.com')
 
 
     @api.onchange('template_id')
