@@ -37,6 +37,7 @@ class PurchaseOrder(models.Model):
 			("approved", "Approved"),
 		]
 	)
+	# cargo_clearance_permit_no = fields.Char(string="Cargo Clearance Permit No.")
 
 	def sc_approved(self):
 		for rec in self:
@@ -51,6 +52,7 @@ class PurchaseOrder(models.Model):
 				po.is_default_terms = True
 		for po in self:
 			po.is_default_terms = True
+
 
 	@api.model
 	def create(self, vals):

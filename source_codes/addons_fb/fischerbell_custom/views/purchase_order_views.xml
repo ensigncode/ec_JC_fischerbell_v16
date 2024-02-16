@@ -22,7 +22,7 @@
 				<field name="sale_line_id" invisible="1"/>
 			</xpath>
 			<xpath expr="//notebook//page[@name='purchase_delivery_invoice']" position="after">
-				<page string="Special Remark">
+				<page string="Special Remark" name="special_remark">
 					<field name="internal_note" nolabel="1" placeholder="Special Remark...."/>
 				</page>
 			</xpath>
@@ -43,6 +43,13 @@
 			</xpath>
 			<xpath expr="//header//button[@name='button_cancel']" position="attributes">
 				 <attribute name="states">draft,to approve,sent,purchase,approved</attribute>
+			</xpath>
+			<xpath expr="//notebook//page[@name='special_remark']" position="after">
+				<page string="Freight Charges ">
+				</page>
+			</xpath>
+			<xpath expr="//field[@name='date_planned']" position="attributes">
+				<attribute name="invisible">1</attribute>
 			</xpath>
 		</field>
 	</record>
