@@ -45,7 +45,7 @@
 				 <attribute name="states">draft,to approve,sent,purchase,approved</attribute>
 			</xpath>
 			<xpath expr="//notebook//page[@name='special_remark']" position="after">
-				<page string="Freight Charges ">
+				<page string="Shipment Tracking">
 				</page>
 			</xpath>
 			<xpath expr="//field[@name='date_planned']" position="attributes">
