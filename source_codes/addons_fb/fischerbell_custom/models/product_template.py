@@ -144,9 +144,17 @@ class ProductTemplate(models.Model):
 			vals['qr_code_image'] = self.generate_qr_code(vals['barcode'])
 		else:
 			vals['qr_code_image'] = False
+		admin = self.env.ref('base.user_admin', raise_if_not_found=False)
+		param = {
+			'title':'Does this product requires traceability?',
+			'error_type': 'success'
+		}
+		if not admin.partner_id.id == self.env.user.partner_id.id:
+			self.env['bus.bus']._sendone(self.env.user.partner_id, 'iap_notification', param)
+		if admin:
+			self.env['bus.bus']._sendone(admin.partner_id, 'iap_notification', param)
 
 		return super().create(vals)
-
 
 
 class CustomerSku(models.Model):

@@ -37,7 +37,12 @@ class PurchaseOrder(models.Model):
 			("approved", "Approved"),
 		]
 	)
-	# cargo_clearance_permit_no = fields.Char(string="Cargo Clearance Permit No.")
+
+	shipment_tracking_date = fields.Datetime("Date")
+	cargo_clearance_permit_no = fields.Char(string="Cargo Clearance Permit No.")
+	logistics = fields.Char(string="Logistics")
+	total_cif = fields.Float('Total CIF/FOB')
+
 
 	def sc_approved(self):
 		for rec in self:
