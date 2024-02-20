@@ -23,7 +23,7 @@ class FitTestTrainingTrainee(models.Model):
 
 	trainee = fields.Char(string="Trainee")
 	passport_no = fields.Char(string="NRIC / FIN NO./ Employee No.")
-	size = fields.Integer(string="Size")
+	size = fields.Char(string="Size")
 	is_pass_fail = fields.Boolean(string="Pass / Fail")
 	tested_on = fields.Date(string="Tested On")
 	fit_id = fields.Many2one('fit.test.training', string="Fit")
