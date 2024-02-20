@@ -86,7 +86,7 @@ class FischerbellInventoryReport(models.AbstractModel):
 		# initial horizontal / vertical
 		x = 0
 		y = 0
-	
+
 		# write to cell
 		sheet.write(y, x, 'Item No', title2)
 		x += 1
@@ -126,87 +126,46 @@ class FischerbellInventoryReport(models.AbstractModel):
 		x = 0
 		y += 1
 		numbering = 0
+
 		for product in product_template:
-			all_purchase_line = 0
-			avg_price = 0
-			len_purchase = []
+			expiration_date = product.expiration_date.strftime('%Y-%m-%d') if product.expiration_date else ''
+			numbering += 1
+			sheet.write(y, x,  product.default_code or '', content1)
+			x += 1
+			sheet.write(y, x, product.product_brand_id.name or '', content1)
+			x += 1
+			sheet.write(y, x, product.categ_id.name or '', content1)
+			x += 1
+			sheet.write(y, x, product.name or '', content1)
+			x += 1
+			sheet.write(y, x, product.qty_available or '', content1)
+			x += 1
+			sheet.write(y, x, product.uom_id.name or '', content1)
+			x += 1
+			sheet.write(y, x, product.standard_price or '', content1)
+			x += 1
+			sheet.write(y, x, product.cost_currency_id.name or '', content1)
+			x += 1
+			sheet.write(y, x,  '', content1)
+			x += 1
+			sheet.write(y, x, product.currency_id.name or '', content1)
+			x += 1
+			sheet.write(y, x,  '', content1)
+			x += 1
+			sheet.write(y, x, product.batch_number or '', content1)
+			x += 1
+			sheet.write(y, x, product.serial_number or '', content1)
+			x += 1
+			sheet.write(y, x, expiration_date or '', content1)
+			x += 1
+			sheet.write(y, x, product.location_id.name or '', content1)
+			x += 1
+			sheet.write(y, x, '', content1)
+			x += 1
+			sheet.write(y, x, '', content1)
+			x += 1
 
-			for purchase_line in product.purchase_line_ids:
-				len_purchase.append(purchase_line.id)
-				all_purchase_line += purchase_line.price_unit
-
-			if all_purchase_line and len_purchase:
-				avg_price = all_purchase_line / len(len_purchase)
-
-			for line in product.purchase_line_ids:
-				numbering += 1
-				sheet.write(y, x, line.product_template_id.default_code or '', content1) #Supplier
-				x += 1
-				sheet.write(y, x, line.product_template_id.product_brand_id.name or '', content1) #PO Number
-				x += 1
-				sheet.write(y, x, line.product_template_id.categ_id.name or '', content1) #Product / Model No
-				x += 1
-				sheet.write(y, x, line.product_template_id.model or '', content1) #Description
-				x += 1
-				sheet.write(y, x, line.product_uom_qty or '', content1) #Qty
-				x += 1
-				sheet.write(y, x, line.product_uom.name or '', content1) #UOM
-				x += 1
-				sheet.write(y, x, product.standard_price or '', content1) #Purchase Price / Cost Price
-				x += 1
-				sheet.write(y, x, product.cost_currency_id.name or '', content1) #Purchase Currency / Cost Currency
-				x += 1
-				sheet.write(y, x, product.list_price or '', content1) #Inventory Price / Sales Price
-				x += 1
-				sheet.write(y, x, product.currency_id.name or '', content1) #Inventory Currency / Sales Currency
-				x += 1
-				if avg_price:
-					sheet.write(y, x, avg_price or '', content1) #Avg Price
-					x += 1
-				else:
-					sheet.write(y, x, '', content1) #Avg Price
-					x += 1
-
-				if line.product_template_id.tracking == 'lot':
-					sheet.write(y, x, line.lot_id.name or '', content1) #Batch Number
-				else:
-					sheet.write(y, x, '', content1) #Batch Number
-				x += 1
-
-				if line.product_template_id.tracking == 'serial':
-					sheet.write(y, x, line.lot_id.name or '', content1) #Serial
-				else:
-					sheet.write(y, x, '', content1) #Serial
-				x += 1
-
-				expiry_date = ''
-				wh_location = ''
-				for receipt in line.order_id.picking_ids:
-					if receipt.date_deadline:
-						expiry_date = receipt.date_deadline.strftime('%d %b %Y')
-					else:
-						expiry_date = ''
-
-					if receipt.location_dest_id:
-						wh_location = receipt.location_dest_id.complete_name
-					else:
-						wh_location = ''
-				sheet.write(y, x, expiry_date, content1) #Expiry Date
-				x += 1
-				sheet.write(y, x, wh_location, content1) #WH Location
-				x += 1
-				# freight_charge = 0
-				for bill in line.order_id.invoice_ids:
-					for charges in bill.move_ids:
-						sheet.write(y, x, charges.name or '', content1) #Freight Charges
-				x += 1
-				if line.order_id.partner_id.currency_type:
-					sheet.write(y, x, line.order_id.partner_id.currency_type, content1) #Local / Overseas
-				else:
-					sheet.write(y, x, '', content1) #Local / Overseas
-				x += 1
-
-				x = 0
-				y += 1
+			x = 0
+			y += 1
 		for i in range(numbering):
 			sheet.set_row(1+i, 60)
