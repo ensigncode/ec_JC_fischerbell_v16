@@ -1,0 +1,6 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+postal_management.access_postal_postal,access_postal_postal,postal_management.model_postal_postal,base.group_user,1,1,1,1
+postal_management.access_postal_code,access_postal_code,postal_management.model_postal_code,base.group_user,1,1,1,1
+postal_management.access_assign_driver,access_assign_driver,postal_management.model_assign_driver,base.group_user,1,1,1,1
+
+postal_management.access_assign_driver_line,access_assign_driver_line,postal_management.model_assign_driver_line,base.group_user,1,1,1,1

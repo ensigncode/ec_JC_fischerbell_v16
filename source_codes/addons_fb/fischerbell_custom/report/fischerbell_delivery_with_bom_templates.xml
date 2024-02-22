@@ -25,34 +25,57 @@
                     <t t-if="doc.sale_id.order_line">
                         <t t-foreach="doc.sale_id.order_line" t-as="line">
                             <t t-set="count" t-value="count+1"/>
+                           
                                 <tr>
-                                    <td width="5%" class="text-center" style="font-size: 15px; line-height: 1em;"><span t-esc="count"/></td>
-                                    <td width="15%" class="text-left" style="font-size: 15px; line-height: 1em;"><span t-esc="line.product_template_id.default_code"/></td>
-                                    <td width="35%" class="text-left" style="font-size: 15px; line-height: 1em;">
+                                    <td width="5%" class="text-center" style=""><span t-esc="count"/></td>
+                                    <td width="15%" class="text-left" style=""><span t-esc="line.product_template_id.default_code"/></td>
+                                    <td width="35%" class="text-left" style="">
                                         <span style="font-family: 'Unitext Pro Regular'; line-height: 1em;" t-esc="line.product_template_id.name"/><br/>
                                         <br/>
                                     </td>
-                                    <td width="10%" class="text-center" style="font-size: 15px; line-height: 1em;"><span t-esc="int(line.product_uom_qty)"/></td>
-                                    <td width="10%" class="text-center" style="font-size: 15px; line-height: 1em;"><span t-esc="line.product_uom.name"/></td>
+                                    <td width="10%" class="text-center" style=""><span t-esc="int(line.product_uom_qty)"/></td>
+                                    <td width="10%" class="text-center" style=""><span t-esc="line.product_uom.name"/></td>
                                 </tr>
+                                <t t-set="bom_count" t-value="0"/>
                                 <t t-foreach="line.product_template_id.bom_ids.bom_line_ids" t-as="bom_line">
+                                    <tr>
+                                        <td width="5%" class="text-center" style=""></td>
+                                        <td width="15%"></td>
+                                        <td width="35%" class="text-left" style="">
+                                            <t t-set="bom_count" t-value="bom_count+1"/>
+                                            <span t-esc="bom_count"></span>
+                                            <span>&#41;</span>
+                                            <span t-esc="int(bom_line.product_qty * int(line.product_uom_qty))"/>
+                                            <span t-esc="bom_line.product_uom_id.name"/>
+                                            <span>&amp;nbsp;</span>
+                                            <span>&#45;</span>
+                                            <span>&amp;nbsp;</span>
+                                            <span style="font-family: 'Unitext Pro Regular'; line-height: 1em;" t-esc="bom_line.product_id.name"/><br/>
+                                            <br/>
+                                        </td>
+                                        <td width="10%" class="text-center" style=""></td>
+                                        <td width="10%" class="text-center" style=""></td>
+                                    </tr>
+                                </t>
+
+                                <!-- <t t-foreach="line.product_template_id.bom_ids.bom_line_ids" t-as="bom_line">
                                 <t t-set="count" t-value="count+1"/>
                                 <tr>
-                                    <td width="5%" class="text-center" style="font-size: 15px; line-height: 1em;"><span t-esc="count"/></td>
-                                    <td width="15%" class="text-left" style="font-size: 15px; line-height: 1em;"><span t-esc="bom_line.product_id.default_code"/></td>
-                                    <td width="35%" class="text-left" style="font-size: 15px; line-height: 1em;">
+                                    <td width="5%" class="text-center" style=""><span t-esc="count"/></td>
+                                    <td width="15%" class="text-left" style=""><span t-esc="bom_line.product_id.default_code"/></td>
+                                    <td width="35%" class="text-left" style="">
                                         <span style="font-family: 'Unitext Pro Regular'; line-height: 1em;" t-esc="bom_line.product_id.name"/><br/>
                                         <br/>
                                     </td>
-                                    <td width="10%" class="text-center" style="font-size: 15px; line-height: 1em;"><span t-esc="int(bom_line.product_qty * int(line.product_uom_qty))"/></td>
-                                    <td width="10%" class="text-center" style="font-size: 15px; line-height: 1em;"><span t-esc="bom_line.product_uom_id.name"/></td>
+                                    <td width="10%" class="text-center" style=""><span t-esc="int(bom_line.product_qty * int(line.product_uom_qty))"/></td>
+                                    <td width="10%" class="text-center" style=""><span t-esc="bom_line.product_uom_id.name"/></td>
                                 </tr>
-                                </t>                                
+                                </t>                                 -->
                         </t>
                                     <tr>
-                                        <td width="5%" class="text-center" style="font-size: 15px; line-height: 1em;"><span/></td>
-                                        <td width="15%" class="text-left" style="font-size: 15px; line-height: 1em;"><span/></td>
-                                        <td width="35%" class="text-left" style="font-size: 15px; line-height: 1em;">
+                                        <td width="5%" class="text-center" style=""><span/></td>
+                                        <td width="15%" class="text-left" style=""><span/></td>
+                                        <td width="35%" class="text-left" style="">
                                             *<span style="font-family: 'Unitext Pro Regular';" t-esc="line.product_template_id.categ_id.name"/><br/>
                                         <t t-set="count" t-value="0"/>
                                         <t t-foreach="doc.generate_total_qty()" t-as="option_line">
@@ -63,8 +86,8 @@
                                             <span style="font-family: 'Unitext Pro Regular';" t-esc="option_line['product_id'].categ_id.name"/><br/>
                                         </t>
                                         </td>
-                                        <td width="10%" class="text-center" style="font-size: 15px; line-height: 1em;"><span/></td>
-                                        <td width="10%" class="text-center" style="font-size: 15px; line-height: 1em;"><span/></td>
+                                        <td width="10%" class="text-center" style=""><span/></td>
+                                        <td width="10%" class="text-center" style=""><span/></td>
                                     </tr>
 
                     </t>
@@ -88,9 +111,12 @@
                                 font-family: 'Arial';
                                 font-size: 13px;
                             }
+                            
                             .page td {
                                 vertical-align: top;
-                                padding-top: 10px;
+                                padding-top: 30px;
+                                font-size: 15px; 
+                                line-height: 0em;
                             }
                             .footer {
                                 font-size: 35px;
@@ -649,21 +675,28 @@
                                     </tr>
                                 </table>
                             </div>
-                            <table width="100%" class="table-head" style="font-size: 15px; font-weight: bold; padding-top: 10px; padding-bottom: 10px; border-left: 2px solid white; border-bottom: 3px solid black; border-top: 3px solid black; border-right: 2px solid white; margin-bottom: 10px;">
-                                <thead class="table-head" style="font-size: 15px; font-weight: bold; padding-top: 10px; padding-bottom: 10px; border-left: 2px solid transparent; border-bottom: 3px solid black; border-top: 3px solid black; border-right: 2px solid transparent; margin-bottom: 10px;">
+                            <div>
+
+                           
+                            <table width="100%" class="table-head" style="font-size: 15px; font-weight: bold;  border-left: 2px solid white; border-bottom: 3px solid black; border-top: 3px solid black; border-right: 2px solid white; ">
+                                <thead class="table-head" style="font-size: 15px; font-weight: bold; border-left: 2px solid transparent; border-bottom: 3px solid black; border-top: 3px solid black; border-right: 2px solid transparent; ">
                                     <tr>
                                         <th width="5%">NO</th>
-                                        <th width="15%" style="text-align: left;"><span>PRODUCT CODE</span></th>
+                                        <th width="15%" style="text-align: left;"><span>PRODUCT CODEeee</span></th>
                                         <th width="35%" style="text-align: left;"><span>DESCRIPTION</span></th>
                                         <th width="10%"><span>QTY</span></th>
                                         <th width="10%"><span>UOM</span></th>
                                     </tr>
                                 </thead>
                             </table>
+                            
+                        </div>
+                       
                         </div>
                     </t>
                     <t>
                         <div class="page">
+                            
                             <t t-call="fischerbell_custom.page_deliveryorder_bom_template"/>
                         </div>
                         <div class="footer">

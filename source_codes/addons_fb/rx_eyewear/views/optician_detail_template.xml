@@ -39,7 +39,7 @@
                                         <div class="col-6">
                                             <div class="input-group">
                                                 <label for="email">Email:</label>
-                                                <input type="text" placeholder="Your Mobile" name="email" required="true"
+                                                <input type="text" placeholder="Your Email" name="email" required="true"
                                                     id="email"></input>
                                             </div>
                                         </div>
@@ -47,7 +47,7 @@
                                             <div class="input-group">
                                                 <label for="emp_no">
                                                     NRIC / FIN No. / Employee No.:</label>
-                                                <input type="text" placeholder="Your Name" name="emp_no" required="true"
+                                                <input type="text" placeholder="NRIC / FIN No. / Employee No." name="emp_no" required="true"
                                                     id="emp_no"></input>
                                             </div>
                                         </div>
@@ -55,7 +55,7 @@
                                             <div class="input-group">
                                                 <label for="dept_code">
                                                     DEPARTMENT CODE:</label>
-                                                <input type="text" placeholder="Your Name" name="dept_code"
+                                                <input type="text" placeholder="DEPARTMENT CODE" name="dept_code"
                                                     id="dept_code"></input>
                                             </div>
                                         </div>
@@ -100,6 +100,7 @@
                                                     <option value=""></option>
                                                     <option value="blue_ray">BLUE RAY​</option>
                                                     <option value="photo_chromic">PHOTOCHROMIC</option>
+                                                    <option value="anti_fog"> ANTI-FOG &amp; BLUE RAY​</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -114,42 +115,42 @@
                                         <div class="col-6">
                                             <div class="input-group">
                                                 <label for="sphere_left">SPHERE Left:</label>
-                                                <input type="text" placeholder="SPHERE" name="sphere_left"
+                                                <input type="text" placeholder="SPHERE left" name="sphere_left"
                                                     id="sphere_left"></input>
                                             </div>
                                         </div>
                                         <div class="col-6">
                                             <div class="input-group">
                                                 <label for="cyl_left">CYL Left:</label>
-                                                <input type="text" placeholder="CYL" name="cyl_left"
+                                                <input type="text" placeholder="CYL left" name="cyl_left"
                                                     id="cyl_left"></input>
                                             </div>
                                         </div>
                                         <div class="col-6">
                                             <div class="input-group">
                                                 <label for="axis_left">AXIS Left:</label>
-                                                <input type="text" placeholder="AXIS" name="axis_left"
+                                                <input type="text" placeholder="AXIS left" name="axis_left"
                                                     id="axis_left"></input>
                                             </div>
                                         </div>
                                         <div class="col-6">
                                             <div class="input-group">
                                                 <label for="sphere_right">SPHERE Right:</label>
-                                                <input type="text" placeholder="SPHERE" name="sphere_right"
+                                                <input type="text" placeholder="SPHERE right" name="sphere_right"
                                                     id="sphere_right"></input>
                                             </div>
                                         </div>
                                         <div class="col-6">
                                             <div class="input-group">
                                                 <label for="cyl_right">CYL Right:</label>
-                                                <input type="text" placeholder="CYL" name="cyl_right"
+                                                <input type="text" placeholder="CYL right" name="cyl_right"
                                                     id="cyl_right"></input>
                                             </div>
                                         </div>
                                         <div class="col-6">
                                             <div class="input-group">
                                                 <label for="axis_right">AXIS Right:</label>
-                                                <input type="text" placeholder="AXIS" name="axis_right"
+                                                <input type="text" placeholder="AXIS right" name="axis_right"
                                                     id="axis_right"></input>
                                             </div>
                                         </div>
@@ -170,7 +171,7 @@
                                         <div class="col-6">
                                             <div class="input-group">
                                                 <label for="requirements">REQUIRMENTS:</label>
-                                                <textarea name="requirements" rows="4" cols="50" id="Requirements"></textarea>
+                                                <textarea placeholder="Your Requirements" name="requirements" rows="4" cols="50" id="Requirements"></textarea>
                                                
                                             </div>
                                         </div>
