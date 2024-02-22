@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="portal_my_home_menu_transfer"
+              name="Portal layout : Transfer menu entries"
+              inherit_id="portal.portal_breadcrumbs" priority="30">
+         <xpath expr="//ol[hasclass('o_portal_submenu')]" position="inside">
+            <li t-if="page_name == 'transfer'"
+                t-attf-class="breadcrumb-item #{'active ' if not transfer else ''}">
+                <a t-if="transfer"
+                   t-attf-href="/my/transfer{{ keep_query() }}">
+                    My Transfer
+                </a>
+                <t t-else="">Transfer</t>
+            </li>
+        </xpath>
+     </template>
+
+      <template id="portal_list_transfer" name="Transfer View">
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="True"/>
+            <t t-call="portal.portal_searchbar">
+                <t t-set="title">Transfer
+                </t>
+            </t>
+            <t t-if="not page_name">
+                <p>There are currently no transfer information for your
+                    account.
+                </p>
+            </t>
+            <t t-if="page_name" t-call="portal.portal_table">
+                <thead>
+                    <tr class="active">
+                        <th>
+                            <span class='d-none d-md-inline'>Name</span>
+                        </th>
+                        <th>
+                            <span class='d-none d-md-inline'>Delivery</span>
+                        </th>
+
+                        <th>
+                            <span class='d-none d-md-inline'>Scheduled Date</span>
+                        </th>
+                         <th>
+                            <span class='d-none d-md-inline'>Deadline</span>
+                        </th>
+                        <th>
+                            <span class='d-none d-md-inline'>Source Document</span>
+                        </th>
+                         <th>
+                            <span class='d-none d-md-inline'>Status</span>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                  <t t-foreach="picking_ids" t-as="picking_id">
+                    <tr>
+                        <td class="d-none" id="picking">
+                            <t t-esc="picking_id.id"/>
+                        </td>
+                        <td>
+                            <t t-esc="picking_id.name"/>
+                        </td>
+                        <td>
+                            <t t-esc="picking_id.partner_id.display_name"/>
+                        </td>
+                        <td>
+                            <t t-esc="picking_id.scheduled_date" t-options='{"widget": "date","format": "dd-MM-yyyy"}'/>
+                        </td>
+                        <td>
+                            <t t-esc="picking_id.date_deadline" t-options='{"widget": "date","format": "dd-MM-yyyy"}'/>
+                        </td>
+                         <td>
+                            <t t-esc="picking_id.origin"/>
+                        </td>
+                          <t t-set="status_list" t-value="{
+                        'draft':'Draft',
+                        'waiting': 'Waiting another operation',
+                        'confirmed': 'Waiting',
+                        'assigned': 'Ready',
+                        'done':'Done',
+                        'cancel':'Cancelled',
+                        }"/>
+                        <td>
+                            <t t-foreach="status_list" t-as="status">
+                                 <t t-if="picking_id.state == 'draft'">
+                                     <span class="badge badge-pill bg-secondary">
+                                         <t t-esc="status_list[status]"/>
+                                     </span>
+                                 </t>
+                                 <t t-if="status == picking_id.state">
+                                    <t t-if="picking_id.state == 'waiting'">
+                                        <span class="badge badge-pill bg-success">
+                                            <t t-esc="status_list[status]"/>
+                                        </span>
+                                    </t>
+                                    <t t-if="picking_id.state == 'confirmed'">
+                                        <span class="badge badge-pill bg-warning">
+                                            <t t-esc="status_list[status]"/>
+                                        </span>
+                                    </t>
+                                    <t t-if="picking_id.state == 'assigned'">
+                                        <span class="badge badge-pill bg-info">
+                                            <t t-esc="status_list[status]"/>
+                                        </span>
+                                    </t>
+                                    <t t-if="picking_id.state == 'done'">
+                                        <span class="badge badge-pill bg-success">
+                                            <t t-esc="status_list[status]"/>
+                                        </span>
+                                    </t>
+                                    <t t-if="picking_id.state == 'cancel'">
+                                        <span class="badge badge-pill bg-danger">
+                                            <t t-esc="status_list[status]"/>
+                                        </span>
+                                    </t>
+                                    
+                                </t>
+                                
+                            </t>
+                        </td>
+                        <t t-if="not picking_id.signature_uploded">
+                            <div class="modal fade" t-attf-id="modalsignatureaccept_{{ picking_id.id }}" tabindex="-1" aria-labelledby="signature" role="dialog" aria-hidden="true">
+                              <div class="modal-dialog modal-dialog-centered" style="margin-left: 263px;" role="document">
+                                  <div class="modal-content">
+                                      <div class="modal-header">
+                                          <h5 class="modal-title" id="signatureForm">Signature</h5>
+                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                      </div>
+                                      <div class="modal-body">
+                                          <t t-call="portal.signature_form">
+                                                <t t-set="call_url" t-value="'/my/need_approved?picking_id=%s' % picking_id.id"/>
+                                              <t t-set="default_name" t-value="picking_id.partner_id.name"/>
+                                          </t>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                            <td class="portal_btn_blocks">
+                               <!-- <t t-if="pa.state == 'confirm'"> -->
+                                   <button class="btn btn-link o_icon_button text-primary approve_btn" t-att-data-id="picking_id.id" type="button">
+                                       <i class="fa fa-pencil"/>
+                                       Signature
+                                   </button>
+                               <!-- </t> -->
+                            </td>
+                         </t>
+                         <t t-else="">
+                           <td class="portal_btn_blocks"></td>
+                         </t>
+                     </tr>
+                  </t>
+               </tbody>
+             </t>
+         </t>
+       </template>
+
+       <template id="portal_view_transfer" name="Transfer" customize_show="True"
+              inherit_id="portal.portal_my_home" priority="90">
+          <xpath expr="//div[hasclass('o_portal_docs')]" position="inside">
+            <t t-call="portal.portal_docs_entry">
+                <t t-set="title">Transfer</t>
+                <t t-set="url" t-value="'/my/transfer'"/>
+                <t t-set="placeholder_count" t-value="'transfer_count'"/>
+            </t>
+        </xpath>
+      </template>
+</odoo>

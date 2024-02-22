@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>   
+    <record id="view_res_partner_inherit" model="ir.ui.view">
+        <field name="name">view_res_partner_inherit</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='category_id']" position="after">
+                <field name="postal_id"/>
+                <field name="postal_code_ids" widget="many2many_tags"/>
+                <field name="is_driver"/>
+            </xpath>
+            <xpath expr="//page[@name='contact_addresses']" position="after">
+                <page name="fleet_vehicles" string="Vehicle">
+                    <field name="fleet_vehicle_ids" nolabel="1">
+                        <tree>
+                            <field name="model_id"/>
+                            <field name="license_plate"/>
+                            <field name="driver_id"/>
+                        </tree>
+                    </field>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_partner_postal_filter" model="ir.ui.view">
+        <field name="name">view_partner_postal_filter</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_res_partner_filter" />
+        <field name="arch" type="xml">
+            <xpath expr="//filter[@name='salesperson']" position="before">
+                <filter string="Driver" name="is_driver" domain="[('is_driver', '=', True)]"/>
+                <filter string="Postal" name="postal_id_filter" context="{'group_by': 'postal_id'}"/>
+            </xpath>
+        </field>
+    </record>
+
+
+    <record id="view_res_partner_tree_inherit" model="ir.ui.view">
+        <field name="name">view_res_partner_tree_inherit</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='parent_id']" position="after">
+                <field name="postal_id" optional="hide"/>
+                <field name="postal_code_ids" widget="many2many_tags"  optional="hide"/>
+                <field name="is_driver"  optional="hide"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="action_res_partner_driver_view" model="ir.actions.act_window">
+        <field name="name">Driver</field>
+        <field name="res_model">res.partner</field>
+        <field name="view_mode">tree,kanban,form</field>
+        <field name="view_id" ref="base.view_partner_tree"/>
+        <field name="domain">[('is_driver', '=', True)]</field>
+        <field name="context">{'default_is_driver': True}</field>
+    </record>
+
+    <menuitem id="Driver_menu" 
+            action="action_res_partner_driver_view"
+            name="Driver"
+            parent="sale.sale_order_menu"
+            sequence="41"
+            />
+
+</odoo>

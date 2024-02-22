@@ -10,7 +10,7 @@ from odoo.tools.misc import xlsxwriter
 class OpticianDetail(models.Model):
     _name = 'optician.detail'
 
-    name = fields.Char(string="Name")
+    name = fields.Char(string="Employee Name")
     mobile = fields.Char(string="Mobile")
     email = fields.Char(string="Email")
     emp_no = fields.Char(string="NRIC / FIN No. / Employee No.")
@@ -19,7 +19,7 @@ class OpticianDetail(models.Model):
     presc_type = fields.Char(string="Type of Prescription")
     add_on_type = fields.Char(string="Add on type")
     product_id = fields.Many2one('product.template',string="Frame", domain = "[('is_optic', '=', True)]")
-    company_id = fields.Many2one('res.partner',string="Group", domain = "[('is_company', '=', True)]")
+    company_id = fields.Many2one('res.partner',string="Company", domain = "[('is_company', '=', True)]")
     sphere_left = fields.Char(string="SPHERE LEFT")
     cyl_left = fields.Char(string="CYL LEFT")
     axis_left = fields.Char(string="AXIS LEFT")
@@ -66,7 +66,7 @@ class OpticianDetail(models.Model):
             })
             for filter_rec in filtered_records :
                 new_line = self.env['sale.order.line'].sudo().create({
-                    'name': _('Sample Order Line'),
+                    # 'name': filter_rec.product_id.product_variant_id.description,
                     'child_id' : filter_rec.partner_id.id,
                     'child_name' : filter_rec.partner_id.display_name,
                     'product_id': filter_rec.product_id.product_variant_id.id,

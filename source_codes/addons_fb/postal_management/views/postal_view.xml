@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record model="ir.ui.view" id="postal_sector_form_view">
+        <field name="name">postal.sector.form.view</field>
+        <field name="model">postal.code</field>
+        <field name="arch" type="xml">
+            <form string="Postal Sector">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="code"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="postal_sector_tree_view">
+        <field name="name">postal.sector.tree.view</field>
+        <field name="model">postal.code</field>
+        <field name="type">tree</field>
+        <field name="arch" type="xml">
+            <tree string='Postal Sector'>
+                <field name="code"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_postal_sector_view" model="ir.actions.act_window">
+        <field name="name">Postal Sector</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">postal.code</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <record model="ir.ui.view" id="postal_form_view">
+        <field name="name">postal.form.view</field>
+        <field name="model">postal.postal</field>
+        <field name="arch" type="xml">
+            <form string="Postal">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="postal_district"/>
+                            <field name="postal_code_ids" widget="many2many_tags"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="postal_tree_view">
+        <field name="name">postal.tree.view</field>
+        <field name="model">postal.postal</field>
+        <field name="type">tree</field>
+        <field name="arch" type="xml">
+            <tree string='Postal'>
+                <field name="postal_district"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_postal_view" model="ir.actions.act_window">
+        <field name="name">Postal</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">postal.postal</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="postal_list_menu" 
+            name="List of Postal Districts"
+            parent="stock.menu_stock_config_settings"
+            />
+
+    <menuitem id="postal_sector_menu" 
+            action="action_postal_sector_view"
+            name="Postal Sector"
+            parent="postal_list_menu"
+            />
+
+    <menuitem id="postal_district_menu" 
+            action="action_postal_view"
+            name="Postal District"
+            parent="postal_list_menu"
+            />
+
+</odoo>
+

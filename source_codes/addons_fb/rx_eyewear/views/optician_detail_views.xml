@@ -84,11 +84,33 @@
             </form>
         </field>
     </record>
+    <record id="view_optician_detail_filter" model="ir.ui.view">
+        <field name="name">optician.detail.select</field>
+        <field name="model">optician.detail</field>
+        <field name="arch" type="xml">
+            <search string="Search optician Detail">
+                <!-- <field name="name"
+                   filter_domain="['|', '|', '|', '|', ('display_name', 'ilike', self), ('ref', '=', self), ('email', 'ilike', self), ('vat', 'ilike', self), ('company_registry', 'ilike', self)]"/> -->
+                <field name="name" filter_domain="[('name', 'ilike', self)]"/>
+                <field name="company_id" filter_domain="[('company_id', 'ilike', self)]"/>
+                
+                <separator/>
+               
+                <group expand="0" name="group_by" string="Group By">
+                    <filter name="company" string="Company" domain="[]" context="{'group_by' : 'company_id'}" />
+                    <!-- <filter name="group_company" string="Company" context="{'group_by': 'parent_id'}"/>
+                    <filter name="group_country" string="Country" context="{'group_by': 'country_id'}"/> -->
+                </group>
+            </search>
+        </field>
+    </record>
 
     <record id="optician_detail_action" model="ir.actions.act_window">
         <field name="name">Optician Detail</field>
         <field name="res_model">optician.detail</field>
         <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="rx_eyewear.view_optician_detail_filter"/>
+        <field name="domain">[]</field>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
                 Create Optician Details

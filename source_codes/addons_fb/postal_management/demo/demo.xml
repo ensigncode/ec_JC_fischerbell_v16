@@ -1,0 +1,340 @@
+ <odoo>
+     <data noupdate="0">
+          <record id="demo_postal_1" model="postal.code">
+             <field name="code">01</field>
+          </record>
+          <record id="demo_postal_2" model="postal.code">
+             <field name="code">02</field>
+          </record>
+           <record id="demo_postal_3" model="postal.code">
+             <field name="code">03</field>
+          </record> <record id="demo_postal_4" model="postal.code">
+             <field name="code">04</field>
+          </record> <record id="demo_postal_5" model="postal.code">
+             <field name="code">05</field>
+          </record> <record id="demo_postal_6" model="postal.code">
+             <field name="code">06</field>
+          </record> <record id="demo_postal_7" model="postal.code">
+             <field name="code">07</field>
+          </record> <record id="demo_postal_8" model="postal.code">
+             <field name="code">08</field>
+          </record> <record id="demo_postal_9" model="postal.code">
+             <field name="code">09</field>
+          </record> <record id="demo_postal_10" model="postal.code">
+             <field name="code">10</field>
+          </record> <record id="demo_postal_11" model="postal.code">
+             <field name="code">11</field>
+          </record> <record id="demo_postal_12" model="postal.code">
+             <field name="code">12</field>
+          </record> <record id="demo_postal_13" model="postal.code">
+             <field name="code">13</field>
+          </record> <record id="demo_postal_14" model="postal.code">
+             <field name="code">14</field>
+          </record> <record id="demo_postal_15" model="postal.code">
+             <field name="code">15</field>
+          </record> <record id="demo_postal_16" model="postal.code">
+             <field name="code">16</field>
+          </record> <record id="demo_postal_17" model="postal.code">
+             <field name="code">17</field>
+          </record> <record id="demo_postal_18" model="postal.code">
+             <field name="code">18</field>
+          </record> <record id="demo_postal_19" model="postal.code">
+             <field name="code">19</field>
+          </record> <record id="demo_postal_20" model="postal.code">
+             <field name="code">20</field>
+          </record> <record id="demo_postal_21" model="postal.code">
+             <field name="code">21</field>
+          </record> <record id="demo_postal_22" model="postal.code">
+             <field name="code">22</field>
+          </record> <record id="demo_postal_23" model="postal.code">
+             <field name="code">23</field>
+          </record> <record id="demo_postal_24" model="postal.code">
+             <field name="code">24</field>
+          </record> <record id="demo_postal_25" model="postal.code">
+             <field name="code">25</field>
+          </record> <record id="demo_postal_26" model="postal.code">
+             <field name="code">26</field>
+          </record> <record id="demo_postal_27" model="postal.code">
+             <field name="code">27</field>
+          </record> <record id="demo_postal_28" model="postal.code">
+             <field name="code">28</field>
+          </record> <record id="demo_postal_29" model="postal.code">
+             <field name="code">29</field>
+          </record> <record id="demo_postal_30" model="postal.code">
+             <field name="code">30</field>
+          </record> <record id="demo_postal_31" model="postal.code">
+             <field name="code">31</field>
+          </record> <record id="demo_postal_32" model="postal.code">
+             <field name="code">32</field>
+          </record> <record id="demo_postal_33" model="postal.code">
+             <field name="code">33</field>
+          </record> <record id="demo_postal_34" model="postal.code">
+             <field name="code">34</field>
+          </record> <record id="demo_postal_35" model="postal.code">
+             <field name="code">35</field>
+          </record> <record id="demo_postal_36" model="postal.code">
+             <field name="code">36</field>
+          </record>
+          <record id="demo_postal_37" model="postal.code">
+             <field name="code">37</field>
+          </record> 
+          <record id="demo_postal_38" model="postal.code">
+             <field name="code">38</field>
+          </record>
+          <record id="demo_postal_39" model="postal.code">
+             <field name="code">39</field>
+          </record>
+          <record id="demo_postal_40" model="postal.code">
+             <field name="code">40</field>
+          </record>
+          <record id="demo_postal_41" model="postal.code">
+             <field name="code">41</field>
+          </record>
+          <record id="demo_postal_42" model="postal.code">
+             <field name="code">42</field>
+          </record>
+          <record id="demo_postal_43" model="postal.code">
+             <field name="code">43</field>
+          </record>
+          <record id="demo_postal_44" model="postal.code">
+             <field name="code">44</field>
+          </record>
+          <record id="demo_postal_45" model="postal.code">
+             <field name="code">45</field>
+          </record>
+          <record id="demo_postal_46" model="postal.code">
+             <field name="code">46</field>
+          </record>
+          <record id="demo_postal_47" model="postal.code">
+             <field name="code">47</field>
+          </record>
+          <record id="demo_postal_48" model="postal.code">
+             <field name="code">48</field>
+          </record>
+          <record id="demo_postal_49" model="postal.code">
+             <field name="code">49</field>
+          </record>
+          <record id="demo_postal_50" model="postal.code">
+             <field name="code">50</field>
+          </record>
+          <record id="demo_postal_51" model="postal.code">
+             <field name="code">51</field>
+          </record>
+          <record id="demo_postal_52" model="postal.code">
+             <field name="code">52</field>
+          </record>
+          <record id="demo_postal_53" model="postal.code">
+             <field name="code">53</field>
+          </record>
+          <record id="demo_postal_54" model="postal.code">
+             <field name="code">54</field>
+          </record>
+          <record id="demo_postal_55" model="postal.code">
+             <field name="code">55</field>
+          </record>
+          <record id="demo_postal_56" model="postal.code">
+             <field name="code">56</field>
+          </record>
+          <record id="demo_postal_57" model="postal.code">
+             <field name="code">57</field>
+          </record>
+          <record id="demo_postal_58" model="postal.code">
+             <field name="code">58</field>
+          </record>
+          <record id="demo_postal_59" model="postal.code">
+             <field name="code">59</field>
+          </record>
+          <record id="demo_postal_60" model="postal.code">
+             <field name="code">60</field>
+          </record>
+          <record id="demo_postal_61" model="postal.code">
+             <field name="code">61</field>
+          </record>
+          <record id="demo_postal_62" model="postal.code">
+             <field name="code">62</field>
+          </record>
+          <record id="demo_postal_63" model="postal.code">
+             <field name="code">63</field>
+          </record>
+          <record id="demo_postal_64" model="postal.code">
+             <field name="code">64</field>
+          </record>
+          <record id="demo_postal_65" model="postal.code">
+             <field name="code">65</field>
+          </record>
+          <record id="demo_postal_66" model="postal.code">
+             <field name="code">66</field>
+          </record>
+          <record id="demo_postal_67" model="postal.code">
+             <field name="code">67</field>
+          </record>
+          <record id="demo_postal_68" model="postal.code">
+             <field name="code">68</field>
+          </record>
+          <record id="demo_postal_69" model="postal.code">
+             <field name="code">69</field>
+          </record>
+          <record id="demo_postal_70" model="postal.code">
+             <field name="code">70</field>
+          </record>
+          <record id="demo_postal_71" model="postal.code">
+             <field name="code">71</field>
+          </record>
+          <record id="demo_postal_72" model="postal.code">
+             <field name="code">72</field>
+          </record>
+          <record id="demo_postal_73" model="postal.code">
+             <field name="code">73</field>
+          </record>
+          <record id="demo_postal_74" model="postal.code">
+             <field name="code">74</field>
+          </record>
+          <record id="demo_postal_75" model="postal.code">
+             <field name="code">75</field>
+          </record>
+          <record id="demo_postal_76" model="postal.code">
+             <field name="code">76</field>
+          </record>
+          <record id="demo_postal_77" model="postal.code">
+             <field name="code">77</field>
+          </record>
+          <record id="demo_postal_78" model="postal.code">
+             <field name="code">78</field>
+          </record>
+          <record id="demo_postal_79" model="postal.code">
+             <field name="code">79</field>
+          </record>
+          <record id="demo_postal_80" model="postal.code">
+             <field name="code">80</field>
+          </record>
+          <record id="demo_postal_81" model="postal.code">
+             <field name="code">81</field>
+          </record>
+          <record id="demo_postal_82" model="postal.code">
+             <field name="code">82</field>
+          </record>
+
+          <record id="demo_postal_postal_1" model="postal.postal">
+             <field name="postal_district">01</field>
+             <field name="postal_code_ids" eval="[(6, 0, [ref('demo_postal_1'), ref('demo_postal_2'),ref('demo_postal_3'),ref('demo_postal_4'),ref('demo_postal_5'),ref('demo_postal_6')])]"/>
+         </record>
+         
+         <record id="demo_postal_postal_2" model="postal.postal">
+             <field name="postal_district">02</field>
+             <field name="postal_code_ids" eval="[(6, 0, [ref('demo_postal_7'), ref('demo_postal_8')])]"/>
+         </record>
+         <record id="demo_postal_postal_3" model="postal.postal">
+             <field name="postal_district">03</field>
+             <field name="postal_code_ids" eval="[(6, 0, [ref('demo_postal_14'), ref('demo_postal_15'),ref('demo_postal_16')])]"/>
+         </record>
+         <record id="demo_postal_postal_4" model="postal.postal">
+             <field name="postal_district">04</field>
+             <field name="postal_code_ids" eval="[(6, 0, [ref('demo_postal_9'),ref('demo_postal_10')])]"/>
+         </record>
+         <record id="demo_postal_postal_5" model="postal.postal">
+             <field name="postal_district">05</field>
+             <field name="postal_code_ids" eval="[(6, 0, [ref('demo_postal_11'), ref('demo_postal_12'),ref('demo_postal_13')])]"/>
+         </record>
+         <record id="demo_postal_postal_6" model="postal.postal">
+             <field name="postal_district">06</field>
+             <field name="postal_code_ids" eval="[(6, 0, [ref('demo_postal_17')])]"/>
+         </record>
+         <record id="demo_postal_postal_7" model="postal.postal">
+             <field name="postal_district">07</field>
+             <field name="postal_code_ids" eval="[(6, 0, [ref('demo_postal_18'), ref('demo_postal_19')])]"/>
+         </record>
+
+         <record id="demo_postal_postal_8" model="postal.postal">
+             <field name="postal_district">08</field>
+             <field name="postal_code_ids" eval="[(6, 0, [ref('demo_postal_20'), ref('demo_postal_21')])]"/>
+         </record>
+
+         <record id="demo_postal_postal_9" model="postal.postal">
+             <field name="postal_district">09</field>
+             <field name="postal_code_ids" eval="[(6, 0, [ref('demo_postal_22'), ref('demo_postal_23')])]"/>
+         </record>
+
+         <record id="demo_postal_postal_10" model="postal.postal">
+             <field name="postal_district">10</field>
+             <field name="postal_code_ids" eval="[(6, 0, [ref('demo_postal_24'), ref('demo_postal_25'),ref('demo_postal_26'),ref('demo_postal_27')])]"/>
+         </record>
+
+         <record id="demo_postal_postal_11" model="postal.postal">
+             <field name="postal_district">11</field>
+             <field name="postal_code_ids" eval="[(6, 0, [ref('demo_postal_28'), ref('demo_postal_29'),ref('demo_postal_30')])]"/>
+         </record>
+
+         <record id="demo_postal_postal_12" model="postal.postal">
+             <field name="postal_district">12</field>
+             <field name="postal_code_ids" eval="[(6, 0, [ref('demo_postal_31'), ref('demo_postal_32'),ref('demo_postal_33')])]"/>
+         </record>
+
+         <record id="demo_postal_postal_13" model="postal.postal">
+             <field name="postal_district">13</field>
+             <field name="postal_code_ids" eval="[(6, 0, [ref('demo_postal_34'), ref('demo_postal_35'),ref('demo_postal_36'),ref('demo_postal_37')])]"/>
+         </record>
+
+          <record id="demo_postal_postal_14" model="postal.postal">
+             <field name="postal_district">14</field>
+             <field name="postal_code_ids" eval="[(6, 0, [ref('demo_postal_38'), ref('demo_postal_39'),ref('demo_postal_40'),ref('demo_postal_41')])]"/>
+         </record>
+          <record id="demo_postal_postal_15" model="postal.postal">
+             <field name="postal_district">15</field>
+             <field name="postal_code_ids" eval="[(6, 0, [ref('demo_postal_42'), ref('demo_postal_43'),ref('demo_postal_44'),ref('demo_postal_45')])]"/>
+         </record>
+          <record id="demo_postal_postal_16" model="postal.postal">
+             <field name="postal_district">16</field>
+             <field name="postal_code_ids" eval="[(6, 0, [ref('demo_postal_46'), ref('demo_postal_47'),ref('demo_postal_48')])]"/>
+         </record>
+          <record id="demo_postal_postal_17" model="postal.postal">
+             <field name="postal_district">17</field>
+             <field name="postal_code_ids" eval="[(6, 0, [ref('demo_postal_49'), ref('demo_postal_50'),ref('demo_postal_81')])]"/>
+         </record>
+         <record id="demo_postal_postal_18" model="postal.postal">
+             <field name="postal_district">18</field>
+             <field name="postal_code_ids" eval="[(6, 0, [ref('demo_postal_51'), ref('demo_postal_52')])]"/>
+         </record>
+
+         <record id="demo_postal_postal_19" model="postal.postal">
+             <field name="postal_district">19</field>
+             <field name="postal_code_ids" eval="[(6, 0, [ref('demo_postal_53'), ref('demo_postal_54'),ref('demo_postal_55'),ref('demo_postal_82')])]"/>
+         </record>
+         <record id="demo_postal_postal_20" model="postal.postal">
+             <field name="postal_district">20</field>
+             <field name="postal_code_ids" eval="[(6, 0, [ref('demo_postal_56'), ref('demo_postal_57')])]"/>
+         </record>
+         <record id="demo_postal_postal_21" model="postal.postal">
+             <field name="postal_district">21</field>
+             <field name="postal_code_ids" eval="[(6, 0, [ref('demo_postal_58'), ref('demo_postal_59')])]"/>
+         </record>
+
+          <record id="demo_postal_postal_22" model="postal.postal">
+             <field name="postal_district">22</field>
+             <field name="postal_code_ids" eval="[(6, 0, [ref('demo_postal_60'), ref('demo_postal_61'), ref('demo_postal_62'), ref('demo_postal_63'), ref('demo_postal_64')])]"/>
+         </record>
+         <record id="demo_postal_postal_23" model="postal.postal">
+             <field name="postal_district">23</field>
+             <field name="postal_code_ids" eval="[(6, 0, [ref('demo_postal_65'), ref('demo_postal_66'), ref('demo_postal_67'), ref('demo_postal_68')])]"/>
+         </record>
+          <record id="demo_postal_postal_24" model="postal.postal">
+             <field name="postal_district">24</field>
+             <field name="postal_code_ids" eval="[(6, 0, [ref('demo_postal_69'), ref('demo_postal_70'), ref('demo_postal_71')])]"/>
+         </record>
+          <record id="demo_postal_postal_25" model="postal.postal">
+             <field name="postal_district">25</field>
+             <field name="postal_code_ids" eval="[(6, 0, [ref('demo_postal_72'), ref('demo_postal_73')])]"/>
+         </record>
+          <record id="demo_postal_postal_26" model="postal.postal">
+             <field name="postal_district">26</field>
+             <field name="postal_code_ids" eval="[(6, 0, [ref('demo_postal_77'), ref('demo_postal_78')])]"/>
+         </record>
+         <record id="demo_postal_postal_27" model="postal.postal">
+             <field name="postal_district">27</field>
+             <field name="postal_code_ids" eval="[(6, 0, [ref('demo_postal_75'), ref('demo_postal_76')])]"/>
+         </record>
+         <record id="demo_postal_postal_28" model="postal.postal">
+             <field name="postal_district">28</field>
+             <field name="postal_code_ids" eval="[(6, 0, [ref('demo_postal_79'), ref('demo_postal_80')])]"/>
+         </record> -->
+    </data>
+</odoo>
