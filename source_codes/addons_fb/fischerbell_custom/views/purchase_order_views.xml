@@ -46,6 +46,22 @@
 			</xpath>
 			<xpath expr="//notebook//page[@name='special_remark']" position="after">
 				<page string="Shipment Tracking">
+					<group>
+						<group>
+							<field name="shipment_tracking_date"/>
+							<field name="cargo_clearance_permit_no"/>
+							<field name="logistics"/>
+							<field name="partner_id"/>
+							<field name="total_cif"/>
+							<field name="total_amount_payable"/>
+						</group>
+						<group>
+							<field name="api_no"/>
+							<field name="remarks_one"/>
+							<field name="remarks_two"/>
+							<field name="status"/>
+						</group>
+					</group>
 				</page>
 			</xpath>
 			<xpath expr="//field[@name='date_planned']" position="attributes">
@@ -65,7 +81,7 @@
 		</field>
 	</record>
 
-<!--	 <record id="purchase_order_analysis_report_tree_view" model="ir.ui.view">-->
+<!--	 <record id=" 	" model="ir.ui.view">-->
 <!--        <field name="name">purchase.order.analysis.report.tree.view</field>-->
 <!--        <field name="model">purchase.order.line</field>-->
 <!--        <field name="arch" type="xml">-->
@@ -93,6 +109,16 @@
         <field name="arch" type="xml">
             <tree string="Purchase Order" create="false">
                 <field name="name"/>
+				<field name="shipment_tracking_date"/>
+				<field name="cargo_clearance_permit_no"/>
+				<field name="logistics"/>
+				<field name="partner_id"/>
+				<field name="total_cif"/>
+				<field name="total_amount_payable"/>
+				<field name="api_no"/>
+				<field name="remarks_one"/>
+				<field name="remarks_two"/>
+				<field name="status"/>
             </tree>
         </field>
     </record>
@@ -100,10 +126,10 @@
 	<record id="fischerbell_action_purchase_order_sg" model="ir.actions.act_window">
         <field name="name">Freight Charges</field>
         <field name="res_model">purchase.order</field>
-        <field name="view_mode">tree</field>
-		<field name="domain">[('partner_id.country_code', '=', 'SG')]</field>
+        <field name="view_mode">tree,form</field>
+		<field name="domain">[('cargo_clearance_permit_no', '!=', False )]</field>
 		<field name="view_id" ref="fischerbell_custom.purchase_order_report_sg_tree_view"/>
-        <field name="target">current</field>
+<!--        <field name="target">current</field>-->
     </record>
 
 	 <record id="fischerbell_action_purchase_order_report_all" model="ir.actions.act_window">
