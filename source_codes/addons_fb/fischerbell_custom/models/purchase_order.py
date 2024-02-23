@@ -41,8 +41,12 @@ class PurchaseOrder(models.Model):
 	shipment_tracking_date = fields.Datetime("Date")
 	cargo_clearance_permit_no = fields.Char(string="Cargo Clearance Permit No.")
 	logistics = fields.Char(string="Logistics")
-	total_cif = fields.Float('Total CIF/FOB')
-
+	total_cif = fields.Float(string='Total CIF/FOB')
+	total_amount_payable = fields.Float(string='Total Amount Payable')
+	api_no = fields.Char('APi No.')
+	remarks_one = fields.Char('Remarks 1')
+	remarks_two = fields.Char('Remarks 2')
+	status = fields.Char('Status')
 
 	def sc_approved(self):
 		for rec in self:

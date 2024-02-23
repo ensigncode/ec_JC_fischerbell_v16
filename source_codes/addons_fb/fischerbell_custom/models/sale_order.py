@@ -1096,6 +1096,7 @@ class SaleOrderLine(models.Model):
 	last_price = fields.Float('Last Order Price', compute="_compute_last_order_price", store=True)
 	picking_id = fields.Many2one('stock.picking', 'Picking')
 	product_detail_sheet_url = fields.Char(related="product_id.product_detail_sheet_url")
+	is_product_rentable = fields.Boolean('Rent ok')
 
 
 	@api.depends('customer_id','product_id')
