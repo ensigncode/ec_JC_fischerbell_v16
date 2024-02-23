@@ -14,6 +14,11 @@ class StockMove(models.Model):
 	mrp_line_id = fields.Many2one('stock.move', compute="_compute_mrp_line_id", store=True)
 	mrp_customer_id = fields.Many2one('res.partner', compute="_compute_mrp_line_id", store=True)
 	mrp_phone = fields.Char('Phone Number', compute="_compute_mrp_line_id", store=True)
+	manufacturing_date = fields.Date('manufacturing date')
+	expiration_date = fields.Date('expiration date')
+	serial_number = fields.Char('Serial Number')
+
+
 
 
 	def _get_new_picking_values(self):
@@ -59,6 +64,13 @@ class StockMove(models.Model):
 						move.mrp_line_id = line.id
 						move.mrp_customer_id = line.customer_id.id
 						move.mrp_phone = line.phone
+
+class StockMoveLine(models.Model):
+	_inherit = "stock.move.line"
+
+	expiration_date = fields.Date('expiration date')
+	serial_number = fields.Char('Serial Number')
+	batch_number = fields.Char('Batch Number')
 
 
 class StockWarehouseOrderpoint(models.Model):

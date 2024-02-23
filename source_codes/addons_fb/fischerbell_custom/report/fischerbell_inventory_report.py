@@ -83,7 +83,7 @@ class FischerbellInventoryReport(models.AbstractModel):
 		content5.set_underline()
 
 
-		# initial horizontal / vertical
+		# initial horizontal / vertical020
 		x = 0
 		y = 0
 
@@ -96,7 +96,9 @@ class FischerbellInventoryReport(models.AbstractModel):
 		x += 1
 		sheet.write(y, x, 'Model# / Description', title2)
 		x += 1
-		sheet.write(y, x, 'Qty', title2)
+		sheet.write(y, x, 'Stock on Hand Qty', title2)
+		x += 1
+		sheet.write(y, x, 'Reserved / Committed Qty', title2)
 		x += 1
 		sheet.write(y, x, 'Unit of Measure', title2)
 		x += 1
@@ -118,8 +120,6 @@ class FischerbellInventoryReport(models.AbstractModel):
 		x += 1
 		sheet.write(y, x, 'WH Location', title2)
 		x += 1
-		sheet.write(y, x, 'Freight Charges', title2)
-		x += 1
 		sheet.write(y, x, 'Local / Overseas', title2)
 		x += 1
 
@@ -128,44 +128,57 @@ class FischerbellInventoryReport(models.AbstractModel):
 		numbering = 0
 
 		for product in product_template:
-			expiration_date = product.expiration_date.strftime('%Y-%m-%d') if product.expiration_date else ''
-			numbering += 1
-			sheet.write(y, x,  product.default_code or '', content1)
-			x += 1
-			sheet.write(y, x, product.product_brand_id.name or '', content1)
-			x += 1
-			sheet.write(y, x, product.categ_id.name or '', content1)
-			x += 1
-			sheet.write(y, x, product.name or '', content1)
-			x += 1
-			sheet.write(y, x, product.qty_available or '', content1)
-			x += 1
-			sheet.write(y, x, product.uom_id.name or '', content1)
-			x += 1
-			sheet.write(y, x, product.standard_price or '', content1)
-			x += 1
-			sheet.write(y, x, product.cost_currency_id.name or '', content1)
-			x += 1
-			sheet.write(y, x,  '', content1)
-			x += 1
-			sheet.write(y, x, product.currency_id.name or '', content1)
-			x += 1
-			sheet.write(y, x,  '', content1)
-			x += 1
-			sheet.write(y, x, product.batch_number or '', content1)
-			x += 1
-			sheet.write(y, x, product.serial_number or '', content1)
-			x += 1
-			sheet.write(y, x, expiration_date or '', content1)
-			x += 1
-			sheet.write(y, x, product.location_id.name or '', content1)
-			x += 1
-			sheet.write(y, x, '', content1)
-			x += 1
-			sheet.write(y, x, '', content1)
-			x += 1
+			purchase_order_lines = self.env['purchase.order.line'].search([
+				('product_id', '=', product.product_variant_id.id)
+			])
+			stock_moves = self.env['stock.move'].search([
+				('purchase_line_id', 'in', purchase_order_lines.ids)
+			])
+			for move in stock_moves:
+				stock_move_lines = self.env['stock.move.line']
+				stock_move_lines |= move.mapped('move_line_ids')
+				for stock_move_line in stock_move_lines:
+					expiration_date = stock_move_line.expiration_date.strftime('%Y-%m-%d') if stock_move_line.expiration_date else ''
+					numbering += 1
+					sheet.write(y, x,  product.default_code or '', content1)
+					x += 1
+					sheet.write(y, x, product.product_brand_id.name or '', content1)
+					x += 1
+					sheet.write(y, x, product.categ_id.name or '', content1)
+					x += 1
+					sheet.write(y, x, product.name or '', content1)
+					x += 1
+					sheet.write(y, x, product.qty_available or '', content1)
+					x += 1
+					sheet.write(y, x, product.virtual_available or '', content1)
+					x += 1
+					sheet.write(y, x, product.uom_id.name or '', content1)
+					x += 1
+					sheet.write(y, x, product.list_price or '', content1)
+					x += 1
+					sheet.write(y, x, product.cost_currency_id.name or '', content1)
+					x += 1
+					sheet.write(y, x,  '', content1)
+					x += 1
+					sheet.write(y, x, product.currency_id.name or '', content1)
+					x += 1
+					sheet.write(y, x,  '', content1)
+					x += 1
+					sheet.write(y, x, stock_move_line.batch_number or '', content1)
+					x += 1
+					sheet.write(y, x, stock_move_line.serial_number or '', content1)
+					x += 1
+					sheet.write(y, x, expiration_date or '', content1)
+					x += 1
+					sheet.write(y, x, product.location_id.name or '', content1)
+					x += 1
+					if move.picking_id.partner_id.l10n_in_gst_treatment == "overseas":
+						sheet.write(y, x, "Overseas", content1)
+					else:
+						sheet.write(y, x, "Local", content1)
+					x += 1
 
-			x = 0
-			y += 1
-		for i in range(numbering):
-			sheet.set_row(1+i, 60)
+					x = 0
+					y += 1
+				for i in range(numbering):
+					sheet.set_row(1+i, 60)
