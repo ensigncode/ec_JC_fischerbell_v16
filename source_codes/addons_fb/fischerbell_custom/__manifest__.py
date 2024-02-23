@@ -84,11 +84,11 @@
     'css': [
         "static/src/xml/*.xml']",
     ],
-    'assets': {
-            'web.assets_backend': [
-                # 'fischerbell_custom/static/src/js/*.js',
-            ],
-        },
+    # 'assets': {
+    #         'web.assets_backend': [
+    #             # 'fischerbell_custom/static/src/js/*.js',
+    #         ],
+    #     },
 
     'installable': True,
     'auto_install': False,
