@@ -14,30 +14,28 @@ class FischerbellInventoryReport(models.AbstractModel):
 	_inherit = 'report.report_xlsx.abstract'
 
 
-
 	def generate_xlsx_report(self, workbook, data, product_template):
 		sheet = workbook.add_worksheet('Inventory_Report')
 		sheet.set_landscape()
-		numbering = 0
-		link = 0
 
+		sheet.set_default_row(60)  # Default row height for all rows
 
-		sheet.set_row(0, 60)
+		# Set column width
 		sheet.set_column('A:A', 10)
 		sheet.set_column('B:B', 12)
 		sheet.set_column('C:C', 12)
-		sheet.set_column('D:D', 20)
-		sheet.set_column('E:E', 4)
-		sheet.set_column('F:F', 10)
-		sheet.set_column('G:G', 12)
-		sheet.set_column('H:H', 12)
-		sheet.set_column('I:I', 10)
+		sheet.set_column('D:D', 60)
+		sheet.set_column('E:E', 30)
+		sheet.set_column('F:F', 20)
+		sheet.set_column('G:G', 20)
+		sheet.set_column('H:H', 20)
+		sheet.set_column('I:I', 20)
 		sheet.set_column('J:J', 12)
 		sheet.set_column('K:K', 18)
-		sheet.set_column('L:L', 8)
-		sheet.set_column('M:M', 12)
-		sheet.set_column('N:N', 8)
-		sheet.set_column('O:O', 12)
+		sheet.set_column('L:L', 12)
+		sheet.set_column('M:M', 20)
+		sheet.set_column('N:N', 30)
+		sheet.set_column('O:O', 30)
 
 		title1 = workbook.add_format()
 		title1.set_bold()
@@ -82,103 +80,70 @@ class FischerbellInventoryReport(models.AbstractModel):
 		content5.set_font_color('#FF0000')
 		content5.set_underline()
 
+		# Define formats
+		title_format = workbook.add_format({
+			'bold': True,
+			'align': 'center'})
+		content_format = workbook.add_format({'font_size': 10, 'align': 'center', 'valign': 'vcenter', 'border': 1})
 
-		# initial horizontal / vertical020
-		x = 0
-		y = 0
+		# Write column headers
+		headers = [
+			'Item No', 'Brand', 'Item Group', 'Model# / Description', 'Stock on Hand Qty',
+			'Reserved / Committed Qty', 'Unit of Measure', 'Purchase Price', 'Purchase Price Currency',
+			'Inventory Price', 'Inventory Price Currency', 'Avg Price', 'Batch', 'Serial#', 'Expiry Date',
+			'WH Location', 'Local / Overseas'
+		]
+		for col, header in enumerate(headers):
+			sheet.write(0, col, header, title_format)
 
-		# write to cell
-		sheet.write(y, x, 'Item No', title2)
-		x += 1
-		sheet.write(y, x, 'Brand', title2)
-		x += 1
-		sheet.write(y, x, 'Item Group', title2)
-		x += 1
-		sheet.write(y, x, 'Model# / Description', title2)
-		x += 1
-		sheet.write(y, x, 'Stock on Hand Qty', title2)
-		x += 1
-		sheet.write(y, x, 'Reserved / Committed Qty', title2)
-		x += 1
-		sheet.write(y, x, 'Unit of Measure', title2)
-		x += 1
-		sheet.write(y, x, 'Purchase Price', title2)
-		x += 1
-		sheet.write(y, x, 'Purchase Price Currency', title2)
-		x += 1
-		sheet.write(y, x, 'Inventory Price', title2)
-		x += 1
-		sheet.write(y, x, 'Inventory Price Currency', title2)
-		x += 1
-		sheet.write(y, x, 'Avg Price', title2)
-		x += 1
-		sheet.write(y, x, 'Batch', title2)
-		x += 1
-		sheet.write(y, x, 'Serial#', title2)
-		x += 1
-		sheet.write(y, x, 'Expiry Date', title2)
-		x += 1
-		sheet.write(y, x, 'WH Location', title2)
-		x += 1
-		sheet.write(y, x, 'Local / Overseas', title2)
-		x += 1
-
-		x = 0
-		y += 1
+		# Initialize row and numbering variables
+		row = 1
 		numbering = 0
 
+		# Iterate over product template
 		for product in product_template:
-			purchase_order_lines = self.env['purchase.order.line'].search([
-				('product_id', '=', product.product_variant_id.id)
-			])
-			stock_moves = self.env['stock.move'].search([
-				('purchase_line_id', 'in', purchase_order_lines.ids)
-			])
-			for move in stock_moves:
-				stock_move_lines = self.env['stock.move.line']
-				stock_move_lines |= move.mapped('move_line_ids')
-				for stock_move_line in stock_move_lines:
-					expiration_date = stock_move_line.expiration_date.strftime('%Y-%m-%d') if stock_move_line.expiration_date else ''
-					numbering += 1
-					sheet.write(y, x,  product.default_code or '', content1)
-					x += 1
-					sheet.write(y, x, product.product_brand_id.name or '', content1)
-					x += 1
-					sheet.write(y, x, product.categ_id.name or '', content1)
-					x += 1
-					sheet.write(y, x, product.name or '', content1)
-					x += 1
-					sheet.write(y, x, product.qty_available or '', content1)
-					x += 1
-					sheet.write(y, x, product.virtual_available or '', content1)
-					x += 1
-					sheet.write(y, x, product.uom_id.name or '', content1)
-					x += 1
-					sheet.write(y, x, product.list_price or '', content1)
-					x += 1
-					sheet.write(y, x, product.cost_currency_id.name or '', content1)
-					x += 1
-					sheet.write(y, x,  '', content1)
-					x += 1
-					sheet.write(y, x, product.currency_id.name or '', content1)
-					x += 1
-					sheet.write(y, x,  '', content1)
-					x += 1
-					sheet.write(y, x, stock_move_line.batch_number or '', content1)
-					x += 1
-					sheet.write(y, x, stock_move_line.serial_number or '', content1)
-					x += 1
-					sheet.write(y, x, expiration_date or '', content1)
-					x += 1
-					sheet.write(y, x, product.location_id.name or '', content1)
-					x += 1
-					if move.picking_id.partner_id.l10n_in_gst_treatment == "overseas":
-						sheet.write(y, x, "Overseas", content1)
-					else:
-						sheet.write(y, x, "Local", content1)
-					x += 1
+			purchase_order_lines = self.env['purchase.order.line'].search(
+				[('product_id', '=', product.product_variant_id.id)])
+			stock_moves = self.env['stock.move'].search([('purchase_line_id', 'in', purchase_order_lines.ids)])
 
-					x = 0
-					y += 1
-				for i in range(numbering):
-					sheet.set_row(1+i, 60)
+			if stock_moves:
+				for move in stock_moves:
+					stock_move_lines = move.move_line_ids.filtered(lambda ml: ml.product_id == product.product_variant_id)
+					for stock_move_line in stock_move_lines:
+						numbering += 1
+						self.write_product_data(sheet, row, product, stock_move_line, content_format)
+						row += 1
+			else:
+				numbering += 1
+				self.write_product_data(sheet, row, product, None, content_format)
+				row += 1
+
+		for i in range(numbering):
+			sheet.set_row(1 + i, 60)
+
+	def write_product_data(self, sheet, row, product, stock_move_line, content_format):
+		if stock_move_line:
+			expiration_date = stock_move_line.expiration_date.strftime(
+				'%Y-%m-%d') if stock_move_line.expiration_date else ''
+			batch_number = stock_move_line.batch_number
+			serial_number = stock_move_line.serial_number
+		else:
+			expiration_date = ''
+			batch_number = ''
+			serial_number = ''
+
+		data = [
+			product.default_code or '', product.product_brand_id.name or '', product.categ_id.name or '',
+			product.name or '', product.qty_available or '', product.virtual_available or '', product.uom_id.name or '',
+			product.list_price or '', product.cost_currency_id.name or '', '', product.currency_id.name or '', '',
+			batch_number, serial_number, expiration_date, product.location_id.name or ''
+		]
+		for col, value in enumerate(data):
+			sheet.write(row, col, value, content_format)
+
+		# Write "Local" or "Overseas" based on condition
+		if stock_move_line and stock_move_line.move_id.picking_id.partner_id.l10n_in_gst_treatment == "overseas":
+			sheet.write(row, col + 1, "Overseas", content_format)
+		else:
+			sheet.write(row, col + 1, "Local", content_format)
+
