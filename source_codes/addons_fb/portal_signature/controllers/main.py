@@ -34,7 +34,7 @@ class PortalAttendance(portal.CustomerPortal):
 		uid = request.session.uid
 		user_id = request.env['res.users'].sudo().browse(uid)
 		
-		search_domain = [('driver_id', '=', user_id.partner_id.id)]
+		search_domain = [('driver_id', '=', user_id.partner_id.id),('picking_type_id.code','=','outgoing')]
 		picking_obj = request.env['stock.picking'].sudo().search(
 			[])
 		total_picking = picking_obj.sudo().search_count(

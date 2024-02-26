@@ -33,17 +33,17 @@
                         <th>
                             <span class='d-none d-md-inline'>Name</span>
                         </th>
-                        <th>
-                            <span class='d-none d-md-inline'>Delivery</span>
+                        <th class='d-none'>
+                            <span class='d-none'>Delivery</span>
                         </th>
 
-                        <th>
+                        <th class='d-none'>
                             <span class='d-none d-md-inline'>Scheduled Date</span>
                         </th>
-                         <th>
+                         <th class='d-none'>
                             <span class='d-none d-md-inline'>Deadline</span>
                         </th>
-                        <th>
+                        <th class='d-none'>
                             <span class='d-none d-md-inline'>Source Document</span>
                         </th>
                          <th>
@@ -60,16 +60,16 @@
                         <td>
                             <t t-esc="picking_id.name"/>
                         </td>
-                        <td>
+                        <td class="d-none">
                             <t t-esc="picking_id.partner_id.display_name"/>
                         </td>
-                        <td>
+                        <td class="d-none">
                             <t t-esc="picking_id.scheduled_date" t-options='{"widget": "date","format": "dd-MM-yyyy"}'/>
                         </td>
-                        <td>
+                        <td class="d-none">
                             <t t-esc="picking_id.date_deadline" t-options='{"widget": "date","format": "dd-MM-yyyy"}'/>
                         </td>
-                         <td>
+                         <td class="d-none">
                             <t t-esc="picking_id.origin"/>
                         </td>
                           <t t-set="status_list" t-value="{
