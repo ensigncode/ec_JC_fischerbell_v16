@@ -10,6 +10,7 @@
                 'stock',
                 'sale',
                 'fleet',
+                'delivery',
             ],
     'data': [
         'security/ir.model.access.csv',

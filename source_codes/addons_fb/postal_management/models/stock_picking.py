@@ -43,13 +43,13 @@ class StockPicking(models.Model):
 				res_u.with_context(button_validate_picking_ids=res_u.pick_ids.ids).process()
 		return True
 
-class SaleOrder(models.Model):
-	_inherit = 'sale.order'
+# class SaleOrder(models.Model):
+# 	_inherit = 'sale.order'
 
-	def action_update(self):
-		delivery_code = '14'
-		postal_code_id = self.env['postal.code'].search([('name','=',delivery_code)])
-		postal_id = postal_code_id.mapped('postal_code_id')
-		driver_ids = self.env['res.partner'].search([('postal_id','in',postal_id.ids)])
-		return True
+# 	def action_update(self):
+# 		delivery_code = '14'
+# 		postal_code_id = self.env['postal.code'].search([('name','=',delivery_code)])
+# 		postal_id = postal_code_id.mapped('postal_code_id')
+# 		driver_ids = self.env['res.partner'].search([('postal_id','in',postal_id.ids)])
+# 		return True
 

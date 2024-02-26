@@ -6,7 +6,8 @@
         <field name="inherit_id" ref="base.view_partner_form"/>
         <field name="arch" type="xml">
             <xpath expr="//field[@name='category_id']" position="after">
-                <field name="postal_id"/>
+                <field name="postal_id" invisible="1" />
+                <field name="postal_ids"  widget="many2many_tags"/>
                 <field name="postal_code_ids" widget="many2many_tags"/>
                 <field name="is_driver"/>
             </xpath>
@@ -31,7 +32,7 @@
         <field name="arch" type="xml">
             <xpath expr="//filter[@name='salesperson']" position="before">
                 <filter string="Driver" name="is_driver" domain="[('is_driver', '=', True)]"/>
-                <filter string="Postal" name="postal_id_filter" context="{'group_by': 'postal_id'}"/>
+                <!-- <filter string="Postal" name="postal_id_filter" context="{'group_by': 'postal_id'}"/> -->
             </xpath>
         </field>
     </record>
