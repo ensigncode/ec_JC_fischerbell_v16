@@ -19,6 +19,13 @@ class StockPicking(models.Model):
 		string="Signed On", copy=False)
 
 
+	@api.onchange('carrier_id')
+	def onchange_carrier_id(self):
+		for res in self:
+			if res.carrier_id :
+				res.driver_id = res.carrier_id.assigned_driver
+
+
 	def make_picking_done(self):
 		if self.state == 'assigned':
 			picking_id = self
