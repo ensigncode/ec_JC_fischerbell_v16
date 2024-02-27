@@ -12,7 +12,7 @@
     'company': 'EnsignCode Solutions',
     'maintainer': 'EnsignCode Solutions',
     'website': "https://www.ensigncode.com",
-    'depends': ['base', 'website', 'sale', 'web_digital_sign'],
+    'depends': ['base', 'website', 'sale'],
     'data': [
         'security/ir.model.access.csv',
         'data/website_data.xml',
