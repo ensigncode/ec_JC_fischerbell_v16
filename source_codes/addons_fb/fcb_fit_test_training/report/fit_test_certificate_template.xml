@@ -14,11 +14,20 @@
 											     alt="certificate" style="height: 792px;width: 400px; margin: 0;"/>
 										</div>
 										<div class="col-6">
+											<t t-if="doc.training_types == 'aed'">
+												<p style="font-size: 40px;color:grey;">AED Training Certificate</p>
+											</t>
+											<t t-if="doc.training_types == 'scba'">
+												<p style="font-size: 40px;color:grey;">Fit Test Certificate</p>
+											</t>
+											<t t-if="doc.training_types == 'spill_traning'">
+												<p style="font-size: 40px;color:grey;">Spill Training Certificate</p>
+											</t>
+											<t t-if="doc.training_types == 'fit_test'">
+												<p style="font-size: 40px;color:grey;">Fit Test Certificate</p>
+											</t>
 											<br/>
-											<p style="font-size: 30px;">Fit Test Certificate</p>
-											<br/>
-											<br/>
-											<p style="font-size: 25px;">This is to certify that
+											<p style="font-size: 20px;">This is to certify that
 												<br/>
 												<strong style="font-size: 25px;">
 													<t t-if="o.trainee">
@@ -26,36 +35,68 @@
 													</t>
 												</strong>
 											</p>
-											<p style="font-size: 25px;">IC /FIN No. /Employee No:
+											<p style="font-size: 20px;">IC /FIN No. /Employee No:
 												<t t-if="o.passport_no">
 													<span t-field="o.passport_no"/>
 												</t>
 											</p>
-											<p style="font-size: 25px;">From
+											<p style="font-size: 20px;">From
 												<br/>
-												<strong style="font-size: 25px;">Elmer</strong>
-											</p>
-											<p style="font-size: 20px;">Passed the Training
-												<br/>Type of Training
-												<t t-if="o.fit_id.training_type">
-													<span t-field="o.fit_id.training_type"/>
-												</t>
-												<br/>Size
-												<t t-if="o.size">
-													<span t-field="o.size"/>
-												</t>
-												<br/>
-												<b>Result:
-													<t t-if="o.is_pass_fail == True">Pass</t>
-													<t t-else="">Fail
+												<strong>
+													<t t-if="doc.company">
+														<span t-field="doc.company"/>
 													</t>
-												</b>
+												</strong>
 											</p>
-											<p style="font-size: 25px;">Tested On
-												<t t-if="o.tested_on">
-													<span t-field="o.tested_on"/>
-												</t>
+											<t t-if="doc.training_types == 'fit_test'">
+												<p style="font-size: 20px;">Passed the Training
+													<br/>Type of Training
+													<t t-if="o.fit_id.training_type">
+														<span t-field="o.fit_id.training_type"/>
+													</t>
+													<br/>Size
+													<t t-if="o.size">
+														<span t-field="o.size"/>
+													</t>
+													<br/>
+													<span>Result:
+														<strong>
+															<t t-if="o.is_pass_fail == True">Pass</t>
+															<t t-else="">Fail
+															</t>
+														</strong>
+													</span>
+													<br/>
+													<br/>
+													<span>Tested On:
+														<t t-if="o.tested_on">
+															<span t-field="o.tested_on"/>
+														</t>
+													</span>
+												</p>
+											</t>
+											<br/>
+											<p t-if="doc.training_types == 'aed' or doc.training_types == 'scba' or doc.training_types == 'spill_traning'">
+												<span style="font-size: 20px;">Attended the Training on
+													<t t-if="o.tested_on">
+														<span t-field="o.tested_on"/>
+													</t>
+												</span>
+												<br/>
+												<span style="font-size: 20px;">Type of Training:
+													<t t-if="o.fit_id.training_type">
+														<span t-field="o.fit_id.training_type"/>
+													</t>
+												</span>
+												<br/>
+												<span style="font-size: 20px;">Result:
+													<strong>
+														<t t-if="o.is_pass_fail == True">Pass</t>
+														<t t-else="">Fail</t>
+													</strong>
+												</span>
 											</p>
+
 											<br/>
 											<br/>
 											<br/>
@@ -64,10 +105,19 @@
 											<br/>
 											<br/>
 											<p style="font-size: 15px;text-align: right;">
+<!--												<t t-if="doc.trainer_sign">-->
+<!--													 <img t-att-src="'data:image/png;base64,%s' % doc.trainer_sign"-->
+<!--													  style="height: 100px;width: 40px; margin: 0;"/>-->
+<!--													<span t-field="doc.trainer_sign" t-options='{"widget": "signature"}'/>-->
+
+<!--													<span t-field="doc.trainer_sign"  t-options='{"widget": "signature"}' />-->
+<!--												</t>-->
 												______________________________
 											</p>
 											<b>
-												<p style="font-size: 15px; text-align: right;">Patric Yeo | Trainer</p>
+												<p style="font-size: 15px; text-align: right;"><t t-if="doc.name">
+													<span t-field="doc.name"/>
+												</t> | Trainer</p>
 											</b>
 											<b>
 												<p style="font-size: 15px; text-align: right;">Fischer Bell Private

@@ -32,6 +32,8 @@
                             <field name="charge_name"/>
                             <field name="training_type"/>
                             <field name="company"/>
+                            <field name="training_types"/>
+                            <field name="trainer_sign" widget="signature"/>
                         </group>
                         <group>
                             <field name="date"/>
