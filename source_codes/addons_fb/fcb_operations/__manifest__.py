@@ -11,12 +11,14 @@
 		'stock',
 		'sale',
 		'purchase',
+		'sale_purchase',
 	],
 	'data': [
 		"data/email_template_alert_reminder.xml",
 		"data/email_alert_temp_sale_person.xml",
 		"data/ir_cron.xml",
 		"views/product_template.xml",
+		"views/sale_order_view.xml",
 	],
 	'demo': [
 	],
