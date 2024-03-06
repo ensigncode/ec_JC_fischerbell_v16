@@ -8,7 +8,7 @@
         Fischerbell Custom
     """,
     'website': 'https://www.sgeede.com/',
-    'depends': ['account','sale','purchase', 'stock','purchase_stock', 'report_xlsx','contacts','mrp','crm','sale_subscription','account_accountant','industry_fsm','helpdesk','marketing_automation','mrp','quality_control','stock_barcode','maintenance','hr','hr_appraisal', 'mail'],
+    'depends': ['account','sale','purchase', 'stock','purchase_stock', 'report_xlsx','contacts','mrp','crm','sale_subscription','account_accountant','industry_fsm','helpdesk','marketing_automation','mrp','quality_control','stock_barcode','maintenance','hr','hr_appraisal', 'mail','sale_renting'],
     'data': [
         'data/fischerbell_consignment_note_send_email_templates.xml',
         'data/ir_server_actions.xml',
@@ -43,6 +43,7 @@
         'report/fischerbell_statement_of_account_templates.xml',
         'report/fischerbell_temporary_loan_order_templates.xml',
         'report/report_delivery_slip.xml',
+        'report/instrument_rental_tc_report.xml',
         'security/ir.model.access.csv',
         'security/fischerbell_security.xml',
         'wizard/fischerbell_wizard_report_all_loan_item_views.xml',
