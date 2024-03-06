@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 
 from odoo import api, models, fields, _
+import logging
+_logger = logging.getLogger(__name__)
 
 
 class SaleOrder(models.Model):
@@ -17,10 +19,11 @@ class SaleOrder(models.Model):
 			product = order_line.product_id
 			qty_to_deliver = order_line.product_uom_qty
 			stock_available = product.qty_available
-
+                  
 			if stock_available < qty_to_deliver:
 				#   Check incoming stock from purchase orders
 				purchase_orders = self.env['purchase.order'].search([('state', '=', 'purchase')])
+
 				for po in purchase_orders:
 					for po_line in po.order_line:
 						if po_line.product_id == product:
