@@ -148,6 +148,29 @@
                                                     </div>
                                                 </div>
                                             </div>
+                                            <div t-attf-class="form-group #{error.get('street') and 'o_has_error' or ''} col-xl-6">
+                                                <label class="col-form-label" for="street">Street</label>
+                                                <input type="text" name="street" t-attf-class="form-control #{error.get('street') and 'is-invalid' or ''}" t-att-value="street or partner.street"/>
+                                            </div>
+                                            <div t-attf-class="form-group #{error.get('city') and 'o_has_error' or ''} col-xl-6">
+                                                <label class="col-form-label" for="city">City</label>
+                                                <input type="text" name="city" t-attf-class="form-control #{error.get('city') and 'is-invalid' or ''}" t-att-value="city or partner.city" />
+                                            </div>
+                                            <div t-attf-class="form-group #{error.get('zip') and 'o_has_error' or ''} col-xl-6">
+                                                <label class="col-form-label label-optional" for="zipcode">Zip / Postal Code</label>
+                                                <input type="text" name="zipcode" t-attf-class="form-control #{error.get('zip') and 'is-invalid' or ''}" t-att-value="zipcode or partner.zip" />
+                                            </div>
+                                            <div t-attf-class="form-group #{error.get('country_id') and 'o_has_error' or ''} col-xl-6">
+                                                <label class="col-form-label" for="country_id">Country</label>
+                                                <select name="country_id" t-attf-class="form-control #{error.get('country_id') and 'is-invalid' or ''}">
+                                                    <option value="">Country...</option>
+                                                    <t t-foreach="countries or []" t-as="country">
+                                                        <option t-att-value="country.id" t-att-selected="country.id == int(country_id) if country_id else country.id == partner.country_id.id">
+                                                            <t t-esc="country.name" />
+                                                        </option>
+                                                    </t>
+                                                </select>
+                                            </div>
                                             <div class="mb-0 py-2 col-12 s_website_form_field s_website_form_required s_website_form_model_required"
                                                  data-type="char" data-name="Field">
                                                 <div class="row s_col_no_resize s_col_no_bgcolor">

@@ -260,8 +260,8 @@
                                             <div class="document-title">
                                                 <table style="width:100%; border: 0px solid white;">
                                                     <br/>
-                                                     <div style="padding:0; margin:0px; padding-top:10px; padding-bottom:10px; text-align:center; margin-left: 32%;">
-                                                                <img t-att-src="'/report/barcode/Code128/'+o.name" style="width:400px;height:75px" alt="Barcode"/>
+                                                     <div style="padding:0; margin:0px; padding-top:10px; padding-bottom:10px; text-align:center; margin-left: 40%;">
+                                                                <img t-att-src="'/report/barcode/Code128/'+o.name" style="width:270px;height:75px" alt="Barcode"/>
                                                      </div>
                                                     <tr>
                                                         <td width="45%" class="text-wrap">

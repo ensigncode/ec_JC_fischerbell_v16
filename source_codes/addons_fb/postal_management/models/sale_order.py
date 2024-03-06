@@ -11,8 +11,9 @@ class SaleOrder(models.Model):
 		driver_ids = False
 		partner_shipping_id = self.partner_shipping_id if self.partner_shipping_id else self.partner_id
 		zipcode = partner_shipping_id.zip
-		delivery_code = str(zipcode[-2:])
+		delivery_code = str(zipcode[0:2]) if zipcode else False
 		postal_code_id = self.env['postal.code'].search([('code','=',delivery_code)])
+		purchase_order_ids = self._get_purchase_orders().ids
 		if postal_code_id:
 			partner_ids = self.env['res.partner'].search([('is_driver','=',True),('postal_code_ids','in',postal_code_id.ids)])
 			if partner_ids:

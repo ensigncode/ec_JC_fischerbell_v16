@@ -13,6 +13,16 @@ class FischerbellInventoryReport(models.AbstractModel):
 	_name = 'report.fischerbell_custom.inventory_report'
 	_inherit = 'report.report_xlsx.abstract'
 
+	def _get_sgd_price(self, product):
+		# Convert product.list_price to SGD if needed
+	    if product.currency_id.name != 'SGD':
+			# Convert product.list_price to SGD
+	        sgd_price = product.list_price * (
+	            1 / product.currency_id._get_conversion_rate(product.currency_id, self.env.ref('base.SGD')))
+	        return sgd_price
+
+
+
 
 	def generate_xlsx_report(self, workbook, data, product_template):
 		sheet = workbook.add_worksheet('Inventory_Report')
@@ -102,6 +112,13 @@ class FischerbellInventoryReport(models.AbstractModel):
 
 		# Iterate over product template
 		for product in product_template:
+			inventory_price_new = []
+			if product.currency_id.name == "SGD":
+				inventory_price_new.append(product.list_price)
+			else:
+				sgd_price = self._get_sgd_price(product)
+				inventory_price_new.append(sgd_price)
+				
 			purchase_order_lines = self.env['purchase.order.line'].search(
 				[('product_id', '=', product.product_variant_id.id)])
 			stock_moves = self.env['stock.move'].search([('purchase_line_id', 'in', purchase_order_lines.ids)])
@@ -111,17 +128,17 @@ class FischerbellInventoryReport(models.AbstractModel):
 					stock_move_lines = move.move_line_ids.filtered(lambda ml: ml.product_id == product.product_variant_id)
 					for stock_move_line in stock_move_lines:
 						numbering += 1
-						self.write_product_data(sheet, row, product, stock_move_line, content_format)
+						self.write_product_data(sheet, row, product, stock_move_line, content_format,inventory_price_new)
 						row += 1
 			else:
 				numbering += 1
-				self.write_product_data(sheet, row, product, None, content_format)
+				self.write_product_data(sheet, row, product, None, content_format,inventory_price_new)
 				row += 1
 
 		for i in range(numbering):
 			sheet.set_row(1 + i, 60)
 
-	def write_product_data(self, sheet, row, product, stock_move_line, content_format):
+	def write_product_data(self, sheet, row, product, stock_move_line, content_format,inventory_price_new):
 		if stock_move_line:
 			expiration_date = stock_move_line.expiration_date.strftime(
 				'%Y-%m-%d') if stock_move_line.expiration_date else ''
@@ -132,10 +149,16 @@ class FischerbellInventoryReport(models.AbstractModel):
 			batch_number = ''
 			serial_number = ''
 
+		formatted_prices = [str(price).rstrip('.0') if str(price).endswith('.0') else str(price) for price in inventory_price_new]
+
+		inventory_price_str = ', '.join(formatted_prices)
+		if len(formatted_prices) == 1:
+			inventory_price_str = formatted_prices[0]
+
 		data = [
 			product.default_code or '', product.product_brand_id.name or '', product.categ_id.name or '',
 			product.name or '', product.qty_available or '', product.virtual_available or '', product.uom_id.name or '',
-			product.list_price or '', product.cost_currency_id.name or '', '', product.currency_id.name or '', '',
+			product.list_price or '', product.cost_currency_id.name or '', inventory_price_str, product.currency_id.name or '', '',
 			batch_number, serial_number, expiration_date, product.location_id.name or ''
 		]
 		for col, value in enumerate(data):

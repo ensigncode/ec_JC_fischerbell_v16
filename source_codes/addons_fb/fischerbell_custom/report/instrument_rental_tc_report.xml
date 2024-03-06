@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+        <template id="instrument_rental_tc_template">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="doc">
+                    <div>
+                        <h1>Terms and Conditions of Rental of Equipment and Instrument </h1>
+                    </div>
+                    <div>
+                        <h3>1.    Definitions </h3>
+                    </div>
+                    <div>
+                        <p>(a)  In these Terms and Conditions, unless the context otherwise requires: </p>
+                        <p>(b)      "Lessee" means the party specified in the Rental Agreement Form who enters into a Rental Agreement Form with the Lessor to rent Equipment and Instrument from the Lessor which expression shall include its successors and permitted assigns. </p>
+                        <p>(c)      "Lessor" means the person, firm or corporation who by the Rental Agreement Form undertakes to supply the Rental of equipment and instruments services or to render such other Rental of Equipment and Instruments services as may be required by the Rental Agreement Form which expression shall include its successors and permitted assigns.</p>
+                        <p t-field="docs.partner_id.name"/>
+                        <p>(e)      "Delivery Date" means the delivery date specified in the Rental Agreement Form. </p>
+                        <p>(f)       "GST" means Singapore prevailing Goods and Services Tax.</p>
+                        <p>(g)      "Rental of Equipment and Instrument Services" means the rental services (whether specific or unascertained) and parts or units thereof to be supplied pursuant to Rental Agreement Form.</p>
+                        <p>(h)      "Rental Agreement Form" means the Rental Agreement Form attached to or issued together with these Terms and Conditions of Rental of Equipment and Instrument.</p>
+                        <p>(i)      "Description" means the descriptions and specifications relating to Rental of Equipment and Instrument set out in the Rental Agreement Form. </p>
+                        <p>(j)      "Terms and Conditions" means these terms and conditions of sale and all attachments, annexes and schedules hereto, if any. </p>
+                        <p>(k)      Words importing the singular shall include the plural and vice versa. </p>
+                        <p>(l)      The headings herein are for reference purposes only and shall not be taken into consideration as the interpretation or construction of Rental Agreement Form. </p>
+                    </div>
+                    <div>
+                        <h3>2.       Effect of these Terms and Conditions</h3>
+                    </div>
+                     <div>
+                        <p>(a)      Upon execution of the Rental Agreement Form, this Rental Agreement Form comprises the terms and conditions governing the provision of Rental of Equipment and Services (this "Rental Agreement Form").  </p>
+                        <p>(b)      These Terms and Conditions shall constitute the entire contract for the Rental of Equipment and Instrument from the Lessor to the Lessee and shall not incorporate or be deemed to incorporate the provisions of any extraneous documents unless accepted in writing by the Lessor. </p>
+                        <p>(c)      Any modification to the Rental Agreement Form shall be binding upon the Lessee and the Lessor, only upon written consent by the Lessor. </p>
+                        <p>(d)      If there is any inconsistency or conflict between the terms of the Rental Agreement Form and these Terms and Conditions, the terms in the Rental Agreement Form shall prevail to the extent of such inconsistency or conflict. </p>
+                    </div>
+                    <div>
+                        <h3>3.       Pricing</h3>
+                    </div>
+                    <div>
+                        <p>i)      No prorated weekly rental is permitted unless agreed prior.  </p>
+                        <p>II)     If special rates are negotiated for a longer term rental of period, the full term of the agreement must be completed and no cancellation of such is permitted.  </p>
+                        <p>iii)    Upon the change in the scope of Rental of Equipment and Instrument;  </p>
+                        <p>iv)     If Rental of Equipment and Instrument are required to be performed outside normal working hours; and </p>
+                        <p>v)      Shipping cost.</p>
+                        <p>(b)     All prices shall be exclusive of any goods and services tax, all duties fees, taxes, costs of delivery, packaging, insurance costs, shipping or other delivery costs, which shall be borne by the Lessee.</p>
+                        <p>(c)     The prices to be charged shall be subject to increase by the Lessor for any variation in the delivery schedule, design, quantities or specification of the Rental of Equipment and Instrument made at the request of the Lessee, or any delay caused by Lessee.</p>
+                    </div>
+                    <div>
+                        <h3>4.       Invoicing</h3>
+                    </div>
+                    <div>
+                        <p>All invoices shall be denominated in Singapore Dollars. The Lessee shall settle all invoices for Rental of Equipment and Instrument provided within 30 calendar days from the date of invoice in the manner required by the Lessor.   </p>
+                    </div>
+                    <div>
+                        <h3>5.       Payment</h3>
+                    </div>
+                    <div>
+                        <p>(a)      Time shall be of the essence for payment for Rental of Equipment and Instrument provided.</p>
+                        <p>(b)      Unless otherwise agreed, all payments shall be made in Singapore Dollars and all bank charges and other costs and expenses incurred in connection with any payment shall be borne by the Lessor.   </p>
+                        <p>(c)      If payments are made in a currency other than Singapore Dollars and the amount paid is, after conversion, less than the amount due under the invoice, the Lessee will indemnify the Lessor for the outstanding amount and all other losses sustained by the Lessor.   </p>
+                        <p>(d)      Payment for the Rental of Equipment and Instrument shall be made in full. If the Lessee fails to make payment on the due date then, without prejudice to any other right or remedy available to the Lessor, the Lessor shall be entitled to suspend any further deliveries to the Lessee. </p>
+                        <p>(e)      If any sum due and payable by the Lessee is not paid within 7 days of the due date, interest will be charged on such outstanding sum on a day-to-day basis from the due date to the date of actual payment (both dates inclusive) at the rate of 1.5% per month or part thereof (compounded).</p>
+                        <p>(f)      The Lessee shall not be entitled to make any deduction or withhold any sum from the payment from time to time due to the Lessor whether by way of set-off, counter-claim or otherwise.</p>
+                        <p>(g)      Payments must be issued in the name of the Lessor.</p>
+                    </div>
+                     <div>
+                        <h3>6.       Time of Provision of Services</h3>
+                    </div>
+                    <div>
+                        <p>(a)      The Rental of Equipment and Instrument shall be deemed to have been duly completed and accepted by the Lessee if no notice to the contrary has been received by the Lessor within 14 calendar days of the Services to the Lessee.</p>
+                        <p>(b)      The Rental of Equipment and Instrument shall be provided at the delivery location stated in the Rental Agreement Form on the date of delivery.   </p>
+                    </div>
+                    <div>
+                        <h3>7.       Delivery</h3>
+                    </div>
+                    <div>
+                        <p>(a)      Equipment and Instrument must be picked up at the Lessor’s specified location and to be returned no later than 24 hours.</p>
+                        <p>(b)      Delivery shall be made to the place(s) and by the method(s) specified in Rental Agreement Form (or if none, ex-works Lessor Singapore).   </p>
+                        <p>(c)      Any delivery dates quoted are for guidance only and not a term of the Rental Agreement Form. Time for delivery shall not be of the essence unless previously agreed by the Lessor in writing and the Lessor shall not be liable for any delay in delivery of Goods and Services.</p>
+                        <p>(d)      Where the Goods and Services are to be delivered in instalments, each delivery shall constitute a separate Rental Agreement Form and failure by the Lessor to delivery any one or more of such instalments in accordance with this Rental Agreement Form, or any claims by the Lessee in respect of any one or more instalments shall not entitle the Lessee to treat the Rental Agreement Form as a whole as repudiated.   </p>
+                        <p>(e)      The delivery of a greater or lesser quantity of the Rental of Equipment and Instrument than the quantity ordered, of other Rental of Equipment and Instrument not ordered, or of Rental of Equipment and Instrument which only some are defective, shall not entitle the Lessee to reject the Rental of Equipment and Instrument that were ordered and are not defective.</p>
+                        <p>(f)      The Lessor shall be entitled to withhold delivery of any Rental of Equipment and Instrument, if at the time delivery is to be made, payment is due by the Lessee to the Lessor on any account whatsoever.   </p>
+                        <p>(g)      If, under this Rental Agreement Form, the Lessee is to secure or arrange for the vessel or vessel’s space. The Lessee must secure or arrange for the necessary vessel or vessel’s space on berth terms basis and give the Lessor shipping instructions within a reasonable time prior to shipment. The Lessor may, at its sole discretion and for the Lessee’s risk and account, arrange for the vessel or the vessel’s space and make shipment of the Rental of Equipment and Instrument without prejudice and in addition to any other rights and remedies the Lessor may have under this Rental Agreement Form or at law or in equity or otherwise</p>
+                    </div>
+                    <div>
+                        <h3>8.       Claims for Loss or Defect</h3>
+                    </div>
+                    <div>
+                        <p>(a)      The Lessee shall inspect the Equipment and Instrument immediately upon delivery and shall within 14 calendar days from such delivery, give notice in writing to the Lessor of any shortage, breakage, defect or any other matter or thing by reason where of it is alleged that the Equipment and Instrument are not in accordance with the Rental Agreement Form.</p>
+                        <p>(b)      The Equipment and Instrument in respect of which the Lessee makes any claim hereunder shall be preserved intact as delivered and the Lessor or its agents shall have the right to attend the Lessee’s premises to investigate the complaint.  </p>
+                        <p>(c)      If the Lessee shall fail to give notice or preserve the Equipment and Instrument as required pursuant to the above, the Equipment and Instrument shall be conclusively presumed to be in all respects in accordance with the Rental Agreement Form and free from any defect and the Lessee shall be deemed to have accepted the Equipment and Instrument accordingly.</p>
+                        <p>(d)      If the Equipment and Instrument are either lost or damaged beyond repair during the period of Rental of the Equipment and Instrument with the Lessee, the Lessor will have the right to levy 50% of the Purchase List Price of the Equipment and Instrument on the Lessee, in addition to the rental amount due.</p>
+                    </div>
+                     <div>
+                        <h3>9.       Liability and Warranty</h3>
+                    </div>
+                    <div>
+                        <p>(a)      The Lessor warrants that, insofar as the Equipment and Instrument are of its own manufacture, they shall be free of defect in workmanship or materials at time of delivery. If any Equipment and Instrument do not conform to that warranty, the Lessor will at its option:</p>
+                        <p>i)       Replace the Equipment and Instrument found not to conform to the warranty and such replacement shall be supplied to these conditions; or  </p>
+                        <p>ii)      Take such steps as the Lessor deems necessary to bring the Equipment and Instrument into a state which they are free from such defects; or</p>
+                        <p>iii)       Take back the Equipment and Instrument found not conform to the warranty and refund the appropriate part of the rental amount.</p>
+                    </div>
+                    <div>
+                        <p>PROVIDED THAT</p>
+                    </div>
+                    <div>
+                        <p>i)       The liability of the Lessor shall not arise unless the Lessee demonstrates to the Lessor’s reasonable satisfaction that the Equipment and Instrument have, prior to use, been properly stored and handled and subsequently have not been used in any unusual or abnormal way or in a manner contrary to any instructions or recommendations for use provided by the Lessee;</p>
+                        <p>ii)      The liability of the Lessor shall in no event exceed the rental price of the Equipment and Instrument;  </p>
+                        <p>iii)     Performance of any one of the above options [as limited by (ii) of the above] shall constitute an entire discharge of the Lessor’s liability under this warranty.</p>
+                        <p>(b)      The Lessor further undertakes that, insofar as the Equipment and Instrument are not of its own manufacture, it will pass on to the Lessee the benefit of any guarantees or indemnities given to it in respect of such Goods and Services by its own suppliers.</p>
+                        <p>(c)      It is the responsibility of the Lessee to inform the Lessor immediately if the Equipment and Instrument is lost, damaged, or a service problem occurs during the rental period.</p>
+                        <p>(d)      It is the responsibility of the Lessee that the Equipment and Instrument are used in correct applications and are safely operated.</p>
+                    </div>
+                    <div>
+                        <h3>10.      Limitations of Liability: </h3>
+                    </div>
+                    <div>
+                        <p>(a)      Any liability of the Lessee or the Lessor towards the other party hereunder shall, in no event, exceed the total rental price of the Equipment and Instrument provided.</p>
+                        <p>(b)      Other than the Proposal or any other charges which may be agreed in writing between Lessor and the Lessee,   </p>
+                        <p>i)       the Lessor will not be responsible in any way to the Lessee or any third party for any loss, damage, claim or demand, including special, indirect, consequential, arising out of or resulting from contractual, tortuous (including negligence) or other actions or obligations of the parties.</p>
+                        <p>ii)       the Lessor shall not, in any event, be liable for any obligation, liability, right, claim or remedy for loss of or damage to any equipment, or for loss of use, revenue or profits with respect to any equipment, or for any other consequential, special, incidental or exemplary damages whatsoever (including consequential, special, incidental or exemplary damages in connection with any delay in the provision of the Rental of Equipment and Instrument or in respect of loss of business opportunities or loss of reputation) pursuant to this Rental Agreement Form.</p>
+                        <p>iii)       All conditions and warranty, expressed or implied, as to quality or fitness for any purpose of the Rental of Equipment and Instrument are hereby expressly excluded;</p>
+                        <p>iv)      It is hereby expressly declared that any statements as to quality made by the Lessee do not form part of the description of the Rental of Equipment and Instrument.</p>
+                        <p>(c)      The application, use and processing of the Rental of Equipment and Instrument is the absolute responsibility of the Lessor and Lessor shall be deemed to have carried out its own tests to ensure the suitability of the Rental of Equipment and Instrument for their intended purposes and applications. All recommendations and advice given by or behalf of the Lessor to the Lessee as to the methods of storing, applying or using the Rental of Equipment and Instrument, the purposes to which the Rental of Equipment and Instrument may be applied, and the suitability of using the Equipment and Instrument in any process or in conjunction with any other materials are given without liability on the part of the Lessor, its servants or agents.</p>
+                    </div>
+                    <div>
+                        <h3>11.      Breach of Contract </h3>
+                    </div>
+                    <div>
+                        <p>The Lessee shall indemnify the Lessor in respect of any costs, charges, losses or expenses, including legal fees which the Lessor may sustain or incur as a result of the Lessee’s breach of Rental Agreement Form.</p>
+                    </div>
+                    <div>
+                        <h3>12.      Termination </h3>
+                    </div>
+                    <div>
+                        <p>(a)      Any party may   terminate this Rental Agreement Form upon providing the other with 30 days written notice of termination. In addition, any party may terminate this Contract forthwith by notice in writing if the other:</p>
+                        <p>i)       commits or threatens to commit any breach of this Rental Agreement Form, and if such breach is remediable, fails to remedy the same within 14 days after notice to remedy the same; or</p>
+                        <p>ii)      suspends or discontinues its business or sells or otherwise disposes of all or a substantial part of its assets; or</p>
+                        <p>iii)     makes an arrangement with its creditors, is subject to a judicial management order, is insolvent or goes into liquidation (otherwise than for the purpose of a reconstruction or amalgamation).</p>
+                        <p>(b)      In the case of termination for any reason by any party, the Lessor shall be entitled to be paid for all Rental of Equipment and Instrument carried out as of (and including) the date of termination, if any, without prejudice to its other rights.</p>
+                    </div>
+                    <div>
+                        <h3>13.      Intellectual Property Rights  </h3>
+                    </div>
+                    <div>
+                        <p>Unless otherwise stated in the Rental Agreement Form: The supply of Rental of Equipment and Instrument by the Lessor shall not confer or imply any right upon the Lessee to use any of the Lessor’s trademarks or patents which shall at all times remain the property of the Lessor.</p>
+                    </div>
+                    <div>
+                        <h3>14.      Force Majeure </h3>
+                    </div>
+                    <div>
+                        <p>Neither party shall be responsible for any failure or delay in complying with its obligations contained in the Rental Agreement Form where such failure or delay is caused by any riot, civil commotion, strike, lockout, fire, war, act of foreign enemies or any event beyond the reasonable control of and not due to the negligence of, or default by, the party affected. The party affected shall immediately inform the other party in writing of the said failure or delay and the event relied upon for such failure or delay. The affected party shall for the duration of such event be relieved of such obligation under the Rental Agreement Form as is affected by such event provided that the Rental Agreement Form shall remain in force with regard to those obligations under the Rental Agreement Form which are not affected by such event and the affected party shall resume the performance of its obligations affected upon the cessation of such event.</p>
+                        <p>If any of the events mentioned above continues for more than six (6) consecutive months, the Lessor reserves the right to terminate the Rental Agreement Form as a whole or in respect of the Rental of Equipment and Instrument not delivered or performed as at the date of termination, without being liable for any damages or losses incurred by the Lessor.</p>
+                    </div>
+                    <div>
+                        <h3>15.      Passing of Property and Risk of Loss or Damage </h3>
+                    </div>
+                    <div>
+                        <p>(a)      Risk of loss or damage to the Services shall pass to the Lessee when the Rental of Equipment and Instrument are delivered to or collected by the Lessee or its agent.</p>
+                        <p>(b)      Notwithstanding risk in the Rental of Equipment and Instrument passing in accordance with Clause 14(a), title in the Rental of Equipment and Instrument shall not pass to the Lessee until full payment has been received by the Lessor for the Rental of Equipment and Instrument supplied by the Lessor to the Lessee.</p>
+                        <p>(c)      Until the title in the Rental of Equipment and Instrument passes to the Lessee, the Lessee shall hold the Rental of Equipment and Instrument upon trust for the Lessor and shall keep the Rental of Equipment and Instrument separate from those of the Lessee and third parties, and clearly identified as the Lessor’s property unless the Lessee uses or sells the Rental of Equipment and Instrument in the ordinary course of business in which case the Lessee shall hold the altered Services or proceeds of sale upon trust for the Lessor.</p>
+                        <p>(d)      It is the responsibility of the Lessee to inform the Lessor if the Equipment and Instrument fail to operate during the rental period. </p>
+                        <p>(e)      The Lessee agrees to inform the Lessor immediately for further instructions and/or diagnostic aid.</p>
+                        <p>(f)       The Lessor will replace the Equipment and Instrument if available, but the Lessor shall not be held responsible for any incidental or consequential loss as a result of the down-time of the Equipment and Instrument.</p>
+                        <p>(g)      When payment of any sum due to the Lessor from the Lessee becomes overdue or when the Lessor becomes insolvent goes into liquidation, has a winding up order made against it or has an administrator or administrative receiver appointed over its assets, income or any part thereof or enters into an arrangement with its creditors, all sums owed to the Lessor shall become immediately due and payable and the Lessor shall have the right to recover and resell the Rental of Equipment and Instrument may enter upon the Lessee’s premises by its servants or agents for that purpose.</p>
+                    </div>
+                    <div>
+                        <h3>16.      Confidentiality  </h3>
+                    </div>
+                    <div>
+                        <p>(a)      Each party shall not, without the other party’s prior written approval, disclose or use any proprietary or confidential information received from the other party pursuant to this Rental Agreement.</p>
+                        <p>(b)      The confidentiality obligations in this clause shall not apply to any information which:</p>
+                        <p>i)       becomes generally known to the public, other than by reason of any wilful or negligent act or omission of the receiving party;</p>
+                        <p>ii)       is at the time of disclosure, legally in the possession of the receiving party without any obligation of confidentiality; or</p>
+                        <p>iii)       is required to be disclosed pursuant to any applicable court, governmental orders or other legal requirement or legal process.</p>
+                        <p>(c)      Except with the consent in writing from the Lessor, the Lessee shall not make use of any information mentioned herein supplied by the Lessor for the purposes of the Rental Agreement Form for any other purpose other than the performance of its obligations under this Rental Agreement Form.</p>
+                    </div>
+                    <div>
+                        <h3>17.      Third Party Rights  </h3>
+                    </div>
+                    <div>
+                        <p>No person who is not a party to the Rental Agreement Form shall have any rights under the Contracts (Rights of Third Parties) Act, Cap. 53B, to enforce any term or condition of the Rental Agreement Form.</p>
+                    </div>
+                    <div>
+                        <h3>18.      No Waiver of Rights  </h3>
+                    </div>
+                    <div>
+                        <p>The failure of any party to enforce at any time any of the provisions herein shall not be construed to be a waiver of such provisions or a waiver of the right of such party thereafter to enforce any such provisions. No waiver by a party of any right hereunder shall be deemed as a waiver of any other right.</p>
+                    </div>
+                    <div>
+                        <h3>19.      Assignment   </h3>
+                    </div>
+                    <div>
+                        <p>The Lessee may not assign or otherwise transfer any of its rights, benefits or obligations hereunder in whole or in part without the prior written consent of the Lessor. The Lessor may at any time, assign, subcontract or otherwise transfer its rights, benefits or obligations or any part thereof under this Rental Agreement Form.</p>
+                    </div>
+                    <div>
+                        <h3>20.      Technical Services   </h3>
+                    </div>
+                    <div>
+                        <p>(a)      Calibration Services</p>
+                        <p>i)       No fees are applicable for standard pre-calibration or post-calibration of the Equipment and Instruments as long as no other service is required.</p>
+                        <p>ii)      Additional fees will be applicable during the rental period and if calibration is required to the non-standard or special compounds.</p>
+                        <p>(b)      Decontamination Services</p>
+                        <p>i)       The Lessee is required to protect the Equipment and Instrument from its environmental contamination (if any).</p>
+                        <p>ii)      The Lessee is required to decontaminate the Equipment and Instrument after each use.</p>
+                        <p>iii)     It is mandatory that the Lessee inform the Lessor in writing that </p>
+                        <p>a.       the Equipment and Instrument will be operating in an environment which has presence of contaminating materials, </p>
+                        <p>b.       the Equipment and Instrument will be exposed to an toxic and hazardous environment, </p>
+                        <p>c.       the Equipment and Instrument will be coated with toxic or hazardous chemicals. </p>
+                        <p>(c)      The Lessor has the right to levy additional fees on the Lessee if the Lessee fails to inform the Lessor of the environmental issues as stipulated in Item 20(b).</p>
+                    </div>
+                    <div>
+                        <h3>21.      Notices   </h3>
+                    </div>
+                    <div>
+                        <p>Any notice to be served on either of the parties by the other shall be in English and in writing and shall be sent by prepaid recorded delivery or registered post or by facsimile, and shall be deemed to have been received by the addressee within ten (10) days of posting or twenty-four (24) hours if sent by facsimile to the correct facsimile number of the addressee.</p>
+                    </div>
+                    <div>
+                        <h3>22.      Applicable Law   </h3>
+                    </div>
+                    <div>
+                        <p>(a)      This Rental Agreement Form shall be governed by the Laws of Singapore and both parties hereby submit to the non-exclusive jurisdiction of Singapore courts.</p>
+                        <p>(b)      The application of the United Nations Convention on Agreements for the International Sale of Goods 1980 to this Rental Agreement Form is hereby expressly excluded.</p>
+                    </div>
+
+                </t>
+            </t>
+        </template>
+
+        <record id="action_report_instrument_rental_tc" model="ir.actions.report">
+            <field name="name">Instrument Rental TC</field>
+            <field name="model">sale.order</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">fischerbell_custom.instrument_rental_tc_template</field>
+            <field name="report_file">fischerbell_custom.instrument_rental_tc_template</field>
+            <field name="print_report_name">'Instrument Rental Tc - %s' % (object.name or '')</field>
+            <field name="binding_model_id" ref="model_sale_order"/>
+            <field name="binding_type">report</field>
+<!--            <field name="paperformat_id" ref="fischerbell_custom.fischerbell_custom_instrument_rental_tc_paperformat"/>-->
+        </record>
+
+	</data>
+</odoo>

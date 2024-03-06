@@ -837,6 +837,206 @@
                             </div>
                         </div>
                     </t>
+                </t>
+            </t>
+        </template>
+
+
+        <template id="fischerbell_custom.fischerbell_report_rental_saleorder_document">
+            <t t-call="web.html_container">
+                <t t-call="web.basic_layout">
+                    <t t-foreach="docs" t-as="doc">
+                        <style>
+                            .page {
+                            font-family: 'Arial';
+                            font-size: 13px;
+                            }
+                            .page td {
+                            vertical-align: top;
+                            padding-top: 10px;
+                            }
+                            .footer {
+                            font-size: 35px;
+                            font-weight: bold;
+                            }
+                            .text-wrap {
+                            font-weight: bold;
+                            font-size: 13px;
+                            font-family: 'Tara SC Black';
+                            padding: 5px;
+                            }
+                            .text-style {
+                            font-size: 13px;
+                            font-family: 'Arial';
+                            }
+                            .text-note {
+                            font-size: 13px;
+                            font-family: 'Arial';
+                            }
+                            table.order-line {
+                            width: 100%;
+                            border: 0px solid white;
+                            margin: 8px 5px 0 5px;
+                            }
+
+                            table.order-line thead tr th {
+                            font-size: 13px;
+                            font-family: 'Tara SC Black';
+                            font-weight: bold;
+                            padding-top: 10px;
+                            padding-bottom: 10px;
+                            border-top: 2px solid black;
+                            border-bottom: 2px solid black;
+                            }
+                            .variant-image {
+                            margin-top: 20px;
+                            width: 60%;
+                            }
+                            .table table-total {
+                            border: 1px solid black;
+                            min-height: 200px;
+                            position: absolute;
+                            bottom: 0px;"
+                            }
+                        </style>
+                        <!-- Header -->
+                        <div class="header">
+                            <div style="border-bottom: 0px solid white; margin-bottom:10px;">
+                                <table style="border: 0px solid white;" width="100%">
+                                    <tr>
+                                        <td width="70%">
+                                            <img src="/fischerbell_custom/static/src/img/fischerbell_header.jpeg"
+                                                 width="400" height="100" style="margin-bottom: 10px;"/>
+                                        </td>
+                                        <td>
+                                            <img src="/fischerbell_custom/static/src/img/fischerbell_header2.jpeg"
+                                                 width="180" height="100" style="margin-bottom: 10px;"/>
+                                        </td>
+                                        <td>
+                                            <img src="/fischerbell_custom/static/src/img/fischerbell_header3.jpeg"
+                                                 width="130" height="100" style="margin-bottom: 10px;"/>
+                                        </td>
+                                        <br/>
+                                    </tr>
+<!--                                    <tr>-->
+<!--                                        <br/>-->
+<!--                                        <br/>-->
+<!--                                        <br/>-->
+<!--                                        <br/>-->
+<!--                                        <td colspan="3">-->
+<!--                                            <table width="100%"-->
+<!--                                                   style="border-top: 2px solid black; border-left: 0px solid white; border-right: 0px solid white; border-bottom: 0px solid white; margin-left: 10px;">-->
+<!--                                                <tr>-->
+<!--                                                    <td width="46.8%">-->
+<!--                                                        <table style="width:100%; border: 0px solid white;">-->
+<!--                                                            <tr>-->
+<!--                                                                <td width="35%" class="text-wrap">-->
+<!--                                                                    <span style="font-weight: bold; font-size: 12px; font-family: 'Tara SC Black'; padding: 5px;">-->
+<!--                                                                        Company-->
+<!--                                                                    </span>-->
+<!--                                                                </td>-->
+<!--                                                                <td width="5%" class="text-wrap">-->
+<!--                                                                    <span style="font-weight: bold; font-size: 12px; font-family: 'Tara SC Black'; padding: 5px;">-->
+<!--                                                                        :-->
+<!--                                                                    </span>-->
+<!--                                                                </td>-->
+<!--                                                                <td width="60%" class="text-style">-->
+<!--                                                                    <t t-if="doc.partner_id.company_type=='company'">-->
+<!--                                                                        <t t-foreach="doc.partner_id.child_ids"-->
+<!--                                                                           t-as="child">-->
+<!--                                                                            <t t-if="child.type == 'contact'">-->
+<!--                                                                                <span style="font-size: 12px; font-family: 'Arial'; margin-left: 5px;"-->
+<!--                                                                                      t-esc="child.name"/>-->
+<!--                                                                            </t>-->
+<!--                                                                        </t>-->
+<!--                                                                    </t>-->
+<!--                                                                    <t t-else="">-->
+<!--                                                                        <span style="font-size: 12px; font-family: 'Arial'; margin-left: 5px;"-->
+<!--                                                                              t-esc="doc.partner_id.name"/>-->
+<!--                                                                    </t>-->
+<!--                                                                </td>-->
+<!--                                                            </tr>-->
+<!--                                                            <tr>-->
+<!--                                                                <td width="35%" class="text-wrap">-->
+<!--                                                                    <span style="font-weight: bold; font-size: 12px; font-family: 'Tara SC Black'; padding: 5px;">-->
+<!--                                                                        Contact No-->
+<!--                                                                    </span>-->
+<!--                                                                </td>-->
+<!--                                                                <td width="5%" class="text-wrap">-->
+<!--                                                                    <span style="font-weight: bold; font-size: 12px; font-family: 'Tara SC Black'; padding: 5px;">-->
+<!--                                                                        :-->
+<!--                                                                    </span>-->
+<!--                                                                </td>-->
+<!--                                                                <td width="60%" class="text-style">-->
+<!--                                                                    <t t-if="doc.partner_id.company_type=='company'">-->
+<!--                                                                        <t t-foreach="doc.partner_id.child_ids"-->
+<!--                                                                           t-as="child">-->
+<!--                                                                            <t t-if="child.type == 'contact'">-->
+<!--                                                                                <span style="font-size: 12px; font-family: 'Arial'; margin-left: 5px;"-->
+<!--                                                                                      t-esc="child.phone"/>-->
+<!--                                                                            </t>-->
+<!--                                                                        </t>-->
+<!--                                                                    </t>-->
+<!--                                                                    <t t-else="">-->
+<!--                                                                        <span style="font-size: 12px; font-family: 'Arial'; margin-left: 5px;"-->
+<!--                                                                              t-esc="doc.partner_id.phone"/>-->
+<!--                                                                    </t>-->
+<!--                                                                </td>-->
+<!--                                                            </tr>-->
+<!--                                                            <tr>-->
+<!--                                                                <td width="35%" class="text-wrap">-->
+<!--                                                                    <span style="font-weight: bold; font-size: 12px; font-family: 'Tara SC Black'; padding: 5px;">-->
+<!--                                                                        Email-->
+<!--                                                                    </span>-->
+<!--                                                                </td>-->
+<!--                                                                <td width="5%" class="text-wrap">-->
+<!--                                                                    <span style="font-weight: bold; font-size: 12px; font-family: 'Tara SC Black'; padding: 5px;">-->
+<!--                                                                        :-->
+<!--                                                                    </span>-->
+<!--                                                                </td>-->
+<!--                                                                <td width="60%" class="text-style">-->
+<!--                                                                    <t t-if="doc.partner_id.company_type=='company'">-->
+<!--                                                                        <t t-foreach="doc.partner_id.child_ids"-->
+<!--                                                                           t-as="child">-->
+<!--                                                                            <t t-if="child.type == 'contact'">-->
+<!--                                                                                <span style="font-size: 12px; font-family: 'Arial'; margin-left: 5px;"-->
+<!--                                                                                      t-esc="child.email"/>-->
+<!--                                                                            </t>-->
+<!--                                                                        </t>-->
+<!--                                                                    </t>-->
+<!--                                                                    <t t-else="">-->
+<!--                                                                        <span style="font-size: 12px; font-family: 'Arial'; margin-left: 5px;"-->
+<!--                                                                              t-esc="doc.partner_id.email"/>-->
+<!--                                                                    </t>-->
+<!--                                                                </td>-->
+<!--                                                            </tr>-->
+<!--                                                             <tr>-->
+<!--                                                                <td width="35%" class="text-wrap">-->
+<!--                                                                    <span style="font-weight: bold; font-size: 12px; font-family: 'Tara SC Black'; padding: 5px;">-->
+<!--                                                                        Bill To-->
+<!--                                                                    </span>-->
+<!--                                                                </td>-->
+<!--                                                                <td width="5%" class="text-wrap">-->
+<!--                                                                    <span style="font-weight: bold; font-size: 12px; font-family: 'Tara SC Black'; padding: 5px;">-->
+<!--                                                                        :-->
+<!--                                                                    </span>-->
+<!--                                                                </td>-->
+<!--                                                                <td width="60%" class="text-style">-->
+<!--                                                                    <span style="font-size: 12px; font-family: 'Arial'; margin-left: 5px;"-->
+<!--                                                                          t-esc="doc.partner_invoice_id.name"/>-->
+<!--                                                                </td>-->
+<!--                                                            </tr>-->
+<!--                                                        </table>-->
+<!--                                                    </td>-->
+<!--                                                    <td width="3.4%"/>-->
+<!--                                                </tr>-->
+<!--                                            </table>-->
+<!--                                        </td>-->
+<!--                                    </tr>-->
+                                </table>
+                            </div>
+                        </div>
+                    </t>
                     <t>
                         <div class="page">
                             <t t-call="fischerbell_custom.page_quotation_template"/>
@@ -854,6 +1054,15 @@
             </t>
         </template>
 
+
+        <template id="fischerbell_report_rental_saleorder">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="doc">
+                    <t t-call="fischerbell_custom.fischerbell_report_rental_saleorder_document" t-lang="doc.partner_id.lang"/>
+                </t>
+            </t>
+        </template>
+
         <record id="action_report_saleorder_fischerbell" model="ir.actions.report">
             <field name="name">Quotation</field>
             <field name="model">sale.order</field>
@@ -861,6 +1070,18 @@
             <field name="report_name">fischerbell_custom.fischerbell_report_quotation_saleorder</field>
             <field name="report_file">fischerbell_custom.fischerbell_report_quotation_saleorder</field>
             <field name="print_report_name">(object.get_report_name())</field>
+            <field name="binding_model_id" ref="model_sale_order"/>
+            <field name="binding_type">report</field>
+            <field name="paperformat_id" ref="fischerbell_custom.fischerbell_custom_paperformat"/>
+        </record>
+
+        <record id="action_report_saleorder_rental" model="ir.actions.report">
+            <field name="name">Rental Agreement</field>
+            <field name="model">sale.order</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">fischerbell_custom.fischerbell_report_rental_saleorder</field>
+            <field name="report_file">fischerbell_custom.fischerbell_report_rental_saleorder</field>
+            <field name="print_report_name">'Rental Order'</field>
             <field name="binding_model_id" ref="model_sale_order"/>
             <field name="binding_type">report</field>
             <field name="paperformat_id" ref="fischerbell_custom.fischerbell_custom_paperformat"/>
