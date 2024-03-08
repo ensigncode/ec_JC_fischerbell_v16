@@ -331,4 +331,17 @@
         groups="sales_team.group_sale_salesman"
         parent="sale.menu_sale_report"
         sequence="41"/>
+
+        <record id="inherit_view_rental_order_primary_form_viewr" model="ir.ui.view">
+        <field name="name">rental.order.primary.form.view</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale_renting.rental_order_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[hasclass('badge') and hasclass('rounded-pill') and hasclass('text-bg-info')  and hasclass('float-end') and hasclass('border-0')]" position="replace"/>
+            <xpath expr="//div[hasclass('badge') and hasclass('rounded-pill') and hasclass('text-bg-info')  and hasclass('float-end') and hasclass('border-0')]" position="replace"/>
+            <xpath expr="//div[hasclass('badge') and hasclass('rounded-pill') and hasclass('text-bg-warning')  and hasclass('float-end') and hasclass('border-0')]" position="replace"/>
+            <xpath expr="//div[hasclass('badge') and hasclass('rounded-pill') and hasclass('text-bg-danger')  and hasclass('float-end') and hasclass('border-0')]" position="replace"/>
+            <xpath expr="//div[hasclass('badge') and hasclass('rounded-pill') and hasclass('text-bg-success')  and hasclass('float-end') and hasclass('border-0')]" position="replace"/>
+        </field>
+    </record>
 </odoo>
