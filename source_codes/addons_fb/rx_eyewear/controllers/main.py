@@ -23,6 +23,9 @@ class OpticianPortalController(http.Controller):
 			if kw.get('name') and kw.get('mobile') :
 				name = kw.get('name')
 				mobile = kw.get('mobile')
+				company = kw.get('company_id')
+				company_id = request.env['res.partner'].sudo().search([('name','ilike',company),('is_company','=',True)],limit=1)
+				
 				partner_id = request.env['res.partner'].sudo().search(['|',('mobile','=',mobile),('phone','=',mobile),('name','ilike',name)])
 				if not partner_id : 
 					partner_id = request.env['res.partner'].sudo().create({
@@ -40,7 +43,7 @@ class OpticianPortalController(http.Controller):
 				'presc_type' : kw.get('presc_type') if kw.get('presc_type') else '',
 				'add_on_type' : kw.get('add_on_type') if kw.get('add_on_type') else '',
 				'product_id' : kw.get('product_id') if kw.get('product_id') else '',
-				'company_id' : kw.get('company_id') if kw.get('company_id') else '',
+				'company_id' : company_id.id if company_id else Fal,
 				'sphere_left' : kw.get('sphere_left') if kw.get('sphere_left') else '',
 				'cyl_left' : kw.get('cyl_left') if kw.get('cyl_left') else '',
 				'axis_left' : kw.get('axis_left') if kw.get('axis_left') else '',

@@ -54,7 +54,7 @@
                                           <br/>
                                         <!--</t>-->
                                         <t t-if="operation.customer_id.name">
-                                          <span>Batch No : </span><span style="font-family: 'Unitext Pro Regular'; line-height: 1em;" t-esc="operation.customer_id.name"/><br/>
+                                          <span>Serial No : </span><span style="font-family: 'Unitext Pro Regular'; line-height: 1em;" t-esc="operation.customer_id.name"/><br/>
                                         </t>
                                         <t t-if="operation.phone">
                                           <span>Mobile No : </span><span style="font-family: 'Unitext Pro Regular'; line-height: 1em;" t-esc="operation.phone"/><br/>
