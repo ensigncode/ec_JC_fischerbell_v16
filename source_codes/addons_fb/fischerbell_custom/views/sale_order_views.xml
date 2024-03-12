@@ -338,6 +338,7 @@
         <field name="inherit_id" ref="sale_renting.rental_order_form_view"/>
         <field name="arch" type="xml">
             <xpath expr="//div[hasclass('badge') and hasclass('rounded-pill') and hasclass('text-bg-info')  and hasclass('float-end') and hasclass('border-0')]" position="replace"/>
+            <xpath expr="//div[hasclass('badge') and hasclass('rounded-pill') and hasclass('text-bg-info')  and hasclass('float-end') and hasclass('border-0')]" position="replace"/>
             <xpath expr="//div[hasclass('badge') and hasclass('rounded-pill') and hasclass('text-bg-warning')  and hasclass('float-end') and hasclass('border-0')]" position="replace"/>
             <xpath expr="//div[hasclass('badge') and hasclass('rounded-pill') and hasclass('text-bg-danger')  and hasclass('float-end') and hasclass('border-0')]" position="replace"/>
             <xpath expr="//div[hasclass('badge') and hasclass('rounded-pill') and hasclass('text-bg-success')  and hasclass('float-end') and hasclass('border-0')]" position="replace"/>
