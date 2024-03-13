@@ -13,3 +13,13 @@ class SaleOrderLine(models.Model):
 
     child_id = fields.Many2one("res.partner",string="Employee id")
     child_name = fields.Char("Employee name")
+
+class StockMove(models.Model):
+    _inherit = 'stock.move'
+
+    child_id = fields.Many2one("res.partner",string="Employee Id",related='sale_line_id.child_id')
+
+class StockMoveLine(models.Model):
+    _inherit = 'stock.move.line'
+
+    child_id = fields.Many2one("res.partner",string="Employee Id",related='move_id.child_id')

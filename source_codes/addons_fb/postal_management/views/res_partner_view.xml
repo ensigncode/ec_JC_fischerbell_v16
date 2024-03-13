@@ -10,6 +10,7 @@
                 <field name="postal_ids"  widget="many2many_tags"/>
                 <field name="postal_code_ids" widget="many2many_tags"/>
                 <field name="is_driver"/>
+                <field name="is_forwarder"/>
             </xpath>
             <xpath expr="//page[@name='contact_addresses']" position="after">
                 <page name="fleet_vehicles" string="Vehicle">

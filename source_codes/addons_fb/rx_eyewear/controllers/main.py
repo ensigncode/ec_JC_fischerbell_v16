@@ -32,6 +32,11 @@ class OpticianPortalController(http.Controller):
 						'name' : name,
 						'mobile' : mobile,
 					})
+				if not company_id : 
+					company_id = request.env['res.partner'].sudo().create({
+						'name' : company,
+						'is_company' : True,
+					})
 			
 			optician_detail_id = request.env['optician.detail'].sudo().create({
 				'name' : kw.get('name') if kw.get('name') else '',

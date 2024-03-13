@@ -10,6 +10,7 @@ class ResPartner(models.Model):
 	postal_ids = fields.Many2many('postal.postal',string="Postal Districts")
 	postal_code_ids = fields.Many2many('postal.code',readonly=False)
 	is_driver = fields.Boolean(string="Is Driver")
+	is_forwarder = fields.Boolean(string="Is Forwarder")
 	fleet_vehicle_ids = fields.One2many('fleet.vehicle','driver_id',string="Vehicle")
 
 	def cron_onchange_postal_codes(self):

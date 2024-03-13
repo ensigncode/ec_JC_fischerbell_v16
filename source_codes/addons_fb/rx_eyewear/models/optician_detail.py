@@ -62,9 +62,10 @@ class OpticianDetail(models.Model):
             
             sale_order_id = self.env['sale.order'].sudo().create({
                 'partner_id' : company.id,
-                'optician_detail_id':self.id,
+                # 'optician_detail_id':self.id,
             })
             for filter_rec in filtered_records :
+                sale_order_id.write({'optician_detail_id':filter_rec.id})
                 new_line = self.env['sale.order.line'].sudo().create({
                     # 'name': filter_rec.product_id.product_variant_id.description,
                     'child_id' : filter_rec.partner_id.id,
@@ -181,3 +182,5 @@ class FischerbellOpticianDetailReport(models.AbstractModel):
             x = 0
             y += 1
             sheet.set_row(y, 30)
+
+
