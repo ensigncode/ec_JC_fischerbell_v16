@@ -22,7 +22,7 @@
   'assets': {
         'web.assets_frontend': [
             'rx_eyewear/static/src/scss/optician_detail.scss',
-            'rx_eyewear/static/src/js/optician_detail.js',
+            # 'rx_eyewear/static/src/js/optician_detail.js',
         ],
        
     },

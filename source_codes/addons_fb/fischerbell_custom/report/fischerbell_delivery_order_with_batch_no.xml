@@ -38,7 +38,7 @@
                                     <td width="35%" class="text-left" style="font-size: 15px; line-height: 1em;">
                                     <!-- <t t-if="line.mrp_line_id.name"> -->
                                         <span t-esc="line.product_id.name"/><br/>
-                                        <span>Batch No.: </span><span t-esc="line.lot_id.name"/>
+                                        <span>Serial No.: </span><span t-esc="line.lot_id.name"/>
                                     <!-- </t> -->
                                     </td>
                                     <td width="10%" class="text-center" style="font-size: 15px; line-height: 1em;"><span t-esc="int(line.qty_done)"/></td>

@@ -24,13 +24,16 @@ class SaleOrder(models.Model):
 		res = super(SaleOrder,self).action_confirm()
 		if self.collection == "assigned_driver":
 			driver_ids = self.assign_driver()
-
 			if self.picking_ids and driver_ids:
 				for picking in self.picking_ids:
-					picking.driver_id = driver_ids[0].id
-					picking.driver_ids = [(6,0,driver_ids.ids)]
-					if driver_ids and driver_ids[0].fleet_vehicle_ids:
-						picking.vehicle_id = driver_ids[0].fleet_vehicle_ids[0].id
+					if not picking.carrier_id :
+						picking.driver_ids = [(6,0,driver_ids.ids)]
+						if driver_ids and driver_ids[0].fleet_vehicle_ids:
+							picking.vehicle_id = driver_ids[0].fleet_vehicle_ids[0].id
+						if len(driver_ids.ids) == 1:
+							picking.driver_id = driver_ids[0].id
+						if len(driver_ids.ids) > 1 :
+							picking.driver_id = False
 		return res
 
 		

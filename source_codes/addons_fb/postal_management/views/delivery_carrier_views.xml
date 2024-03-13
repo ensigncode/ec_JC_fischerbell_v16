@@ -6,7 +6,7 @@
         <field name="inherit_id" ref="delivery.view_delivery_carrier_form"/>
         <field name="arch" type="xml">
             <xpath expr="//field[@name='company_id']" position="after">
-                <field name="assigned_driver" domain="[('is_driver', '=', True)]" />
+                <field name="assigned_driver" domain="[('is_forwarder', '=', True)]" />
             </xpath>
         </field>
     </record>

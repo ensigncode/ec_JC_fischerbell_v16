@@ -5,8 +5,21 @@ from odoo import api, fields, models, _
 class StockPicking(models.Model):
 	_inherit = 'stock.picking'
 
+	
+	@api.model
+	def _get_driver_id_domain(self):
+		sale_order_id = self.env['sale.order'].sudo().search([('name','=',self.origin)])
+		print("\n\n self.sale id ==== ",sale_order_id,self.origin,self.name,self)
+		if sale_order_id:
+			partner_shipping_id = self.sale_id.partner_shipping_id if self.sale_id.partner_shipping_id else self.sale_id.partner_id
+			zipcode = partner_shipping_id.zip
+			delivery_code = str(zipcode[0:2]) if zipcode else False
+			postal_code_id = self.env['postal.code'].search([('code','=',delivery_code)])
+			self.driver_ids = self.env['res.partner'].search([('is_driver','=',True),('postal_code_ids','in',postal_code_id.ids)]) 
+		
 	driver_id = fields.Many2one('res.partner',string="Driver")
-	driver_ids = fields.Many2many('res.partner',string="Driver")
+	forwarder_id = fields.Many2one('res.partner',string="Forwarder")
+	driver_ids = fields.Many2many('res.partner',string="Driver",compute="_get_driver_id_domain")
 	vehicle_id = fields.Many2one('fleet.vehicle',string="Vehicle")
 	assign_driver = fields.Boolean(string="Driver Assign")
 	signature_uploded = fields.Boolean(string="Signature Uploded")
@@ -23,7 +36,8 @@ class StockPicking(models.Model):
 	def onchange_carrier_id(self):
 		for res in self:
 			if res.carrier_id :
-				res.driver_id = res.carrier_id.assigned_driver
+				res.forwarder_id = res.carrier_id.assigned_driver
+				res.driver_id = False
 
 
 	def make_picking_done(self):
@@ -49,14 +63,4 @@ class StockPicking(models.Model):
 						})
 				res_u.with_context(button_validate_picking_ids=res_u.pick_ids.ids).process()
 		return True
-
-# class SaleOrder(models.Model):
-# 	_inherit = 'sale.order'
-
-# 	def action_update(self):
-# 		delivery_code = '14'
-# 		postal_code_id = self.env['postal.code'].search([('name','=',delivery_code)])
-# 		postal_id = postal_code_id.mapped('postal_code_id')
-# 		driver_ids = self.env['res.partner'].search([('postal_id','in',postal_id.ids)])
-# 		return True
 
