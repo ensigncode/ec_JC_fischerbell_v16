@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_picking_shipping_label_document">
+        <t t-call="web.html_container">
+            <div class="page">
+                <style>
+                    .mt52 {
+                        margin-top:52px;
+                    }
+                    .mt64 {
+                        margin-top:64px;
+                    }
+                    h5,p {
+                        font-weight:bold;
+                        font-size : 35px;
+                    }
+                </style>
+                <div class="container">
+                    <div class="row justify-content-center">
+                        <div class="col-12 text-center mt64">
+                            <h5 t-esc="doc.partner_id.name"></h5>
+                            <h5>
+                                <t t-if="doc.partner_id.street"> <t t-esc="doc.partner_id.street"/></t>
+                                <t t-if="doc.partner_id.street2">, <t t-esc="doc.partner_id.street2"/></t>
+                                <t t-if="doc.partner_id.city">, <t t-esc="doc.partner_id.city"/></t><br />
+                                <t t-if="doc.partner_id.state_id"> <t t-esc="doc.partner_id.state_id.name"/></t>
+                                <t t-if="doc.partner_id.zip">, <t t-esc="doc.partner_id.zip"/></t>
+                            </h5>
+                            <h5 class="mt52" t-esc="doc.packing_dimentions"></h5>
+                            <h5>
+                                Weight : 
+                                <span t-esc="doc.weight"/>
+                                <span t-if="doc.weight_uom_name" t-esc="doc.weight_uom_name"/>
+                                
+                            </h5>
+                            <h5 class="mt52">
+                                ATTN : 
+                                <span t-esc="doc.partner_id.name"/>
+                            </h5>
+                            <h5>
+                                Tel : 
+                                <t t-if="doc.partner_id.phone">
+                                    <span t-esc="doc.partner_id.phone"/>
+                                </t>
+                                <t t-else="">
+                                    <span t-esc="doc.company_id.phone"/>
+                                </t>
+                            </h5>
+                            
+                            <h5 class="mt52">
+                                <sapn>FROM: FISCHER BELL </sapn>
+                            </h5>
+                            <h5>
+                                <sapn>1 CORPORATION DRIVE </sapn>
+                            </h5>
+                            <h5>
+                                <sapn>#09-07 REVV </sapn>
+                            </h5>
+                            <h5>
+                                <sapn>SINGAPORE 619775</sapn>
+                            </h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+    <template id="report_picking_shipping_label">
+        <t t-call="web.basic_layout">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="postal_management.report_picking_shipping_label_document" t-lang="doc.partner_id.lang"/>
+            </t>
+        </t>
+    </template>
+
+    <record id="paperformat_shipping_label" model="report.paperformat">
+        <field name="name">Shipping label paperformat</field>
+        <field name="default" eval="True" />
+        <field name="format">custom</field>
+        <field name="page_height">297</field>
+        <field name="page_width">300</field>
+        <field name="orientation">Portrait</field>
+        <field name="margin_top">20</field>
+        <field name="margin_bottom">10</field>
+        <field name="margin_left">0</field>
+        <field name="margin_right">0</field>
+        <field name="disable_shrinking" eval="True"/>
+        <field name="dpi">90</field>
+    </record>
+
+    <record id="action_report_delivery_order_shipping_label" model="ir.actions.report">
+        <field name="name">Shipping Label</field>
+        <field name="model">stock.picking</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">postal_management.report_picking_shipping_label</field>
+        <field name="report_file">postal_management.report_picking_shipping_label</field>
+        <field name="print_report_name">
+            (object.state in ('draft', 'waiting', 'assigned', 'confirmed', 'done') and 'Shipping label - %s' % (object.name))</field>
+        <field name="binding_model_id" ref="model_stock_picking"/>
+        <field name="binding_type">report</field>
+        <field name="paperformat_id" ref="postal_management.paperformat_shipping_label"/>
+    </record>
+
+    
+</odoo>
