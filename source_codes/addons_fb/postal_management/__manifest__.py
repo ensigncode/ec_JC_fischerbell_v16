@@ -21,6 +21,7 @@
         'views/res_partner_view.xml',
         'views/sale_order_view.xml',
         'views/delivery_carrier_views.xml',
+        'reports/shipping_label_report.xml',
         'demo/demo.xml',
 
     ],

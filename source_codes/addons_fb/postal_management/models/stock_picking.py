@@ -23,13 +23,10 @@ class StockPicking(models.Model):
 	vehicle_id = fields.Many2one('fleet.vehicle',string="Vehicle")
 	assign_driver = fields.Boolean(string="Driver Assign")
 	signature_uploded = fields.Boolean(string="Signature Uploded")
-	signature = fields.Image(
-		string="Signature",
-		copy=False, attachment=True, max_width=1024, max_height=1024)
-	signed_by = fields.Char(
-		string="Signed By", copy=False)
-	signed_on = fields.Datetime(
-		string="Signed On", copy=False)
+	signature = fields.Image(string="Signature",copy=False, attachment=True, max_width=1024, max_height=1024)
+	signed_by = fields.Char(string="Signed By", copy=False)
+	signed_on = fields.Datetime(string="Signed On", copy=False)
+	packing_dimentions = fields.Char(string="Packing Dimentions")
 
 
 	@api.onchange('carrier_id')
