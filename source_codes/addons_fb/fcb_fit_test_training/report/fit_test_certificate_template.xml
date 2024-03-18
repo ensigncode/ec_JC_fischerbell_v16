@@ -27,6 +27,7 @@
 												<p style="font-size: 40px;color:grey;">Fit Test Certificate</p>
 											</t>
 											<br/>
+											<div style="height:380px;">
 											<p style="font-size: 20px;">This is to certify that
 												<br/>
 												<strong style="font-size: 25px;">
@@ -96,10 +97,7 @@
 													</strong>
 												</span>
 											</p>
-											<br/>
-											<br/>
-											<br/>
-											<br/>
+										</div>
 											<span class="mb-3" t-field="doc.trainer_sign" t-options='{"widget": "image"}' style="display: block; width: 200px; text-align: right; margin-left: auto; border-bottom: 1px solid;"/>
 											<strong>
 												<p style="font-size: 15px; text-align: right;"><t t-if="doc.name">

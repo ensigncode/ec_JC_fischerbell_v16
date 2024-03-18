@@ -245,32 +245,67 @@ class SaleOrder(models.Model):
 	# 		if 'partner_seq' not in vals or vals['partner_seq'] == _('New'):
 	# 			vals['partner_seq'] = self.env['ir.sequence'].next_by_code('quality.point') or _('New')
 	# 	return super().create(vals_list)
+	# def action_to_approve(self):
+	# 	self.submited_date = date.today()
+	# 	if not 'vendor_wizard' in self._context:
+	# 		line_ids = []
+	# 		for rec in self.order_line:
+	# 			line = rec
+	# 			mrp_route_id = self.env.ref('purchase_stock.route_warehouse0_buy')
+	# 			mto_route_id = self.env.ref('stock.route_warehouse0_mto')
+	# 			if mrp_route_id and line.product_id.bom_ids and mto_route_id and (mrp_route_id in line.product_id.route_ids) or (mto_route_id in line.product_id.route_ids) and line.product_id.bom_ids:
+	# 				boms = line.product_id.bom_ids._bom_find(line.product_id, company_id=line.company_id.id, bom_type='phantom')[line.product_id]
+	# 				if boms:
+	# 					for bom_line in boms[0].bom_line_ids:
+	# 						line_ids.append((0,0,{'product_id':bom_line.product_id.id,'demand_qty':rec.product_uom_qty,'sale_line_id':line.id,'bom_line_id':bom_line.id}))
+	# 			elif not rec.product_id.product_tmpl_id.seller_ids:
+	# 				line_ids.append((0,0,{'product_id':line.product_id.id,'demand_qty':rec.product_uom_qty,'sale_line_id':line.id}))
+	# 		if line_ids:
+	# 			return {'type': 'ir.actions.act_window',
+	# 					'name': _('Product wizard'),
+	# 					'res_model': 'update.product.vendor',
+	# 					'view_mode': 'form',
+	# 					'context': {'order_id': self.id,'line_ids':line_ids},
+	# 					'target': 'new',
+	# 					}
+	# 		else:
+	# 			self.approval_order()
+	#
+	# 	return True
+
 	def action_to_approve(self):
 		self.submited_date = date.today()
-		if not 'vendor_wizard' in self._context:
-			line_ids = []
-			for rec in self.order_line:
-				line = rec
-				mrp_route_id = self.env.ref('purchase_stock.route_warehouse0_buy')
-				mto_route_id = self.env.ref('stock.route_warehouse0_mto')
-				if mrp_route_id and line.product_id.bom_ids and mto_route_id and (mrp_route_id in line.product_id.route_ids) or (mto_route_id in line.product_id.route_ids) and line.product_id.bom_ids:
-					boms = line.product_id.bom_ids._bom_find(line.product_id, company_id=line.company_id.id, bom_type='phantom')[line.product_id]
-					if boms:
-						for bom_line in boms[0].bom_line_ids:
-							line_ids.append((0,0,{'product_id':bom_line.product_id.id,'demand_qty':rec.product_uom_qty,'sale_line_id':line.id,'bom_line_id':bom_line.id}))
-				elif not rec.product_id.product_tmpl_id.seller_ids:
-					line_ids.append((0,0,{'product_id':line.product_id.id,'demand_qty':rec.product_uom_qty,'sale_line_id':line.id}))
-			if line_ids:
-				return {'type': 'ir.actions.act_window',
-						'name': _('Product wizard'),
-						'res_model': 'update.product.vendor',
-						'view_mode': 'form',
-						'context': {'order_id': self.id,'line_ids':line_ids},
-						'target': 'new',
-						}
-			else:
-				self.approval_order()
-		
+		self.approval_order()
+		# if not 'vendor_wizard' in self._context:
+		# 	line_ids = []
+		# 	for rec in self.order_line:
+		# 		line = rec
+		# 		mrp_route_id = self.env.ref('purchase_stock.route_warehouse0_buy')
+		# 		mto_route_id = self.env.ref('stock.route_warehouse0_mto')
+		# 		if mrp_route_id and line.product_id.bom_ids and mto_route_id and (
+		# 				mrp_route_id in line.product_id.route_ids) or (
+		# 				mto_route_id in line.product_id.route_ids) and line.product_id.bom_ids:
+		# 			boms = line.product_id.bom_ids._bom_find(line.product_id, company_id=line.company_id.id,
+		# 													 bom_type='phantom')[line.product_id]
+		# 			if boms:
+		# 				for bom_line in boms[0].bom_line_ids:
+		# 					line_ids.append((0, 0,
+		# 									 {'product_id': bom_line.product_id.id, 'demand_qty': rec.product_uom_qty,
+		# 									  'sale_line_id': line.id, 'bom_line_id': bom_line.id}))
+		# 		elif not rec.product_id.product_tmpl_id.seller_ids:
+		# 			line_ids.append((0, 0, {'product_id': line.product_id.id, 'demand_qty': rec.product_uom_qty,
+		# 									'sale_line_id': line.id}))
+		# 	if line_ids:
+		# 		return {'type': 'ir.actions.act_window',
+		# 				'name': _('Product wizard'),
+		# 				'res_model': 'update.product.vendor',
+		# 				'view_mode': 'form',
+		# 				'context': {'order_id': self.id, 'line_ids': line_ids},
+		# 				'target': 'new',
+		# 				}
+		# 	else:
+
+
 		return True
 
 	def approval_order(self):
