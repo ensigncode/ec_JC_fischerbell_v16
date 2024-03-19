@@ -96,7 +96,7 @@
                                         <div class="col-6">
                                             <div class="input-group">
                                                 <label for="add_on_type">Add on:</label>
-                                                <select id="add_on_type" name="add_on_type" required="true">
+                                                <select id="add_on_type" name="add_on_type">
                                                     <option value=""></option>
                                                     <option value="blue_ray">BLUE RAY​</option>
                                                     <option value="photo_chromic">PHOTOCHROMIC</option>

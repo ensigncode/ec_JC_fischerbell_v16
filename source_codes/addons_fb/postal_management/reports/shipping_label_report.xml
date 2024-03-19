@@ -29,7 +29,7 @@
                             <h5 class="mt52" t-esc="doc.packing_dimentions"></h5>
                             <h5>
                                 Weight : 
-                                <span t-esc="doc.weight"/>
+                                <span t-esc="doc.weight_shipping_label"/>
                                 <span t-if="doc.weight_uom_name" t-esc="doc.weight_uom_name"/>
                                 
                             </h5>

@@ -5,17 +5,17 @@ from odoo import api, fields, models, _
 class StockPicking(models.Model):
 	_inherit = 'stock.picking'
 
-	
 	@api.model
 	def _get_driver_id_domain(self):
 		sale_order_id = self.env['sale.order'].sudo().search([('name','=',self.origin)])
-		print("\n\n self.sale id ==== ",sale_order_id,self.origin,self.name,self)
-		if sale_order_id:
+		if sale_order_id and self.picking_type_id.code == 'outgoing':
 			partner_shipping_id = self.sale_id.partner_shipping_id if self.sale_id.partner_shipping_id else self.sale_id.partner_id
 			zipcode = partner_shipping_id.zip
 			delivery_code = str(zipcode[0:2]) if zipcode else False
 			postal_code_id = self.env['postal.code'].search([('code','=',delivery_code)])
 			self.driver_ids = self.env['res.partner'].search([('is_driver','=',True),('postal_code_ids','in',postal_code_id.ids)]) 
+		else :
+			self.driver_ids = False
 		
 	driver_id = fields.Many2one('res.partner',string="Driver")
 	forwarder_id = fields.Many2one('res.partner',string="Forwarder")
@@ -27,6 +27,7 @@ class StockPicking(models.Model):
 	signed_by = fields.Char(string="Signed By", copy=False)
 	signed_on = fields.Datetime(string="Signed On", copy=False)
 	packing_dimentions = fields.Char(string="Packing Dimentions")
+	weight_shipping_label = fields.Float(string="Weight for Shipping label")
 
 
 	@api.onchange('carrier_id')

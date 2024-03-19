@@ -7,6 +7,7 @@
         <field name="arch" type="xml">
             <field name="group_id" position="after">
                 <field name="packing_dimentions"/>
+                <field name="weight_shipping_label" />
             </field>
             <xpath expr="//page//group[@name='other_infos']" position="after">
                 <group string="Driver Information" name="driver_infos">
