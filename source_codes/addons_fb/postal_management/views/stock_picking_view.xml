@@ -5,10 +5,17 @@
         <field name="model">stock.picking</field>
         <field name="inherit_id" ref="stock.view_picking_form"/>
         <field name="arch" type="xml">
-            <field name="group_id" position="after">
-                <field name="packing_dimentions"/>
-                <field name="weight_shipping_label" />
-            </field>
+            <xpath expr="//group[@name='other_infos']" position="before">
+                <group name='shipping_label_report_data' string="Shipping Label Information">
+                    <field name="packing_dimentions"/>
+                    <label for="weight_shipping_label" string="Weight Shipping label"/>
+                    <div>
+                        <field name="weight_shipping_label" class="oe_inline" style="width:10% !important"/>
+                        <field name="weight_uom_shipping_label" nolabel="1" class="oe_inline" style="margin-left:3px;width:30% !important"/>
+                    </div>
+                </group>
+            </xpath>
+            
             <xpath expr="//page//group[@name='other_infos']" position="after">
                 <group string="Driver Information" name="driver_infos">
                     <field name="driver_ids" widget="many2many_tags" invisible="1" />

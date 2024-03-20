@@ -28,6 +28,7 @@ class StockPicking(models.Model):
 	signed_on = fields.Datetime(string="Signed On", copy=False)
 	packing_dimentions = fields.Char(string="Packing Dimentions")
 	weight_shipping_label = fields.Float(string="Weight for Shipping label")
+	weight_uom_shipping_label   = fields.Many2one("uom.uom",string="Weight Unit name")
 
 
 	@api.onchange('carrier_id')
