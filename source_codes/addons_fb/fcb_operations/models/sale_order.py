@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 
 from odoo import api, models, fields, _
-import logging
-_logger = logging.getLogger(__name__)
 
 
 class SaleOrder(models.Model):
@@ -19,21 +17,21 @@ class SaleOrder(models.Model):
 			product = order_line.product_id
 			qty_to_deliver = order_line.product_uom_qty
 			stock_available = product.qty_available
-                  
-			if stock_available < qty_to_deliver:
-				#   Check incoming stock from purchase orders
-				purchase_orders = self.env['purchase.order'].search([('state', '=', 'purchase')])
 
-				for po in purchase_orders:
-					for po_line in po.order_line:
-						if po_line.product_id == product:
-							product_available_date = po_line.date_planned
-							product_buyer_id = po.user_id
-							self.product_available_date = product_available_date
-							self.product_buyer_id = product_buyer_id
-							if template_id and self.user_id.login:
-								template_id.sudo().send_mail(self.id, force_send=True, email_values={
-									'email_from': self.product_buyer_id.email, 'email_to': self.user_id.login})
-						else:
-							print("\n")
+			if stock_available < qty_to_deliver:
+				purchase_line_orders = self.env['purchase.order.line'].search([('product_id', '=', product.id)])
+				for po_line in purchase_line_orders:
+					if po_line.product_id.id == product.id:
+						product_available_date = po_line.date_planned
+						product_buyer_id = po_line.order_id.user_id
+						self.product_available_date = product_available_date
+						self.product_buyer_id = product_buyer_id
+
+						if template_id and self.user_id.login:
+							template_values = {
+								'email_from': product_buyer_id.email,
+								'email_to': self.user_id.login,
+							}
+							template_id.sudo().send_mail(self.id, force_send=True, email_values=template_values)
+
 		return res
