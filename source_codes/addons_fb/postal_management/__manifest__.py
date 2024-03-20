@@ -2,7 +2,7 @@
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 {
     'name': 'Postal Management',
-    'version': '16.0.0.1',
+    'version': '16.0.0.2',
     'category': '',
     'summary': '',
     'website': '',
