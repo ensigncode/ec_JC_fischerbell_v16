@@ -192,6 +192,18 @@ class PurchaseOrderLine(models.Model):
 	sale_id = fields.Many2one('sale.order', related="sale_line_id.order_id")
 	manufacture_lot_id = fields.Many2one('fischerbell.manufacture.lot', 'Manufacture No')
 	comments = fields.Char()
+	request_delivery_date = fields.Datetime("Request Delivery Date")
+
+	@api.onchange('product_id')
+	def onchange_sake_product_image(self):
+		for product in self:
+			if product.order_id.estimated_delivery_date:
+			   product.date_planned = product.order_id.estimated_delivery_date
+			   product.request_delivery_date = product.order_id.request_delivery_date
+			else:
+				product.date_planned = False
+				product.request_delivery_date = False
+
 
 	@api.onchange('customer_id')
 	def onchange_purchase_customer_sku(self):
