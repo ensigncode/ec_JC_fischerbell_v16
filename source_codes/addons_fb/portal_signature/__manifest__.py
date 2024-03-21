@@ -2,13 +2,14 @@
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 {
     'name': 'Portal Signature',
-    'version': '16.0.0.1',
+    'version': '16.0.0.3',
     'category': '',
     'summary': '',
     'website': '',
-    'depends': ['website'],
+    'depends': ['website','stock'],
     'data': [
-    'views/portal_signature_template.xml'
+        'security/ir.model.access.csv',
+        'views/portal_signature_template.xml'
         
     ],
     'demo': [

@@ -7,7 +7,7 @@
     'summary': '',
     'website': '',
     'depends': ['account','l10n_in','account_asset','account_reports','purchase_stock',
-            'stock_dropshipping',],
+            'stock_dropshipping'],
     'data': [
         "data/demo_data.xml",
         "data/ir_cron_data.xml",
