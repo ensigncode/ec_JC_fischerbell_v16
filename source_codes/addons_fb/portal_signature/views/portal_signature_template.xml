@@ -33,6 +33,23 @@
                         <th>
                             <span class='d-none d-md-inline'>Name</span>
                         </th>
+                        <th>
+                            <span class='d-none d-md-inline'>Company Name</span>
+                        </th>
+                        <th class="d-none">
+                            <span class='d-none d-md-inline'>Company Address</span>
+                        </th>
+                        <th>
+                            <span class='d-none d-md-inline'>Instructions</span>
+                        </th>
+                        <th>
+                            <span class='d-none d-md-inline'>Contact Person</span>
+                        </th>
+                        <th>
+                            <span class='d-none d-md-inline'>Phone Number</span>
+                        </th>
+                       
+
                         <th class='d-none'>
                             <span class='d-none'>Delivery</span>
                         </th>
@@ -51,14 +68,29 @@
                         </th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody class="tbody_class">
                   <t t-foreach="picking_ids" t-as="picking_id">
-                    <tr>
+                    <tr draggable="true"> 
                         <td class="d-none" id="picking">
                             <t t-esc="picking_id.id"/>
                         </td>
                         <td>
                             <t t-esc="picking_id.name"/>
+                        </td>
+                        <td>
+                            <t t-esc="picking_id.partner_id.parent_id.name"/>
+                        </td>
+                        <td class="d-none">
+                            <t t-esc="picking_id.partner_id.street"/>
+                        </td>
+                        <td>
+                            <t t-esc="picking_id.delivery_instruction"/>
+                        </td>
+                        <td>
+                            <t t-esc="picking_id.partner_id.name"/>
+                        </td>
+                        <td>
+                            <t t-esc="picking_id.partner_id.phone"/>
                         </td>
                         <td class="d-none">
                             <t t-esc="picking_id.partner_id.display_name"/>
@@ -141,7 +173,6 @@
                                        <i class="fa fa-pencil"/>
                                        Signature
                                    </button>
-                               <!-- </t> -->
                             </td>
                          </t>
                          <t t-else="">

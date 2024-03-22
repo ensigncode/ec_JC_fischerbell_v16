@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'Fischerbell Custom',
-    'version': '1.0',
+    'version': '1.0.1',
     "author": "SGEEDE",
     'category': 'Custom Development',
     'description': """
         Fischerbell Custom
     """,
     'website': 'https://www.sgeede.com/',
-    'depends': ['account','sale','purchase', 'stock','purchase_stock', 'report_xlsx','contacts','mrp','crm','sale_subscription','account_accountant','industry_fsm','helpdesk','marketing_automation','mrp','quality_control','stock_barcode','maintenance','hr','hr_appraisal', 'mail','sale_renting'],
+    'depends': ['account','sale','purchase', 'stock','purchase_stock', 'report_xlsx','contacts','mrp','crm','sale_subscription','account_accountant','industry_fsm','helpdesk','marketing_automation','mrp','quality_control','stock_barcode','maintenance','hr','hr_appraisal', 'mail','sale_renting','fcb_accounting'],
     'data': [
         'data/fischerbell_consignment_note_send_email_templates.xml',
         'data/ir_server_actions.xml',
