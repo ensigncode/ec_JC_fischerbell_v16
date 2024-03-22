@@ -167,12 +167,36 @@
                                   </div>
                               </div>
                           </div>
+
+                          <div class="modal fade" t-attf-id="modaldeliveryskip_{{ picking_id.id }}" tabindex="-1" aria-labelledby="signature" role="dialog" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="">Skip Delivery</h5>
+                                       <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <label class="" for="skip_reason"></label>
+                                        <textarea type="text" rows="4" cols="50" placeholder=" Give the reason for skip this delivery." id="skip_reason" name="skip_reason"></textarea>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="" class="btn btn-primary submit_skip_delivery" t-att-data-id="picking_id.id">Submit</button>
+                                        <button type="cancel" class="btn btn-secondary">Cancel</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                             <td class="portal_btn_blocks">
                                <!-- <t t-if="pa.state == 'confirm'"> -->
                                    <button class="btn btn-link o_icon_button text-primary approve_btn" t-att-data-id="picking_id.id" type="button">
                                        <i class="fa fa-pencil"/>
                                        Signature
                                    </button>
+                                   <button class="btn btn-primary skip_delivery" t-att-data-id="picking_id.id" type="button">
+                                        Skip
+                                   </button>
+                               <!-- </t> -->
                             </td>
                          </t>
                          <t t-else="">
