@@ -13,12 +13,22 @@
 											<img src="/fcb_fit_test_training/static/src/img/side_bar_image.jpeg"
 											     alt="certificate" style="height: 792px;width: 400px; margin: 0;"/>
 										</div>
-										<div class="col-6">
+										<div class="col-6 mt-4 pt-4">
+											<t t-if="doc.training_types == 'aed'">
+												<p style="font-size: 40px;color:grey;">AED Training Certificate</p>
+											</t>
+											<t t-if="doc.training_types == 'scba'">
+												<p style="font-size: 40px;color:grey;">Fit Test Certificate</p>
+											</t>
+											<t t-if="doc.training_types == 'spill_traning'">
+												<p style="font-size: 40px;color:grey;">Spill Training Certificate</p>
+											</t>
+											<t t-if="doc.training_types == 'fit_test'">
+												<p style="font-size: 40px;color:grey;">Fit Test Certificate</p>
+											</t>
 											<br/>
-											<p style="font-size: 30px;">Fit Test Certificate</p>
-											<br/>
-											<br/>
-											<p style="font-size: 25px;">This is to certify that
+											<div style="height:470px;">
+											<p style="font-size: 20px;">This is to certify that
 												<br/>
 												<strong style="font-size: 25px;">
 													<t t-if="o.trainee">
@@ -26,56 +36,79 @@
 													</t>
 												</strong>
 											</p>
-											<p style="font-size: 25px;">IC /FIN No. /Employee No:
+											<p style="font-size: 20px;">IC /FIN No. /Employee No:
 												<t t-if="o.passport_no">
 													<span t-field="o.passport_no"/>
 												</t>
 											</p>
-											<p style="font-size: 25px;">from
+											<p style="font-size: 20px;">From
 												<br/>
-												<strong style="font-size: 25px;">Elmer</strong>
-											</p>
-											<p style="font-size: 20px;">Passed the Training
-												<br/>Type of Training:
-												<t t-if="o.fit_id.training_type">
-													<span t-field="o.fit_id.training_type"/>
-												</t>
-												<br/>Size / Result:
-												<b>
-													<t t-if="o.size">
-														<span t-field="o.size"/>&#160;/&#160;
+												<strong>
+													<t t-if="doc.company">
+														<span t-field="doc.company"/>
 													</t>
-												</b>
-												<b>
-													<t t-if="o.is_pass_fail == True">Pass</t>
-													<t t-else="">Fail
+												</strong>
+											</p>
+											<t t-if="doc.training_types == 'fit_test'">
+												<p style="font-size: 20px;">Passed the Training
+													<br/>Type of Training:
+													<t t-if="o.fit_id.training_type">
+														<span t-field="o.fit_id.training_type"/>
 													</t>
-												</b>
+													<br/>Size / Result:
+															<b>
+																<t t-if="o.size">
+																	<span t-field="o.size"/>&#160;/&#160;
+																</t>
+															</b>
+															<b>
+																<t t-if="o.is_pass_fail == True">Pass</t>
+																<t t-else="">Fail
+																</t>
+															</b>
+													<br/>
+													<br/>
+													<span>Tested On:
+														<t t-if="o.tested_on">
+															<span t-field="o.tested_on" t-options='{"widget": "date","format": "dd-MM-yyyy"}'/>
+														</t>
+													</span>
+												</p>
+											</t>
+											<br/>
+											<p t-if="doc.training_types == 'aed' or doc.training_types == 'scba' or doc.training_types == 'spill_traning'">
+												<span style="font-size: 20px;">Attended the Training on
+													<t t-if="o.tested_on">
+														<span t-field="o.tested_on" t-options='{"widget": "date","format": "dd-MM-yyyy"}'/>
+													</t>
+												</span>
+												<br/>
+												<span style="font-size: 20px;">Type of Training:
+													<t t-if="o.fit_id.training_type">
+														<span t-field="o.fit_id.training_type"/>
+													</t>
+												</span>
+												<br/>
+												<span style="font-size: 20px;">Result:
+													<strong>
+														<t t-if="o.is_pass_fail == True">Pass</t>
+														<t t-else="">Fail</t>
+													</strong>
+												</span>
 											</p>
-											<p style="font-size: 25px;">Tested On:
-												<t t-if="o.tested_on">
-													<span t-field="o.tested_on"/>
-												</t>
-											</p>
-											<br/>
-											<br/>
-											<br/>
-											<br/>
-											<br/>
-											<br/>
-											<br/>
-											<p style="font-size: 15px;text-align: right;">
-												______________________________
-											</p>
-											<b>
-												<p style="font-size: 15px; text-align: right;">Patric Yeo | Trainer</p>
-											</b>
-											<b>
+										</div>
+											<span class="mb-3" t-field="doc.trainer_sign" t-options='{"widget": "image"}' style="display: block; width: 200px; text-align: right; margin-left: auto; border-bottom: 1px solid;"/>
+											<strong>
+												<p style="font-size: 15px; text-align: right;"><t t-if="doc.name">
+													<span t-field="doc.name"/>
+												</t> | Trainer</p>
+											</strong>
+											<strong>
 												<p style="font-size: 15px; text-align: right;">Fischer Bell Private
 													Limited
 												</p>
-											</b>
-											<p style="font-size: 15px;text-align: center;">This Certificate is valid for
+											</strong>
+											<p style="font-size: 10px;text-align: center;">This Certificate is valid for
 												one (1) year from the date issued
 											</p>
 										</div>
@@ -98,12 +131,12 @@
 										<br/>
 									</p>
 									<p style="font-size: 30px;">Passed the Training
-										<br/>Type of Training
+										<br/>Type of Training:
 
-										<br/>Size
+										<br/>Size:
 
 										<br/>
-										<b>Result
+										<b>Result:
 										</b>
 									</p>
 									<p style="font-size: 30px;">Tested On
@@ -117,4 +150,3 @@
 		</t>
 	</template>
 </odoo>
-
