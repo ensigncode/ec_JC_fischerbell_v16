@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="rental_order_form_view_ext_fcb_rental_extend" model="ir.ui.view">
+        <field name="name">rental.order.form.ext.fcb.rental.extend</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale_renting.rental_order_form_view"/>
+        <field name="arch" type="xml">
+            <button name="open_pickup" position="replace"/>
+            <!-- <xpath expr="//button[@name='open_return'][2]" position="replace"/> -->
+            <!-- <xpath expr="//button[@name='open_return'][1]" position="replace"/> -->
+            <button name="open_return" position="replace"/>
+            <button name="open_return" position="replace"/>
+        </field>
+    </record>
+</odoo>
