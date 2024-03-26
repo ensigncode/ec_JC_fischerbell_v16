@@ -196,31 +196,31 @@ class FischerbellAgingReport(models.AbstractModel):
 		sheet.write(y, x, 'Total Price', title2)
 		x += 1
 
-
 		lot_serial_numbers = False
-		for product in products:
-			lot_serial_numbers = self.env['stock.lot'].search([('product_id','=',product.id)])
+		purchase_orders = self.env['purchase.order'].search([])
+		# for product in products:
+		# 	lot_serial_numbers = self.env['stock.lot'].search([('product_id','=',product.id)])
 
 		x = 0
 		y += 1
-		if lot_serial_numbers:
-			for lot in lot_serial_numbers:
+		if purchase_orders:
+			for order in purchase_orders:
 				total_qty = 0
 				total_price = 0
 				numbering += 1
-				sheet.write(y, x, lot.product_id.model or '', content1) #Model
+				sheet.write(y, x, order.product_id.model or '', content1) #Model
 				x += 1
-				sheet.write(y, x, lot.product_id.default_code or '', content1) #Item Group
+				sheet.write(y, x, order.product_id.default_code or '', content1) #Item Group
 				x += 1
-				description = lot.product_id.description
+				description = order.product_id.description
 				soup = BeautifulSoup(description, 'html.parser')
 				DescriptionText = soup.get_text()
 				sheet.write(y, x, DescriptionText or '', content1) #description
 				x += 1
-				sheet.write(y, x, lot.name or '', content1) #Batch No
+				sheet.write(y, x, order.name or '', content1) #Batch No
 				x += 1
-				if lot.expiration_date:
-					sheet.write(y, x, lot.expiration_date.strftime('%d %b %Y') or '', content1) #Expiration Date
+				if order.expiration_date:
+					sheet.write(y, x, order.expiration_date.strftime('%d %b %Y') or '', content1) #Expiration Date
 					x += 1
 				else:
 					sheet.write(y, x, '', content1)
@@ -241,17 +241,17 @@ class FischerbellAgingReport(models.AbstractModel):
 				expiry_1_year = today + relativedelta(years=1)
 
 				#1 month qty
-				if lot.expiration_date <= expiry_1_month:
+				if order.expiration_date <= expiry_1_month:
 					total_qty += 1
-					sheet.write(y, x, lot.product_qty or '', content1)
+					sheet.write(y, x, order.product_qty or '', content1)
 					x += 1
 				else:
 					sheet.write(y, x, '', content1)
 					x += 1
 				#1 month value
-				if lot.expiration_date <= expiry_1_month:
+				if order.expiration_date <= expiry_1_month:
 					total_price += 1
-					sheet.write(y, x, lot.product_id.list_price or '', content1)
+					sheet.write(y, x, order.product_id.list_price or '', content1)
 					x += 1
 				else:
 					sheet.write(y, x, '', content1)
@@ -260,17 +260,17 @@ class FischerbellAgingReport(models.AbstractModel):
 				###############################################################
 
 				#2 month qty
-				if lot.expiration_date <= expiry_2_month and lot.expiration_date > expiry_1_month:
+				if order.expiration_date <= expiry_2_month and order.expiration_date > expiry_1_month:
 					total_qty += 1
-					sheet.write(y, x, lot.product_qty or '', content1)
+					sheet.write(y, x, order.product_qty or '', content1)
 					x += 1
 				else:
 					sheet.write(y, x, '', content1)
 					x += 1
 				#2 month value
-				if lot.expiration_date <= expiry_2_month and lot.expiration_date >= expiry_1_month:
+				if order.expiration_date <= expiry_2_month and order.expiration_date >= expiry_1_month:
 					total_price += 1
-					sheet.write(y, x, lot.product_id.list_price or '', content1)
+					sheet.write(y, x, order.product_id.list_price or '', content1)
 					x += 1
 				else:
 					sheet.write(y, x, '', content1)
@@ -279,17 +279,17 @@ class FischerbellAgingReport(models.AbstractModel):
 				###############################################################
 
 				#3 month qty
-				if lot.expiration_date <= expiry_3_month and lot.expiration_date > expiry_2_month:
+				if order.expiration_date <= expiry_3_month and order.expiration_date > expiry_2_month:
 					total_qty += 1
-					sheet.write(y, x, lot.product_qty or '', content1)
+					sheet.write(y, x, order.product_qty or '', content1)
 					x += 1
 				else:
 					sheet.write(y, x, '', content1)
 					x += 1
 				#3 month value
-				if lot.expiration_date <= expiry_3_month and lot.expiration_date > expiry_2_month:
+				if order.expiration_date <= expiry_3_month and order.expiration_date > expiry_2_month:
 					total_price += 1
-					sheet.write(y, x, lot.product_id.list_price or '', content1)
+					sheet.write(y, x, order.product_id.list_price or '', content1)
 					x += 1
 				else:
 					sheet.write(y, x, '', content1)
@@ -298,17 +298,17 @@ class FischerbellAgingReport(models.AbstractModel):
 				###############################################################
 
 				#4 month qty
-				if lot.expiration_date <= expiry_4_month and lot.expiration_date > expiry_3_month:
+				if order.expiration_date <= expiry_4_month and order.expiration_date > expiry_3_month:
 					total_qty += 1
-					sheet.write(y, x, lot.product_qty or '', content1)
+					sheet.write(y, x, order.product_qty or '', content1)
 					x += 1
 				else:
 					sheet.write(y, x, '', content1)
 					x += 1
 				#4 month value
-				if lot.expiration_date <= expiry_4_month and lot.expiration_date > expiry_3_month:
+				if order.expiration_date <= expiry_4_month and order.expiration_date > expiry_3_month:
 					total_price += 1
-					sheet.write(y, x, lot.product_id.list_price or '', content1)
+					sheet.write(y, x, order.product_id.list_price or '', content1)
 					x += 1
 				else:
 					sheet.write(y, x, '', content1)
@@ -317,17 +317,17 @@ class FischerbellAgingReport(models.AbstractModel):
 				###############################################################
 
 				#5 month qty
-				if lot.expiration_date <= expiry_5_month and lot.expiration_date > expiry_4_month:
+				if order.expiration_date <= expiry_5_month and order.expiration_date > expiry_4_month:
 					total_qty += 1
-					sheet.write(y, x, lot.product_qty or '', content1)
+					sheet.write(y, x, order.product_qty or '', content1)
 					x += 1
 				else:
 					sheet.write(y, x, '', content1)
 					x += 1
 				#5 month value
-				if lot.expiration_date <= expiry_5_month and lot.expiration_date > expiry_4_month:
+				if order.expiration_date <= expiry_5_month and order.expiration_date > expiry_4_month:
 					total_price += 1
-					sheet.write(y, x, lot.product_id.list_price or '', content1)
+					sheet.write(y, x, order.product_id.list_price or '', content1)
 					x += 1
 				else:
 					sheet.write(y, x, '', content1)
@@ -336,17 +336,17 @@ class FischerbellAgingReport(models.AbstractModel):
 				###############################################################
 
 				#6 month qty
-				if lot.expiration_date <= expiry_6_month and lot.expiration_date > expiry_5_month:
+				if order.expiration_date <= expiry_6_month and order.expiration_date > expiry_5_month:
 					total_qty += 1
-					sheet.write(y, x, lot.product_qty or '', content1)
+					sheet.write(y, x, order.product_qty or '', content1)
 					x += 1
 				else:
 					sheet.write(y, x, '', content1)
 					x += 1
 				#6 month value
-				if lot.expiration_date <= expiry_6_month and lot.expiration_date > expiry_5_month:
+				if order.expiration_date <= expiry_6_month and order.expiration_date > expiry_5_month:
 					total_price += 1
-					sheet.write(y, x, lot.product_id.list_price or '', content1)
+					sheet.write(y, x, order.product_id.list_price or '', content1)
 					x += 1
 				else:
 					sheet.write(y, x, '', content1)
@@ -355,17 +355,17 @@ class FischerbellAgingReport(models.AbstractModel):
 				###############################################################
 
 				#7 month qty
-				if lot.expiration_date <= expiry_7_month and lot.expiration_date > expiry_6_month:
+				if order.expiration_date <= expiry_7_month and order.expiration_date > expiry_6_month:
 					total_qty += 1
-					sheet.write(y, x, lot.product_qty or '', content1)
+					sheet.write(y, x, order.product_qty or '', content1)
 					x += 1
 				else:
 					sheet.write(y, x, '', content1)
 					x += 1
 				#7 month value
-				if lot.expiration_date <= expiry_7_month and lot.expiration_date > expiry_6_month:
+				if order.expiration_date <= expiry_7_month and order.expiration_date > expiry_6_month:
 					total_price += 1
-					sheet.write(y, x, lot.product_id.list_price or '', content1)
+					sheet.write(y, x, order.product_id.list_price or '', content1)
 					x += 1
 				else:
 					sheet.write(y, x, '', content1)
@@ -374,17 +374,17 @@ class FischerbellAgingReport(models.AbstractModel):
 				###############################################################
 
 				#8 month qty
-				if lot.expiration_date <= expiry_8_month and lot.expiration_date > expiry_7_month:
+				if order.expiration_date <= expiry_8_month and order.expiration_date > expiry_7_month:
 					total_qty += 1
-					sheet.write(y, x, lot.product_qty or '', content1)
+					sheet.write(y, x, order.product_qty or '', content1)
 					x += 1
 				else:
 					sheet.write(y, x, '', content1)
 					x += 1
 				#8 month value
-				if lot.expiration_date <= expiry_8_month and lot.expiration_date > expiry_7_month:
+				if order.expiration_date <= expiry_8_month and order.expiration_date > expiry_7_month:
 					total_price += 1
-					sheet.write(y, x, lot.product_id.list_price or '', content1)
+					sheet.write(y, x, order.product_id.list_price or '', content1)
 					x += 1
 				else:
 					sheet.write(y, x, '', content1)
@@ -393,17 +393,17 @@ class FischerbellAgingReport(models.AbstractModel):
 				###############################################################
 
 				#9 month qty
-				if lot.expiration_date <= expiry_9_month and lot.expiration_date > expiry_8_month:
+				if order.expiration_date <= expiry_9_month and order.expiration_date > expiry_8_month:
 					total_qty += 1
-					sheet.write(y, x, lot.product_qty or '', content1)
+					sheet.write(y, x, order.product_qty or '', content1)
 					x += 1
 				else:
 					sheet.write(y, x, '', content1)
 					x += 1
 				#9 month value
-				if lot.expiration_date <= expiry_9_month and lot.expiration_date > expiry_8_month:
+				if order.expiration_date <= expiry_9_month and order.expiration_date > expiry_8_month:
 					total_price += 1
-					sheet.write(y, x, lot.product_id.list_price or '', content1)
+					sheet.write(y, x, order.product_id.list_price or '', content1)
 					x += 1
 				else:
 					sheet.write(y, x, '', content1)
@@ -412,17 +412,17 @@ class FischerbellAgingReport(models.AbstractModel):
 				###############################################################
 
 				#110month qty
-				if lot.expiration_date <= expiry_10_month and lot.expiration_date > expiry_9_month:
+				if order.expiration_date <= expiry_10_month and order.expiration_date > expiry_9_month:
 					total_qty += 1
-					sheet.write(y, x, lot.product_qty or '', content1)
+					sheet.write(y, x, order.product_qty or '', content1)
 					x += 1
 				else:
 					sheet.write(y, x, '', content1)
 					x += 1
 				#10 month value
-				if lot.expiration_date <= expiry_10_month and lot.expiration_date > expiry_9_month:
+				if order.expiration_date <= expiry_10_month and order.expiration_date > expiry_9_month:
 					total_price += 1
-					sheet.write(y, x, lot.product_id.list_price or '', content1)
+					sheet.write(y, x, order.product_id.list_price or '', content1)
 					x += 1
 				else:
 					sheet.write(y, x, '', content1)
@@ -431,17 +431,17 @@ class FischerbellAgingReport(models.AbstractModel):
 				###############################################################
 
 				#11 month qty
-				if lot.expiration_date <= expiry_11_month and lot.expiration_date > expiry_10_month:
+				if order.expiration_date <= expiry_11_month and order.expiration_date > expiry_10_month:
 					total_qty += 1
-					sheet.write(y, x, lot.product_qty or '', content1)
+					sheet.write(y, x, order.product_qty or '', content1)
 					x += 1
 				else:
 					sheet.write(y, x, '', content1)
 					x += 1
 				#11 month value
-				if lot.expiration_date <= expiry_11_month and lot.expiration_date > expiry_10_month:
+				if order.expiration_date <= expiry_11_month and order.expiration_date > expiry_10_month:
 					total_price += 1
-					sheet.write(y, x, lot.product_id.list_price or '', content1)
+					sheet.write(y, x, order.product_id.list_price or '', content1)
 					x += 1
 				else:
 					sheet.write(y, x, '', content1)
@@ -450,17 +450,17 @@ class FischerbellAgingReport(models.AbstractModel):
 				###############################################################
 
 				#12 month qty
-				if lot.expiration_date <= expiry_12_month and lot.expiration_date > expiry_11_month:
+				if order.expiration_date <= expiry_12_month and order.expiration_date > expiry_11_month:
 					total_qty += 1
-					sheet.write(y, x, lot.product_qty or '', content1)
+					sheet.write(y, x, order.product_qty or '', content1)
 					x += 1
 				else:
 					sheet.write(y, x, '', content1)
 					x += 1
 				#12 month value
-				if lot.expiration_date <= expiry_12_month and lot.expiration_date > expiry_11_month:
+				if order.expiration_date <= expiry_12_month and order.expiration_date > expiry_11_month:
 					total_price += 1
-					sheet.write(y, x, lot.product_id.list_price or '', content1)
+					sheet.write(y, x, order.product_id.list_price or '', content1)
 					x += 1
 				else:
 					sheet.write(y, x, '', content1)
@@ -469,23 +469,23 @@ class FischerbellAgingReport(models.AbstractModel):
 				###############################################################
 
 				#1 year qty
-				if lot.expiration_date <= expiry_1_year and lot.expiration_date > expiry_12_month:
+				if order.expiration_date <= expiry_1_year and order.expiration_date > expiry_12_month:
 					total_qty += 1
-					sheet.write(y, x, lot.product_qty or '', content1)
+					sheet.write(y, x, order.product_qty or '', content1)
 					x += 1
 				else:
 					sheet.write(y, x, '', content1)
 					x += 1
 				#1 year value
-				if lot.expiration_date <= expiry_1_year and lot.expiration_date > expiry_12_month:
+				if order.expiration_date <= expiry_1_year and order.expiration_date > expiry_12_month:
 					total_price += 1
-					sheet.write(y, x, lot.product_id.list_price or '', content1)
+					sheet.write(y, x, order.product_id.list_price or '', content1)
 					x += 1
 				else:
 					sheet.write(y, x, '', content1)
 					x += 1
 
-				sheet.write(y, x, lot.product_uom_id.name or '', content1) #UoM
+				sheet.write(y, x, order.product_uom_id.name or '', content1) #UoM
 				x += 1
 				sheet.write(y, x, total_qty or '', content1) #Total Qty
 				x += 1
