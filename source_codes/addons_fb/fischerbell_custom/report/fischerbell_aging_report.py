@@ -120,7 +120,6 @@ class FischerbellAgingReport(models.AbstractModel):
 		sheet.merge_range('F1:AI1', 'Aging Inventory', title2)
 		# sheet.merge_range('F0:AI0', 'Aging Inventory', title2)
 
-		# initial horizontal / vertical
 		x = 0
 		y = 1
 	
@@ -196,10 +195,7 @@ class FischerbellAgingReport(models.AbstractModel):
 		sheet.write(y, x, 'Total Price', title2)
 		x += 1
 
-		lot_serial_numbers = False
 		purchase_orders = self.env['purchase.order'].search([])
-		# for product in products:
-		# 	lot_serial_numbers = self.env['stock.lot'].search([('product_id','=',product.id)])
 
 		x = 0
 		y += 1
