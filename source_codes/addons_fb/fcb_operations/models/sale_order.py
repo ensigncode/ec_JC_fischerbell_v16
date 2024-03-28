@@ -22,7 +22,7 @@ class SaleOrder(models.Model):
 				purchase_line_orders = self.env['purchase.order.line'].search([('product_id', '=', product.id)])
 				for po_line in purchase_line_orders:
 					if po_line.product_id.id == product.id:
-						product_available_date = po_line.date_planned
+						product_available_date = po_line.estimated_delivery_date
 						product_buyer_id = po_line.order_id.user_id
 						self.product_available_date = product_available_date
 						self.product_buyer_id = product_buyer_id
