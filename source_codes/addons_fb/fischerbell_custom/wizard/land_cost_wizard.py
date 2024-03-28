@@ -81,7 +81,7 @@ class LandCostWizard(models.TransientModel):
                                 freight_price = invoice_line_id.price_unit
                                 currency_and_price = f"{line.order_id.currency_id.name} { line.price_unit}"
                                 item_price = line.price_unit + freight_price
-                                cost = (line.product_qty * line.price_unit / purchase_id.amount_total) if purchase_id.amount_total != 0 else 0)
+                                cost = (line.product_qty * line.price_unit/purchase_id.amount_total)
                                 landed_cost = round((freight_price * cost) + line.price_unit, 2)
                                 company_currency_name = line.company_id.currency_id.name
                                 purchase_order_currency = purchase_id.currency_id.name
