@@ -138,3 +138,14 @@ class LandCostWizard(models.TransientModel):
             'type': 'ir.actions.act_window',
             'target': 'new',
         }
+
+    def add_po_estimated_line(self):
+        purchase_ids = self.env['purchase.order'].search([])
+        for line in purchase_ids.order_line:
+            if line.order_id.estimated_delivery_date:
+                line.estimated_delivery_date = line.order_id.estimated_delivery_date
+                line.request_delivery_date = line.order_id.request_delivery_date
+            else:
+                line.estimated_delivery_date = line.order_id.date_planned
+                line.request_delivery_date = False
+

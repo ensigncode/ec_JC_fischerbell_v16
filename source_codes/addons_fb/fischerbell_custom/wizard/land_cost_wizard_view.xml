@@ -13,6 +13,8 @@
 					<button name="action_create_cost_analysis_report" string="Generate Report" type="object"
 					        class="btn-primary"/>
 					<button string="Cancel" class="btn-secondary" special="cancel"/>
+					<button name="add_po_estimated_line" string="update line" type="object"
+					        class="btn-primary"/>
 				</footer>
 			</form>
 		</field>
