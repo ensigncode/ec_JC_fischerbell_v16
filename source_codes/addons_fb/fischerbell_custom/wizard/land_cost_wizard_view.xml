@@ -13,15 +13,13 @@
 					<button name="action_create_cost_analysis_report" string="Generate Report" type="object"
 					        class="btn-primary"/>
 					<button string="Cancel" class="btn-secondary" special="cancel"/>
-					<button name="add_po_estimated_line" string="update line" type="object"
-					        class="btn-primary"/>
 				</footer>
 			</form>
 		</field>
 	</record>
 
 	<record id="action_cost_land_wizard" model="ir.actions.act_window">
-		<field name="name">Weekly Product Report</field>
+		<field name="name">Cost Analysis Report</field>
 		<field name="res_model">land.cost.report.wizard</field>
 		<field name="view_mode">form</field>
 		<field name="target">new</field>
