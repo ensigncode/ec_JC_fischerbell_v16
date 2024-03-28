@@ -166,7 +166,7 @@ class PurchaseOrder(models.Model):
 				elif partner_id.no_delivery_days_selection == 'date':
 					if partner_id.delivery_restriction_start_date <= order_date_planned.date() <= partner_id.delivery_restriction_end_date:
 						raise UserError('The customer %s is not available at this date %s, please change it as per the customers availability' % (partner_id.name,order_date_planned))
-	
+
 
 	@api.depends('order_line.date_planned')
 	def _compute_date_planned(self):
@@ -193,15 +193,16 @@ class PurchaseOrderLine(models.Model):
 	manufacture_lot_id = fields.Many2one('fischerbell.manufacture.lot', 'Manufacture No')
 	comments = fields.Char()
 	request_delivery_date = fields.Datetime("Request Delivery Date")
+	estimated_delivery_date = fields.Datetime("Estimated Delivery Date")
 
 	@api.onchange('product_id')
 	def onchange_sake_product_image(self):
 		for product in self:
 			if product.order_id.estimated_delivery_date:
-			   product.date_planned = product.order_id.estimated_delivery_date
+			   product.estimated_delivery_date = product.order_id.estimated_delivery_date
 			   product.request_delivery_date = product.order_id.request_delivery_date
 			else:
-				product.date_planned = False
+				product.estimated_delivery_date = False
 				product.request_delivery_date = False
 
 

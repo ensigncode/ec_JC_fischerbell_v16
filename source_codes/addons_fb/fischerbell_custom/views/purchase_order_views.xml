@@ -20,10 +20,11 @@
 				<field name="batch_number" invisible="1"/>
 				<field name="lot_id"/>
 				<field name="request_delivery_date" />
+				<field name="estimated_delivery_date" />
 				<field name="sale_line_id" invisible="1"/>
 			</xpath>
 			<xpath expr="//field[@name='order_line']//field[@name='date_planned']" position="attributes">
-				 <attribute name="string">Estimated Delivery Date</attribute>
+				<attribute name="invisible">1</attribute>
 			</xpath>
 			<xpath expr="//notebook//page[@name='purchase_delivery_invoice']" position="after">
 				<page string="Special Remark" name="special_remark">
