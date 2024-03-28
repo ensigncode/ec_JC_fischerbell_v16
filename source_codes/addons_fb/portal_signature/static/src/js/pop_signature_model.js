@@ -47,6 +47,9 @@ $(document).ready(function(){
                     method: 'send_notification_skip_delivery',
                     args: [[parseInt(dataIdValue)],reason_value],
                 }).then(function (data){
+                    if(data) {
+                        window.location.reload()
+                    }
                 });
     });
     // $(document).on('click', '.o_portal_sign_submit', function (e) {

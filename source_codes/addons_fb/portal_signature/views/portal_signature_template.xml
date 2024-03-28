@@ -33,34 +33,18 @@
                         <th>
                             <span class='d-none d-md-inline'>Name</span>
                         </th>
-                        <th>
-                            <span class='d-none d-md-inline'>Company Name</span>
-                        </th>
-                        <th class="d-none">
-                            <span class='d-none d-md-inline'>Company Address</span>
-                        </th>
-                        <th>
-                            <span class='d-none d-md-inline'>Instructions</span>
-                        </th>
-                        <th>
-                            <span class='d-none d-md-inline'>Contact Person</span>
-                        </th>
-                        <th>
-                            <span class='d-none d-md-inline'>Phone Number</span>
-                        </th>
-                       
-
+                        
                         <th class='d-none'>
                             <span class='d-none'>Delivery</span>
                         </th>
 
-                        <th class='d-none'>
+                        <th>
                             <span class='d-none d-md-inline'>Scheduled Date</span>
                         </th>
-                         <th class='d-none'>
+                         <th>
                             <span class='d-none d-md-inline'>Deadline</span>
                         </th>
-                        <th class='d-none'>
+                        <th>
                             <span class='d-none d-md-inline'>Source Document</span>
                         </th>
                          <th>
@@ -75,33 +59,17 @@
                             <t t-esc="picking_id.id"/>
                         </td>
                         <td>
-                            <t t-esc="picking_id.name"/>
+                            <a t-attf-href="/my/transfer/#{picking_id.id}?{{ keep_query() }}"><span t-field="picking_id.name"/></a>
                         </td>
+                       
+                        
                         <td>
-                            <t t-esc="picking_id.partner_id.parent_id.name"/>
-                        </td>
-                        <td class="d-none">
-                            <t t-esc="picking_id.partner_id.street"/>
-                        </td>
-                        <td>
-                            <t t-esc="picking_id.delivery_instruction"/>
-                        </td>
-                        <td>
-                            <t t-esc="picking_id.partner_id.name"/>
-                        </td>
-                        <td>
-                            <t t-esc="picking_id.partner_id.phone"/>
-                        </td>
-                        <td class="d-none">
-                            <t t-esc="picking_id.partner_id.display_name"/>
-                        </td>
-                        <td class="d-none">
                             <t t-esc="picking_id.scheduled_date" t-options='{"widget": "date","format": "dd-MM-yyyy"}'/>
                         </td>
-                        <td class="d-none">
+                        <td>
                             <t t-esc="picking_id.date_deadline" t-options='{"widget": "date","format": "dd-MM-yyyy"}'/>
                         </td>
-                         <td class="d-none">
+                         <td>
                             <t t-esc="picking_id.origin"/>
                         </td>
                           <t t-set="status_list" t-value="{
@@ -208,7 +176,47 @@
              </t>
          </t>
        </template>
+       <template id="portal_my_transfer_detail" name="My Transfer">
+            <t t-call="portal.portal_layout">
+                <table class="table rounded mb-0 mt-3 bg-white o_portal_my_doc_table">
+                    <tbody>
+                        <tr>
+                            <td style="font-weight:bold;width:20%;">Picking</td>
+                            <td><t t-esc="picking_id.name"/></td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight:bold;width:20%;">Company Name</td>
+                            <td><t t-esc="picking_id.company_id.name"/></td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight:bold;width:20%;">Company Address</td>
+                            <td>
+                                <p>
+                                    <t t-esc="picking_id.company_id.street"/>,<t t-esc="picking_id.company_id.street2"/><br />
+                                    <t t-esc="picking_id.company_id.city"/>,<t t-esc="picking_id.company_id.state_id.name"/><br />
+                                    <t t-esc="picking_id.company_id.country_id.name"/>,<t t-esc="picking_id.company_id.zip"/>
+                                </p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight:bold;width:20%;">Instructions</td>
+                            <td><t t-esc="picking_id.delivery_instruction"/></td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight:bold;width:20%;">Contact Person</td>
+                            <td><t t-esc="picking_id.partner_id.name"/></td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight:bold;width:20%;">Phone Number</td>
+                            <td><t t-esc="picking_id.partner_id.phone"/></td>
+                        </tr>
+                        
+                    </tbody>
+                </table>
+            </t>
+    </template>
 
+      
        <template id="portal_view_transfer" name="Transfer" customize_show="True"
               inherit_id="portal.portal_my_home" priority="90">
           <xpath expr="//div[hasclass('o_portal_docs')]" position="inside">
