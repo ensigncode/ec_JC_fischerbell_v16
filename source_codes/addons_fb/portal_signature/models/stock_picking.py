@@ -2,6 +2,7 @@
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 
 from odoo import api, fields, models, _
+from dateutil.relativedelta import relativedelta
 
 class StockPicking(models.Model):
 	_inherit = 'stock.picking'
@@ -34,4 +35,6 @@ class StockPicking(models.Model):
 					'res_id': self.id,
 					'message_type' : 'notification',
 				})
+		self.next_delivery_date = (fields.Datetime.today() + relativedelta(days=1))
+		return True
 

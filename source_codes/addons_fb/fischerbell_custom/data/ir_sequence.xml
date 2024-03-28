@@ -73,14 +73,14 @@
         <record id="giro_payment_method_seq" model="ir.sequence">
             <field name="name">Giro Payment mehtod Sequence</field>
             <field name="code">giro_payment_method_seq</field>
-            <field name="prefix">GIRMMYY/%(year)s/</field>
+            <field name="prefix">GIR/%(month)s/%(year)s/</field>
             <field name="padding">5</field>
             <field name="company_id" eval="False"/>
         </record>
         <record id="paynow_payment_method_seq" model="ir.sequence">
             <field name="name">Paynow Payment mehtod Sequence</field>
             <field name="code">paynow_payment_method_seq</field>
-            <field name="prefix">GIRMMYY/%(year)s/</field>
+            <field name="prefix">GIR/%(month)s/%(year)s/</field>
             <field name="padding">5</field>
             <field name="company_id" eval="False"/>
         </record>

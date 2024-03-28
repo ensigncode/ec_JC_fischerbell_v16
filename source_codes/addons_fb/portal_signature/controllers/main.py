@@ -58,6 +58,16 @@ class PortalAttendance(portal.CustomerPortal):
 		}
 		return request.render("portal_signature.portal_list_transfer", vals)
 
+	@http.route(['/my/transfer/<int:picking_id>', '/my/transfer/<int:picking_id>/page/<int:page>'], type='http', auth="public", website=True)
+	def portal_my_transfer(self, picking_id=None, access_token=None, page=1, date_begin=None, date_end=None, sortby=None, search=None, search_in='content', groupby=None, task_id=None, **kw):
+		
+		picking_sudo = request.env['stock.picking'].sudo().browse(picking_id)
+		values = {
+			'picking': picking_id,
+			'picking_id':picking_sudo,
+			'page_name': 'transfer',
+			}
+		return request.render("portal_signature.portal_my_transfer_detail", values)
 
 	@http.route(['/my/need_approved'], type='json', auth="public", website=True)
 	def portal_transfer_accept(self,*args, **kwargs):

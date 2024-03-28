@@ -8,8 +8,15 @@ class StockPicking(models.Model):
 	@api.model
 	def _get_driver_id_domain(self):
 		sale_order_id = self.env['sale.order'].sudo().search([('name','=',self.origin)])
+		purchase_order_id = self.env['purchase.order'].sudo().search([('name','=',self.origin)])
 		if sale_order_id and self.picking_type_id.code == 'outgoing':
 			partner_shipping_id = self.sale_id.partner_shipping_id if self.sale_id.partner_shipping_id else self.sale_id.partner_id
+			zipcode = partner_shipping_id.zip
+			delivery_code = str(zipcode[0:2]) if zipcode else False
+			postal_code_id = self.env['postal.code'].search([('code','=',delivery_code)])
+			self.driver_ids = self.env['res.partner'].search([('is_driver','=',True),('postal_code_ids','in',postal_code_id.ids)]) 
+		elif purchase_order_id and self.picking_type_id.code == 'incoming':
+			partner_shipping_id = self.purchase_id.partner_id
 			zipcode = partner_shipping_id.zip
 			delivery_code = str(zipcode[0:2]) if zipcode else False
 			postal_code_id = self.env['postal.code'].search([('code','=',delivery_code)])
