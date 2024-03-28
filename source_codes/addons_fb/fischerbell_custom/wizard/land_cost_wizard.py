@@ -23,7 +23,6 @@ class LandCostWizard(models.TransientModel):
     document = fields.Binary('Files To Download')
     file = fields.Char('Report File Name', readonly=1)
 
-
     def action_create_cost_analysis_report(self):
         context = dict(self._context or {})
         file_path = 'Product_Purchase' + '.xlsx'
@@ -81,7 +80,7 @@ class LandCostWizard(models.TransientModel):
                                 freight_price = invoice_line_id.price_unit
                                 currency_and_price = f"{line.order_id.currency_id.name} { line.price_unit}"
                                 item_price = line.price_unit + freight_price
-                                cost = (line.product_qty * line.price_unit/purchase_id.amount_total)
+                                cost = (line.product_qty * line.price_unit / purchase_id.amount_total) if purchase_id.amount_total != 0 else 0
                                 landed_cost = round((freight_price * cost) + line.price_unit, 2)
                                 company_currency_name = line.company_id.currency_id.name
                                 purchase_order_currency = purchase_id.currency_id.name
