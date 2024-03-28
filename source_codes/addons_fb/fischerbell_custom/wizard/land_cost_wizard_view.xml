@@ -1,0 +1,35 @@
+<odoo>
+	<record id="view_cost_analysis_report_wizard_form" model="ir.ui.view">
+		<field name="name">cost.analysis.report.wizard.form</field>
+		<field name="model">land.cost.report.wizard</field>
+		<field name="arch" type="xml">
+			<form string="Cost Analysis Report">
+				<field name="file" invisible="1"/>
+				<p attrs="{'invisible': [('file', '==', False)]}">
+					Here is the Excel Report:
+					<field name="document" filename="file" attrs="{'invisible': [('file', '==', False)]}" readonly="1"/>
+				</p>
+				<footer>
+					<button name="action_create_cost_analysis_report" string="Generate Report" type="object"
+					        class="btn-primary"/>
+					<button string="Cancel" class="btn-secondary" special="cancel"/>
+				</footer>
+			</form>
+		</field>
+	</record>
+
+	<record id="action_cost_land_wizard" model="ir.actions.act_window">
+		<field name="name">Weekly Product Report</field>
+		<field name="res_model">land.cost.report.wizard</field>
+		<field name="view_mode">form</field>
+		<field name="target">new</field>
+
+	</record>
+
+	<menuitem id="fischerbell_menu_landed_cost_report"
+	          name="Landed Cost Report"
+	          action="action_cost_land_wizard"
+	          parent="purchase.purchase_report_main"/>
+
+
+</odoo>
