@@ -77,9 +77,10 @@ class PurchaseOrder(models.Model):
 class PurchaseOrderLine(models.Model):
     _inherit = 'purchase.order.line'
 
-    picking_type_id = fields.Many2one('stock.picking.type', 'Deliver To', required=True,
-                                      help="This will determine operation type of incoming shipment")
-
+    @api.model
+    def _default_picking_type(self):
+        return self.order_id.picking_type_id if self.order_id and self.order_id.picking_type_id else False
+    
     @api.model
     def _get_default_picking_type(self):
         picking_type = self.env['stock.picking.type'].search([('code', '=', 'incoming')], limit=1)
@@ -98,6 +99,10 @@ class PurchaseOrderLine(models.Model):
         if 'order_id' in vals and 'picking_type_id' not in vals:
             order_id = self.env['purchase.order'].browse(vals['order_id'])
             vals['picking_type_id'] = order_id.picking_type_id.id or self._get_default_picking_type()
+        if 'order_id' in vals and 'picking_type_id' in vals:
+            order_id = self.env['purchase.order'].browse(vals['order_id'])
+            vals['picking_type_id'] = order_id.picking_type_id.id
+
         return super(PurchaseOrderLine, self).create(vals)
     
     def _compute_tax_id(self):
@@ -107,6 +112,11 @@ class PurchaseOrderLine(models.Model):
             if line.product_id and partner_id and partner_id.supplier_taxes and partner_id.l10n_in_gst_treatment == "overseas":
                 line.taxes_id = [(6, 0, partner_id.supplier_taxes.ids)]
         return res
+    
+    @api.depends('picking_type_id')
+    def _compute_dest_address_id(self):
+        for po_line in self:
+            self.filtered(lambda po_line: po_line.picking_type_id.default_location_dest_id.usage != 'customer').dest_address_id = False
 
     default_location_dest_id_usage = fields.Selection(related='picking_type_id.default_location_dest_id.usage',
                                                       string='Destination Location Type',
@@ -114,7 +124,9 @@ class PurchaseOrderLine(models.Model):
                                                       readonly=True)
     dest_address_id = fields.Many2one('res.partner', compute='_compute_dest_address_id', store=True, readonly=False)
 
-    @api.depends('picking_type_id')
-    def _compute_dest_address_id(self):
-        for po_line in self:
-            self.filtered(lambda po_line: po_line.picking_type_id.default_location_dest_id.usage != 'customer').dest_address_id = False
+    picking_type_id = fields.Many2one('stock.picking.type', 'Deliver To', 
+                                        domain="['|', ('warehouse_id', '=', False), ('warehouse_id.company_id', '=', company_id)]",
+                                      help="This will determine operation type of incoming shipment",default=_default_picking_type)
+
+
+    
