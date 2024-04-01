@@ -7,6 +7,37 @@ from odoo.exceptions import UserError
 class PurchaseOrder(models.Model):
     _inherit = 'purchase.order'
 
+ 
+    def _prepare_picking(self):
+        context = self.env.context
+        if 'picking_type_code' and 'dest_address_id' and 'picking_type_id' in context:
+            picking_type_code = context.get('picking_type_code')
+            dest_address_id = context.get('dest_address_id')
+            picking_type_id = context.get('picking_type_id')
+
+            for order in self:
+                if not order.group_id:
+                    order.group_id = order.group_id.create({
+                        'name': order.name,
+                        'partner_id': order.partner_id.id
+                    })
+                if not order.partner_id.property_stock_supplier.id:
+                    raise UserError(_("You must set a Vendor Location for this partner %s", order.partner_id.name))
+                picking_type = self.env['stock.picking.type'].search([('code', '=', picking_type_code), ('warehouse_id.company_id', '=', order.company_id.id)], limit=1)
+                print("\n\n\n picking typeeeeeeeeeeeeeeeeee ",picking_type)
+                if not picking_type:
+                    raise UserError(_("Picking type not found for code: %s", picking_type_code))
+                return {
+                    'picking_type_id': picking_type_id.id,
+                    'partner_id': order.partner_id.id,
+                    'user_id': False,
+                    'date': order.date_order,
+                    'origin': order.name,
+                    'location_dest_id': dest_address_id.property_stock_customer.id if dest_address_id else picking_type.default_location_dest_id.id,
+                    'location_id': order.partner_id.property_stock_supplier.id,
+                    'company_id': order.company_id.id,
+                }
+    
     def _create_picking(self):
         StockPicking = self.env['stock.picking']
         for order in self.filtered(lambda po: po.state in ('purchase', 'done')):
@@ -16,13 +47,13 @@ class PurchaseOrder(models.Model):
                     if line.picking_type_id and line.picking_type_id.code:
                         picking_type_code = line.picking_type_id.code
                         dest_address_id = line.dest_address_id
-                        pickings = order.picking_ids.filtered(lambda x: x.state not in ('done', 'cancel') and x.picking_type_code == picking_type_code and x.dest_address_id == dest_address_id)
-                        if not pickings:
-                            res = order._prepare_picking(picking_type_code, dest_address_id)
-                            picking = StockPicking.with_user(SUPERUSER_ID).create(res)
-                        else:
-                            picking = pickings[0]
+                        pickings = order.picking_ids.filtered(lambda x: x.state not in ('done', 'cancel') and x.picking_type_code == picking_type_code)
+                        res = order.with_context(picking_type_code = picking_type_code, dest_address_id = dest_address_id,picking_type_id = line.picking_type_id)._prepare_picking()
+                        picking = StockPicking.with_user(SUPERUSER_ID).create(res)
+                       
                         moves = line._create_stock_moves(picking)
+                        for move in moves : 
+                            move.location_dest_id = picking.location_dest_id
                         moves = moves.filtered(lambda x: x.state not in ('done', 'cancel'))._action_confirm()
                         seq = 0
                         for move in sorted(moves, key=lambda move: move.date):
@@ -36,28 +67,6 @@ class PurchaseOrder(models.Model):
                                                        subtype_id=self.env.ref('mail.mt_note').id)
         return True
 
-    def _prepare_picking(self, picking_type_code, dest_address_id):
-        self.ensure_one()
-        if not self.group_id:
-            self.group_id = self.group_id.create({
-                'name': self.name,
-                'partner_id': self.partner_id.id
-            })
-        if not self.partner_id.property_stock_supplier.id:
-            raise UserError(_("You must set a Vendor Location for this partner %s", self.partner_id.name))
-        picking_type = self.env['stock.picking.type'].search([('code', '=', picking_type_code), ('warehouse_id.company_id', '=', self.company_id.id)], limit=1)
-        if not picking_type:
-            raise UserError(_("Picking type not found for code: %s", picking_type_code))
-        return {
-            'picking_type_id': picking_type.id,
-            'partner_id': self.partner_id.id,
-            'user_id': False,
-            'date': self.date_order,
-            'origin': self.name,
-            'location_dest_id': dest_address_id.property_stock_customer.id if dest_address_id else picking_type.default_location_dest_id.id,
-            'location_id': self.partner_id.property_stock_supplier.id,
-            'company_id': self.company_id.id,
-        }
 
     @api.onchange('picking_type_id')
     def onchange_picking_type_id_custom(self):
@@ -108,4 +117,4 @@ class PurchaseOrderLine(models.Model):
     @api.depends('picking_type_id')
     def _compute_dest_address_id(self):
         for po_line in self:
-            po_line.dest_address_id = po_line.picking_type_id.default_location_dest_id.partner_id
+            self.filtered(lambda po_line: po_line.picking_type_id.default_location_dest_id.usage != 'customer').dest_address_id = False
