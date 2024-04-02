@@ -41,6 +41,7 @@ class ProductTemplate(models.Model):
 	manufacturing_date = fields.Date('manufacturing date')
 	expiration_date = fields.Date('expiration date')
 	serial_number = fields.Char('Serial Number')
+	requires_traceability = fields.Boolean('Requires Traceability')
 
 
 	@api.depends_context('company')
@@ -144,7 +145,9 @@ class ProductTemplate(models.Model):
 			vals['qr_code_image'] = self.generate_qr_code(vals['barcode'])
 		else:
 			vals['qr_code_image'] = False
-		return super().create(vals)
+		rec = super().create(vals)
+		rec.requires_traceability = True
+		return rec
 
 
 class CustomerSku(models.Model):
@@ -170,6 +173,8 @@ class ProductProduct(models.Model):
 	qr_code_image = fields.Binary(string='QR Code', attachment=True, readonly=True)
 	product_detail_sheet = fields.Many2one('ir.attachment')
 	product_detail_sheet_url = fields.Char('Sheet Url',compute="_compute_sheet_url")
+	# requires_traceability = fields.Boolean('Requires Traceability')
+
 
 
 
@@ -244,25 +249,16 @@ class ProductProduct(models.Model):
 				vals['qr_code_image'] = self.generate_qr_code(vals['barcode'])
 			else:
 				vals['qr_code_image'] = False
-
 		res = super().write(vals)
 		return res
 
 	@api.model
 	def create(self, vals):
-		admin = self.env.ref('base.user_admin', raise_if_not_found=False)
-		param = {
-			'title': 'Does this product requires traceability?',
-			'error_type': 'success'
-		}
-		if not admin.partner_id.id == self.env.user.partner_id.id:
-			self.env['bus.bus']._sendone(self.env.user.partner_id, 'iap_notification', param)
-		if admin:
-			self.env['bus.bus']._sendone(admin.partner_id, 'iap_notification', param)
 		if vals.get('barcode'):
 			vals['qr_code_image'] = self.generate_qr_code(vals['barcode'])
 		else:
 			vals['qr_code_image'] = False
-
-		return super().create(vals)
+		rec =  super().create(vals)
+		rec.requires_traceability = True
+		return rec
 

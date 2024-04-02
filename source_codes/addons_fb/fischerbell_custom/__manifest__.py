@@ -55,7 +55,7 @@
         'wizard/purchase_order_ref_views.xml',
 	    'wizard/purchase_order_wizard_view.xml',
         'wizard/followup_manual_reminder_views.xml',
-	 'wizard/land_cost_wizard_view.xml',
+	    'wizard/land_cost_wizard_view.xml',
         'views/account_move_views.xml',
         'views/fischerbell_aging_report_views.xml',
         'views/fischerbell_configuration_note_views.xml',

@@ -72,6 +72,12 @@
             <xpath expr="//form" position="attributes">
                 <attribute name="name">Product Template</attribute>
             </xpath>
+            <xpath expr="//header" position="after">
+                 <field name="requires_traceability" invisible="1"/>
+                 <div class="alert alert-warning mb-0" role="alert" attrs="{'invisible': [('requires_traceability', '!=', False)]}">
+                        Does this product requires traceability?
+                    </div>
+            </xpath>
             <field name="categ_id" position="after">
                 <field name="default_code" attrs="{'invisible': [('product_variant_count', '>', 1)]}"/>
                 <field name="barcode" attrs="{'invisible': [('product_variant_count', '>', 1)]}"/>
@@ -117,6 +123,12 @@
                 <attribute name="string">Product Variant</attribute>
                 <attribute name="duplicate">false</attribute>
             </form>
+            <xpath expr="//header" position="after">
+                 <field name="requires_traceability" invisible="1"/>
+                 <div class="alert alert-warning mb-0" role="alert" attrs="{'invisible': [('requires_traceability', '!=', False)]}">
+                        Does this product requires traceability?
+                    </div>
+            </xpath>
             <xpath expr="//div[@name='standard_price_uom']" position="after">
                 <field name="default_code"/>
                 <field name="barcode"/>
