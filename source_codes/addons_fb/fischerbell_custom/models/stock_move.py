@@ -68,7 +68,8 @@ class StockMove(models.Model):
 class StockMoveLine(models.Model):
 	_inherit = "stock.move.line"
 
-	expiration_date = fields.Date('expiration date')
+	manufacturing_date = fields.Date('Manufacturing Date')
+	expiration_date = fields.Date('Expiration Date')
 	serial_number = fields.Char('Serial Number')
 	batch_number = fields.Char('Batch Number')
 
