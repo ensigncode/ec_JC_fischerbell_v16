@@ -67,6 +67,12 @@ class LandCostWizard(models.TransientModel):
 
         purchase_ids = self.env['purchase.order'].search([])
         for purchase_id in purchase_ids:
+            rate_ids = purchase_id.currency_id.mapped('rate_ids')
+            if rate_ids:
+                company_rate_id = rate_ids[0]
+                currency_id= company_rate_id.company_rate
+            else:
+                currency_id = 1
             for line in purchase_id.order_line:
                 invoices = line.mapped('invoice_lines.move_id')
                 if invoices:
@@ -87,10 +93,6 @@ class LandCostWizard(models.TransientModel):
                                 landed_cost_with_currency = f"{company_currency_name} {landed_cost}"
                                 fright_purchase_order_cu = f"{purchase_order_currency} {freight_price}"
                                 item_purchase_order_cu = f"{purchase_order_currency} {item_price}"
-                                currency_rate = line.currency_id._get_conversion_rate(line.currency_id, line.company_id.currency_id,
-                                                                                       line.company_id,
-                                                                                        purchase_id.date_order or fields.Date.today())
-
                                 worksheet.write(rows, 0, line.product_id.default_code if line.product_id.default_code else '',
                                                 cell_wrap_format)
                                 worksheet.write(rows, 1, line.product_id.name, cell_wrap_format)
@@ -100,7 +102,7 @@ class LandCostWizard(models.TransientModel):
                                 worksheet.write(rows, 5, currency_and_price or 0, cell_float_format)
                                 worksheet.write(rows, 6, fright_purchase_order_cu or 0, cell_float_format)
                                 worksheet.write(rows, 7, item_purchase_order_cu or 0 ,cell_wrap_format)
-                                worksheet.write(rows, 8, 1.63, cell_wrap_format),
+                                worksheet.write(rows, 8, currency_id, cell_wrap_format),
 
                                 rows += 1
                 else:
@@ -120,7 +122,7 @@ class LandCostWizard(models.TransientModel):
                     worksheet.write(rows, 5, currency_and_price or 0, cell_float_format)
                     worksheet.write(rows, 6,  0, cell_float_format)
                     worksheet.write(rows, 7, item_purchase_order_cu or 0, cell_wrap_format)
-                    worksheet.write(rows, 8, 1.63, cell_wrap_format),
+                    worksheet.write(rows, 8, currency_id, cell_wrap_format),
 
                     rows += 1
 
