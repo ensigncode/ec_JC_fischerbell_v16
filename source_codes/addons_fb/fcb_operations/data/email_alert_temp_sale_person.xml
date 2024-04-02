@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <data>
-        <record id="email_template_available_quantity_reminder" model="mail.template">
-            <field name="name">Available Quantity Reminder</field>
-            <field name="model_id" ref="model_sale_order"/>
-            <field name="subject">Available Quantity In Stock</field>
-            <field name="auto_delete" eval="True"/>
-            <field name="body_html" type="html">
-                <p>Dear,
-                    <br/>
-                    <br/>
-                    Your Order  <t t-out="object.name or ''"></t> product will be scheduled for delivery on
-                    <t t-out="object.product_available_date or ''"></t>
-                    from 8.30am to 5.30pm and available in stock.
-                    <br/>
-                    <br/>
-                    Regards,
-                    <br/>
-                    <t t-out="object.product_buyer_id.name"/>
-                </p>
-            </field>
-        </record>
-    </data>
+	<data>
+		<record id="email_template_available_quantity_reminder" model="mail.template">
+			<field name="name">Available Quantity Reminder</field>
+			<field name="model_id" ref="model_sale_order"/>
+			<field name="subject">Available Quantity In Stock</field>
+			<field name="auto_delete" eval="True"/>
+			<field name="body_html" type="html">
+				<p>Dear,
+					<br/>
+					<br/>
+					Your Order  <t t-out="object.name or ''"></t> product will be scheduled to received on
+					<t t-out="object.product_available_date and object.product_available_date.strftime('%d/%m/ %Y') or ''"></t>
+					from 8.30am to 5.30pm and available in stock.
+					<br/>
+					<br/>
+					Regards,
+					<br/>
+					<t t-out="object.product_buyer_id.name"/>
+				</p>
+			</field>
+		</record>
+	</data>
 </odoo>
