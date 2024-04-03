@@ -9,6 +9,7 @@
     'depends': ['website','stock'],
     'data': [
         'security/ir.model.access.csv',
+        "data/mail_template.xml",
         'views/portal_signature_template.xml'
         
     ],
