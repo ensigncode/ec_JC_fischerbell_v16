@@ -8,5 +8,6 @@ class ResPartner(models.Model):
 
 	customer_taxes = fields.Many2one('account.tax',domain=[('type_tax_use','=','sale')],string="Customer Taxes")
 	supplier_taxes = fields.Many2one('account.tax',domain=[('type_tax_use','=','purchase')],string="Supplier Taxes")
+	translated_display_name = fields.Char(string="Translated Display Name")
 
 
