@@ -11,7 +11,6 @@ var rpc = require('web.rpc');
 var _t = core._t;
 
 $(document).ready(function(){
-
     let shadow;
     function dragit(event) {
         shadow = event.target;
@@ -41,7 +40,8 @@ $(document).ready(function(){
         e.preventDefault();
         var clickedButton = e.target;
         var dataIdValue = clickedButton.getAttribute('data-id');
-        var reason_value = $('#skip_reason').val()
+        var modalid = "#modaldeliveryskip_" + dataIdValue
+        var reason_value = $(modalid).find('#skip_reason').val();
         rpc.query({
                     model: 'stock.picking',
                     method: 'send_notification_skip_delivery',
@@ -52,9 +52,5 @@ $(document).ready(function(){
                     }
                 });
     });
-    // $(document).on('click', '.o_portal_sign_submit', function (e) {
-    //     e.preventDefault();
-    //     $('#modalsignatureaccept').modal('hide');
-    // });
 });
 });

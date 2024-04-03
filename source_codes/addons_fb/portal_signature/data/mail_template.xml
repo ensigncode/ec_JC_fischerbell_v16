@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="email_template_skip_delivery_notification" model="mail.template">
+            <field name="name">Skip delivery notification</field>
+            <field name="model_id" ref="stock.model_stock_picking"/>
+            <field name="email_from">{{ (object.company_id.email_formatted or user.email_formatted) }}</field>
+            <field name="subject">Skip Product Delivery Notification</field>
+            <field name="description">Sent to sale/purchase mangers for skip the delivery of product.</field>
+            <field name="body_html" type="html">
+                <p>Dear Manger,
+                    <br/>
+                    <br/>
+                    This Delivery (
+                    <t t-if="object.name">
+                        <t t-out="object.name or ''"></t>
+                    </t>
+                    ) has been skipped due to the following reason:  
+                    <t t-if="ctx and ctx.get('reason_value')">
+                        <t t-out="ctx.get('reason_value') or ''"/> 
+                    </t>
+                    <br/>
+                    <br/>
+                    Thanks.
+                    <br/>
+                </p>
+            </field>
+        </record>
+    </data>
+</odoo>

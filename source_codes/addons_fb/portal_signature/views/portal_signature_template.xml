@@ -136,7 +136,7 @@
                               </div>
                           </div>
 
-                          <div class="modal fade" t-attf-id="modaldeliveryskip_{{ picking_id.id }}" tabindex="-1" aria-labelledby="signature" role="dialog" aria-hidden="true">
+                          <div class="modal fade skip_delivery_modal" t-attf-id="modaldeliveryskip_{{ picking_id.id }}" tabindex="-1" aria-labelledby="signature" role="dialog" aria-hidden="true">
                             <div class="modal-dialog modal-dialog-centered" role="document">
                                 <div class="modal-content">
                                     <div class="modal-header">
@@ -156,7 +156,7 @@
                         </div>
 
                             <td class="portal_btn_blocks">
-                               <!-- <t t-if="pa.state == 'confirm'"> -->
+                               <t t-if="picking_id.state not in ['done','cancel']">
                                    <button class="btn btn-link o_icon_button text-primary approve_btn" t-att-data-id="picking_id.id" type="button">
                                        <i class="fa fa-pencil"/>
                                        Signature
@@ -164,7 +164,7 @@
                                    <button class="btn btn-primary skip_delivery" t-att-data-id="picking_id.id" type="button">
                                         Skip
                                    </button>
-                               <!-- </t> -->
+                               </t>
                             </td>
                          </t>
                          <t t-else="">
