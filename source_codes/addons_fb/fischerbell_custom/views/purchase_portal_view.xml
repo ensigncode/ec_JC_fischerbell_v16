@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<template id="purchase_order_portal_content_inherit" inherit_id="purchase.purchase_order_portal_content">
+		<xpath expr="//div[@class='row'][2]" position="after">
+			<div>
+				<form id="purchase_order_form" action="/purchase_order/submit_data" method="post">
+					<div t-att-class="'d-inline'">
+                      <strong>Estimated Date:</strong><span class="ms-1" t-field="order.estimated_delivery_date" t-options='{"widget": "date"}'/>
+                    </div>
+					<div>
+						<strong>Update Estimated Date:</strong>
+						<input type="date" id="estimated_delivery_date" name="estimated_delivery_date"/>
+					</div>
+					<input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+					<input type="hidden" name="purchase_order_name" t-att-value="order.name"/>
+					<button type="submit" class="btn btn-secondary btn-block o_download_btn">Update</button>
+				</form>
+			</div>
+		</xpath>
+	</template>
+</odoo>
