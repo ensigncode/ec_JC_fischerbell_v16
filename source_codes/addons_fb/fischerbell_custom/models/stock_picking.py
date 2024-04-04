@@ -379,7 +379,8 @@ class Picking(models.Model):
 				vals['partner_note'] = config_note.note
 
 		res = super(Picking, self).create(vals)
-
+		if vals.get('next_delivery_date') and res.purchase_id:
+			res.purchase_id.next_delivery_date = vals.get('next_delivery_date')
 		pick_order = self.env['stock.picking'].search([('picking_type_id.sequence_code','=','PICK'),('origin','=',res.origin)], limit=1)
 		if res.picking_type_id.sequence_code == 'OUT':
 			res.pick_id = pick_order
@@ -434,9 +435,9 @@ class Picking(models.Model):
 					('partner_ids', 'in', [partner_id.id])  # Use a list to compare with a Many2many field
 				], limit=1)
 				vals['partner_note'] = config_note.note
-
 		res = super(Picking, self).write(vals)
-
+		if vals.get('next_delivery_date') and self.purchase_id:
+			self.purchase_id.next_delivery_date = vals.get('next_delivery_date')
 		for picking in self:
 			if picking.state == 'done' and picking.sale_id and picking.picking_type_code == 'outgoing' and not picking.sale_id.invoice_ids and picking.sale_id.type != 'loan':
 				picking.sale_id._create_invoices()
