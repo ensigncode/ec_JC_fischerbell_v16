@@ -149,7 +149,7 @@
                                     </div>
                                     <div class="modal-footer">
                                         <button type="" class="btn btn-primary submit_skip_delivery" t-att-data-id="picking_id.id">Submit</button>
-                                        <button type="cancel" class="btn btn-secondary">Cancel</button>
+                                        <button type="button" data-bs-dismiss="modal" class="btn btn-secondary">Cancel</button>
                                     </div>
                                 </div>
                             </div>

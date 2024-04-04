@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="stock_picking_packing_label_view_form" model="ir.ui.view">
+        <field name="name">stock.picking.packing.label.view.form</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//group[@name='other_infos']" position="before">
+                <group name='packing_label_report_data' string="Packing Label Information">
+                    <field name="package"/>
+                    <field name="contact_one"/>
+                    <field name="contact_two"/>
+                    <field name="qr_code" widget="image"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+</odoo>

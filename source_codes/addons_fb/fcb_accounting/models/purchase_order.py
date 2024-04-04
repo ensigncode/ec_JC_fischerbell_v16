@@ -24,7 +24,6 @@ class PurchaseOrder(models.Model):
                 if not order.partner_id.property_stock_supplier.id:
                     raise UserError(_("You must set a Vendor Location for this partner %s", order.partner_id.name))
                 picking_type = self.env['stock.picking.type'].search([('code', '=', picking_type_code), ('warehouse_id.company_id', '=', order.company_id.id)], limit=1)
-                print("\n\n\n picking typeeeeeeeeeeeeeeeeee ",picking_type)
                 if not picking_type:
                     raise UserError(_("Picking type not found for code: %s", picking_type_code))
                 return {
@@ -99,9 +98,9 @@ class PurchaseOrderLine(models.Model):
         if 'order_id' in vals and 'picking_type_id' not in vals:
             order_id = self.env['purchase.order'].browse(vals['order_id'])
             vals['picking_type_id'] = order_id.picking_type_id.id or self._get_default_picking_type()
-        if 'order_id' in vals and 'picking_type_id' in vals:
-            order_id = self.env['purchase.order'].browse(vals['order_id'])
-            vals['picking_type_id'] = order_id.picking_type_id.id
+        # if 'order_id' in vals and 'picking_type_id' in vals:
+        #     order_id = self.env['purchase.order'].browse(vals['order_id'])
+        #     vals['picking_type_id'] = order_id.picking_type_id.id
 
         return super(PurchaseOrderLine, self).create(vals)
     
@@ -122,7 +121,7 @@ class PurchaseOrderLine(models.Model):
                                                       string='Destination Location Type',
                                                       help="Technical field used to display the Drop Ship Address",
                                                       readonly=True)
-    dest_address_id = fields.Many2one('res.partner', compute='_compute_dest_address_id', store=True, readonly=False)
+    dest_address_id = fields.Many2one('res.partner', compute='_compute_dest_address_id', store=True, readonly=False, string="Destination Address")
 
     picking_type_id = fields.Many2one('stock.picking.type', 'Deliver To', 
                                         domain="['|', ('warehouse_id', '=', False), ('warehouse_id.company_id', '=', company_id)]",
