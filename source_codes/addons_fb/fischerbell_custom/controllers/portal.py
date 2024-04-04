@@ -19,5 +19,6 @@ class CustomerPortal(http.Controller):
 			{'access_token': purchase_order.access_token})
 		if estimated_delivery_date and purchase_order_name:
 			if purchase_order:
+				purchase_order.order_line.write({'estimated_delivery_date': estimated_delivery_date})
 				purchase_order.write({'estimated_delivery_date': estimated_delivery_date})
 		return http.request.redirect(redirect_url)
