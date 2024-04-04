@@ -3,10 +3,34 @@
 from odoo import api, fields, models
 from datetime import datetime, timedelta, date
 from odoo.exceptions import UserError, ValidationError
+import qrcode
+import io
+import base64
 
 
 class StockPicking(models.Model):
 	_inherit = "stock.picking"
+
+	package = fields.Char(string="Package")
+	qr_code = fields.Binary(string='QR Code', compute='_generate_qr_code')
+	contact_one = fields.Many2one('res.partner',string="Contact 1")
+	contact_two = fields.Many2one('res.partner',string="Contact 2")
+	
+	@api.depends('name')
+	def _generate_qr_code(self):
+		for picking in self:
+			qr = qrcode.QRCode(
+				version=1,
+				error_correction=qrcode.constants.ERROR_CORRECT_L,
+				box_size=5,
+				border=4,
+			)
+			qr.add_data(picking.name)
+			qr.make(fit=True)
+			img = qr.make_image(fill_color="black", back_color="white")
+			buffer = io.BytesIO()
+			img.save(buffer, format="PNG")
+			picking.qr_code = base64.b64encode(buffer.getvalue())
 
 	def cron_alert_vendor_date(self):
 		partner_ids = self.env['res.partner'].search([('supplier_rank', '=', True)])

@@ -19,7 +19,7 @@
             <xpath expr="//page//group[@name='other_infos']" position="after">
                 <group string="Driver Information" name="driver_infos">
                     <field name="driver_ids" widget="many2many_tags" invisible="1" />
-                    <field name="driver_id" domain="[('id','in',driver_ids)]" attrs="{'invisible': [('carrier_id', '!=', False)]}"/>
+                    <field name="driver_id" domain="[('id','in',driver_ids)]" attrs="{'invisible': [('carrier_id', '!=', False)]}" options="{'no_create_edit': True,'no_create': True}"/>
                     <field name="forwarder_id" domain="[('is_forwarder','=',True)]"  attrs="{'invisible': [('carrier_id', '=', False)]}" />
                     <field name="assign_driver" invisible="1"/>
                     <field name="vehicle_id" domain="[('driver_id','=',driver_id)]"/>
