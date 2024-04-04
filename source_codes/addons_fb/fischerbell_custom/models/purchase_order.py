@@ -37,7 +37,6 @@ class PurchaseOrder(models.Model):
 			("approved", "Approved"),
 		]
 	)
-
 	shipment_tracking_date = fields.Datetime("Date")
 	cargo_clearance_permit_no = fields.Char(string="Cargo Clearance Permit No.")
 	logistics = fields.Char(string="Logistics")
@@ -47,6 +46,7 @@ class PurchaseOrder(models.Model):
 	remarks_one = fields.Char('Remarks 1')
 	remarks_two = fields.Char('Remarks 2')
 	status = fields.Char('Status')
+	next_delivery_date = fields.Datetime('Next(Earliest) Delivery Date')
 
 	def sc_approved(self):
 		for rec in self:
