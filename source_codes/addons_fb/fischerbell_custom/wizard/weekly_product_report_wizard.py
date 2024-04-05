@@ -58,7 +58,7 @@ class WeeklyProductReportwizard(models.TransientModel):
         wrksht.cell(row=table_header, column=column_loc).border = border_bottom
         column_loc += 1
 
-        total_location = self.env['stock.location'].search([('usage','=','internal')])
+        total_location = self.env['stock.location'].search([('usage','=','internal'),('inventory_status','=',True)])
 
         for nm in total_location:
             wrksht.cell(row=table_header, column=column_loc).value = f"{nm.name}"

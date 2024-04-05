@@ -28,3 +28,10 @@ class StockLot(models.Model):
 				stock_lot.tracking = stock_lot.product_id.tracking
 			else:
 				stock_lot.tracking = 'none'
+
+class StockLocation(models.Model):
+	_inherit = 'stock.location'
+
+
+	inventory_status = fields.Boolean('Show in Inventory Status')
+
