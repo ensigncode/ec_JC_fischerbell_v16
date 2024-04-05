@@ -19,6 +19,9 @@
 		"data/ir_cron.xml",
 		"views/product_template.xml",
 		"views/sale_order_view.xml",
+		"views/stock_picking_views.xml",
+		"views/res_partner_views.xml",
+		"reports/packing_label_report.xml",
 	],
 	'demo': [
 	],

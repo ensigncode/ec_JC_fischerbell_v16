@@ -86,6 +86,7 @@ class PortalAttendance(portal.CustomerPortal):
 		picking_id = request.env['stock.picking'].sudo().browse(picking)
 		current_datetime = datetime.now()
 		picking_id.write({'signature':signature,'signed_on':current_datetime,'signed_by':name,'signature_uploded':True})
+		self.successfull_delivery = True
 		picking_id.sudo().make_picking_done()
 
 		return {

@@ -4,8 +4,18 @@
 from odoo import api, fields, models, _
 from dateutil.relativedelta import relativedelta
 
+class SkipReasonLline(models.Model):
+	_name = 'skip.reason.line'
+
+	name = fields.Char('Reason')
+	reason_date = fields.Datetime('Reason Date')
+	picking_id = fields.Many2one('stock.picking',string="Picking")
+
 class StockPicking(models.Model):
 	_inherit = 'stock.picking'
+
+	skip_reason_line_ids = fields.One2many('skip.reason.line','picking_id',string="Skip Reasons")
+	successfull_delivery = fields.Boolean(string="Successfull Delivery",default=True)
 	
 	def send_notification_skip_delivery(self,reason_value=None):
 		self = self.sudo()
@@ -44,5 +54,12 @@ class StockPicking(models.Model):
 				# Handle the exception gracefully
 				raise UserError(_("Error : %s") % e)
 		self.next_delivery_date = (fields.Datetime.today() + relativedelta(days=1))
+		self.successfull_delivery = False
+		reason_line = self.skip_reason_line_ids.create({
+            'name': reason_value,
+            'reason_date': fields.Datetime.now(),
+            'picking_id': self.id,
+        })
+		print("\n\n\n\n ******************************************** reason line --- ",reason_line)
 		return True
 
