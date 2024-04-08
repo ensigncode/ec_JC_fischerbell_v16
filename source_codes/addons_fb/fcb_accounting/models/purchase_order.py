@@ -87,22 +87,20 @@ class PurchaseOrderLine(models.Model):
             return False
         return picking_type.id
 
+    @api.onchange('product_id')
+    def onchange_product_picking_type(self):
+        for line in self:
+            if line.order_id:
+                line.picking_type_id = line.order_id.picking_type_id.id or self._get_default_picking_type()
+            else : 
+                self._get_default_picking_type()
+
     @api.onchange('order_id')
     def _onchange_order_id(self):
         for line in self:
             if line.order_id:
                 line.picking_type_id = line.order_id.picking_type_id.id or self._get_default_picking_type()
 
-    @api.model
-    def create(self, vals):
-        if 'order_id' in vals and 'picking_type_id' not in vals:
-            order_id = self.env['purchase.order'].browse(vals['order_id'])
-            vals['picking_type_id'] = order_id.picking_type_id.id or self._get_default_picking_type()
-        # if 'order_id' in vals and 'picking_type_id' in vals:
-        #     order_id = self.env['purchase.order'].browse(vals['order_id'])
-        #     vals['picking_type_id'] = order_id.picking_type_id.id
-
-        return super(PurchaseOrderLine, self).create(vals)
     
     def _compute_tax_id(self):
         res = super()._compute_tax_id()
