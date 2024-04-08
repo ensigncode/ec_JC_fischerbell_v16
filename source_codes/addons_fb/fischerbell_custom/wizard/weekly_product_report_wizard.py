@@ -61,7 +61,7 @@ class WeeklyProductReportwizard(models.TransientModel):
         total_location = self.env['stock.location'].search([('usage','=','internal'),('inventory_status','=',True)])
 
         for nm in total_location:
-            wrksht.cell(row=table_header, column=column_loc).value = f"{nm.name}"
+            wrksht.cell(row=table_header, column=column_loc).value = f"{nm.complete_name}"
             wrksht.cell(row=table_header, column=column_loc).font = bold_text
             wrksht.cell(row=table_header, column=column_loc).alignment = table_header_alignment
             wrksht.cell(row=table_header, column=column_loc).border = border_bottom
@@ -119,7 +119,7 @@ class WeeklyProductReportwizard(models.TransientModel):
             for nm in total_location:
                 if order.location_id.name == nm.name:
                     loc_qty = order.product_id.stock_quant_ids.filtered(lambda loc_qty:loc_qty.location_id == order.location_id)
-                    wrksht.cell(row=table_row, column=table_col).value = loc_qty.quantity
+                    wrksht.cell(row=table_row, column=table_col).value = loc_qty[0].quantity
                     wrksht.cell(row=table_row, column=table_col).alignment = table_header_alignment
                     table_col += 1
                 else:
