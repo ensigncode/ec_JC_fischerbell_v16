@@ -83,15 +83,16 @@ class PurchaseOrder(models.Model):
 		return super(PurchaseOrder,self).write(vals)
 
 	# add function change estimated  date based on po to poline
-	@api.onchange('estimated_delivery_date')
+	@api.onchange('estimated_delivery_date','request_delivery_date')
 	def _compute_purchase_estimated_delivery_date(self):
 		for rec in self:
-			if rec.estimated_delivery_date:
-				self.order_line.write({'estimated_delivery_date': self.estimated_delivery_date})
+			if rec.estimated_delivery_date or rec.request_delivery_date:
+				self.order_line.write({'estimated_delivery_date': self.estimated_delivery_date,
+				                       'request_delivery_date': self.request_delivery_date})
 			else:
-				self.order_line.write({'estimated_delivery_date': self.estimated_delivery_date})
+				self.order_line.write({'estimated_delivery_date': self.estimated_delivery_date,
+				                       'request_delivery_date': self.request_delivery_date})
 
-	@api.depends('partner_note')
 	def _compute_purchase_internal_note(self):
 		self.len_note = False
 		for inv in self:
