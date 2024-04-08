@@ -43,7 +43,7 @@
                                         To:
                                     </td>
                                     <td colspan="2">
-                                        <p>
+                                        <p style="margin-bottom:0px;">
                                             <t t-esc="doc.partner_id.name"></t><br />
                                             <t t-if="doc.partner_id.street"> <t t-esc="doc.partner_id.street"/></t>
                                             <t t-if="doc.partner_id.street2">, <t t-esc="doc.partner_id.street2"/></t>
@@ -52,14 +52,14 @@
                                             <t t-if="doc.partner_id.country_id"> <t t-esc="doc.partner_id.country_id.name"/></t>
                                             <t t-if="doc.partner_id.zip">, <t t-esc="doc.partner_id.zip"/></t>
                                         </p>
-                                        <p>
-                                            <t t-esc="doc.company_id.name"></t><br />
-                                            <t t-if="doc.company_id.street"> <t t-esc="doc.company_id.street"/></t>
-                                            <t t-if="doc.company_id.street2">, <t t-esc="doc.company_id.street2"/></t>
-                                            <t t-if="doc.company_id.city">, <t t-esc="doc.company_id.city"/></t>
-                                            <t t-if="doc.company_id.state_id"> <t t-esc="doc.company_id.state_id.name"/></t>
-                                            <t t-if="doc.company_id.country_id"> <t t-esc="doc.company_id.country_id.name"/></t>
-                                            <t t-if="doc.company_id.zip">, <t t-esc="doc.company_id.zip"/></t>
+                                        <p t-if="doc.partner_id.parent_id">
+                                            <t t-esc="doc.partner_id.parent_id.name"></t><br />
+                                            <t t-if="doc.partner_id.parent_id.street"> <t t-esc="doc.partner_id.parent_id.street"/></t>
+                                            <t t-if="doc.partner_id.parent_id.street2">, <t t-esc="doc.partner_id.parent_id.street2"/></t>
+                                            <t t-if="doc.partner_id.parent_id.city">, <t t-esc="doc.partner_id.parent_id.city"/></t>
+                                            <t t-if="doc.partner_id.parent_id.state_id"> <t t-esc="doc.partner_id.parent_id.state_id.name"/></t>
+                                            <t t-if="doc.partner_id.parent_id.country_id"> <t t-esc="doc.partner_id.parent_id.country_id.name"/></t>
+                                            <t t-if="doc.partner_id.parent_id.zip">, <t t-esc="doc.partner_id.parent_id.zip"/></t>
                                         </p>
                                     </td>
                                 </tr>
@@ -163,7 +163,7 @@
     <record id="action_report_delivery_order_packing_label_label" model="ir.actions.report">
         <field name="name">Packing Label</field>
         <field name="model">stock.picking</field>
-        <field name="report_type">qweb-html</field>
+        <field name="report_type">qweb-pdf</field>
         <field name="report_name">fcb_operations.report_packing_label</field>
         <field name="report_file">fcb_operations.report_packing_label</field>
         <field name="print_report_name">
