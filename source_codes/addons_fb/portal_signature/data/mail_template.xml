@@ -8,7 +8,7 @@
             <field name="subject">Skip Product Delivery Notification</field>
             <field name="description">Sent to sale/purchase mangers for skip the delivery of product.</field>
             <field name="body_html" type="html">
-                <p>Dear Manger,
+                <p>Dear Manager,
                     <br/>
                     <br/>
                     This Delivery (
@@ -18,6 +18,33 @@
                     ) has been skipped due to the following reason:  
                     <t t-if="ctx and ctx.get('reason_value')">
                         <t t-out="ctx.get('reason_value') or ''"/> 
+                    </t>
+                    <br/>
+                    <br/>
+                    Thanks.
+                    <br/>
+                </p>
+            </field>
+        </record>
+
+        <record id="email_template_successfull_delivery_notification" model="mail.template">
+            <field name="name">Successfull delivery notification</field>
+            <field name="model_id" ref="stock.model_stock_picking"/>
+            <field name="email_from">{{ (object.company_id.email_formatted or user.email_formatted) }}</field>
+            <field name="subject">Successfull Product Delivery Notification</field>
+            <field name="description">Sent to sale mangers for Successfull the delivery of products.</field>
+            <field name="body_html" type="html">
+                <p>Dear Manager,
+                    <br/>
+                    <br/>
+                    This Delivery (
+                    <t t-if="object.name">
+                        <t t-out="object.name or ''"></t>
+                    </t>
+                    ) has been successfully delivered.  
+                    <br />
+                    <t t-if="ctx and ctx.get('platform_name')">
+                        Please go to the platform : <t t-out="ctx.get('platform_name') or ''"/>  to submit.
                     </t>
                     <br/>
                     <br/>

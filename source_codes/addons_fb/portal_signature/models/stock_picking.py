@@ -3,6 +3,7 @@
 
 from odoo import api, fields, models, _
 from dateutil.relativedelta import relativedelta
+from odoo.exceptions import UserError, ValidationError
 
 class SkipReasonLline(models.Model):
 	_name = 'skip.reason.line'
@@ -60,6 +61,5 @@ class StockPicking(models.Model):
             'reason_date': fields.Datetime.now(),
             'picking_id': self.id,
         })
-		print("\n\n\n\n ******************************************** reason line --- ",reason_line)
 		return True
 

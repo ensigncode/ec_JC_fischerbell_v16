@@ -23,8 +23,8 @@
 		<field name="inherit_id" ref="stock.view_picking_internal_search"/>
 		<field name="arch" type="xml">
 			<xpath expr="//search//filter[@name='backorder']" position="after">
-				<filter name="successfull_transfer" string="Successfull Transfer" domain="[('successfull_delivery','=',True),('state','=','done')]"/>
-				<filter name="unsuccessfull_transfer" string="UnSuccessfull Transfer" domain="[('successfull_delivery','=',False)]"/>
+				<filter name="successfull_transfer" string="Successful Delivery" domain="[('successfull_delivery','=',True),('state','=','done')]"/>
+				<filter name="unsuccessfull_transfer" string="Unsuccessful Delivery" domain="[('successfull_delivery','=',False)]"/>
 			</xpath>
 		</field>
 	</record>
