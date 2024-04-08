@@ -32,7 +32,7 @@ class PurchaseOrder(models.Model):
                     'user_id': False,
                     'date': order.date_order,
                     'origin': order.name,
-                    'location_dest_id': dest_address_id.property_stock_customer.id if dest_address_id else picking_type.default_location_dest_id.id,
+                    'location_dest_id': dest_address_id.property_stock_customer.id if dest_address_id and dest_address_id.property_stock_customer else picking_type.default_location_dest_id.id,
                     'location_id': order.partner_id.property_stock_supplier.id,
                     'company_id': order.company_id.id,
                 }
@@ -47,8 +47,10 @@ class PurchaseOrder(models.Model):
                         picking_type_code = line.picking_type_id.code
                         dest_address_id = line.dest_address_id
                         pickings = order.picking_ids.filtered(lambda x: x.state not in ('done', 'cancel') and x.picking_type_code == picking_type_code)
+                        picking = order.picking_ids.filtered(lambda x:x.picking_type_id == line.picking_type_id)
                         res = order.with_context(picking_type_code = picking_type_code, dest_address_id = dest_address_id,picking_type_id = line.picking_type_id)._prepare_picking()
-                        picking = StockPicking.with_user(SUPERUSER_ID).create(res)
+                        if not picking:
+                            picking = StockPicking.with_user(SUPERUSER_ID).create(res)
                        
                         moves = line._create_stock_moves(picking)
                         for move in moves : 
