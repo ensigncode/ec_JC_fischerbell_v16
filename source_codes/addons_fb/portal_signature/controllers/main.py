@@ -92,6 +92,7 @@ class PortalAttendance(portal.CustomerPortal):
 		current_datetime = datetime.now()
 		picking_id.write({'signature':signature,'signed_on':current_datetime,'signed_by':name,'signature_uploded':True})
 		self.successfull_delivery = True
+		picking_id.sudo().button_validate()
 		picking_id.sudo().make_picking_done()
 		
 		if picking_id and picking_id.picking_type_code == 'outgoing' :

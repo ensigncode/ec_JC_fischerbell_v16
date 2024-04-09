@@ -6,13 +6,17 @@
             <field name="model_id" ref="model_stock_picking"/>
             <field name="subject">validation Reminder</field>
             <field name="body_html" type="html">
-                <p>Dear
-                    <t t-out="object.name or ''"></t>
+                <p>Dear, <br />
                     <br/>
-                    Please validate the product in stocks
+                    
+                    We wanted to inform you that the transfer with reference <t t-out="object.name or ''"></t> is currently pending and has not been completed yet. 
+                    As per our records, this transfer is still in progress and has not reached the 'done' state.
+
+                    Please review the transfer and take necessary action to ensure its completion at your earliest convenience.
+
+                    If you have any questions or need further assistance regarding this transfer, please don't hesitate to reach out to us. We are here to help.
                     <br/>
-                    Regards,
-                    <br/>
+                    Regards,<br />
                     <t t-out="object.partner_id.name"/>
                 </p>
             </field>
