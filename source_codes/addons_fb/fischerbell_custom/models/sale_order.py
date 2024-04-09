@@ -442,7 +442,6 @@ class SaleOrder(models.Model):
 		# 		        }
 		super_call = super(SaleOrder, self).action_confirm()
 		for order in self:
-			print('>>>>>>>>>>>>>>>>>>>>>>>>>s>>>>>>>>>>>>>>')
 			# Sent email to customer based on the state
 			order.send_mail_triggers_based_on_state()
 		return super_call
