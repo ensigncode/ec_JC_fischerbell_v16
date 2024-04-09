@@ -104,7 +104,6 @@ class FischerbellInventoryReport(models.AbstractModel):
 		for product in product_template:
 			quant_id = self.env['stock.quant'].search(
 				[('product_id', '=', product.product_variant_id.id)], order='id desc',limit=1)
-			print("uuuuuuuuuu",quant_id.id)
 			purchase_order_lines = self.env['purchase.order.line'].search(
 				[('product_id', '=', product.product_variant_id.id)])
 			stock_moves = self.env['stock.move'].search([('purchase_line_id', 'in', purchase_order_lines.ids)])
@@ -139,10 +138,12 @@ class FischerbellInventoryReport(models.AbstractModel):
 			expiration_date = stock_move_line.expiration_date.strftime(
 				'%Y-%m-%d') if stock_move_line.expiration_date else ''
 			batch_number = stock_move_line.batch_number
-			serial_number = stock_move_line.serial_number
+			serial_number = stock_move_line.lot_name or ''  # Updated line
+
 		else:
 			expiration_date = ''
 			batch_number = ''
+
 			serial_number = ''
 			converted_price = product.list_price
 
