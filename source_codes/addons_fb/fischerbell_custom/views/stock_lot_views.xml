@@ -11,6 +11,7 @@
                 <field name="create_date" optional="show"/>
                 <field name="company_id" groups="base.group_multi_company"/>
                 <field name="last_delivery_partner_id" optional="hide" string="Transfer to"/>
+                <field name="manufacturing_date" optional="show"/>
             </tree>
         </field>
     </record>
@@ -95,9 +96,9 @@
         <field name="arch" type="xml">
             <xpath expr="//field[@name='lot_name']" position="after" >
                 <field name="manufacturing_date"/>
-                <field name="expiration_date"/>
+                <!-- <field name="expiration_date"/>
 	            <field name="serial_number"/>
-                <field name="batch_number"/>
+                <field name="batch_number"/> -->
             </xpath>
         </field>
     </record>
