@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        
+        <!-- View for the wizard -->
+        <record id="view_send_invoice_wizard_form" model="ir.ui.view">
+            <field name="name">send.invoice.now.wizard.form</field>
+            <field name="model">send.invoice.now.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Send Invoicenow Wizard">
+                    <sheet>
+                        <group>
+                            <field name="attachment_ids" widget="many2many_binary"/>
+                        </group>
+                        <footer>
+                            <button name="action_invoice_send_invoicenow" string="Send" type="object" class="btn-primary"/>
+                            <button string="Cancel" class="btn-secondary" special="cancel"/>
+                        </footer>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <!-- Action for the wizard -->
+        <record id="send_invoice_now_wizard_action" model="ir.actions.act_window">
+            <field name="name">Send Invoicenow Wizard</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">send.invoice.now.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+            <field name="view_id" ref="view_send_invoice_wizard_form"/>
+        </record>
+
+
+        <!-- Menu item to trigger the wizard -->
+        <!-- <record id="menu_open_invoice_attachment_wizard" model="ir.actions.act_window">
+            <field name="name">Invoice Now</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">account.move</field>
+            <field name="view_mode">form</field>
+            <field name="target">current</field>
+            <field name="view_id" ref="view_account_move_form_custom"/>
+            <field name="context">{"form_view_initial_mode": "edit"}</field>
+        </record> -->
+    </data>
+</odoo>

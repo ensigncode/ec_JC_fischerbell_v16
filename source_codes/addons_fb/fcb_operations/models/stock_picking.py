@@ -13,8 +13,8 @@ class StockPicking(models.Model):
 
 	package = fields.Char(string="Package")
 	qr_code = fields.Binary(string='QR Code', compute='_generate_qr_code')
-	contact_one = fields.Many2one('res.partner',string="Contact 1")
-	contact_two = fields.Many2one('res.partner',string="Contact 2")
+	contact_one = fields.Many2one('res.partner',string="Contact 1", domain="[('customer_rank','>', 0)]")
+	contact_two = fields.Many2one('res.partner',string="Contact 2", domain="[('customer_rank','>', 0)]")
 	
 	@api.depends('name')
 	def _generate_qr_code(self):
