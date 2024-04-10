@@ -18,6 +18,12 @@ class StockPicking(models.Model):
 	skip_reason_line_ids = fields.One2many('skip.reason.line','picking_id',string="Skip Reasons")
 	successfull_delivery = fields.Boolean(string="Successfull Delivery",default=True)
 	responsible_customer_id = fields.Many2one('res.partner',string="Responsible customer")
+	latest_skip_reason = fields.Char(string="Latest Skip Reason", compute="_compute_latest_skip_reason", store=True)
+	
+	def _compute_latest_skip_reason(self):
+		for picking in self:
+			latest_skip_reason = picking.skip_reason_line_ids.sorted('create_date', reverse=True)[:1].name
+			picking.latest_skip_reason = latest_skip_reason
 	
 	def send_notification_skip_delivery(self,reason_value=None):
 		self = self.sudo()

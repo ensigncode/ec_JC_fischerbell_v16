@@ -36,7 +36,7 @@ class PortalAttendance(portal.CustomerPortal):
 		uid = request.session.uid
 		user_id = request.env['res.users'].sudo().browse(uid)
 		
-		search_domain = [('driver_id', '=', user_id.partner_id.id),('state','not in',['cancel'])]
+		search_domain = [('driver_id', '=', user_id.partner_id.id),('state','in',['assigned','done'])]
 		picking_obj = request.env['stock.picking'].sudo().search(
 			[])
 		total_picking = picking_obj.sudo().search_count(
@@ -53,6 +53,7 @@ class PortalAttendance(portal.CustomerPortal):
 			order='id desc' 
 			)
 		vals = {
+			'current_date' : fields.date.today(),
 			'picking_ids': picking_id,
 			'page_name': 'transfer',
 			'pager': page_detail,

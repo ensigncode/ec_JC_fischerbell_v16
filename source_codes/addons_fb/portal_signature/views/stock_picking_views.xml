@@ -1,5 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+    <record id="stock_picking_reason_line_view_tree" model="ir.ui.view">
+        <field name="name">stock.picking.reason.line.view.tree</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.vpicktree"/>
+        <field name="arch" type="xml">
+            <field name="state" position="after">
+                <field name="latest_skip_reason" optional="hide" />
+            </field>
+        </field>
+    </record>
     <record id="stock_picking_reason_line_view_form" model="ir.ui.view">
         <field name="name">stock.picking.reason.line.view.form</field>
         <field name="model">stock.picking</field>
