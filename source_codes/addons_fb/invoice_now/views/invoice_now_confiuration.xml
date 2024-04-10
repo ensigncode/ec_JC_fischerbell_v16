@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+        <record id="invoice_now_configuration_view_tree" model="ir.ui.view">
+            <field name="name">invoice.now.configuration.view.form</field>
+            <field name="model">invoice.now.configuration</field>
+            <field name="arch" type="xml">
+                <tree string="Invoice Now Configuartion">
+                    <field name="client_id" />
+                    <field name="secret_key" />
+                </tree>
+            </field>
+        </record>
+
+        <record id="invoice_now_configuration_view_form" model="ir.ui.view">
+            <field name="name">invoice.now.configuration.view.form</field>
+            <field name="model">invoice.now.configuration</field>
+            <field name="arch" type="xml">
+                <form string="Invoice Now Configuartion">
+                    <header>
+                        <button name="action_generate_token" 
+                            string="Generate Token" class="oe_highlight"
+                            type="object" data-hotkey="v"/>
+
+                        <button name="action_refresh_token" 
+                            string="Refresh Token" class="oe_highlight"
+                            type="object" data-hotkey="v"/>
+
+                        <button name="get_document_json_format" 
+                            string="Query Documents - JSON Response" class="oe_highlight"
+                            type="object" data-hotkey="v" invisible="1"/>
+
+                        <button name="get_document_csv_format" 
+                            string="Query Documents - CSV Response" class="oe_highlight"
+                            type="object" data-hotkey="v" invisible="1"/>
+
+                        <button name="get_document_criteria_json_format" 
+                            string="Query Documents Criteria - JSON Response" class="oe_highlight"
+                            type="object" data-hotkey="v" invisible="1"/>
+                       <!--  <button name="action_download_doc_xml" 
+                            string="Download Document Contents - XML" class="oe_highlight"
+                            type="object" data-hotkey="v"/> -->
+                    </header>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="client_id" required="1"/>
+                                <field name="secret_key" required="1"/>
+                                <field name="base_uri" required="1"/>
+                                <field name="inv_document_type" required="1"/>
+                                <field name="inv_document_format" required="1"/>
+                                <field name="credit_document_type" required="1"/>
+                                <field name="credit_document_format" required="1"/>
+                                <field name="api_version" required="1"/>
+                            </group>
+                            <group></group>                        
+                        </group>
+
+                        <group string="Token">
+                            <field name="access_token" readonly="1"  force_save="1"/>
+                            <field name="refresh_token" readonly="1" force_save="1"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <record id="invoice_now_configuration_action" model="ir.actions.act_window">
+            <field name="name">Invoice now Configuration</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">invoice.now.configuration</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+        <menuitem id="invoice_now_configuration_menu_root" 
+            action="invoice_now_configuration_action"
+            parent="account.account_invoicing_menu" name="Invoice Now Configuration" sequence="2"/>
+</odoo>

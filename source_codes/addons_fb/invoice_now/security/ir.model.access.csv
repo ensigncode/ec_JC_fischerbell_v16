@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_send_invoice_now_wizard,access_send_invoice_now_wizard,model_send_invoice_now_wizard,,1,1,1,1
+access_invoice_now_configuration,access_invoice_now_configuration,model_invoice_now_configuration,,1,1,1,1
+invoice_now.access_send_invoice_lines,access_send_invoice_lines,invoice_now.model_send_invoice_lines,base.group_user,1,1,1,1
+invoice_now.access_send_invoice,access_send_invoice,invoice_now.model_send_invoice,base.group_user,1,1,1,1
