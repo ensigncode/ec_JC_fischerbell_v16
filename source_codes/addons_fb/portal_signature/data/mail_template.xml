@@ -20,6 +20,7 @@
                         <t t-out="ctx.get('reason_value') or ''"/> 
                     </t>
                     <br/>
+                    Please schedule the next delivery date.
                     <br/>
                     Thanks.
                     <br/>

@@ -249,6 +249,8 @@ class Picking(models.Model):
 					qty = int(move_line.product_uom_qty)
 					if move_line.quantity_done > move_line.product_uom_qty:
 						raise ValidationError("Sorry, you cannot input the quantity more than "+str(qty))
+					if move_line.product_uom_qty != move_line.quantity_done : 
+						raise ValidationError("Sorry, you cannot validate make sure demand quantity and done quantity must be same.")
 					else:
 						pass
 
