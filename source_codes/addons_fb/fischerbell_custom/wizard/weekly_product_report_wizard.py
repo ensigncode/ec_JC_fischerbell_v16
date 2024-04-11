@@ -26,7 +26,7 @@ class WeeklyProductReportwizard(models.TransientModel):
 
     def action_create_weekly_report(self):
         wb = Workbook()
-        f_name = 'Sales History'
+        f_name = 'Weekly Order Report'
 
         table_header_alignment = Alignment(horizontal='left', vertical='top', text_rotation=0, wrap_text=True)
         bold_text = Font(name="Calibri", size=11, bold=True)
@@ -145,7 +145,6 @@ class WeeklyProductReportwizard(models.TransientModel):
 
             sale_lines = self.env['sale.order.line'].search([('order_id.state','=','sale' ), ('product_id','=', order.product_id.id)])
             for month_in in range(1, 13):
-                print("month_in", month_in)
                 total_sales = sum(sale_lines.filtered(lambda ord:ord.order_id.date_order.month == month_in).mapped('product_uom_qty'))
                 wrksht.cell(row=table_row, column=table_col).value = total_sales or ''
                 wrksht.cell(row=table_row, column=table_col).alignment = table_header_alignment

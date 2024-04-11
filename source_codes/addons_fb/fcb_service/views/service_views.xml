@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_task_form2_inherit" model="ir.ui.view">
+        <field name="name">view.task.form2.inherit</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project.view_task_form2"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='partner_id']" position="after">
+                <field name="customer_code" readonly="1"/>
+                <field name="customer_email"/>
+            </xpath>
+            <xpath expr="//page[@name='extra_info']" position="after">
+                <page name="service_line" string="Service Line">
+                    <field name="service_line" widget="section_and_note_one2many" mode="tree">
+                        <tree editable="bottom">
+                            <field name="product_temp_id"/>
+                            <field name="product_uom_qty"/>
+                            <field name="price_unit"/>
+                        </tree>
+                    </field>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="action_service_type">
+        <field name="name">Service Type</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">service.type</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+  <menuitem name="Service Type"
+              id="menu_service_type"
+              action="action_service_type"
+              parent="industry_fsm.fsm_menu_settings"/>
+</odoo>

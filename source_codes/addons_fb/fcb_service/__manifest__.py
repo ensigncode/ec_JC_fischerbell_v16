@@ -10,7 +10,8 @@
 		'industry_fsm',
 	],
 	'data': [
-		# "reports/packing_label_report.xml",
+		'security/ir.model.access.csv',
+		'views/service_views.xml'
 	],
 	'demo': [
 	],
