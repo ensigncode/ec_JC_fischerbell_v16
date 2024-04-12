@@ -8,8 +8,9 @@
             <xpath expr="//group[@name='other_infos']" position="before">
                 <group name='packing_label_report_data' string="Packing Label Information">
                     <field name="package"/>
-                    <field name="contact_one"/>
-                    <field name="contact_two"/>
+                    <field name="contact_one" domain="[('id', 'in', contact_ids)]" />
+                    <field name="contact_two" domain="[('id', 'in', contact_ids)]" />
+                    <field name="contact_ids" invisible="1" />
                     <field name="qr_code" widget="image"/>
                 </group>
             </xpath>

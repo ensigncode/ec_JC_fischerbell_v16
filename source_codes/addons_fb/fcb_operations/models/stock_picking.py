@@ -13,9 +13,21 @@ class StockPicking(models.Model):
 
 	package = fields.Char(string="Package")
 	qr_code = fields.Binary(string='QR Code', compute='_generate_qr_code')
-	contact_one = fields.Many2one('res.partner',string="Contact 1", domain="[('customer_rank','>', 0)]")
-	contact_two = fields.Many2one('res.partner',string="Contact 2", domain="[('customer_rank','>', 0)]")
+	contact_ids = fields.Many2many('res.partner',string="Contact IDS",compute="_compute_contact_ids")
+	contact_one = fields.Many2one('res.partner',string="Contact 1")
+	contact_two = fields.Many2one('res.partner',string="Contact 2")
 	
+	@api.depends('partner_id')
+	def _compute_contact_ids(self):
+		for res in self : 
+			parent_id = self.partner_id.parent_id if self.partner_id.parent_id else False
+			if parent_id :
+				partner_ids = self.env['res.partner'].sudo().search([('parent_id','=',parent_id.id)])
+				res.contact_ids = partner_ids
+			else :
+				partner_ids = self.env['res.partner'].sudo().search([])
+				res.contact_ids = partner_ids
+
 	@api.depends('name')
 	def _generate_qr_code(self):
 		for picking in self:

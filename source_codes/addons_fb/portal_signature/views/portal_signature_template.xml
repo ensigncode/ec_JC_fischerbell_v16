@@ -146,7 +146,12 @@
                                     <div class="modal-body">
                                         <t t-call="portal.signature_form">
                                             <t t-set="call_url" t-value="'/my/need_approved?picking_id=%s' % picking_id.id"/>
-                                            <t t-set="default_name" t-value="picking_id.partner_id.name"/>
+                                            <t t-if="picking_id.is_dropship">
+                                                <t t-set="default_name" t-value="picking_id.responsible_customer_id.name"/>
+                                            </t>
+                                            <t t-else="">
+                                                <t t-set="default_name" t-value="picking_id.partner_id.name"/>
+                                            </t>
                                         </t>
                                     </div>
                                 </div>
