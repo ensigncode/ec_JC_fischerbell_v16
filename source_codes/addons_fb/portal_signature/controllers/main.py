@@ -93,9 +93,11 @@ class PortalAttendance(portal.CustomerPortal):
 		current_datetime = datetime.now()
 		picking_id.write({'signature':signature,'signed_on':current_datetime,'signed_by':name,'signature_uploded':True})
 		self.successfull_delivery = True
-		picking_id.sudo().button_validate()
+		quality_id = request.env['quality.check'].sudo().search([('picking_id','=',picking_id.id)])
+		if quality_id:
+			quality_id.do_pass()
 		picking_id.sudo().make_picking_done()
-		
+
 		if picking_id and picking_id.picking_type_code == 'outgoing' :
 			if picking_id.partner_id.parent_id : 
 				parent_id = picking_id.partner_id.parent_id
@@ -103,14 +105,14 @@ class PortalAttendance(portal.CustomerPortal):
 					'platform_name' : parent_id.platform_name,
 				})
 			sale_order_id = request.env['sale.order'].sudo().search([('name','=',picking_id.origin)])
-			invoices = request.env['account.move']
+			invoices = False
 			if sale_order_id : 
 				if not sale_order_id.invoice_ids :
-					invoice = sale_order_id._create_invoices()
-					if invoice : 
-						invoice.action_post()
-				
-				invoices = sale_order_id.invoice_ids
+					invoices = sale_order_id._create_invoices()
+					invoices.sudo().action_post()
+				else :
+					sale_order_id.invoice_ids.action_post()
+					invoices = sale_order_id.invoice_ids
 			for invoice in invoices:
 				pdf = request.env['ir.actions.report'].sudo()._render_qweb_pdf('account.account_invoices', [invoice.id])
 				pdf_base64 = base64.b64encode(pdf[0])
