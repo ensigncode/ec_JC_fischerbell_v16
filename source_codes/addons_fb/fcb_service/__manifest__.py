@@ -7,11 +7,12 @@
 	'summary': 'FCB Service',
 	'website': '',
 	'depends': [
-		'industry_fsm',
+		'industry_fsm','sale'
 	],
 	'data': [
 		'security/ir.model.access.csv',
-		'views/service_views.xml'
+		'views/service_views.xml',
+		'views/fischerbell_header.xml'
 	],
 	'demo': [
 	],

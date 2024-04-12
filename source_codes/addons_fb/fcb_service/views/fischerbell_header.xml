@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!--        <template id="external_layout_header" inherit_id="report.external_layout_header">-->
+        <!--   <xpath expr="//div[1]" position="replace">-->
+        <!--                               <t t-call="fcb_service.fischerbell_custom_header"/>-->
+
+        <!--   </xpath>-->
+        <!--        </template>-->
+
+        <template id="delivery_report_saleorder_document" inherit_id="sale.report_saleorder_document">
+            <xpath expr="//div[hasclass('page')]" position="before">
+                <t t-call="fcb_service.fischerbell_custom_header_1"/>
+            </xpath>
+        </template>
+
+        <template id="fischerbell_custom_header">
+            <t t-if="o and 'company_id' in o">
+                <t t-set="company" t-value="o.company_id"></t>
+            </t>
+            <t t-if="not o or not 'company_id' in o">
+                <t t-set="company" t-value="res_company"></t>
+            </t>
+            <div>
+
+                <div class="row">
+                    <div class="col-6" style="float:left;width:50%;">
+                        <img t-if="company.logo" t-att-src="image_data_uri(company.logo)"
+                             style="max-height: 80px;"/>
+                    </div>
+                    <div class="col-6"
+                         style="font:16px lucida-console,sans-serif !important; text-align: left;float:right;width:50%;">
+                        <strong t-field="company.partner_id"/>
+                        <br/>
+                        <span t-if="company.partner_id.street">
+                            <span t-if="company.partner_id.street" t-field="company.partner_id.street"/>,
+                        </span>
+
+                        <span t-if="company.partner_id.street2">
+                            <span t-field="company.partner_id.street2"/>
+
+                        </span>
+
+                        <span t-if="company.partner_id.city" t-field="company.partner_id.city"/>
+
+                        <span t-if="company.partner_id.country_id" t-field="company.partner_id.country_id"/>
+                        <br/>
+                        Tel :
+                        <span class="col-6" t-if="company.partner_id.phone" t-field="company.partner_id.phone"/>
+                        <span style="padding:15px"/>Fax :
+                        <span class="col-6" t-if="company.partner_id.phone" t-field="company.partner_id.phone"/>
+                        <br/>
+                        W :
+                        <span class="col-6" t-if="company.partner_id.website" t-field="company.partner_id.website"/>
+                        <span style="padding:15px"/>E :
+                        <span class="col-6" t-if="company.partner_id.phone" t-field="company.partner_id.phone"/>
+                        <br/>
+                        UEN :
+                        <span class="col-6">200502661D</span>
+                        <span style="padding:15px"/>GST REG No :
+                        <span class="col-6">20-0502661D</span>
+                        <br/>
+                        <span t-if="company.partner_id.vat" t-field="company.partner_id.vat"/>
+                        <br/>
+                    </div>
+                </div>
+
+                <div class="col-12" style="background-color:black;text-align:center;float:left;width:100%;">
+                    <p style="color:white;font-size:20px;text-align:center;height: 10px;">-Report Name-</p>
+                </div>
+                <br/>
+                <br/>
+                <br/>
+                <div class="row mt32 mb32 ">
+                    <div>
+                        <table>
+                            <tr>
+                                <th colspan="6"></th>
+                                <th colspan="6"></th>
+                            </tr>
+                            <tr>
+                                <td style="width:25%;">
+                                    <strong>Customer</strong><strong style="text-align:right;">:</strong>
+                                </td>
+                                <td style="border-bottom: 1px solid black;text-align:left;width:25%;height:10px"
+                                    class="w-50"></td>
+                                <td style="width:25%;">
+                                    <strong>Our Reference No:</strong>
+                                </td>
+                                <td colspan="col-6" style="border-bottom: 1px solid black;text-align:center;width:25%;"
+                                    class="w-50"></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong>Address:</strong>
+                                </td>
+                                <td style="border-bottom: 1px solid black;text-align:center';width:25%;"
+                                    class="w-50"></td>
+                                <td>
+                                    <strong>Your Reference No:</strong>
+                                </td>
+                                <td style="border-bottom: 1px solid black;text-align:center; " class="w-50"></td>
+                            </tr>
+                            <tr>
+                                <td >
+                                </td>
+                                <td style="border-bottom: 1px solid black;text-align:center; height: 20px;"
+                                    class="w-50"></td>
+                                <td>
+                                    <strong>Requeste Date:</strong>
+                                </td>
+                                <td style="border-bottom: 1px solid black;text-align:center" class="w-50"></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong>Model:</strong>
+                                </td>
+                                <td style="border-bottom: 1px solid black;text-align:center" class="w-50"></td>
+                                <td>
+                                    <strong>Contact Person:</strong>
+                                </td>
+                                <td style="border-bottom: 1px solid black;text-align:center" class="w-50"></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong>Next Service Date:</strong>
+                                </td>
+                                <td style="border-bottom: 1px solid black;text-align:center" class="w-50"></td>
+                                <td>
+                                    <strong>Contact No:</strong>
+                                </td>
+                                <td style="border-bottom: 1px solid black;text-align:center" class="w-50"></td>
+                            </tr>
+                            <tr>
+                                <td/>
+                                <td/>
+                                <td>
+                                    <strong>Item Serial No:</strong>
+                                </td>
+                                <td style="border-bottom: 1px solid black;text-align:center" class="w-50"></td>
+
+                            </tr>
+                            <tr>
+                                <td/>
+                                <td/>
+                                <td>
+                                    <strong>Completed date:</strong>
+                                </td>
+                                <td style="border-bottom: 1px solid black;text-align:center" class="w-50"></td>
+                            </tr>
+
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+
+        </template>
+
+        <template id="fischerbell_custom_header_1">
+            <xpath expr="//t[@t-call='web.html_container']" position="replace">
+                <t t-call="web.html_container">
+                    <t t-foreach="docs" t-as="doc">
+                        <t t-call="fcb_service.fischerbell_custom_header" t-lang="doc.partner_id.lang"/>
+                    </t>
+                </t>
+
+            </xpath>
+        </template>
+
+        <record id="action_report_fischerbell_custom_header_1" model="ir.actions.report">
+            <field name="name">Exchange Notwwwwwwwwwwwwe</field>
+            <field name="model">sale.order</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">fcb_service.fischerbell_custom_header_1</field>
+            <field name="report_file">fcb_service.fischerbell_custom_header_1</field>
+            <field name="print_report_name">'Exchange Order - %s' % (object.name or '')</field>
+            <field name="binding_model_id" ref="sale.model_sale_order"/>
+            <field name="binding_type">report</field>
+        </record>
+
+    </data>
+</odoo>
