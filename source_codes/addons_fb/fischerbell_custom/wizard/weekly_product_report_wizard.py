@@ -1,12 +1,14 @@
 import base64
 import calendar
-
+import logging
 from odoo import _, api, models, fields
 from datetime import datetime
 from openpyxl import Workbook
 from openpyxl.styles import Border, Side, Alignment, Font
 from io import BytesIO
 from datetime import datetime, timedelta
+
+_logger = logging.getLogger(__name__)
 
 
 class WeeklyProductReportwizard(models.TransientModel):
@@ -145,7 +147,10 @@ class WeeklyProductReportwizard(models.TransientModel):
 
             sale_lines = self.env['sale.order.line'].search([('order_id.state','=','sale' ), ('product_id','=', order.product_id.id)])
             for month_in in range(1, 13):
+                _logger.info('---------------------month_in',month_in)
                 total_sales = sum(sale_lines.filtered(lambda ord:ord.order_id.date_order.month == month_in).mapped('product_uom_qty'))
+                _logger.info('--------------------->>total_sales', total_sales)
+                print("---->>>>>>total_sales",total_sales)
                 wrksht.cell(row=table_row, column=table_col).value = total_sales or ''
                 wrksht.cell(row=table_row, column=table_col).alignment = table_header_alignment
                 table_col += 1
