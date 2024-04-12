@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<record id="product_templates_form_views_inherit_service" model="ir.ui.view">
+		<field name="name">product.template.form.views.inherit.service</field>
+		<field name="model">product.template</field>
+		<field name="inherit_id" ref="product.product_template_form_view"/>
+		<field name="arch" type="xml">
+			<xpath expr="//page[@name='invoicing']" position="after">
+				<page string="Service" name="service">
+					<group>
+						<group>
+							<field name="is_serviceable"/>
+							<field name="service_time"/>
+							<field name="required_calibration"/>
+						</group>
+					</group>
+				</page>
+			</xpath>
+		</field>
+	</record>
+</odoo>
