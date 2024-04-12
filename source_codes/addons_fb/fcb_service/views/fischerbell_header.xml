@@ -1,18 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
-        <!--        <template id="external_layout_header" inherit_id="report.external_layout_header">-->
-        <!--   <xpath expr="//div[1]" position="replace">-->
-        <!--                               <t t-call="fcb_service.fischerbell_custom_header"/>-->
-
-        <!--   </xpath>-->
-        <!--        </template>-->
-
-        <template id="delivery_report_saleorder_document" inherit_id="sale.report_saleorder_document">
-            <xpath expr="//div[hasclass('page')]" position="before">
-                <t t-call="fcb_service.fischerbell_custom_header_1"/>
-            </xpath>
-        </template>
 
         <template id="fischerbell_custom_header">
             <t t-if="o and 'company_id' in o">
@@ -167,17 +155,5 @@
 
             </xpath>
         </template>
-
-        <record id="action_report_fischerbell_custom_header_1" model="ir.actions.report">
-            <field name="name">Exchange Notwwwwwwwwwwwwe</field>
-            <field name="model">sale.order</field>
-            <field name="report_type">qweb-pdf</field>
-            <field name="report_name">fcb_service.fischerbell_custom_header_1</field>
-            <field name="report_file">fcb_service.fischerbell_custom_header_1</field>
-            <field name="print_report_name">'Exchange Order - %s' % (object.name or '')</field>
-            <field name="binding_model_id" ref="sale.model_sale_order"/>
-            <field name="binding_type">report</field>
-        </record>
-
     </data>
 </odoo>
