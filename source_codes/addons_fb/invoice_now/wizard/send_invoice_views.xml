@@ -4,7 +4,7 @@
         <field name="name">view_send_invoice_form</field>
         <field name="model">send.invoice</field>
         <field name="arch" type="xml">
-            <form string="Send Invoice To Peppol Datapost">
+            <form string="Send Invoice to InvoiceNow">
                 <sheet>
                     <group>
                         <group>
@@ -26,7 +26,7 @@
         </field>
     </record>
     <record id="action_send_invoice" model="ir.actions.act_window">
-        <field name="name">Send Invoice To Peppol Datapost</field>
+        <field name="name">Send Invoice to InvoiceNow</field>
         <field name="type">ir.actions.act_window</field>
         <field name="res_model">send.invoice</field>
         <field name="binding_model_id" ref="account.model_account_move"/>

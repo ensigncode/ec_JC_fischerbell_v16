@@ -9,6 +9,7 @@
                 <xpath expr="//field[@name='vat']" position="before">
                     <field name="commercial_partner_id"/>
                     <field name="ref"/>
+                    <field name="applicable_invoicenow" />
                   </xpath>
             </field>
         </record>

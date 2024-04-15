@@ -859,6 +859,7 @@ class SaleOrder(models.Model):
 			if order.delivery_status == 'pending':
 				sale_picking_pending_state_trigger_templ.send_mail(res_id=order.id)
 			elif order.delivery_status == 'full':
+				order.scheduled_delivery_date = fields.datetime.now()
 				sale_picking_done_state_trigger_templ.send_mail(res_id=order.id)
 
 	def write(self, vals):
