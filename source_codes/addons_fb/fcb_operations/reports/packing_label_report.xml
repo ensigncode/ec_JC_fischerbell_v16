@@ -34,8 +34,11 @@
                                     <td class="text-uppercase">
                                         <span class="" t-field="doc.qr_code" t-options="{'widget': 'image'}" role="img"/>
                                     </td>
-                                    <td colspan="2" class="text-uppercase">
+                                    <!-- <td colspan="2" class="text-uppercase">
                                         <div t-field="doc.name" t-options="{'widget': 'barcode', 'width': 600, 'height': 100, 'img_style': 'width:300px;height:50px;'}"/>
+                                    </td> -->
+                                    <td colspan="2" class="text-uppercase">
+                                        <div t-field="doc.name" />
                                     </td>
                                 </tr>
                                 <tr>

@@ -49,7 +49,7 @@ class SendInvoice(models.TransientModel):
 		return res
 
 	def send_invoice_datapost(self,invoice_id,attachment_id,config_id,document_type,document_format):
-		if config_id:
+		if config_id and invoice_id.partner_id.applicable_invoicenow and not invoice_id.send_invoice_status:
 			config_id.action_generate_token()
 			if config_id.access_token:
 				headers = {'Authorization': 'Bearer %s' % config_id.access_token}
