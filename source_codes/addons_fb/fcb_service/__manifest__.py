@@ -12,11 +12,9 @@
 	'data': [
 		'security/ir.model.access.csv',
 		'views/service_views.xml',
-		'views/fischerbell_header.xml',
 		'views/product_template_view.xml',
 		'reports/custome_footer.xml',
-		'views/equipment_service_views.xml',
-
+		'reports/fischerbell_medical_oxy_resu.xml',
 	],
 	'demo': [
 	],
