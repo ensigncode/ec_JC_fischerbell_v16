@@ -14,7 +14,10 @@
 		'views/service_views.xml',
 		'views/product_template_view.xml',
 		'reports/custome_footer.xml',
-		'reports/fischerbell_medical_oxy_resu.xml',
+		# 'reports/fischerbell_medical_oxy_resu.xml',
+		# 'reports/fischerbell_instrumental_evaluation.xml',
+		'reports/fischerbell_eba_service.xml',
+
 	],
 	'demo': [
 	],
