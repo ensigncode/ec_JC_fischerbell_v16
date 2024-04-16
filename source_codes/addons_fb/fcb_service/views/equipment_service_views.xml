@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<!--    <record id="view_task_form2_inherit" model="ir.ui.view">-->
+<!--        <field name="name">view.task.form2.inherit</field>-->
+<!--        <field name="model">project.task</field>-->
+<!--        <field name="inherit_id" ref="project.view_task_form2"/>-->
+<!--        <field name="arch" type="xml">-->
+<!--            <xpath expr="//field[@name='partner_id']" position="after">-->
+<!--                <field name="customer_code" readonly="1"/>-->
+<!--                <field name="customer_email"/>-->
+<!--            </xpath>-->
+<!--            <xpath expr="//field[@name='tag_ids']" position="after">-->
+<!--               <field name="product_categ_id"/>-->
+<!--            </xpath>-->
+<!--            <xpath expr="//page[@name='extra_info']" position="after">-->
+<!--                <page name="service_line" string="Service Line">-->
+<!--                    <field name="service_line" widget="section_and_note_one2many" mode="tree">-->
+<!--                        <tree editable="bottom">-->
+<!--                            <field name="product_categ_name" invisible="1"/>-->
+<!--                            <field name="product_temp_id" domain="[('categ_id', '=', product_categ_name )]"/>-->
+<!--                            <field name="service_type"/>-->
+<!--                            <field name="product_uom_qty"/>-->
+<!--                            <field name="price_unit"/>-->
+<!--                        </tree>-->
+<!--                    </field>-->
+<!--                </page>-->
+<!--            </xpath>-->
+<!--        </field>-->
+<!--    </record>-->
+
+    <record model="ir.actions.act_window" id="action_equipment_service">
+        <field name="name">Equipment Service</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">equipment.service</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+  <menuitem name="Equipment Service Database"
+              id="menu_equipment_service"
+              action="action_equipment_service"
+              parent="sale.sale_menu_root"/>
+</odoo>
