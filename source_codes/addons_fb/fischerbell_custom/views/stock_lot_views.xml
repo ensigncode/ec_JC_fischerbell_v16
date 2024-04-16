@@ -70,10 +70,10 @@
         </field>
     </record>
 
-    <menuitem action="stock.action_production_lot_form" id="menu_action_production_lot_form"
+    <!-- <menuitem action="stock.action_production_lot_form" id="menu_action_production_lot_form"
         parent="stock.menu_stock_inventory_control" groups="stock.group_production_lot"
         sequence="101" name="Batch/Serial Numbers"/>
-
+ -->
     <menuitem id="mrp.menu_mrp_traceability"
           name="Batch/Serial Numbers"
           parent="mrp.menu_mrp_bom"
