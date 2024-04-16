@@ -4,3 +4,5 @@
 from . import product
 from . import service
 from . import product_product
+from . import equipment_service
+from . import stock

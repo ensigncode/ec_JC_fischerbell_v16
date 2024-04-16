@@ -15,6 +15,7 @@
 		'views/fischerbell_header.xml',
 		'views/product_template_view.xml',
 		'reports/custome_footer.xml',
+		'views/equipment_service_views.xml',
 
 	],
 	'demo': [

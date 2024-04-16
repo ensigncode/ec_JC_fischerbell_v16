@@ -9,11 +9,16 @@
                 <field name="customer_code" readonly="1"/>
                 <field name="customer_email"/>
             </xpath>
+            <xpath expr="//field[@name='tag_ids']" position="after">
+               <field name="product_categ_id"/>
+            </xpath>
             <xpath expr="//page[@name='extra_info']" position="after">
                 <page name="service_line" string="Service Line">
                     <field name="service_line" widget="section_and_note_one2many" mode="tree">
                         <tree editable="bottom">
-                            <field name="product_temp_id"/>
+                            <field name="product_categ_name" invisible="1"/>
+                            <field name="product_temp_id" domain="[('categ_id', '=', product_categ_name )]"/>
+                            <field name="service_type"/>
                             <field name="product_uom_qty"/>
                             <field name="price_unit"/>
                         </tree>
