@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <template id="report_product">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <div class="oe_structure"/>
+                        <h2>Product Report</h2>
+                        <p><span t-field="o.name"/></p>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+    <record id="action_report_product_product" model="ir.actions.report">
+        <field name="name">Product Report</field>
+        <field name="model">product.product</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">report_product</field>
+        <field name="report_file">report_product</field>
+        <field name="binding_model_id" ref="product.model_product_product"/>
+        <field name="binding_type">report</field>
+     </record>
+</odoo>
