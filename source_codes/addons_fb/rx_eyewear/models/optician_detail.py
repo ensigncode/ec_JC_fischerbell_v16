@@ -32,7 +32,7 @@ class OpticianDetail(models.Model):
     user_id = fields.Many2one('res.users',string="User")
     partner_id = fields.Many2one("res.partner",string="Partner")
     sale_order_id = fields.Many2one("sale.order",string="Sale Order")
-    sale_order_ids = fields.One2many("sale.order","optician_detail_id",string="Sale Order")
+    sale_order_ids = fields.Many2many("sale.order","optician_detail_id",string="Sale Order")
     sale_order_count = fields.Integer(string="Sale Order",compute="_compute_sale_order_count")
 
     @api.depends('sale_order_ids')
@@ -62,7 +62,6 @@ class OpticianDetail(models.Model):
             
             sale_order_id = self.env['sale.order'].sudo().create({
                 'partner_id' : company.id,
-                # 'optician_detail_id':self.id,
             })
             for filter_rec in filtered_records :
                 sale_order_id.write({'optician_detail_id':filter_rec.id})
@@ -76,6 +75,7 @@ class OpticianDetail(models.Model):
                     'price_unit': filter_rec.product_id.product_variant_id.list_price,
                     "product_uom" : filter_rec.product_id.product_variant_id.uom_id.id,
                 })
+            self.write({'sale_order_ids':[(4,sale_order_id.id)]})         
            
 
 class FischerbellOpticianDetailReport(models.AbstractModel):
