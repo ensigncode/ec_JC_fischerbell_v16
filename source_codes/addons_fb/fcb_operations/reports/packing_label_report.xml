@@ -38,7 +38,8 @@
                                         <div t-field="doc.name" t-options="{'widget': 'barcode', 'width': 600, 'height': 100, 'img_style': 'width:300px;height:50px;'}"/>
                                     </td> -->
                                     <td colspan="2" class="text-uppercase">
-                                        <div t-field="doc.name" />
+                                        <div t-field="doc.name" t-options="{'widget': 'barcode', 'width': 600, 'height': 100, 'img_style': 'width:300px;height:50px;'}"/>
+                                        <div style="text-align:center;margin-top:10px;" t-field="doc.name" />
                                     </td>
                                 </tr>
                                 <tr>
@@ -47,7 +48,8 @@
                                     </td>
                                     <td colspan="2">
                                         <p style="margin-bottom:0px;">
-                                            <t t-esc="doc.partner_id.name"></t><br />
+                                            <t t-esc="doc.partner_id.display_name"></t><br />
+                                            <!-- <t t-esc="doc.partner_id.name"></t><br /> -->
                                             <t t-if="doc.partner_id.street"> <t t-esc="doc.partner_id.street"/></t>
                                             <t t-if="doc.partner_id.street2">, <t t-esc="doc.partner_id.street2"/></t>
                                             <t t-if="doc.partner_id.city">, <t t-esc="doc.partner_id.city"/></t>
