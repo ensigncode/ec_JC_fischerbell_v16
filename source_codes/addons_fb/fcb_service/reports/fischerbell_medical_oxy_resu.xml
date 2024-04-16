@@ -395,42 +395,8 @@
                     </tr>
                 </table>
 
-                <div class="footer">
-                    <div style="border: 1px solid black; padding: 10px;">
-                        <b>Policies:</b>
-                        <br/>
-                        <li style="font-size: 15px;">
-                            <b>Evaluation charges will be applicable should the repair not be accepted upon our
-                                quotation unless otherwise stated.
-                            </b>
-                        </li>
-                        <li style="font-size: 15px;">
-                            <b>The user should decide on the usability of this equipment based on its requirement
-                                and intended use.
-                            </b>
-                        </li>
-                        <li style="font-size: 15px;">
-                            <b>The results or findings are applicable at the time of inspection.</b>
-                        </li>
-                        <li style="font-size: 15px;">
-                            <b>This Report shall not be reproduced except in full without written approval of
-                                Fischer Bell.
-                            </b>
-                        </li>
-                        <li style="font-size: 15px;">
-                            <b>3 months warranty starts from the completion date for parts changed and repair.</b>
-                        </li>
-                        <b>Inspected by:</b>
-                        <div class="col-6">
-                            <img src="/fcb_service/static/src/img/bee.jpg" width="180" height="100"/>
-                            <img src="/fcb_service/static/src/img/sign.jpg" alt="img"
-                                 style="height: 50px;width: 100px; margin-left: 20px;"/>
-                        </div>
-                        <hr style="border-top: 1px solid black; margin-bottom: 2px; margin-top: 20px;"/>
-                        <div>Name &amp; Signature :</div>
-                        <br/>
-                        <br/>
-                    </div>
+                <div>
+                    <t t-call="fcb_service.print_custom_footer"/>
                 </div>
             </div>
         </template>
