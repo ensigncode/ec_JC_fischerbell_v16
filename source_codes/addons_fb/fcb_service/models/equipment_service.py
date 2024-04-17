@@ -7,7 +7,8 @@ class EquipmentService(models.Model):
     _name = "equipment.service"
 
 
-    name = fields.Char(string="Service Type")
     partner_id = fields.Many2one('res.partner',string="Customer ")
     product_id = fields.Many2one('product.product',string="Product")
     delivered_date = fields.Datetime(string="Delivery Date")
+    lot_id = fields.Many2one('stock.lot',string="Lot/Serial Number")
+    delivered_qty = fields.Float(string='Delivered Qty')
