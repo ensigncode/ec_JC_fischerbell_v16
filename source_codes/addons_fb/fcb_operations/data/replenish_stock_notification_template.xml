@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="email_template_replenish_product_reminder" model="mail.template">
+            <field name="name">Replenish stock Reminder</field>
+            <field name="model_id" ref="stock.model_stock_warehouse_orderpoint"/>
+            <field name="email_from">{{ (object.company_id.email_formatted or user.email_formatted) }}</field>
+            <field name="subject">Replenish stock reminder for product</field>
+            <field name="description">Sent to stock mangers for replenish product notification.</field>
+            <field name="body_html" type="html">
+                <p>Dear,
+                    <br/>
+                    <br/>
+                    Please replenish this item (
+                    <t t-if="object.product_id">
+                        <t t-out="object.product_id.name or ''"></t>
+                    </t>
+                    ) from Warehouse  : 
+                    <t t-if="ctx and ctx.get('warehouse_id')">
+                        <t t-out="ctx.get('warehouse_id') or ''"/> 
+                    </t>
+                    <br/>
+                    <br/>
+                    Regards,
+                    <br/>
+                    <!-- <t t-out="object.product_buyer_id.name"/> -->
+                </p>
+            </field>
+        </record>
+    </data>
+</odoo>
