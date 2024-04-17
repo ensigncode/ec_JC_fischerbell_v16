@@ -16,13 +16,13 @@
 		'views/product_template_view.xml',
 		'reports/custome_footer.xml',
 		'views/equipment_service_views.xml',
+        'reports/fischerbell_hazmat_suit_inspection.xml',
+    ],
+    'demo': [
+    ],
 
-	],
-	'demo': [
-	],
-
-	'installable': True,
-	'auto_install': False,
-	'application': True,
-	'license': 'LGPL-3',
+    'installable': True,
+    'auto_install': False,
+    'application': True,
+    'license': 'LGPL-3',
 }

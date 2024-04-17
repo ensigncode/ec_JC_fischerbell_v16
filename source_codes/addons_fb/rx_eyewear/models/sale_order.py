@@ -7,6 +7,7 @@ class SaleOrder(models.Model):
     _inherit = 'sale.order'
 
     optician_detail_id = fields.Many2one('optician.detail',string="Optician Detail")
+    optician_detail_ids = fields.Many2many('optician.detail',string="Optician Detail")
 
 class SaleOrderLine(models.Model):
     _inherit = 'sale.order.line'
@@ -35,7 +36,9 @@ class StockMove(models.Model):
                     if rem_moves :
                         for rem_move in rem_moves:
                             sale_move_id = sale_moves.filtered(lambda x:x.product_id.id == rem_move.product_id.id)
-                            child_id = sale_move_id.sale_line_id.child_id.id if sale_move_id.sale_line_id and sale_move_id.sale_line_id.child_id else False
+                            for move_id in sale_move_id :
+                                child_id = move_id.sale_line_id.child_id.id if move_id.sale_line_id and move_id.sale_line_id.child_id else False
+                                move_id.child_id = child_id
 
             move.child_id = child_id
         
