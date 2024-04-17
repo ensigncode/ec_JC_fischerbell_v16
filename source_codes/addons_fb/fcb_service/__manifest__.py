@@ -7,7 +7,7 @@
 	'summary': 'FCB Service',
 	'website': '',
 	'depends': [
-		'industry_fsm','sale'
+		'industry_fsm','sale','stock'
 	],
 	'data': [
 		'security/ir.model.access.csv',
