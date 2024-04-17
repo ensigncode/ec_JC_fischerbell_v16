@@ -117,15 +117,15 @@ class WeeklyProductReportwizard(models.TransientModel):
             table_col += 1
 
             for nm in total_location:
-                if order.location_id.name == nm.name:
-                    loc_qty = order.product_id.stock_quant_ids.filtered(lambda loc_qty:loc_qty.location_id == order.location_id)
-                    wrksht.cell(row=table_row, column=table_col).value = loc_qty[0].quantity
-                    wrksht.cell(row=table_row, column=table_col).alignment = table_header_alignment
-                    table_col += 1
+                if order.location_id.complete_name == nm.complete_name:
+                    loc_qty = order.product_id.stock_quant_ids.filtered(
+                        lambda loc_qty: loc_qty.location_id == order.location_id)
+                    wrksht.cell(row=table_row, column=table_col).value = loc_qty[0].quantity or ''
                 else:
                     wrksht.cell(row=table_row, column=table_col).value = ''
-                    wrksht.cell(row=table_row, column=table_col).alignment = table_header_alignment
-                    table_col += 1
+
+                wrksht.cell(row=table_row, column=table_col).alignment = table_header_alignment
+                table_col += 1
 
             wrksht.cell(row=table_row, column=table_col).value = order.product_id.virtual_available or ''
             wrksht.cell(row=table_row, column=table_col).alignment = table_header_alignment
