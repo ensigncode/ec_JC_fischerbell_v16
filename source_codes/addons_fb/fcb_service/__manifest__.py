@@ -7,7 +7,7 @@
 	'summary': 'FCB Service',
 	'website': '',
 	'depends': [
-		'industry_fsm','sale','stock'
+		'industry_fsm','sale','stock','industry_fsm_sale'
 	],
 	'data': [
 		'security/ir.model.access.csv',
@@ -16,7 +16,12 @@
 		'views/product_template_view.xml',
 		'reports/custome_footer.xml',
 		'views/equipment_service_views.xml',
-        'reports/fischerbell_hazmat_suit_inspection.xml',
+         # 'reports/fischerbell_medical_oxy_resu.xml',
+        # 'reports/fischerbell_instrumental_evaluation.xml',
+        # 'reports/fischerbell_eba_service.xml',
+        # 'reports/fischerbell_hazmat_suit_inspection.xml',
+        # 'reports/fischerbell_life_jacket_inspection.xml',
+        'reports/fischerbell_personal_fall_protection.xml',
     ],
     'demo': [
     ],
