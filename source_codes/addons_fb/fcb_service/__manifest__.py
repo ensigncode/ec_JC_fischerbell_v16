@@ -3,7 +3,7 @@
 {
     'name': 'FCB Service',
     'version': '16.0.0.1',
-    'category': 'Services/Field Service',
+    'category': 'Servicres/Field Service',
     'summary': 'FCB Service',
     'website': '',
     'depends': [
@@ -21,7 +21,10 @@
         # 'reports/fischerbell_hazmat_suit_inspection.xml',
         # 'reports/fischerbell_life_jacket_inspection.xml',
         # 'reports/fischerbell_personal_fall_protection.xml',
-        'reports/fischerbell_calibration.xml',
+        # 'reports/fischerbell_calibration.xml',
+        # 'reports/fischerbell_scba_mask_inspection.xml'
+        # 'reports/fischerbell_paper_test.xml'
+        'reports/fischerbell_cert_team_inspection.xml'
 
     ],
     'demo': [
