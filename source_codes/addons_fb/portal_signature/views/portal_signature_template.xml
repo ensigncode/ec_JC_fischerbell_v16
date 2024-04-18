@@ -210,16 +210,53 @@
                         </tr>
                         <tr>
                             <td style="font-weight:bold;width:20%;">Company Name</td>
-                            <td><t t-if="picking_id.partner_id.parent_id" t-esc="picking_id.partner_id.parent_id.name"/></td>
+                            <td>
+                                <t t-if="picking_id.is_dropship">
+                                    <t t-if="picking_id.responsible_customer_id" t-esc="picking_id.responsible_customer_id.name"/>
+                                    <t t-else="" t-esc="picking_id.partner_id.name"/>
+                                </t>
+                                <t t-else="">
+                                    <t t-if="picking_id.partner_id.parent_id" t-esc="picking_id.partner_id.parent_id.name"/>
+                                    <t t-else="" t-esc="picking_id.partner_id.name"/>
+                                </t>
+                            </td>
                         </tr>
                         <tr>
                             <td style="font-weight:bold;width:20%;">Company Address</td>
                             <td>
-                                <p>
-                                    <t t-esc="picking_id.partner_id.parent_id.street"/>,<t t-esc="picking_id.partner_id.parent_id.street2"/><br />
-                                    <t t-esc="picking_id.partner_id.parent_id.city"/>,<t t-esc="picking_id.partner_id.parent_id.state_id.name"/><br />
-                                    <t t-esc="picking_id.partner_id.parent_id.country_id.name"/>,<t t-esc="picking_id.partner_id.parent_id.zip"/>
-                                </p>
+                                <t t-if="picking_id.is_dropship">
+                                    <t t-if="picking_id.responsible_customer_id">
+                                        <p>
+                                            <t t-esc="picking_id.responsible_customer_id.street"/>,<t t-esc="picking_id.responsible_customer_id.street2"/><br />
+                                            <t t-esc="picking_id.responsible_customer_id.city"/>,<t t-esc="picking_id.responsible_customer_id.state_id.name"/><br />
+                                            <t t-esc="picking_id.responsible_customer_id.country_id.name"/>,<t t-esc="picking_id.responsible_customer_id.zip"/>
+                                        </p>
+                                    </t>
+                                    <t t-else="">
+                                        <p>
+                                            <t t-esc="picking_id.partner_id.street"/>,<t t-esc="picking_id.partner_id.street2"/><br />
+                                            <t t-esc="picking_id.partner_id.city"/>,<t t-esc="picking_id.partner_id.state_id.name"/><br />
+                                            <t t-esc="picking_id.partner_id.country_id.name"/>,<t t-esc="picking_id.partner_id.zip"/>
+                                        </p>
+                                    </t>
+                                </t>
+                                <t t-else="">
+                                    <t t-if="picking_id.partner_id.parent_id">
+                                        <p>
+                                            <t t-esc="picking_id.partner_id.parent_id.street"/>,<t t-esc="picking_id.partner_id.parent_id.street2"/><br />
+                                            <t t-esc="picking_id.partner_id.parent_id.city"/>,<t t-esc="picking_id.partner_id.parent_id.state_id.name"/><br />
+                                            <t t-esc="picking_id.partner_id.parent_id.country_id.name"/>,<t t-esc="picking_id.partner_id.parent_id.zip"/>
+                                        </p>
+                                    </t>
+                                    <t t-else="">
+                                        <p>
+                                            <t t-esc="picking_id.partner_id.street"/>,<t t-esc="picking_id.partner_id.street2"/><br />
+                                            <t t-esc="picking_id.partner_id.city"/>,<t t-esc="picking_id.partner_id.state_id.name"/><br />
+                                            <t t-esc="picking_id.partner_id.country_id.name"/>,<t t-esc="picking_id.partner_id.zip"/>
+                                        </p>
+                                    </t>
+                                </t>
+                               
                             </td>
                         </tr>
                         <tr>
