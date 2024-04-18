@@ -18,7 +18,7 @@ class StockPicking(models.Model):
 	skip_reason_line_ids = fields.One2many('skip.reason.line','picking_id',string="Skip Reasons")
 	successfull_delivery = fields.Boolean(string="Successfull Delivery",default=True)
 	responsible_customer_id = fields.Many2one('res.partner',string="Responsible customer")
-	latest_skip_reason = fields.Char(string="Latest Skip Reason", compute="_compute_latest_skip_reason", store=True)
+	latest_skip_reason = fields.Char(string="Latest Skip Reason", compute="_compute_latest_skip_reason")
 	
 	def _compute_latest_skip_reason(self):
 		for picking in self:
