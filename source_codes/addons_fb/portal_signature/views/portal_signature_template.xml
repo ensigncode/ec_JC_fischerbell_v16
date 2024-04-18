@@ -210,7 +210,16 @@
                         </tr>
                         <tr>
                             <td style="font-weight:bold;width:20%;">Company Name</td>
-                            <td><t t-if="picking_id.partner_id.parent_id" t-esc="picking_id.partner_id.parent_id.name"/></td>
+                            <td>
+                                <t t-if="picking_id.is_dropship">
+                                    <t t-if="picking_id.responsible_customer_id" t-esc="picking_id.responsible_customer_id.name"/>
+                                    <t t-else="" t-esc="picking_id.partner_id.name"/>
+                                </t>
+                                <t t-else="">
+                                    <t t-if="picking_id.partner_id.parent_id" t-esc="picking_id.partner_id.parent_id.name"/>
+                                    <t t-else="" t-esc="picking_id.partner_id.name"/>
+                                </t>
+                            </td>
                         </tr>
                         <tr>
                             <td style="font-weight:bold;width:20%;">Company Address</td>
