@@ -249,8 +249,6 @@ class Picking(models.Model):
 					qty = int(move_line.product_uom_qty)
 					if move_line.quantity_done > move_line.product_uom_qty:
 						raise ValidationError("Sorry, you cannot input the quantity more than "+str(qty))
-					if move_line.product_uom_qty != move_line.quantity_done : 
-						raise ValidationError("Sorry, you cannot validate make sure demand quantity and done quantity must be same.")
 					else:
 						pass
 
@@ -289,11 +287,13 @@ class Picking(models.Model):
 						if user:
 							pick_return.activity_schedule(summary='Reminder Collect Loan Item', date_deadline=deadline, user_id=user.id,  activity_type_id=self._default_activity_type().id)
 
+		return res
 
-		for record in self:
-			if record.purchase_id:
-				record.purchase_id.action_create_invoice()
-
+	def _action_done(self):
+		res = super()._action_done()
+		for record in self : 
+			if record.state == 'done' : 
+				record.purchase_id.action_create_invoice() 
 		return res
 
 
