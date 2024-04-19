@@ -10,12 +10,21 @@ class Task(models.Model):
     customer_code = fields.Char('Customer Code')
     customer_email = fields.Char('Email')
     product_categ_id = fields.Many2one('product.category', 'Equipment Type')
+    contact_person_id = fields.Many2one('res.partner', string='Contact Person')
+    type_service = fields.Selection([
+        ('urgent', 'Urgent'),
+        ('express', 'Express'),
+        ('standard', 'Standard'),
+    ])
 
 
     @api.onchange('partner_id')
     def _onchange_partner(self):
+        child_ids = []
         self.customer_email = self.partner_id.email if self.partner_id else False
         self.customer_code = self.partner_id.customer_code if self.partner_id else False
+        child_ids = [x.id for x in self.partner_id.child_ids]
+        return {'domain': {'contact_person_id': [('id', 'in', child_ids), ('type', '=', 'contact')]}}
 
 class ServiceOrderLine(models.Model):
     _name = "service.order.line"
