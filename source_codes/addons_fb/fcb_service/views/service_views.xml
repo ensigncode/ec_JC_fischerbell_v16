@@ -10,7 +10,7 @@
                 <field name="customer_email"/>
             </xpath>
             <xpath expr="//field[@name='tag_ids']" position="after">
-               <field name="product_categ_id"/>
+                <field name="product_categ_id"/>
             </xpath>
             <xpath expr="//page[@name='extra_info']" position="after">
                 <page name="service_line" string="Service Line">
@@ -33,8 +33,36 @@
         <field name="model">project.task</field>
         <field name="inherit_id" ref="industry_fsm_sale.view_task_form2_inherit"/>
         <field name="arch" type="xml">
-             <xpath expr="//button[@name='action_fsm_create_quotation']" position='after'>
-                <button class="btn-secondary" name="action_print_qwb_report" type="object" string="Fischerbell Report"
+            <xpath expr="//button[@name='action_fsm_create_quotation']" position='after'>
+                <button class="btn-secondary" name="action_print_calibration_report" type="object"
+                        string="CALIBRATION CERTIFICATE"
+                        title="Fischerbell Report" data-hotkey="x"/>
+                <button class="btn-secondary" name="action_cert_inspection_report" type="object"
+                        string="CERT TEAM INSPECTION REPORT"
+                        title="Fischerbell Report" data-hotkey="x"/>
+                <button class="btn-secondary" name="action_print_eba_service_certificate" type="object"
+                        string="EBA SERVICE CERTIFICATE"
+                        title="Fischerbell Report" data-hotkey="x"/>
+                <button class="btn-secondary" name="action_print_huzmal_task_custom_report" type="object"
+                        string="HUZMAT SUIT INSPECTION REPORT"
+                        title="Fischerbell Report" data-hotkey="x"/>
+                <button class="btn-secondary" name="action_fischerbell_custom_life_jacket_report" type="object"
+                        string="LIFE JACKET INSPECTION REPORT"
+                        title="Fischerbell Report" data-hotkey="x"/>
+                <button class="btn-secondary" name="action_industry_ev_task_custom_report" type="object"
+                        string="INSTRUMENT EVALUATION/REPAIR REPORT"
+                        title="Fischerbell Report" data-hotkey="x"/>
+                <button class="btn-secondary" name="action_medical_oxy_task_custom_report" type="object"
+                        string="MEDICAL OXYGEN RESUSCITATOR"
+                        title="Fischerbell Report" data-hotkey="x"/>
+                <button class="btn-secondary" name="action_paper_test_task_custom_report" type="object"
+                        string="PAPER TEST CERTIFICATEA"
+                        title="Fischerbell Report"  data-hotkey="x"/>
+                <button class="btn-secondary" name="action_worksheet_custom_personal_fall_protection" type="object"
+                        string="PERSONAL FALL PROTECTION INSPECTION REPORT"
+                        title="Fischerbell Report" data-hotkey="x"/>
+                  <button class="btn-secondary" name="action_scba_task_custom_report" type="object"
+                        string="SCBA MASK INSPECTION REPORT"
                         title="Fischerbell Report" data-hotkey="x"/>
             </xpath>
         </field>
@@ -47,7 +75,7 @@
         <field name="view_mode">tree,form</field>
     </record>
 
-  <menuitem name="Service Type"
+    <menuitem name="Service Type"
               id="menu_service_type"
               action="action_service_type"
               parent="industry_fsm.fsm_menu_settings"/>

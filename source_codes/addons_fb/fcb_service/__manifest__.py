@@ -15,16 +15,16 @@
         'views/product_template_view.xml',
         'reports/custome_footer.xml',
         'views/equipment_service_views.xml',
-        # 'reports/fischerbell_medical_oxy_resu.xml',
-        # 'reports/fischerbell_instrumental_evaluation.xml',
-        # 'reports/fischerbell_eba_service.xml',
-        # 'reports/fischerbell_hazmat_suit_inspection.xml',
-        # 'reports/fischerbell_life_jacket_inspection.xml',
-        # 'reports/fischerbell_personal_fall_protection.xml',
-        # 'reports/fischerbell_calibration.xml',
-        # 'reports/fischerbell_scba_mask_inspection.xml'
-        # 'reports/fischerbell_paper_test.xml'
-        'reports/fischerbell_cert_team_inspection.xml'
+        'reports/fischerbell_medical_oxy_resu.xml',
+        'reports/fischerbell_instrumental_evaluation.xml',
+        'reports/fischerbell_eba_service.xml',
+        'reports/fischerbell_hazmat_suit_inspection.xml',
+        'reports/fischerbell_life_jacket_inspection.xml',
+        'reports/fischerbell_personal_fall_protection.xml',
+        'reports/fischerbell_calibration.xml',
+        'reports/fischerbell_scba_mask_inspection.xml',
+        'reports/fischerbell_paper_test.xml',
+        'reports/fischerbell_cert_team_inspection.xml',
 
     ],
     'demo': [
