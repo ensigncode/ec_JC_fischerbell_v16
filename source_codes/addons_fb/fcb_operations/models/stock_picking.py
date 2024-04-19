@@ -49,10 +49,7 @@ class StockPicking(models.Model):
 		
 		partner_ids = self.env['res.partner'].search([('supplier_rank', '=', True)])
 		template_id = self.env.ref('fcb_operations.email_template_alert_reminder_1', raise_if_not_found=True)
-
-
 		overseas_partner_stock_picking_ids =  overseas_stock_picking_ids.filtered(lambda x:x.partner_id.l10n_in_gst_treatment == 'overseas')
-		print("\n\n overseas_partner_stock_picking_ids === ",overseas_partner_stock_picking_ids,template_id)
 		if template_id:
 			if overseas_partner_stock_picking_ids:
 				rest_picking_ids = overseas_stock_picking_ids.filtered(lambda x:x.id not in  overseas_partner_stock_picking_ids.ids)

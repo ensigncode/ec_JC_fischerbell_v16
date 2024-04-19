@@ -31,7 +31,7 @@ class WeeklyProductReportwizard(models.TransientModel):
         table_header_alignment = Alignment(horizontal='left', vertical='top', text_rotation=0, wrap_text=True)
         bold_text = Font(name="Calibri", size=11, bold=True)
         border_bottom = Border(bottom=Side(style='thin'))
-        order_ids = self.env['stock.quant'].search([]).filtered(lambda rec: rec.last_count_date and rec.last_count_date.year == eval(self.year))
+        product_ids = self.env['stock.quant'].search([]).filtered(lambda rec: rec.last_count_date and rec.last_count_date.year == eval(self.year)).mapped("product_id")
         table_header = 1
 
         wrksht = wb.create_sheet(title="Sales Report")
@@ -102,48 +102,50 @@ class WeeklyProductReportwizard(models.TransientModel):
         wrksht.cell(row=table_header, column=column_loc).alignment = table_header_alignment
         wrksht.cell(row=table_header, column=column_loc).border = border_bottom
 
-        for order in order_ids:
+        for product_id in product_ids:
             table_col = 1
-            wrksht.cell(row=table_row, column=table_col).value = order.product_id.default_code or ''
+            wrksht.cell(row=table_row, column=table_col).value = product_id.default_code or ''
             wrksht.cell(row=table_row, column=table_col).alignment = table_header_alignment
             table_col += 1
 
-            wrksht.cell(row=table_row, column=table_col).value = order.product_id.name or ''
+            wrksht.cell(row=table_row, column=table_col).value = product_id.name or ''
             wrksht.cell(row=table_row, column=table_col).alignment = table_header_alignment
             table_col += 1
 
-            wrksht.cell(row=table_row, column=table_col).value = order.product_id.qty_available or ''
+            wrksht.cell(row=table_row, column=table_col).value = product_id.qty_available or ''
             wrksht.cell(row=table_row, column=table_col).alignment = table_header_alignment
             table_col += 1
 
             for nm in total_location:
-                if order.location_id.complete_name == nm.complete_name:
-                    loc_qty = order.product_id.stock_quant_ids.filtered(
-                        lambda loc_qty: loc_qty.location_id == order.location_id)
-                    wrksht.cell(row=table_row, column=table_col).value = loc_qty[0].quantity or ''
+                quant_ids = self.env['stock.quant'].search([('product_id', '=', product_id.id)]).filtered(lambda rec: rec.last_count_date and rec.last_count_date.year == eval(self.year))
+                location_list = [order_l for order_l in quant_ids if order_l.location_id.complete_name == nm.complete_name]
+                if location_list:
+                    loc_qty = product_id.stock_quant_ids.filtered(lambda loc_qty:loc_qty.location_id == location_list[0])
+                    wrksht.cell(row=table_row, column=table_col).value = location_list[0].quantity
+                    wrksht.cell(row=table_row, column=table_col).alignment = table_header_alignment
+                    table_col += 1
                 else:
                     wrksht.cell(row=table_row, column=table_col).value = ''
+                    wrksht.cell(row=table_row, column=table_col).alignment = table_header_alignment
+                    table_col += 1
 
-                wrksht.cell(row=table_row, column=table_col).alignment = table_header_alignment
-                table_col += 1
-
-            wrksht.cell(row=table_row, column=table_col).value = order.product_id.virtual_available or ''
+            wrksht.cell(row=table_row, column=table_col).value = product_id.virtual_available or ''
             wrksht.cell(row=table_row, column=table_col).alignment = table_header_alignment
             table_col += 1
 
-            wrksht.cell(row=table_row, column=table_col).value = order.product_id.sales_count or ''
+            wrksht.cell(row=table_row, column=table_col).value = product_id.sales_count or ''
             wrksht.cell(row=table_row, column=table_col).alignment = table_header_alignment
             table_col += 1
 
-            wrksht.cell(row=table_row, column=table_col).value = order.product_id.qty_available or ''
+            wrksht.cell(row=table_row, column=table_col).value = product_id.qty_available or ''
             wrksht.cell(row=table_row, column=table_col).alignment = table_header_alignment
             table_col += 1
 
-            wrksht.cell(row=table_row, column=table_col).value = order.product_id.uom_id.name or ''
+            wrksht.cell(row=table_row, column=table_col).value = product_id.uom_id.name or ''
             wrksht.cell(row=table_row, column=table_col).alignment = table_header_alignment
             table_col += 1
 
-            sale_lines = self.env['sale.order.line'].search([('order_id.state','=','sale' ), ('product_id','=', order.product_id.id)])
+            sale_lines = self.env['sale.order.line'].search([('order_id.state','=','sale' ), ('product_id','=', product_id.id)])
             for month_in in range(1, 13):
                 total_sales = sum(sale_lines.filtered(lambda ord:ord.order_id.date_order.month == month_in).mapped('product_uom_qty'))
                 wrksht.cell(row=table_row, column=table_col).value = total_sales or ''
