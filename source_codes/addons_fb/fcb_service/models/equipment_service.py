@@ -22,17 +22,17 @@ class EquipmentService(models.Model):
     service_reminder_date = fields.Datetime('service Reminder Date')
 
     def _send_reminder_emails(self):
-    equipment_records = self.env['equipment.service'].search([])
-    for record in equipment_records:
-        if record.service_reminder_date and record.partner_id:  # Check if service reminder date and partner are set
-            today = fields.Date.today()
-            if record.service_reminder_date.date() == today:
-                template = self.env.ref('fcb_service.email_template_service_reminder')
-                template_values = {
-                    'email_from': self.env.user.email,
-                    'email_to': record.partner_id.email,
-                }
-                template.sudo().send_mail(record.id, force_send=True, email_values=template_values)
+        equipment_records = self.env['equipment.service'].search([])
+        for record in equipment_records:
+            if record.service_reminder_date and record.partner_id:
+                today = fields.Date.today()
+                if record.service_reminder_date.date() == today:
+                    template = self.env.ref('fcb_service.email_template_service_reminder')
+                    template_values = {
+                        'email_from': self.env.user.email,
+                        'email_to': record.partner_id.email,
+                    }
+                    template.sudo().send_mail(record.id, force_send=True, email_values=template_values)
 
     @api.onchange('product_id')
     def onchange_product_id(self):
