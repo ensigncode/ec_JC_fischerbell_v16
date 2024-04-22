@@ -1,29 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-
-    	<record id="equipment_service_tree_view" model="ir.ui.view">
-        <field name="name">equipment.service.tree.view</field>
-        <field name="model">equipment.service</field>
-        <field name="arch" type="xml">
-            <tree string="Equipment Service">
-                <field name="partner_id"/>
+	<record id="equipment_service_tree_view" model="ir.ui.view">
+		<field name="name">equipment.service.tree.view</field>
+		<field name="model">equipment.service</field>
+		<field name="arch" type="xml">
+			<tree string="Equipment Service">
+				<field name="partner_id"/>
 				<field name="product_id"/>
 				<field name="delivered_date"/>
 				<field name="lot_id"/>
-                <field name="delivered_qty"/>
-            </tree>
-        </field>
-        </record>
+				<field name="serial_number"/>
+			</tree>
+		</field>
+	</record>
 
-    <record model="ir.actions.act_window" id="action_equipment_service">
-        <field name="name">Equipment Service</field>
-        <field name="type">ir.actions.act_window</field>
-        <field name="res_model">equipment.service</field>
-        <field name="view_mode">tree,form</field>
-    </record>
+	<record id="equipment_service_form_view" model="ir.ui.view">
+		<field name="name">equipment.service.form.view</field>
+		<field name="model">equipment.service</field>
+		<field name="arch" type="xml">
+			<form string="Equipment Service">
+				<sheet>
+					<group>
+						<group>
+							<field name="partner_id"/>
+							<field name="product_id"/>
+							<field name="so_ref"/>
+							<field name="categ_id"/>
+							<field name="delivered_date"/>
+						</group>
+						<group>
+							<field name="lot_id"/>
+							<field name="serial_number"/>
+							<field name="expire_date"/>
+							<field name="service_date"/>
+							<field name="service_reminder_date"/>
+						</group>
+					</group>
+				</sheet>
+			</form>
+		</field>
+	</record>
 
-  <menuitem name="Equipment Service Database"
-              id="menu_equipment_service"
-              action="action_equipment_service"
-              parent="sale.sale_menu_root"/>
+	<record model="ir.actions.act_window" id="action_equipment_service">
+		<field name="name">Equipment Service</field>
+		<field name="type">ir.actions.act_window</field>
+		<field name="res_model">equipment.service</field>
+		<field name="view_mode">tree,form</field>
+	</record>
+
+	<menuitem name="Equipment Service Database"
+	          id="menu_equipment_service"
+	          action="action_equipment_service"
+	          parent="sale.sale_menu_root"/>
 </odoo>
