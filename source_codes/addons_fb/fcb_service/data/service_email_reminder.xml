@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-	<record id="send_email_to_cuatomer" model="ir.cron">
+	<record forcecreate="True" id="send_email_to_cuatomer" model="ir.cron">
 		<field name="name">Service Reminder Email</field>
 		<field name="model_id" ref="model_equipment_service"/>
 		<field name="state">code</field>
