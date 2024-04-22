@@ -3,6 +3,7 @@
 
 from odoo import api, fields, models
 from datetime import timedelta
+import pytz
 
 
 class EquipmentService(models.Model):
