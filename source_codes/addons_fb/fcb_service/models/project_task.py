@@ -32,3 +32,8 @@ class Task(models.Model):
         return self.env.ref('fcb_service.action_worksheet_personal_fall_protection').report_action(self)
     def action_scba_task_custom_report(self):
         return self.env.ref('fcb_service.action_scba_task_custom_report').report_action(self)
+
+
+    def action_report(self):
+        report_action = self.env.ref('fcb_service.calibration_report')  # Replace 'module_name' with the actual name of your module
+        return report_action.report_action(self)
