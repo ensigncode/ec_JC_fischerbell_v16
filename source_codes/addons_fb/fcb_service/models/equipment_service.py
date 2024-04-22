@@ -23,10 +23,11 @@ class EquipmentService(models.Model):
 
     def _send_reminder_emails(self):
         equipment_records = self.env['equipment.service'].search([])
+        utc_now = fields.Datetime.now().astimezone(pytz.utc).date()
         for record in equipment_records:
             if record.service_reminder_date and record.partner_id:
-                today = fields.Date.today()
-                if record.service_reminder_date.date() == today:
+                reminder_date = record.service_reminder_date.date()
+                if reminder_date == utc_now:
                     template = self.env.ref('fcb_service.email_template_service_reminder')
                     template_values = {
                         'email_from': self.env.user.email,
