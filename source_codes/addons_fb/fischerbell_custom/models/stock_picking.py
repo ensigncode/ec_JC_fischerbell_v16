@@ -292,7 +292,7 @@ class Picking(models.Model):
 	def _action_done(self):
 		res = super()._action_done()
 		for record in self : 
-			if record.state == 'done' : 
+			if record.purchase_id and record.state == 'done' : 
 				record.purchase_id.action_create_invoice() 
 		return res
 
