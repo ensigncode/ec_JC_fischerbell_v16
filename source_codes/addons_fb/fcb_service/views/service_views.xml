@@ -7,9 +7,11 @@
         <field name="arch" type="xml">
             <xpath expr="//field[@name='partner_id']" position="after">
                 <field name="customer_code" readonly="1"/>
+                <field name="contact_person_id"/>
                 <field name="customer_email"/>
             </xpath>
             <xpath expr="//field[@name='tag_ids']" position="after">
+                <field name="type_service" widget="radio"/>
                <field name="product_categ_id"/>
             </xpath>
             <xpath expr="//page[@name='extra_info']" position="after">
