@@ -12,6 +12,7 @@
 							<field name="is_serviceable"/>
 							<field name="service_time"/>
 							<field name="required_calibration"/>
+							<field name="service_reminder_days"/>
 						</group>
 					</group>
 				</page>
