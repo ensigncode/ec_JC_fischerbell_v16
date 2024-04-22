@@ -14,7 +14,7 @@
         'data/service_email_reminder.xml',
         'data/service_email_template.xml',
         'views/service_views.xml',
-        'views/fischerbell_header.xml',
+        'reports/fischerbell_header.xml',
         'views/product_template_view.xml',
         'views/project_task_view.xml',
         'reports/custome_footer.xml',
