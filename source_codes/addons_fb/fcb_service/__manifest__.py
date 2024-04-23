@@ -7,7 +7,8 @@
     'summary': 'FCB Service',
     'website': '',
     'depends': [
-        'industry_fsm', 'sale', 'stock', 'industry_fsm_sale'
+        'industry_fsm', 'sale', 'stock', 'industry_fsm_sale',
+        'helpdesk',
     ],
     'data': [
         'security/ir.model.access.csv',
@@ -18,6 +19,8 @@
         'views/project_task_view.xml',
         'reports/custome_footer.xml',
         'views/equipment_service_views.xml',
+        'views/helpdesk_ticket.xml',
+        'wizard/transfer_details_views.xml',
         'reports/fischerbell_medical_oxy_resu.xml',
         'reports/fischerbell_instrumental_evaluation.xml',
         'reports/fischerbell_eba_service.xml',

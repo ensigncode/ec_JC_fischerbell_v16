@@ -3,3 +3,4 @@ fcb_service.access_service_order_line,access_service_order_line,fcb_service.mode
 fcb_service.access_service_type,access_service_type,fcb_service.model_service_type,base.group_user,1,1,1,1
 fcb_service.access_equipment_service,access_equipment_service,fcb_service.model_equipment_service,base.group_user,1,1,1,1
 fcb_service.access_product_service,access_product_service,fcb_service.model_product_service,base.group_user,1,1,1,1
+fcb_service.access_fcb_location,access_fcb_location,fcb_service.model_fcb_location,base.group_user,1,1,1,1
