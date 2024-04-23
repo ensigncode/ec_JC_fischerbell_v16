@@ -8,7 +8,7 @@ class FcbLocation(models.TransientModel):
     warehouse_id = fields.Many2one('stock.warehouse', string='Source Warehouse')
     destination_warehouse_id = fields.Many2one('stock.warehouse')
     src_location_id = fields.Many2one('stock.location', string='Source Location')
-    dest_location_id = fields.Many2one('stock.location')
+    dest_location_id = fields.Many2one('stock.location',string='Destination Location',required=True)
     ticket_id = fields.Many2one('helpdesk.ticket', )
     product_id = fields.Many2one('product.product', )
 
