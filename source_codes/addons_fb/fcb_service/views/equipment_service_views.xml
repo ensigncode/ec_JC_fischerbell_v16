@@ -32,6 +32,7 @@
 							<field name="lot_id"/>
 							<field name="serial_number"/>
 							<field name="expire_date"/>
+							<field name="manufacturing_date"/>
 							<field name="service_date"/>
 							<field name="service_reminder_date"/>
 						</group>

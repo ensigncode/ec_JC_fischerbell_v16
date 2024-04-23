@@ -12,11 +12,12 @@
 			<field name="body_html" type="html">
 				<p>Hello <t t-out="object.partner_id.name or ''"></t>,
 				</p>
-				<p>This is a reminder for your service scheduled on <t
-						t-out="object.service_reminder_date.strftime('%d-%m-%Y')"></t>.
+				<p>your service for <t t-out="object.product_id.name or ''"></t> is due on <t
+						t-out="object.service_reminder_date.strftime('%d-%m-%Y')"></t>,please contect sales team to get
+					quote.
 				</p>
 				<p>Regards,</p>
-				<p>Your Company</p>
+				<p><t t-out="object.env.company.name or ''"></t></p>
 			</field>
 		</record>
 	</data>
