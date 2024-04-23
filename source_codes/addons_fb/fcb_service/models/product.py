@@ -10,6 +10,9 @@ class ProductTemplate(models.Model):
     service_time = fields.Integer(string='Days')
     required_calibration = fields.Boolean('Required Calibration')
     service_reminder_days = fields.Integer(string='Service Reminder Days')
+    reminder_time = fields.Integer(string='Reminder time')
+    service_product_ids = fields.One2many('product.service', 'product_id', 'Products')
+
 
 
 
