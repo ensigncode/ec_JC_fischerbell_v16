@@ -22,7 +22,7 @@ class StockPicking(models.Model):
 						'lot_id': line.lot_id.id,
 						'partner_id': self.partner_id.id,
 						'so_ref': self.origin,
-						'manufacturing_date': line.lot_id.expiration_date,
+						'manufacturing_date': line.lot_id.manufacturing_date,
 						'expire_date': line.lot_id.expiration_date,
 						'categ_id': line.product_id.categ_id.id,
 						'service_date': self.date_done + timedelta(

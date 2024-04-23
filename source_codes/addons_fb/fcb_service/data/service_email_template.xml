@@ -13,7 +13,7 @@
 				<p>Hello <t t-out="object.partner_id.name or ''"></t>,
 				</p>
 				<p>your service for <t t-out="object.product_id.name or ''"></t> is due on <t
-						t-out="object.service_reminder_date.strftime('%d-%m-%Y')"></t>,please contect sales team to get
+						t-out="object.service_date.strftime('%d-%m-%Y')"></t>,please contect sales team to get
 					quote.
 				</p>
 				<p>Regards,</p>
