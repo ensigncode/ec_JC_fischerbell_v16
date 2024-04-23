@@ -7,3 +7,4 @@ from . import product_product
 from . import equipment_service
 from . import stock
 from . import project_task
+from . import product_service
