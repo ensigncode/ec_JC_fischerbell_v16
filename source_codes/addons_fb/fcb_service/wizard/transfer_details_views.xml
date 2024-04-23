@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- View for the Product Details wizard form -->
+    <record id="location_details_view_form" model="ir.ui.view">
+        <field name="name">fcb.location.view.form</field>
+        <field name="model">fcb.location</field>
+        <field name="arch" type="xml">
+            <form string="Product Details">
+                <group>
+                    <group>
+                        <field name="ticket_id"/>
+                        <field name="product_id"/>
+                        <field name="dest_location_id"/>
+                    </group>
+                </group>
+                <footer>
+                    <button name="action_create_transfer"
+                            string="Create Transfer"
+                            type="object" class="oe_highlight"/>
+                    <button string="Cancel" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+    <record id="action_update_fcb_location" model="ir.actions.act_window">
+        <field name="name">Update Location</field>
+        <field name="res_model">fcb.location</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="view_id" ref="location_details_view_form"/>
+    </record>
+
+</odoo>

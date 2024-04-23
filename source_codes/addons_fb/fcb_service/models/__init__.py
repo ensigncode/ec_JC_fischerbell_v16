@@ -8,3 +8,4 @@ from . import equipment_service
 from . import stock
 from . import project_task
 from . import product_service
+from . import helpdesk_ticket
