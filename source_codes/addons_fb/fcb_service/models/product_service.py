@@ -6,8 +6,12 @@ from odoo import api, fields, models
 class ProductService(models.Model):
     _name = "product.service"
 
-    product_id = fields.Many2one('product.product','Products', domain="[('detailed_type', '=', 'service')]")
-    reminder_time = fields.Integer(string='Reminder time',related='product_id.reminder_time')
+    reminder_time = fields.Integer(string='Reminder time',)
     time_selection = fields.Selection([('day', 'Day'), ('month', 'Month'), ('year', 'Year')],  default='day')
     service_reminder_days = fields.Integer(string='Service Reminder Days')
-    service_time = fields.Integer(string='Service Time',related='product_id.service_time')
+    service_time = fields.Integer(string='Service Time',)
+    product_tmpl_id = fields.Many2one('product.template','Products')
+    product_ids = fields.Many2many('product.product')
+    extra_product_ids = fields.Many2many('product.product',related="product_tmpl_id.extra_product_ids")
+    product_variant_id = fields.Many2one('product.product','Products', domain="[('detailed_type', '=', 'service'),('id','not in',extra_product_ids)]")
+
