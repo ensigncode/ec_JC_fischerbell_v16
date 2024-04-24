@@ -15,8 +15,91 @@
                         <field name="delivery_count" widget="statinfo" string="Delivery"/>
                     </button>
                 </xpath>
+                <xpath expr='//field[@name="tag_ids"]' position="after">
+                    <field name="is_servicing" force_save="1" invisible="1"/>
+                    <field name="service_priority" widget="radio" attrs="{'invisible': [('is_servicing','=',False)]}"/>
+                    <field name="date_of_request" attrs="{'invisible': [('is_servicing','=',False)]}" />
+                </xpath>
+                <xpath expr='//field[@name="tag_ids"]' position="before">
+                    <field name="ticket_type" invisible="1"/>
+                    <field name="shipping_type" attrs="{'invisible': [('ticket_type','=',False)]}"/>
+                </xpath>
+                <xpath expr='//field[@name="name"]' position="after">
+                    <field name="reference_no" attrs="{'invisible': [('is_servicing','=',False)]}" />
+                </xpath>
+                <xpath expr='//header' position="inside">
+                    <button name="generate_service"  string="Generate Service" type="object"/>
+                </xpath>
             </field>
         </record>
+
+<!--        <record id="helpdesk_ticket_view_form_inherit_helpdesk_timesheet_inherit" model="ir.ui.view">-->
+<!--            <field name="name">helpdesk.ticket.view.form.inherit.helpdesk.timesheet.inherit</field>-->
+<!--            <field name="model">helpdesk.ticket</field>-->
+<!--            <field name="inherit_id" ref="helpdesk_timesheet.helpdesk_ticket_view_form_inherit_helpdesk_timesheet"/>-->
+<!--            <field name="arch" type="xml">-->
+<!--                <xpath expr='//notebook' position="inside">-->
+<!--                    <page string="Other Info" name="other_info">-->
+<!--                        <group>-->
+<!--                            <group>-->
+<!--                                <field name="create_uid"/>-->
+<!--                                <field name="submitted_id"/>-->
+<!--                            </group>-->
+<!--                            <group>-->
+<!--                                <field name="certificate_name"/>-->
+<!--                                <field name="certificate_address"/>-->
+<!--                            </group>-->
+<!--                        </group>-->
+<!--                    </page>-->
+<!--                    <page string="Equipments" name="equipments" attrs="{'invisible': [('is_servicing','=',False)]}" >-->
+<!--                        <field name="service_line" widget="section_and_note_one2many" mode="tree">-->
+<!--                            <tree editable="bottom">-->
+<!--                                <field name="product_id"/>-->
+<!--                                <field name="product_uom_qty"/>-->
+<!--                            </tree>-->
+<!--                        </field>-->
+<!--                    </page>-->
+<!--                </xpath>-->
+<!--            </field>-->
+<!--        </record>-->
+
+        <record id="helpdesk_team_view_form_inherit" model="ir.ui.view">
+		<field name="name">helpdesk.team.view.form.inherit</field>
+		<field name="model">helpdesk.team</field>
+		<field name="inherit_id" ref="helpdesk.helpdesk_team_view_form"/>
+		<field name="arch" type="xml">
+			<xpath expr='//div[@id="after-sales"]' position="after">
+                <div>
+                    <h2>FCB Service</h2>
+                    <div class="row mt32 o_settings_container" id="is_service">
+                        <div class="col-lg-6 o_setting_box">
+                            <div class="o_setting_left_pane">
+                                <field name="is_servicing"/>
+                            </div>
+                            <div class="o_setting_right_pane">
+                                <label for="is_servicing"/>
+                                <div class="text-muted">
+                                    Tickets for Service
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+			</xpath>
+		</field>
+	    </record>
+
+        <record id="helpdesk_ticket_type_view_tree_inherit" model="ir.ui.view">
+            <field name="name">helpdesk.ticket.type.tree.inherit</field>
+            <field name="model">helpdesk.ticket.type</field>
+            <field name="inherit_id" ref="helpdesk.helpdesk_ticket_type_view_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr='//field[@name="name"]' position="after">
+                    <field name="ticket_type" optional="hide"/>
+                </xpath>
+            </field>
+	    </record>
+
         <record id="helpdesk_ticket_view_form2" model="ir.ui.view">
             <field name="name">helpdesk.ticket.form.inherit</field>
             <field name="model">helpdesk.ticket</field>
@@ -27,7 +110,6 @@
                     <button class="btn btn-secondary" name="action_select_loc" type="object" string="Create Transfer"/>
                     <button class="btn btn-secondary" name="action_select_loc_to_return" type="object" string="Create Return Transfer"/>
                 </xpath>
-
             </field>
         </record>
     </data>
