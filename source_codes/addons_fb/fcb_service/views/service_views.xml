@@ -30,7 +30,7 @@
 <!--        </field>-->
 <!--    </record>-->
 
-    <record id="view_task_form2_inheritd" model="ir.ui.view">
+    <record id="view_task_form2_inherited" model="ir.ui.view">
             <field name="name">view.task.form2.inherit</field>
             <field name="model">project.task</field>
             <field name="inherit_id" ref="industry_fsm_sale.view_task_form2_inherit"/>

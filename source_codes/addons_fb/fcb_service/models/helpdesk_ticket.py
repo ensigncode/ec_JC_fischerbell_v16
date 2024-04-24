@@ -72,8 +72,18 @@ class HelpdeskTicket(models.Model):
         self.ensure_one()
         return {
             'type': 'ir.actions.act_window',
-            'name': _('Create a Field Service task'),
+            'name': _('Create a Transfer'),
             'res_model': 'fcb.location',
+            'view_mode': 'form',
+            'target': 'new',
+        }
+
+    def action_select_loc_to_return(self):
+        self.ensure_one()
+        return {
+            'type': 'ir.actions.act_window',
+            'name': _('Create a Return Transfer'),
+            'res_model': 'fcb.return.location',
             'view_mode': 'form',
             'target': 'new',
         }

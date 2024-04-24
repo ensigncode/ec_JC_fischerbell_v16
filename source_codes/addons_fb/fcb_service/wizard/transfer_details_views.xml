@@ -8,9 +8,10 @@
             <form string="Product Details">
                 <group>
                     <group>
-                        <field name="ticket_id" invisible ='1'/>
-                        <field name="product_id" invisible ='1'/>
-                        <field name="dest_location_id"/>
+                        <field name="ticket_id" invisible='1'/>
+                        <field name="product_id" invisible='1'/>
+                        <field name="location_ids" invisible="1"/>
+                        <field name="dest_location_id" domain="[('id','in',location_ids)]"/>
                     </group>
                 </group>
                 <footer>
