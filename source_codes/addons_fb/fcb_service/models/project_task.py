@@ -6,6 +6,8 @@ from odoo import api, models, fields
 class Task(models.Model):
     _inherit = 'project.task'
 
+    product_id = fields.Many2one('product.product', string="Product")
+
     def action_print_calibration_report(self):
         return self.env.ref('fcb_service.fischerbell_calibration_task_custom_report').report_action(self)
 
