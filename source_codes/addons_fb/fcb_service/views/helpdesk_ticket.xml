@@ -23,8 +23,9 @@
             <field name="priority">80</field>
             <field name="inherit_id" ref="helpdesk_fsm.helpdesk_ticket_view_form"/>
             <field name="arch" type="xml">
-            <xpath expr="//header/button[@name='action_generate_fsm_task']" position="after">
-                    <button class="btn btn-secondary" name="action_select_loc" type="object" string="Create Transfer"  />
+                <xpath expr="//header/button[@name='action_generate_fsm_task']" position="after">
+                    <button class="btn btn-secondary" name="action_select_loc" type="object" string="Create Transfer"/>
+                    <button class="btn btn-secondary" name="action_select_loc_to_return" type="object" string="Create Return Transfer"/>
                 </xpath>
 
             </field>

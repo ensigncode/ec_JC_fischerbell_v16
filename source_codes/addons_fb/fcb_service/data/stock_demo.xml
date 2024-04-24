@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="location_repair" model="stock.location">
+            <field name="name">Repair</field>
+            <field name="usage">internal</field>
+            <field name="location_id" ref="stock.location_wh1"/>
+        </record>
+        <record id="location_inspection" model="stock.location">
+            <field name="name">Inspection</field>
+            <field name="usage">internal</field>
+            <field name="location_id" ref="stock.location_wh1"/>
+        </record>
+         <record id="location_van" model="stock.location">
+            <field name="name">Van</field>
+            <field name="usage">internal</field>
+            <field name="location_id" ref="stock.location_wh1"/>
+        </record>
+    </data>
+</odoo>
