@@ -8,8 +8,8 @@
             <form string="Product Details">
                 <group>
                     <group>
-                        <field name="ticket_id"/>
-                        <field name="product_id"/>
+                        <field name="ticket_id" invisible ='1'/>
+                        <field name="product_id" invisible ='1'/>
                         <field name="dest_location_id"/>
                     </group>
                 </group>
