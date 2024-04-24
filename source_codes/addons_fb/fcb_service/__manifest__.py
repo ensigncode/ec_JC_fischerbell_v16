@@ -14,6 +14,7 @@
         'security/ir.model.access.csv',
         'data/service_email_reminder.xml',
         'data/service_email_template.xml',
+        'data/project_task_seq.xml',
         'views/service_views.xml',
         'views/product_template_view.xml',
         'views/project_task_view.xml',

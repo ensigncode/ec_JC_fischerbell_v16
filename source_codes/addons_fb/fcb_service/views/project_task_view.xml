@@ -8,6 +8,12 @@
 			<xpath expr="//button[@name='action_assign_to_me']" position="after">
 				<button class="btn-secondary" name="action_report" type="object" string="Report"/>
 			</xpath>
+			<xpath expr="//field[@name='tag_ids']" position="after">
+				<field name="product_id"/>
+			</xpath>
+			<xpath expr="//field[@name='is_fsm']" position="attributes">
+                <attribute name="force_save">1</attribute>
+            </xpath>
 		</field>
 	</record>
 </odoo>
