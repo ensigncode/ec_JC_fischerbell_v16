@@ -22,46 +22,47 @@
                 </xpath>
                 <xpath expr='//field[@name="tag_ids"]' position="before">
                     <field name="ticket_type" invisible="1"/>
+                    <field name="task_generated" invisible="1"/>
                     <field name="shipping_type" attrs="{'invisible': [('ticket_type','=',False)]}"/>
                 </xpath>
                 <xpath expr='//field[@name="name"]' position="after">
                     <field name="reference_no" attrs="{'invisible': [('is_servicing','=',False)]}" />
                 </xpath>
                 <xpath expr='//header' position="inside">
-                    <button name="generate_service"  string="Generate Service" type="object"/>
+                    <button name="generate_service"  string="Generate Service" type="object" attrs="{'invisible': ['|', ('is_servicing', '=', False), ('task_generated', '=', True)]}"/>
                 </xpath>
             </field>
         </record>
 
-<!--        <record id="helpdesk_ticket_view_form_inherit_helpdesk_timesheet_inherit" model="ir.ui.view">-->
-<!--            <field name="name">helpdesk.ticket.view.form.inherit.helpdesk.timesheet.inherit</field>-->
-<!--            <field name="model">helpdesk.ticket</field>-->
-<!--            <field name="inherit_id" ref="helpdesk_timesheet.helpdesk_ticket_view_form_inherit_helpdesk_timesheet"/>-->
-<!--            <field name="arch" type="xml">-->
-<!--                <xpath expr='//notebook' position="inside">-->
-<!--                    <page string="Other Info" name="other_info">-->
-<!--                        <group>-->
-<!--                            <group>-->
-<!--                                <field name="create_uid"/>-->
-<!--                                <field name="submitted_id"/>-->
-<!--                            </group>-->
-<!--                            <group>-->
-<!--                                <field name="certificate_name"/>-->
-<!--                                <field name="certificate_address"/>-->
-<!--                            </group>-->
-<!--                        </group>-->
-<!--                    </page>-->
-<!--                    <page string="Equipments" name="equipments" attrs="{'invisible': [('is_servicing','=',False)]}" >-->
-<!--                        <field name="service_line" widget="section_and_note_one2many" mode="tree">-->
-<!--                            <tree editable="bottom">-->
-<!--                                <field name="product_id"/>-->
-<!--                                <field name="product_uom_qty"/>-->
-<!--                            </tree>-->
-<!--                        </field>-->
-<!--                    </page>-->
-<!--                </xpath>-->
-<!--            </field>-->
-<!--        </record>-->
+        <record id="helpdesk_ticket_view_form_inherit_helpdesk_timesheet_inherit" model="ir.ui.view">
+            <field name="name">helpdesk.ticket.view.form.inherit.helpdesk.timesheet.inherit</field>
+            <field name="model">helpdesk.ticket</field>
+            <field name="inherit_id" ref="helpdesk_timesheet.helpdesk_ticket_view_form_inherit_helpdesk_timesheet"/>
+            <field name="arch" type="xml">
+                <xpath expr='//notebook' position="inside">
+                    <page string="Certificate Details" name="other_info" attrs="{'invisible': [('is_servicing','=',False)]}">
+                        <group>
+                            <group>
+                                <field name="create_uid"/>
+                                <field name="submitted_id"/>
+                            </group>
+                            <group>
+                                <field name="certificate_name"/>
+                                <field name="certificate_address"/>
+                            </group>
+                        </group>
+                    </page>
+                    <page string="Equipments" name="equipments" attrs="{'invisible': [('is_servicing','=',False)]}" >
+                        <field name="service_line" widget="section_and_note_one2many" mode="tree">
+                            <tree editable="bottom">
+                                <field name="product_id"/>
+                                <field name="product_uom_qty"/>
+                            </tree>
+                        </field>
+                    </page>
+                </xpath>
+            </field>
+        </record>
 
         <record id="helpdesk_team_view_form_inherit" model="ir.ui.view">
 		<field name="name">helpdesk.team.view.form.inherit</field>
@@ -109,6 +110,8 @@
                 <xpath expr="//header/button[@name='action_generate_fsm_task']" position="after">
                     <button class="btn btn-secondary" name="action_select_loc" type="object" string="Create Transfer"/>
                     <button class="btn btn-secondary" name="action_select_loc_to_return" type="object" string="Create Return Transfer"/>
+                </xpath>
+                <xpath expr="//header//button[@name='action_generate_fsm_task']" position="replace">
                 </xpath>
             </field>
         </record>

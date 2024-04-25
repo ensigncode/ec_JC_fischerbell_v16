@@ -26,6 +26,7 @@ class HelpdeskTicket(models.Model):
     submitted_id = fields.Many2one('res.partner', string="Submitted By")
     certificate_name = fields.Char(string="Certificate Name")
     certificate_address = fields.Char(string="Certificate Address")
+    task_generated = fields.Boolean(string="Task Generated")
 
     @api.model
     def create(self, vals):
@@ -36,14 +37,17 @@ class HelpdeskTicket(models.Model):
         return super(HelpdeskTicket, self).create(vals)
 
     def generate_service(self):
+        self.ensure_one()
+        self.task_generated = True
         for line in self.service_line:
+            task_name = ' | '.join([self.partner_id.name] + [line.product_id.default_code if line.product_id.default_code else line.product_id.name])
             for prod in range(int(line.product_uom_qty)):
                 record = self.env['project.task'].create({
-                    'is_fsm': True,
-                    'name': 'Servicing',
+                    'project_id': self.team_id.fsm_project_id.id,
+                    'name': task_name,
                     'partner_id': self.partner_id.id,
                     'product_id': line.product_id.id,
-
+                    'helpdesk_ticket_id': self.id,
                 })
         return True
 
