@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+
+	<!-- stage "New" gets created by default with sequence 0-->
+	<record id="stage_inspection" model="helpdesk.stage">
+		<field name="name">Inspection pending</field>
+		<field name="sequence">6</field>
+	</record>
+	<record id="stage_in_done" model="helpdesk.stage">
+		<field name="name">Done</field>
+		<field name="sequence">7</field>
+	</record>
+</odoo>
