@@ -21,12 +21,14 @@ class EquipmentService(models.Model):
 	manufacturing_date = fields.Datetime('Manufacturing Date')
 	service_date = fields.Datetime('service Date')
 	service_reminder_date = fields.Datetime('service Reminder Date')
+	is_inhouse_service= fields.Boolean("Is Inhouse Service ?")
+
 
 	def _send_reminder_emails(self):
 		equipment_records = self.env['equipment.service'].search([])
 		utc_now = fields.Datetime.now().astimezone(pytz.utc).date()  # Get current date in UTC
 		for record in equipment_records:
-			if record.service_reminder_date and record.partner_id:  # Check if service reminder date and partner are set
+			if record.service_reminder_date and record.partner_id and record.is_inhouse_service:  # Check if service reminder date and partner are set
 				reminder_date = record.service_reminder_date.date()
 				if reminder_date == utc_now:
 					template = self.env.ref('fcb_service.email_template_service_reminder')
