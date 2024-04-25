@@ -47,14 +47,27 @@
         <field name="model">equipment.service</field>
         <field name="arch" type="xml">
             <search string="Product">
+                <field name="lot_id"/>
+                <field name="partner_id"/>
                 <field name="product_id"/>
                 <separator/>
                 <filter string="Products" name="filter_product" domain="[('product_id', '!=', False)]"/>
                 <filter string="Customer" name="filter_customer" domain="[('partner_id', '!=', False)]"/>
                 <filter string="Lot/Serial Number" name="product" domain="[('lot_id', '!=', False)]"/>
+                <filter string="Today's Reminder" name="today"
+                        domain="[('service_date', '&gt;', (context_today() - datetime.timedelta(days=1)).strftime('%Y-%m-%d'))]"/>
+                <filter string="Today's service" name="today_service_reminder_date"
+                        domain="[('service_reminder_date', '&gt;', (context_today() - datetime.timedelta(days=1)).strftime('%Y-%m-%d'))]"/>
+
                 <group expand="0" string="Group By...">
                     <filter string="Product" name="product" domain="[]" context="{'group_by': 'product_id'}"/>
                     <filter string="Customer" name="customer" domain="[]" context="{'group_by': 'partner_id'}"/>
+                    <separator orientation="vertical"/>
+                    <filter string="Reminder Date" name="group_by_reminder_date_day"
+                            context="{'group_by':'service_reminder_date:day'}"
+                    />
+                    <filter string="Service Date" name="month" context="{'group_by':'service_date:month'}"
+                    />
                 </group>
             </search>
         </field>
