@@ -1,12 +1,33 @@
 # -*- coding: utf-8 -*-
 
 from odoo import api, models, fields
+import json
 
 
 class Task(models.Model):
     _inherit = 'project.task'
 
     product_id = fields.Many2one('product.product', string="Product")
+    equipment_product_id = fields.Many2one('product.product', string="Product")
+    equipment_database_product = fields.Char("Equipment Database Product", compute="_get_equipment_database_domain")
+    equipment_database_serial = fields.Char("Equipment Database Serial", compute="_get_equipment_database_domain")
+    equipment_database_id = fields.Many2one("equipment.service","Serial Number")
+
+
+    @api.depends("partner_id")
+    def _get_equipment_database_domain(self):
+        for equipment in self:
+            equipment_ids = self.env['equipment.service'].search([('partner_id','=', equipment.partner_id.id)])
+            product_ids = [prod.id for prod in equipment_ids.mapped('product_id')]
+            serial_ids = [serial.id for serial in equipment_ids]
+            if serial_ids:
+                equipment.equipment_database_serial = json.dumps([('id', 'in', serial_ids)])
+            else:
+                equipment.equipment_database_serial = json.dumps([('id', 'in', [])])
+            if product_ids:
+                equipment.equipment_database_product = json.dumps([('id', 'in', product_ids)])
+            else:
+                equipment.equipment_database_product = json.dumps([('id', 'in', [])])
 
 
     def action_print_calibration_report(self):
@@ -40,3 +61,4 @@ class Task(models.Model):
     def action_report(self):
         report_action = self.env.ref('fcb_service.calibration_report')  # Replace 'module_name' with the actual name of your module
         return report_action.report_action(self)
+

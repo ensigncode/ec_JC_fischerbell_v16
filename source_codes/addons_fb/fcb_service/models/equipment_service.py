@@ -62,3 +62,15 @@ class EquipmentService(models.Model):
 			record.product_id = lot_id.product_id.id or False
 			record.categ_id = lot_id.product_id.categ_id.id or False
 			record.expire_date = lot_id.expiration_date or False
+
+
+
+	def name_get(self):
+		result = []
+		if self._context.get("model_name") == 'project.task':
+			for rec in self:
+				result.append((rec.id, '%s' % (rec.serial_number)))
+		else:
+			result = super(EquipmentService, self).name_get()
+		return result
+
