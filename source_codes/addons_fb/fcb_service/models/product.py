@@ -7,12 +7,11 @@ class ProductTemplate(models.Model):
     _inherit = "product.template"
 
     is_serviceable = fields.Boolean('Is Serviceable')
-    service_time = fields.Integer(string='Days')
     required_calibration = fields.Boolean('Required Calibration')
-    service_reminder_days = fields.Integer(string='Service Reminder Days')
-    reminder_time = fields.Integer(string='Reminder time')
     service_product_ids = fields.One2many('product.service', 'product_tmpl_id', 'Products')
     extra_product_ids = fields.Many2many('product.product',compute="_compute_product_ids")
+    equipment_id = fields.Many2one('equipment.service', 'equipment service')
+
     @api.depends('service_product_ids')
     def _compute_product_ids(self):
         for tmpl in self:

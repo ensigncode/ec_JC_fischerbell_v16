@@ -27,7 +27,18 @@ class HelpdeskTicket(models.Model):
     certificate_name = fields.Char(string="Certificate Name")
     certificate_address = fields.Char(string="Certificate Address")
     task_generated = fields.Boolean(string="Task Generated")
+    service_type = fields.Selection([
+        ('inhouse_service', 'In House Calibration'),
+        ('onsite_service', 'Onsite Calibration '),
+        ('outsource_service', 'Outsource to 3rd Party Supplier'),
 
+    ])
+    outsource_service = fields.Selection([
+        ('to_fcb', 'Salesman/Driver picks item from customer and brings to FCB > FCB will send item to supplier'),
+        ('d_to_supplier', 'Salesman/Driver picks item from customer and brings to Supplier location'),
+        ('direct_to_c', 'Salesperson will go to customer location for service'),
+
+    ])
     @api.model
     def create(self, vals):
         if vals.get('is_servicing'):
