@@ -8,6 +8,9 @@ from datetime import timedelta
 class StockPicking(models.Model):
 	_inherit = "stock.picking"
 
+
+	task_id = fields.Many2one('project.task', string="Task")
+
 	def button_validate(self):
 		res = super().button_validate()
 		if not self.is_to_check:

@@ -7,12 +7,31 @@
 		<field name="arch" type="xml">
 			<xpath expr="//button[@name='action_assign_to_me']" position="after">
 				<button class="btn-secondary" name="action_report" type="object" string="Report"/>
+				<button class="btn-secondary" name="send_for_inspection" type="object"
+				        string="Send for Inspection"/>
+<!--				<button class="btn-secondary" name="done_inspection" type="object" string="Done"/>-->
+			</xpath>
+			<xpath expr="//div[hasclass('oe_button_box')]" position="inside">
+				<button type="object" name="show_transfer" class="oe_stat_button" icon="fa-list"
+				        >
+					<field name="count_transfer" widget="statinfo" string="Show Transfer"
+					       />
+				</button>
 			</xpath>
 			<xpath expr="//field[@name='tag_ids']" position="after">
 				<field name="product_id"/>
+				<field name="equipment_database_product" invisible="1"/>
+				<field name="equipment_database_serial" invisible="1"/>
 			</xpath>
-			<xpath expr="//field[@name='is_fsm']" position="attributes">
-                <attribute name="force_save">1</attribute>
+			<xpath expr="//page[@name='extra_info']" position="after">
+                <page name="equipment_service_database" string="Equipment Service Database">
+					<group>
+						<group>
+							<field name="equipment_product_id" domain="equipment_database_product"/>
+							<field name="equipment_database_id" domain="equipment_database_serial" context="{'model_name':'project.task'}"/>
+						</group>
+					</group>
+				</page>
             </xpath>
 		</field>
 	</record>
