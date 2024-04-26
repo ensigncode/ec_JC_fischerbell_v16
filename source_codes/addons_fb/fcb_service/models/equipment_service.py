@@ -22,8 +22,21 @@ class EquipmentService(models.Model):
 	service_date = fields.Datetime('service Date')
 	service_reminder_date = fields.Datetime('service Reminder Date')
 	is_inhouse_service= fields.Boolean("Is Inhouse Service ?")
+	service_product_ids = fields.One2many('product.service', 'product_tmpl_id', 'Service Products',related='product_id.service_product_ids')
+	is_serviceable = fields.Boolean('Is Serviceable',related='product_id.is_serviceable')
+	product_variant_id = fields.Many2one('product.product', 'Products',)
+	service = fields.Boolean(compute='_compute_delivered_date', store=True)
 
-
+	@api.depends('delivered_date','service_date', 'service_product_ids', 'service_product_ids.service_time','service_product_ids.reminder_time')
+	def _compute_delivered_date(self):
+		for record in self:
+			for service in record.service_product_ids:
+				if record.delivered_date and service.service_time:
+					service.service_date = record.delivered_date.date()+ timedelta(days = service.service_time)
+					service.reminder_date = record.service_date.date() - timedelta(days = service.reminder_time)
+					record.service = True
+				else:
+					record.service = False
 	def _send_reminder_emails(self):
 		equipment_records = self.env['equipment.service'].search([])
 		utc_now = fields.Datetime.now().astimezone(pytz.utc).date()  # Get current date in UTC
@@ -62,8 +75,6 @@ class EquipmentService(models.Model):
 			record.product_id = lot_id.product_id.id or False
 			record.categ_id = lot_id.product_id.categ_id.id or False
 			record.expire_date = lot_id.expiration_date or False
-
-
 
 	def name_get(self):
 		result = []

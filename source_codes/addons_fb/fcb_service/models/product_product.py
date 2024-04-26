@@ -7,6 +7,5 @@ class ProductProduct(models.Model):
     _inherit = "product.product"
 
     is_serviceable = fields.Boolean(string='Is Serviceable',related='product_tmpl_id.is_serviceable')
-    service_time = fields.Integer(string='Service Time',related='product_tmpl_id.service_time')
     required_calibration = fields.Boolean('Required Calibration',related='product_tmpl_id.required_calibration')
 

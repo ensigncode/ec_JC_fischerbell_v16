@@ -27,7 +27,7 @@
                             <field name="so_ref"/>
                             <field name="categ_id"/>
                             <field name="delivered_date"/>
-                            <field name="is_inhouse_service"/>
+                            <field name="is_inhouse_service" />
                         </group>
                         <group>
                             <field name="lot_id"/>
@@ -38,6 +38,21 @@
                             <field name="service_reminder_date"/>
                         </group>
                     </group>
+
+                    <br/>
+                    <br/>
+                    <field name="is_serviceable" invisible="1"/>
+                    <group string="Service Products" attrs="{'invisible': [('is_serviceable', '=',False)]}">
+                        <field name="service_product_ids" colspan="2" nolabel="1">
+                            <tree editable="bottom" string="Service Products">
+                                <field name="extra_product_ids" widget="many2many_tags" invisible="1"/>
+                                <field name="product_variant_id"/>
+                                <field name="service_date"/>
+                                <field name="reminder_date"/>
+                            </tree>
+                        </field>
+                    </group>
+
                 </sheet>
             </form>
         </field>
