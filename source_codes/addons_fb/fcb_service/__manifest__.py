@@ -41,6 +41,11 @@
     ],
     'demo': [
     ],
+    "assets": {
+        "web.assets_backend": [
+            "/fcb_service/static/src/js/*.js",
+        ],
+    },
 
     'installable': True,
     'auto_install': False,
