@@ -8,7 +8,7 @@
     'website': '',
     'depends': [
         'industry_fsm', 'sale', 'stock', 'industry_fsm_sale',
-        'helpdesk',
+        'helpdesk','purchase',
     ],
     'data': [
         'security/ir.model.access.csv',
@@ -26,6 +26,7 @@
         'views/stock_picking_view.xml',
         'wizard/transfer_details_views.xml',
         'wizard/transfer_return_details_views.xml',
+        'wizard/transfer_outsource_views.xml',
         'reports/fischerbell_medical_oxy_resu.xml',
         'reports/fischerbell_instrumental_evaluation.xml',
         'reports/fischerbell_eba_service.xml',

@@ -14,6 +14,15 @@
                             attrs="{'invisible': [('delivery_count', '=', 0)]}">
                         <field name="delivery_count" widget="statinfo" string="Delivery"/>
                     </button>
+                    <field name="service_type" invisible="1"/>
+                    <field name="purchase_count" invisible="1"/>
+                    <button type="object"
+                            name="action_view_purchases"
+                            class="oe_stat_button"
+                            icon="fa-credit-card" help="Purchase Orders"
+                            attrs="{'invisible': ['|',('purchase_count', '=', 0),('service_type', 'not in', 'outsource_service')]}">
+                        <field name="purchase_count" widget="statinfo" string="Purchase Orders"/>
+                    </button>
                 </xpath>
                 <xpath expr='//field[@name="tag_ids"]' position="after">
                     <field name="is_servicing" force_save="1" invisible="1"/>
@@ -33,7 +42,12 @@
                             attrs="{'invisible': ['|', ('is_servicing', '=', False), ('task_generated', '=', True)]}"/>
                 </xpath>
                 <xpath expr='//field[@name="team_id"]' position="before">
+                    <field name="vender_id"/>
                     <field name="service_type"/>
+                    <field name="product_service_id"/>
+                    <field name="outsource_service"
+                           attrs="{'invisible': [('service_type', 'not in', 'outsource_service')]}"
+                    />
                 </xpath>
             </field>
         </record>
@@ -119,6 +133,11 @@
                     <button class="btn btn-secondary" name="action_select_loc_to_return" type="object"
                             string="Create Return Transfer"
                             attrs="{'invisible': [('service_type', '!=', 'onsite_service')]}"
+                    />
+
+                    <button class="btn btn-secondary" name="action_select_loc_outsource" type="object"
+                            string="Create Outsource Transfer"
+                            attrs="{'invisible': [('service_type', '!=', 'outsource_service')]}"
                     />
                 </xpath>
             </field>

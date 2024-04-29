@@ -7,7 +7,9 @@ class HelpdeskTicket(models.Model):
     _inherit = 'helpdesk.ticket'
 
     picking_ticket_ids = fields.One2many('stock.picking', 'ticket_id', string='Transfers')
+    purchase_ticket_ids =  fields.One2many('purchase.order', 'ticket_id', string='Purchase')
     delivery_count = fields.Integer(string='Delivery Orders', compute='_compute_picking_ticket_ids')
+    purchase_count = fields.Integer(string='Purchase Orders', compute='_compute_purchase_count')
     service_priority = fields.Selection([
         ('urgent', 'Urgent'),
         ('express', 'Express'),
@@ -39,6 +41,9 @@ class HelpdeskTicket(models.Model):
         ('direct_to_c', 'Salesperson will go to customer location for service'),
 
     ])
+    product_service_id = fields.Many2one('product.template','Products', domain="[('detailed_type', '=', 'service')]")
+    vender_id = fields.Many2one('res.partner', string='Vendor', required=True, tracking=True, domain="['|', ('company_id', '=', False), ('company_id', '=', company_id)]", help="You can find a vendor by its Name, TIN, Email or Internal Reference.")
+
     @api.model
     def create(self, vals):
         if vals.get('is_servicing'):
@@ -62,10 +67,16 @@ class HelpdeskTicket(models.Model):
                 })
         return True
 
-    @api.depends('picking_ticket_ids')
+    @api.depends('picking_ticket_ids','purchase_ticket_ids')
     def _compute_picking_ticket_ids(self):
         for order in self:
             order.delivery_count = len(order.picking_ticket_ids)
+            order.purchase_count = len(order.purchase_ticket_ids)
+
+    @api.depends('purchase_ticket_ids')
+    def _compute_purchase_count(self):
+        for order in self:
+            order.purchase_count = len(order.purchase_ticket_ids)
 
     def action_view_transfers(self):
         """Open a new window to view transfers."""
@@ -81,7 +92,20 @@ class HelpdeskTicket(models.Model):
                 action['views'] = form_view
             action['res_id'] = pickings.id
         return action
-
+    def action_view_purchases(self):
+        """Open a new window to view transfers."""
+        action = self.env["ir.actions.actions"]._for_xml_id("purchase.purchase_rfq")
+        purchases = self.purchase_ticket_ids
+        if len(purchases) > 1:
+            action['domain'] = [('id', 'in', purchases.ids)]
+        elif purchases:
+            form_view = [(self.env.ref('purchase.purchase_order_form').id, 'form')]
+            if 'views' in action:
+                action['views'] = form_view + [(state, view) for state, view in action['views'] if view != 'form']
+            else:
+                action['views'] = form_view
+            action['res_id'] = purchases.id
+        return action
 
     def action_select_loc(self):
         self.ensure_one()
@@ -102,7 +126,15 @@ class HelpdeskTicket(models.Model):
             'view_mode': 'form',
             'target': 'new',
         }
-
+    def action_select_loc_outsource(self):
+        self.ensure_one()
+        return {
+            'type': 'ir.actions.act_window',
+            'name': _('Create a Outsource Transfer'),
+            'res_model': 'fcb.outsource.location',
+            'view_mode': 'form',
+            'target': 'new',
+        }
 
 class StockPicking(models.Model):
     _inherit = 'stock.picking'
@@ -127,3 +159,8 @@ class ServiceOrderLine(models.Model):
     product_id = fields.Many2one('product.product', string='Equipments')
     ticket_id = fields.Many2one('helpdesk.ticket',string="Services")
     product_uom_qty = fields.Float(string="Quantity")
+
+class PurchaseOrder(models.Model):
+    _inherit = 'purchase.order'
+
+    ticket_id = fields.Many2one('helpdesk.ticket', string="Ticket Order", store=True, readonly=False, )
