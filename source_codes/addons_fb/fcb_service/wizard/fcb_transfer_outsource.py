@@ -130,8 +130,7 @@ class FcbOutsourceLocation(models.TransientModel):
                 'partner_id': self.ticket_id.partner_id.id,
                 'picking_type_id': self.env.ref('stock.picking_type_out').id,
                 'location_id':self.env.ref('fcb_service.location_repair').id if self.to_destination == 'direct_to_c' else self.dest_location_id.id,
-                'location_dest_id': self.env.ref(
-                    'stock.stock_location_customers').id ,
+                'location_dest_id': self.env.ref('stock.stock_location_customers').id ,
                 'ticket_id': self.ticket_id.id,
                 'move_ids': [(0, 0, {
                     'name': ' Unload to Warehouse ',
