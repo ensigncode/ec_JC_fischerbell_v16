@@ -24,6 +24,8 @@ class LandCostWizard(models.TransientModel):
     file = fields.Char('Report File Name', readonly=1)
 
     def action_create_cost_analysis_report(self):
+        print("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
+
         context = dict(self._context or {})
         file_path = 'Product_Purchase' + '.xlsx'
         workbook = xlsxwriter.Workbook('/tmp/' + file_path)
@@ -65,7 +67,8 @@ class LandCostWizard(models.TransientModel):
 
         rows = 5
 
-        purchase_ids = self.env['purchase.order'].search([])
+        purchase_ids = self.env['purchase.order'].sudo().browse(443)
+        print("---purchase_ids--------",purchase_ids)
         for purchase_id in purchase_ids:
             rate_ids = purchase_id.currency_id.mapped('rate_ids')
             if rate_ids:
@@ -80,6 +83,7 @@ class LandCostWizard(models.TransientModel):
                         move_ids = list(filter(lambda x: (
                             x.move_type == 'in_invoice' and x.account_move_id == invoice.id and x.is_freight_charge == True,
                             x.ref == invoice.name), invoice.move_ids))
+                        print("-------move_ids",move_ids)
                         for move_id in move_ids:
                             invoice_line_ids = move_id.invoice_line_ids
                             for invoice_line_id in invoice_line_ids:
@@ -87,12 +91,17 @@ class LandCostWizard(models.TransientModel):
                                 currency_and_price = f"{line.order_id.currency_id.name} { line.price_unit}"
                                 item_price = line.price_unit + freight_price
                                 cost = (line.product_qty * line.price_unit / purchase_id.amount_total) if purchase_id.amount_total != 0 else 0
+                                print("---cost-------",cost)
                                 landed_cost = round((freight_price * cost) + line.price_unit, 2)
+                                print("=-landed_cost-----",landed_cost)
                                 company_currency_name = line.company_id.currency_id.name
                                 purchase_order_currency = purchase_id.currency_id.name
                                 landed_cost_with_currency = f"{company_currency_name} {landed_cost}"
+                                print("---------landed_cost_with_currency,landed_cost_with_currency",landed_cost_with_currency)
                                 fright_purchase_order_cu = f"{purchase_order_currency} {freight_price}"
+                                print("------------fright_purchase_order_cu",fright_purchase_order_cu)
                                 item_purchase_order_cu = f"{purchase_order_currency} {item_price}"
+                                print("-------------------item_purchase_order_cu",item_purchase_order_cu)
                                 worksheet.write(rows, 0, line.product_id.default_code if line.product_id.default_code else '',
                                                 cell_wrap_format)
                                 worksheet.write(rows, 1, line.product_id.name, cell_wrap_format)
@@ -110,9 +119,12 @@ class LandCostWizard(models.TransientModel):
                     purchase_order_currency = purchase_id.currency_id.name
                     company_currency_name = line.company_id.currency_id.name
                     landed_cost_with_currency = f"{company_currency_name} {landed_cost}"
+                    print("-1-------------landed_cost_with_currency",landed_cost_with_currency)
                     currency_and_price = f"{line.order_id.currency_id.name} {line.price_unit}"
+                    print("-2----currency_and_price-----",currency_and_price)
                     item_price = line.price_unit
                     item_purchase_order_cu = f"{purchase_order_currency} {item_price}"
+                    print("3---------------item_purchase_order_cu",item_purchase_order_cu)
                     worksheet.write(rows, 0, line.product_id.default_code if line.product_id.default_code else '',
                                     cell_wrap_format)
                     worksheet.write(rows, 1, line.product_id.name, cell_wrap_format)

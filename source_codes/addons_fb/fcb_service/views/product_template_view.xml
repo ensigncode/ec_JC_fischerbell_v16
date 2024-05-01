@@ -10,17 +10,9 @@
                 <field name="is_serviceable"/>
             </xpath>
             <xpath expr="//page[@name='invoicing']" position="after">
-                <page string="Service" name="service" attrs="{'invisible': [('detailed_type', '=', 'service')]}">
+                <page string="Service" name="service" attrs="{'invisible': ['|',('detailed_type', '=', 'service'),('is_serviceable', '=',False)]}">
                     <div>
-                        <group>
-                            <group>
-                                <field name="required_calibration"/>
-                            </group>
-                        </group>
                         <field name="extra_product_ids" widget="many2many_tags" invisible="1"/>
-                        <br/>
-                        <br/>
-
                         <group string="Service Products" attrs="{'invisible': [('is_serviceable', '=',False)]}">
                             <field name="service_product_ids" colspan="2" nolabel="1" >
                                 <tree editable="bottom" string="Service Products">
