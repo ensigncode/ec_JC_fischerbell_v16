@@ -105,10 +105,8 @@ class StockAgingReportWizard(models.TransientModel):
 
 	def _get_product_info(self, product_id, warehouse_id, start_date, end_date, usage, code, name, is_last, company_id):
 		if not is_last:
-			print('llllllllllllllllllllllllll',is_last)
 			self.env.cr.execute("select sum(product_uom_qty) from stock_move where product_id=%s and state='done' and date>=%s and date<=%s and picking_type_id is not null and location_dest_id in (select id from stock_location where usage=%s) and picking_type_id in (select id from stock_picking_type where warehouse_id=%s and code=%s and name=%s) and company_id=%s",(product_id, start_date, end_date, usage, warehouse_id, code, name, company_id))
 		else:
-			print('kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk')
 			self.env.cr.execute("select sum(product_uom_qty) from stock_move where product_id=%s and state='done' and date>=%s and picking_type_id is not null and location_dest_id in (select id from stock_location where usage=%s) and picking_type_id in (select id from stock_picking_type where warehouse_id=%s and code=%s and name=%s) and company_id=%s",(product_id, start_date, usage, warehouse_id, code, name, company_id))
 		result = self.env.cr.fetchone()[0]
 		if result:
@@ -253,7 +251,6 @@ class StockAgingReportWizard(models.TransientModel):
 					end_date = date_data.get('end_date')
 					warehouse_id = warehouse.id
 					company_id = company.id
-					print('jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj')
 					delivered_qty = self._get_product_info(product_id.id, warehouse_id, start_date, end_date, 'customer', 'outgoing',  '{"en_US": "Delivery Orders"}', is_last, company_id)
 					received_qty = self._get_product_in_info(product_id.id, warehouse_id, start_date, end_date, 'internal', 'incoming', 'Receipts', is_last, company_id)
 					return_in_qty = self._get_return_in_qty(product_id.id, warehouse_id, start_date, end_date, 'outgoing', {"en_US": "Delivery Orders"}, is_last, company_id)
@@ -266,7 +263,6 @@ class StockAgingReportWizard(models.TransientModel):
 					counter += 1
 				product_data.append(value)
 			lines.append({'product_data':product_data})
-		print("lllllllllllllllllllllllllllllllllllllllllllllllll",lines)
 		return lines
 
 
