@@ -128,11 +128,11 @@
             <field name="arch" type="xml">
                 <xpath expr="//header/button[@name='action_generate_fsm_task']" position="after">
                     <button class="btn btn-secondary" name="action_select_loc" type="object" string="Create Transfer"
-                            attrs="{'invisible': [('service_type', '!=', 'onsite_service')]}"
+                            attrs="{'invisible': [('service_type', '!=', 'inhouse_service')]}"
                     />
                     <button class="btn btn-secondary" name="action_select_loc_to_return" type="object"
                             string="Create Return Transfer"
-                            attrs="{'invisible': [('service_type', '!=', 'onsite_service')]}"
+                            attrs="{'invisible': [('service_type', '!=', 'inhouse_service')]}"
                     />
 
                     <button class="btn btn-secondary" name="action_select_loc_outsource" type="object"
