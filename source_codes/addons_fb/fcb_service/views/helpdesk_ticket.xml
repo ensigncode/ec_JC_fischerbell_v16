@@ -42,9 +42,10 @@
                             attrs="{'invisible': ['|', ('is_servicing', '=', False), ('task_generated', '=', True)]}"/>
                 </xpath>
                 <xpath expr='//field[@name="team_id"]' position="before">
-                    <field name="vender_id"/>
                     <field name="service_type"/>
-                    <field name="product_service_id"/>
+                    <field name="vender_id" attrs="{'invisible': [('service_type', 'not in', 'outsource_service')]}"/>
+                    <field name="product_service_id"
+                           attrs="{'invisible': [('service_type', 'not in', 'outsource_service')]}"/>
                     <field name="outsource_service"
                            attrs="{'invisible': [('service_type', 'not in', 'outsource_service')]}"
                     />

@@ -1,84 +1,94 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-<!--    <record id="view_task_form2_inherit" model="ir.ui.view">-->
-<!--        <field name="name">view.task.form2.inherit</field>-->
-<!--        <field name="model">project.task</field>-->
-<!--        <field name="inherit_id" ref="project.view_task_form2"/>-->
-<!--        <field name="arch" type="xml">-->
-<!--            <xpath expr="//field[@name='partner_id']" position="after">-->
-<!--                <field name="customer_code" readonly="1"/>-->
-<!--                <field name="contact_person_id"/>-->
-<!--                <field name="customer_email"/>-->
-<!--            </xpath>-->
-<!--            <xpath expr="//field[@name='tag_ids']" position="after">-->
-<!--                <field name="type_service" widget="radio"/>-->
-<!--               <field name="product_categ_id"/>-->
-<!--            </xpath>-->
-<!--            <xpath expr="//page[@name='extra_info']" position="after">-->
-<!--                <page name="service_line" string="Service Line">-->
-<!--                    <field name="service_line" widget="section_and_note_one2many" mode="tree">-->
-<!--                        <tree editable="bottom">-->
-<!--                            <field name="product_categ_name" invisible="1"/>-->
-<!--                            <field name="product_temp_id" domain="[('categ_id', '=', product_categ_name )]"/>-->
-<!--                            <field name="service_type"/>-->
-<!--                            <field name="product_uom_qty"/>-->
-<!--                            <field name="price_unit"/>-->
-<!--                        </tree>-->
-<!--                    </field>-->
-<!--                </page>-->
-<!--            </xpath>-->
-<!--        </field>-->
-<!--    </record>-->
+    <!--    <record id="view_task_form2_inherit" model="ir.ui.view">-->
+    <!--        <field name="name">view.task.form2.inherit</field>-->
+    <!--        <field name="model">project.task</field>-->
+    <!--        <field name="inherit_id" ref="project.view_task_form2"/>-->
+    <!--        <field name="arch" type="xml">-->
+    <!--            <xpath expr="//field[@name='partner_id']" position="after">-->
+    <!--                <field name="customer_code" readonly="1"/>-->
+    <!--                <field name="contact_person_id"/>-->
+    <!--                <field name="customer_email"/>-->
+    <!--            </xpath>-->
+    <!--            <xpath expr="//field[@name='tag_ids']" position="after">-->
+    <!--                <field name="type_service" widget="radio"/>-->
+    <!--               <field name="product_categ_id"/>-->
+    <!--            </xpath>-->
+    <!--            <xpath expr="//page[@name='extra_info']" position="after">-->
+    <!--                <page name="service_line" string="Service Line">-->
+    <!--                    <field name="service_line" widget="section_and_note_one2many" mode="tree">-->
+    <!--                        <tree editable="bottom">-->
+    <!--                            <field name="product_categ_name" invisible="1"/>-->
+    <!--                            <field name="product_temp_id" domain="[('categ_id', '=', product_categ_name )]"/>-->
+    <!--                            <field name="service_type"/>-->
+    <!--                            <field name="product_uom_qty"/>-->
+    <!--                            <field name="price_unit"/>-->
+    <!--                        </tree>-->
+    <!--                    </field>-->
+    <!--                </page>-->
+    <!--            </xpath>-->
+    <!--        </field>-->
+    <!--    </record>-->
 
     <record id="view_task_form2_inherited" model="ir.ui.view">
-            <field name="name">view.task.form2.inherit</field>
-            <field name="model">project.task</field>
-            <field name="inherit_id" ref="industry_fsm_sale.view_task_form2_inherit"/>
-            <field name="arch" type="xml">
-                <xpath expr="//button[@name='action_fsm_create_quotation']" position='after'>
-                    <button class="btn-secondary" name="action_print_calibration_report" type="object"
-                            string="CALIBRATION CERTIFICATE"
-                            title="Fischerbell Report" data-hotkey="x"/>
-                    <button class="btn-secondary" name="action_cert_inspection_report" type="object"
-                            string="CERT TEAM INSPECTION REPORT"
-                            title="Fischerbell Report" data-hotkey="x"/>
-                    <button class="btn-secondary" name="action_print_eba_service_certificate" type="object"
-                            string="EBA SERVICE CERTIFICATE"
-                            title="Fischerbell Report" data-hotkey="x"/>
-                    <button class="btn-secondary" name="action_print_huzmal_task_custom_report" type="object"
-                            string="HUZMAT SUIT INSPECTION REPORT"
-                            title="Fischerbell Report" data-hotkey="x"/>
-                    <button class="btn-secondary" name="action_fischerbell_custom_life_jacket_report" type="object"
-                            string="LIFE JACKET INSPECTION REPORT"
-                            title="Fischerbell Report" data-hotkey="x"/>
-                    <button class="btn-secondary" name="action_industry_ev_task_custom_report" type="object"
-                            string="INSTRUMENT EVALUATION/REPAIR REPORT"
-                            title="Fischerbell Report" data-hotkey="x"/>
-                    <button class="btn-secondary" name="action_medical_oxy_task_custom_report" type="object"
-                            string="MEDICAL OXYGEN RESUSCITATOR"
-                            title="Fischerbell Report" data-hotkey="x"/>
-                    <button class="btn-secondary" name="action_paper_test_task_custom_report" type="object"
-                            string="PAPER TEST CERTIFICATEA"
-                            title="Fischerbell Report"  data-hotkey="x"/>
-                    <button class="btn-secondary" name="action_worksheet_custom_personal_fall_protection" type="object"
-                            string="PERSONAL FALL PROTECTION INSPECTION REPORT"
-                            title="Fischerbell Report" data-hotkey="x"/>
-                      <button class="btn-secondary" name="action_scba_task_custom_report" type="object"
-                            string="SCBA MASK INSPECTION REPORT"
-                            title="Fischerbell Report" data-hotkey="x"/>
-                </xpath>
-            </field>
-        </record>
+        <field name="name">view.task.form2.inherit</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="industry_fsm_sale.view_task_form2_inherit"/>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='action_fsm_create_quotation']" position='after'>
+                <button class="btn-secondary" name="action_print_calibration_report" type="object"
+                        string="CALIBRATION CERTIFICATE"
+                        attrs="{'invisible': [('is_fsm', '!=', True)]}"
+                        title="Fischerbell Report" data-hotkey="x"/>
+                <button class="btn-secondary" name="action_cert_inspection_report" type="object"
+                        string="CERT TEAM INSPECTION REPORT"
+                        attrs="{'invisible': [('is_fsm', '!=', True)]}"
+                        title="Fischerbell Report" data-hotkey="x"/>
+                <button class="btn-secondary" name="action_print_eba_service_certificate" type="object"
+                        string="EBA SERVICE CERTIFICATE"
+                        attrs="{'invisible': [('is_fsm', '!=', True)]}"
+                        title="Fischerbell Report" data-hotkey="x"/>
+                <button class="btn-secondary" name="action_print_huzmal_task_custom_report" type="object"
+                        string="HUZMAT SUIT INSPECTION REPORT"
+                        attrs="{'invisible': [('is_fsm', '!=', True)]}"
+                        title="Fischerbell Report" data-hotkey="x"/>
+                <button class="btn-secondary" name="action_fischerbell_custom_life_jacket_report" type="object"
+                        string="LIFE JACKET INSPECTION REPORT"
+                        attrs="{'invisible': [('is_fsm', '!=', True)]}"
+                        title="Fischerbell Report" data-hotkey="x"/>
+                <button class="btn-secondary" name="action_industry_ev_task_custom_report" type="object"
+                        string="INSTRUMENT EVALUATION/REPAIR REPORT"
+                        attrs="{'invisible': [('is_fsm', '!=', True)]}"
+                        title="Fischerbell Report" data-hotkey="x"/>
+                <button class="btn-secondary" name="action_medical_oxy_task_custom_report" type="object"
+                        string="MEDICAL OXYGEN RESUSCITATOR"
+                        attrs="{'invisible': [('is_fsm', '!=', True)]}"
+                        title="Fischerbell Report" data-hotkey="x"/>
+                <button class="btn-secondary" name="action_paper_test_task_custom_report" type="object"
+                        string="PAPER TEST CERTIFICATEA"
+                        attrs="{'invisible': [('is_fsm', '!=', True)]}"
+                        title="Fischerbell Report" data-hotkey="x"/>
+                <button class="btn-secondary" name="action_worksheet_custom_personal_fall_protection" type="object"
+                        string="PERSONAL FALL PROTECTION INSPECTION REPORT"
+                        attrs="{'invisible': [('is_fsm', '!=', True)]}"
+                        title="Fischerbell Report" data-hotkey="x"/>
+                <button class="btn-secondary" name="action_scba_task_custom_report" type="object"
+                        string="SCBA MASK INSPECTION REPORT"
+                        attrs="{'invisible': [('is_fsm', '!=', True)]}"
+                        title="Fischerbell Report" data-hotkey="x"/>
+            </xpath>
+        </field>
+    </record>
 
-<!--    <record model="ir.actions.act_window" id="action_service_type">-->
-<!--        <field name="name">Service Type</field>-->
-<!--        <field name="type">ir.actions.act_window</field>-->
-<!--        <field name="res_model">service.type</field>-->
-<!--        <field name="view_mode">tree,form</field>-->
-<!--    </record>-->
+    <!--    <record model="ir.actions.act_window" id="action_service_type">-->
+    <!--        <field name="name">Service Type</field>-->
+    <!--        <field name="type">ir.actions.act_window</field>-->
+    <!--        <field name="res_model">service.type</field>-->
+    <!--        <field name="view_mode">tree,form</field>-->
+    <!--    </record>-->
 
-<!--  <menuitem name="Service Type"-->
-<!--              id="menu_service_type"-->
-<!--              action="action_service_type"-->
-<!--              parent="industry_fsm.fsm_menu_settings"/>-->
+    <!--  <menuitem name="Service Type"-->
+    <!--              id="menu_service_type"-->
+    <!--              action="action_service_type"-->
+    <!--              parent="industry_fsm.fsm_menu_settings"/>-->
 </odoo>
