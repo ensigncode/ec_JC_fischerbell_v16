@@ -41,7 +41,7 @@ class HelpdeskTicket(models.Model):
         ('direct_to_c', 'Salesperson will go to customer location for service'),
 
     ])
-    product_service_id = fields.Many2one('product.template','Products', domain="[('detailed_type', '=', 'service')]")
+    product_service_id = fields.Many2one('product.template','Service For Provider', domain="[('detailed_type', '=', 'service')]")
     vender_id = fields.Many2one('res.partner', string='Vendor', tracking=True, domain="['|', ('company_id', '=', False), ('company_id', '=', company_id)]", help="You can find a vendor by its Name, TIN, Email or Internal Reference.")
 
     @api.model
@@ -113,6 +113,15 @@ class HelpdeskTicket(models.Model):
             'type': 'ir.actions.act_window',
             'name': _('Create a Transfer'),
             'res_model': 'fcb.location',
+            'view_mode': 'form',
+            'target': 'new',
+        }
+    def action_select_loc_int(self):
+        self.ensure_one()
+        return {
+            'type': 'ir.actions.act_window',
+            'name': _('Create Intransit Transfer'),
+            'res_model': 'fcb.int.location',
             'view_mode': 'form',
             'target': 'new',
         }

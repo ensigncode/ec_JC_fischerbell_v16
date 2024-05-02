@@ -27,6 +27,7 @@
         'wizard/transfer_details_views.xml',
         'wizard/transfer_return_details_views.xml',
         'wizard/transfer_outsource_views.xml',
+        'wizard/transfer_int_details_views.xml',
         'reports/fischerbell_medical_oxy_resu.xml',
         'reports/fischerbell_instrumental_evaluation.xml',
         'reports/fischerbell_eba_service.xml',
