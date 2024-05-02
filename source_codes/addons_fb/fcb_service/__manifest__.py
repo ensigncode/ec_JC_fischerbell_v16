@@ -32,7 +32,6 @@
         'reports/fischerbell_eba_service.xml',
         'reports/fischerbell_hazmat_suit_inspection.xml',
         'reports/fischerbell_life_jacket_inspection.xml',
-        'reports/fischerbell_calibration_report.xml',
         'reports/fischerbell_personal_fall_protection.xml',
         'reports/fischerbell_calibration.xml',
         'reports/fischerbell_scba_mask_inspection.xml',

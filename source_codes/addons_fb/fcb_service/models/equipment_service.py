@@ -67,19 +67,18 @@ class EquipmentService(models.Model):
 
     @api.onchange('product_id','service_product_ids')
     def onchange_product_id(self):
-        if not self.service_product_ids:
-            for product in self._origin.product_id.service_product_ids:
-                    self._origin.update({
-                        'service_product_ids': [(0, 0, {
-                            'product_variant_id': product.product_variant_id.id,
-                            'equipment_id': product.equipment_id.id,
-                            'service_date': product.service_date,
-                            'reminder_date': product.reminder_date,
-                            'service_time': product.service_time,
-                            'reminder_time': product.reminder_time,
-                        })]
-                    })
-
+        # if not self.service_product_ids:
+        #     for product in self._origin.product_id.service_product_ids:
+        #             self._origin.update({
+        #                 'service_product_ids': [(0, 0, {
+        #                     'product_variant_id': product.product_variant_id.id,
+        #                     'equipment_id': product.equipment_id.id,
+        #                     'service_date': product.service_date,
+        #                     'reminder_date': product.reminder_date,
+        #                     'service_time': product.service_time,
+        #                     'reminder_time': product.reminder_time,
+        #                 })]
+        #             })
         domain = []
 
     # if self.product_id:
