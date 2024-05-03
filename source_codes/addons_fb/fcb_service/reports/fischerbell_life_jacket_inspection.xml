@@ -79,7 +79,9 @@
 
                                 <td colspan="3"
                                     style="border-bottom: 1px solid black;text-align:left;width:25%;height:10px"
-                                ></td>
+                                >
+                                    <t t-out="o.partner_id.name"/>
+                                </td>
                                 <td colspan="2" style="width:25%">
                                     <strong>Our Reference No</strong>
                                 </td>
@@ -189,8 +191,9 @@
                                 style="border-left: 2px solid black;border-top: 2px solid black;outline: ppx solid #C4BDBC;"></th>
                             <th colspan="3" rawspan="2" style="border-left: 2px solid black;">
                                 <strong>
-                                    <p>Pass(P) OR FAIL(F)</p>
-                                    <p>Tick(&#10004;) accordingly</p>
+                                    Pass(P) OR FAIL(F)
+                                    <br/>
+                                    Tick accordingly
                                 </strong>
                             </th>
                             <th colspan="1"
@@ -205,10 +208,6 @@
                         <t t-set="wordocsksheet_template_id"
                            t-value="env[o.worksheet_template_id.sudo().model_id.model].search([('x_project_task_id', '=', o.id)])"></t>
                         <t t-foreach="wordocsksheet_template_id.x_x_project_task_worksheet_template_10_ids" t-as="ws">
-                         <h1>
-                                  <t t-out="ws"/>
-                         </h1>
-
                             <tr style="border-left: 2px solid black;border-bottom: 2px solid black;">
                                 <td colspan="3" styl4e="border-left: 2px solid black;border-right: 2px solid black;">
                                     <t t-if="ws.x_visual_inspection"
