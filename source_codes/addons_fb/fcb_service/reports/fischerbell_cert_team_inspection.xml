@@ -304,7 +304,7 @@
         <template id="report_fischerbell_cert_inspection_report">
             <t t-call="web.html_container">
                 <t t-foreach="docs" t-as="o">
-                    <t t-call="fcb_service.fischerbell_custom_fischerbell_calibration" t-lang="o.partner_id.lang"/>
+                    <t t-call="fcb_service.fischerbell_cert_inspection_report" t-lang="o.partner_id.lang"/>
                 </t>
             </t>
         </template>

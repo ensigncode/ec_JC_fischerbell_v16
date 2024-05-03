@@ -191,6 +191,10 @@
                     </div>
                     <br/>
                 </div>
+
+<t t-set="worksheet_template_id"
+                           t-value="env[o.worksheet_template_id.sudo().model_id.model].search([('x_project_task_id', '=', o.id)])"></t>
+
                 <div class="col-12" style="background-color:black;text-align:center;float:left;width:100%;">
                     <strong style="color:white;font-size:20px;text-align:center;height: 10px;">TEST RESULT (PASS/FAIL)
                     </strong>
@@ -216,13 +220,34 @@
                     </thead>
                     <tbody class="table-bordered;text-align:center">
                         <tr style="border-left: 2px solid black;vertical-align:middle">
-                            <td colspan="1" style="border-left: 2px solid black;text-align:center">1</td>
-                            <td colspan="2" style="border-left: 2px solid black;text-align:center">24</td>
-                            <td colspan="2" style="border-left: 2px solid black;text-align:center">&amp;nbsp;</td>
-                            <td colspan="3" style="border-left: 2px solid black;text-align:center">&amp;nbsp;</td>
-                            <td colspan="2" style="border-left: 2px solid black;text-align:center">&amp;nbsp;</td>
-                            <td colspan="1" style="border-left: 2px solid black;text-align:center">&amp;nbsp;</td>
-                            <td colspan="1" style="border-left: 2px solid black;text-align:center">&amp;nbsp;</td>
+                            <td colspan="1" style="border-left: 2px solid black;text-align:center">
+                                 <t t-if="worksheet_template_id.x_studio_eba_sn"
+                                   t-esc="worksheet_template_id.x_studio_eba_sn"/>
+                            </td>
+                            <td colspan="2" style="border-left: 2px solid black;text-align:center">
+                                   <t t-if="worksheet_template_id.x_studio_eba_sn"
+                                   t-esc="worksheet_template_id.x_studio_eba_sn"/>
+                            </td>
+                            <td colspan="2" style="border-left: 2px solid black;text-align:center">
+                                   <t t-if="worksheet_template_id.x_studio_eba_sn"
+                                   t-esc="worksheet_template_id.x_studio_eba_sn"/>
+                            </td>
+                            <td colspan="3" style="border-left: 2px solid black;text-align:center">
+                                   <t t-if="worksheet_template_id.x_studio_eba_sn"
+                                   t-esc="worksheet_template_id.x_studio_eba_sn"/>
+                            </td>
+                            <td colspan="2" style="border-left: 2px solid black;text-align:center">
+                                   <t t-if="worksheet_template_id.x_studio_eba_sn"
+                                   t-esc="worksheet_template_id.x_studio_eba_sn"/>
+                            </td>
+                            <td colspan="1" style="border-left: 2px solid black;text-align:center">
+                                   <t t-if="worksheet_template_id.x_studio_eba_sn"
+                                   t-esc="worksheet_template_id.x_studio_eba_sn"/>
+                            </td>
+                            <td colspan="1" style="border-left: 2px solid black;text-align:center">
+                                   <t t-if="worksheet_template_id.x_studio_eba_sn"
+                                   t-esc="worksheet_template_id.x_studio_eba_sn"/>
+                            </td>
 
                         </tr>
                     </tbody>
@@ -273,6 +298,13 @@
                 </div>
             </div>
         </template>
+        <template id="report_fischerbell_custom_paper_test">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="fcb_service.fischerbell_custom_paper_test" t-lang="o.partner_id.lang"/>
+                </t>
+            </t>
+        </template>
         <record id="paperformat_fischerbell_report_view" model="report.paperformat">
             <field name="name">Custom fischerbell report</field>
             <field name="default" eval="False"/>
@@ -289,11 +321,11 @@
         </record>
 
         <record id="action_paper_test_task" model="ir.actions.report">
-            <field name="name">PAPER TEST CERTIFICATEA</field>
+            <field name="name">PAPER TEST CERTIFICATE</field>
             <field name="model">project.task</field>
             <field name="report_type">qweb-pdf</field>
-            <field name="report_name">fcb_service.fischerbell_custom_paper_test</field>
-            <field name="report_file">fcb_service.fischerbell_custom_paper_test</field>
+            <field name="report_name">fcb_service.report_fischerbell_custom_paper_test</field>
+            <field name="report_file">fcb_service.report_fischerbell_custom_paper_test</field>
             <field name="print_report_name">'Worksheet %s - %s' % (object.name, object.partner_id.name)</field>
             <field name="binding_model_id" eval="False"/>
             <field name="binding_type">report</field>

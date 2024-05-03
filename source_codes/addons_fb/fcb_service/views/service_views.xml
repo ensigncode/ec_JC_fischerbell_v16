@@ -38,43 +38,43 @@
             <xpath expr="//button[@name='action_fsm_create_quotation']" position='after'>
                 <button class="btn-secondary" name="action_print_calibration_report" type="object"
                         string="CALIBRATION CERTIFICATE"
-                        attrs="{'invisible': [('is_fsm', '!=', True)]}"
+                        attrs="{'invisible': ['|',('is_fsm', '!=', True),('worksheet_template_id','!=',5)]}"
                         title="Fischerbell Report" data-hotkey="x"/>
                 <button class="btn-secondary" name="action_cert_inspection_report" type="object"
-                        string="CERT TEAM INSPECTION REPORT"
-                        attrs="{'invisible': [('is_fsm', '!=', True)]}"
+                            string="CERT TEAM INSPECTION REPORT"
+                        attrs="{'invisible': ['|',('is_fsm', '!=', True),('worksheet_template_id','!=',7)]}"
                         title="Fischerbell Report" data-hotkey="x"/>
                 <button class="btn-secondary" name="action_print_eba_service_certificate" type="object"
                         string="EBA SERVICE CERTIFICATE"
-                        attrs="{'invisible': [('is_fsm', '!=', True)]}"
+                        attrs="{'invisible': ['|',('is_fsm', '!=', True),('worksheet_template_id','!=',6)]}"
                         title="Fischerbell Report" data-hotkey="x"/>
                 <button class="btn-secondary" name="action_print_huzmal_task_custom_report" type="object"
                         string="HUZMAT SUIT INSPECTION REPORT"
-                        attrs="{'invisible': [('is_fsm', '!=', True)]}"
+                        attrs="{'invisible': ['|',('is_fsm', '!=', True),('worksheet_template_id','!=',8)]}"
                         title="Fischerbell Report" data-hotkey="x"/>
                 <button class="btn-secondary" name="action_fischerbell_custom_life_jacket_report" type="object"
                         string="LIFE JACKET INSPECTION REPORT"
-                        attrs="{'invisible': [('is_fsm', '!=', True)]}"
+                        attrs="{'invisible': ['|',('is_fsm', '!=', True),('worksheet_template_id','!=',10)]}"
                         title="Fischerbell Report" data-hotkey="x"/>
                 <button class="btn-secondary" name="action_industry_ev_task_custom_report" type="object"
                         string="INSTRUMENT EVALUATION/REPAIR REPORT"
-                        attrs="{'invisible': [('is_fsm', '!=', True)]}"
+                        attrs="{'invisible': ['|',('is_fsm', '!=', True),('worksheet_template_id','!=',9)]}"
                         title="Fischerbell Report" data-hotkey="x"/>
                 <button class="btn-secondary" name="action_medical_oxy_task_custom_report" type="object"
                         string="MEDICAL OXYGEN RESUSCITATOR"
-                        attrs="{'invisible': [('is_fsm', '!=', True)]}"
+                        attrs="{'invisible': ['|',('is_fsm', '!=', True),('worksheet_template_id','!=',11)]}"
                         title="Fischerbell Report" data-hotkey="x"/>
                 <button class="btn-secondary" name="action_paper_test_task_custom_report" type="object"
                         string="PAPER TEST CERTIFICATEA"
-                        attrs="{'invisible': [('is_fsm', '!=', True)]}"
+                        attrs="{'invisible': ['|',('is_fsm', '!=', True),('worksheet_template_id','!=',12)]}"
                         title="Fischerbell Report" data-hotkey="x"/>
                 <button class="btn-secondary" name="action_worksheet_custom_personal_fall_protection" type="object"
                         string="PERSONAL FALL PROTECTION INSPECTION REPORT"
-                        attrs="{'invisible': [('is_fsm', '!=', True)]}"
+                        attrs="{'invisible': ['|',('is_fsm', '!=', True),('worksheet_template_id','!=',13)]}"
                         title="Fischerbell Report" data-hotkey="x"/>
                 <button class="btn-secondary" name="action_scba_task_custom_report" type="object"
                         string="SCBA MASK INSPECTION REPORT"
-                        attrs="{'invisible': [('is_fsm', '!=', True)]}"
+                        attrs="{'invisible': ['|',('is_fsm', '!=', True),('worksheet_template_id','!=',14)]}"
                         title="Fischerbell Report" data-hotkey="x"/>
             </xpath>
         </field>

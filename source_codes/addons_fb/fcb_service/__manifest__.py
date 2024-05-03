@@ -8,13 +8,14 @@
     'website': '',
     'depends': [
         'industry_fsm', 'sale', 'stock', 'industry_fsm_sale',
-        'helpdesk','purchase',
+        'helpdesk','purchase','industry_fsm_report'
     ],
     'data': [
         'security/ir.model.access.csv',
         'data/service_email_reminder.xml',
         'data/service_email_template.xml',
         'data/stock_demo.xml',
+        'data/workshhet_data.xml',
         'data/project_task_seq.xml',
         'data/helpdesk_data.xml',
         'views/service_views.xml',

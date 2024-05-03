@@ -250,16 +250,16 @@
 
                 <table style="border:1px solid black;width:100%;border-collapse: collapse;">
                     <tr style="border-left: 2px solid white;border-right: 2px solid white;">
-                        <td style="border-bottom: 2px solid black;">&amp;nbsp;</td>
+                        <td style="border-bottom: 2px solid black;"><div style="padding:5px"></div></td>
                     </tr>
                     <tr style="border-left: 2px solid white;border-right: 2px solid white;">
-                        <td style="border-bottom: 2px solid black;">&amp;nbsp;</td>
+                        <td style="border-bottom: 2px solid black;"> <span>&amp;nbsp;</span></td>
                     </tr>
                     <tr style="border-left: 2px solid white;border-right: 2px solid white;">
-                        <td style="border-bottom: 2px solid black;">&amp;nbsp;</td>
+                        <td style="border-bottom: 2px solid black;"><p>&amp;nbsp;</p></td>
                     </tr>
                     <tr style="border-right: 1px solid white;border-left: 2px solid white;">
-                        <td style="border-bottom: 2px solid white;">&amp;nbsp;</td>
+                        <td style="border-bottom: 2px solid white;"><p>&amp;nbsp;</p></td>
                     </tr>
                 </table>
                 <div class="col-12" style="background-color:black;text-align:center;float:left;width:100%;">
@@ -273,13 +273,13 @@
                         </td>
                     </tr>
                     <tr style="border-left: 2px solid white;border-right: 2px solid white;">
-                        <td style="border-bottom: 2px solid black;">&amp;nbsp;</td>
+                        <td style="border-bottom: 2px solid black;"><p>&amp;nbsp;</p></td>
                     </tr>
                     <tr style="border-left: 2px solid white;border-right: 2px solid white;">
-                        <td style="border-bottom: 2px solid black;">&amp;nbsp;</td>
+                        <td style="border-bottom: 2px solid black;"><p>&amp;nbsp;</p></td>
                     </tr>
                     <tr style="border-right: 1px solid white;border-left: 2px solid white;">
-                        <td style="border-bottom: 2px solid white;">&amp;nbsp;</td>
+                        <td style="border-bottom: 2px solid white;"><p>&amp;nbsp;</p></td>
                     </tr>
                 </table>
 
@@ -291,7 +291,7 @@
         <template id="report_fischerbell_eba_service_certificate">
             <t t-call="web.html_container">
                 <t t-foreach="docs" t-as="o">
-                    <t t-call="fcb_service.fischerbell_custom_fischerbell_calibration" t-lang="o.partner_id.lang"/>
+                    <t t-call="fcb_service.fischerbell_eba_service_certificate" t-lang="o.partner_id.lang"/>
                 </t>
             </t>
         </template>

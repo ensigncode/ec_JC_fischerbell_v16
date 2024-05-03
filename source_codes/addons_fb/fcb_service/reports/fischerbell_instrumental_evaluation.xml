@@ -285,6 +285,13 @@
                 </div>
             </div>
         </template>
+        <template id="report_fischerbell_industry_ev_task_custom_report">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="fcb_service.fischerbell_industry_ev_task_custom_report" t-lang="o.partner_id.lang"/>
+                </t>
+            </t>
+        </template>
         <record id="paperformat_fischerbell_report_view" model="report.paperformat">
             <field name="name">Custom fischerbell report</field>
             <field name="default" eval="False"/>
@@ -304,8 +311,8 @@
             <field name="name">INSTRUMENT EVALUATION/REPAIR REPORT</field>
             <field name="model">project.task</field>
             <field name="report_type">qweb-pdf</field>
-            <field name="report_name">fcb_service.fischerbell_industry_ev_task_custom_report</field>
-            <field name="report_file">fcb_service.fischerbell_industry_ev_task_custom_report</field>
+            <field name="report_name">fcb_service.report_fischerbell_industry_ev_task_custom_report</field>
+            <field name="report_file">fcb_service.report_fischerbell_industry_ev_task_custom_report</field>
             <field name="print_report_name">'Worksheet %s - %s' % (object.name, object.partner_id.name)</field>
             <field name="binding_model_id" eval="False"/>
             <field name="binding_type">report</field>
