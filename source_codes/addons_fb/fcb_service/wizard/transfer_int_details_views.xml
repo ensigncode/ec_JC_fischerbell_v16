@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- View for the wizard form -->
+    <record id="int_location_details_view_form" model="ir.ui.view">
+        <field name="name">fcb.int.location.view.form</field>
+        <field name="model">fcb.int.location</field>
+        <field name="arch" type="xml">
+            <form string="Product Details">
+                <group>
+                    <group>
+                        <field name="ticket_id" invisible='1'/>
+                        <field name="product_id" invisible='1'/>
+                        <field name="location_ids" invisible="1"/>
+                        <field name="dest_location_id" domain="[('id','in',location_ids)]"/>
+                    </group>
+                </group>
+                <footer>
+                    <button name="action_create_int_transfer"
+                            string="Create Intransit Transfer"
+                            type="object" class="oe_highlight"/>
+                    <button string="Cancel" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>
