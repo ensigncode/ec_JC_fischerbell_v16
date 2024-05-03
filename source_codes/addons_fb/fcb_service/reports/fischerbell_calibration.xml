@@ -191,8 +191,8 @@
                     <br/>
                 </div>
                 <t t-set="worksheet_template_id"
-                           t-value="env[o.worksheet_template_id.sudo().model_id.model].search([('x_project_task_id', '=', o.id)])"></t>
-
+                   t-value="env[o.worksheet_template_id.sudo().model_id.model].search([('x_project_task_id', '=', o.id)])"></t>
+               <h1> <t  t-esc="worksheet_template_id"/></h1>
                 <div class="col-12" style="background-color:black;text-align:center;float:left;width:100%;">
                     <strong style="color:white;font-size:20px;text-align:center;height: 10px;">EQUIPEMENT
                     </strong>
@@ -221,7 +221,7 @@
                         </tr>
                     </thead>
                     <tbody class="table-bordered;text-align:center">
-                        <tr style="border-left: 2px solid black;">
+                        <tr t-if="worksheet_template_id" style="border-left: 2px solid black;">
                             <td colspan="1" style="border-left: 2px solid black;text-align:center">
                                 1.
                             </td>

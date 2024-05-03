@@ -202,259 +202,48 @@
                         </tr>
                     </thead>
                     <tbody class="table-bordered;text-align:center">
-                        <tr style="border-left: 2px solid black;border-bottom: 2px solid black;">
-                            <td colspan="3" styl4e="border-left: 2px solid black;border-right: 2px solid black;">
-                                Valise
-                            </td>
-                            <td colspan="1"
-                                style="border-left: 2px solid black;border-right: 2px solid black;outline: 1px solid #C4BDBC;text-align:center;">
-                                &amp;nbsp;
-                            </td>
-                            <td colspan="1"
-                                style="border-left: 2px solid black;border-right: 2px solid black;text-align:center">
-                                &amp;nbsp;
-                            </td>
-                            <td colspan="1"
-                                style="border-left: 2px solid black;border-right: 2px solid black;outline: 1px solid #C4BDBC;text-align:center">
-                                &amp;nbsp;
-                            </td>
-                            <td colspan="1"
-                                style="border-left: 2px solid black;border-right: 2px solid black;text-align:center">
-                                &amp;nbsp;
-                            </td>
-                            <td colspan="1"
-                                style="border-left: 2px solid black;border-right: 2px solid black;outline: 1px solid #C4BDBC;text-align:center">
-                                &amp;nbsp;
-                            </td>
-                            <td colspan="4"
-                                style="border-left: 2px solid black;text-align:center;border-right: 2px solid black;">
-                                &amp;nbsp;
-                            </td>
-                        </tr>
-                        <tr style="border-left: 2px solid black;border-bottom: 2px solid black;">
-                            <td colspan="3" styl4e="border-left: 2px solid black;border-right: 2px solid black;">
-                                Webbing
-                            </td>
-                            <td colspan="1"
-                                style="border-left: 2px solid black;border-right: 2px solid black;outline: 1px solid #C4BDBC;text-align:center;">
-                                &amp;nbsp;
-                            </td>
-                            <td colspan="1"
-                                style="border-left: 2px solid black;border-right: 2px solid black;text-align:center">
-                                &amp;nbsp;
-                            </td>
-                            <td colspan="1"
-                                style="border-left: 2px solid black;border-right: 2px solid black;outline: 1px solid #C4BDBC;text-align:center">
-                                &amp;nbsp;
-                            </td>
-                            <td colspan="1" style="border-left: 2px solid black;text-align:center">&amp;nbsp;</td>
-                            <td colspan="1"
-                                style="border-left: 2px solid black;border-right: 2px solid black;outline: 1px solid #C4BDBC;text-align:center">
-                                &amp;nbsp;
-                            </td>
-                            <td colspan="4"
-                                style="border-left: 2px solid black;border-right: 2px solid black;text-align:center">
-                                &amp;nbsp;
-                            </td>
-                        </tr>
-                        <tr style="border-left: 2px solid black;border-bottom: 2px solid black;">
-                            <td colspan="3" styl4e="border-left: 2px solid black;border-right: 2px solid black;">
-                                Reflective Tape
-                            </td>
-                            <td colspan="1"
-                                style="border-left: 2px solid black;border-right: 2px solid black;outline: 1px solid #C4BDBC;text-align:center;">
-                                &amp;nbsp;
-                            </td>
-                            <td colspan="1"
-                                style="border-left: 2px solid black;border-right: 2px solid black;text-align:center">
-                                &amp;nbsp;
-                            </td>
-                            <td colspan="1"
-                                style="border-left: 2px solid black;outline: 1px solid #C4BDBC;text-align:center">
-                                &amp;nbsp;
-                            </td>
-                            <td colspan="1"
-                                style="border-left: 2px solid black;border-right: 2px solid black;text-align:center">
-                                &amp;nbsp;
-                            </td>
-                            <td colspan="1"
-                                style="border-left: 2px solid black;border-right: 2px solid black;outline: 1px solid #C4BDBC;text-align:center">
-                                &amp;nbsp;
-                            </td>
-                            <td colspan="4"
-                                style="border-left: 2px solid black;border-right: 2px solid black;text-align:center">
-                                &amp;nbsp;
-                            </td>
-                        </tr>
-                        <tr style="border-left: 2px solid black;border-bottom: 2px solid black">
-                            <td colspan="3" styl4e="border-left: 2px solid black;border-right: 2px solid black;">
-                                Bladers
-                            </td>
-                            <td colspan="1"
-                                style="border-left: 2px solid black;border-right: 2px solid black;outline: 1px solid #C4BDBC;text-align:center;">
-                                &amp;nbsp;
-                            </td>
-                            <td colspan="1"
-                                style="border-left: 2px solid black;border-right: 2px solid black;text-align:center">
-                                &amp;nbsp;
-                            </td>
-                            <td colspan="1"
-                                style="border-left: 2px solid black;border-right: 2px solid black;outline: 1px solid #C4BDBC;text-align:center">
-                                &amp;nbsp;
-                            </td>
-                            <td colspan="1" style="border-left: 2px solid black;text-align:center">&amp;nbsp;</td>
-                            <td colspan="1"
-                                style="border-left: 2px solid black;border-right: 2px solid black;outline: 1px solid #C4BDBC;text-align:center">
-                                &amp;nbsp;
-                            </td>
-                            <td colspan="4"
-                                style="border-left: 2px solid black;border-right: 2px solid black;text-align:center">
-                                &amp;nbsp;
-                            </td>
-                        </tr>
-                        <tr style="border-left: 2px solid black;border-bottom: 2px solid black;">
-                            <td colspan="3" styl4e="border-left: 2px solid black;border-right: 2px solid black;">Bladers
-                                1 &amp; 2 (M Bar)
-                            </td>
-                            <td colspan="1"
-                                style="border-left: 2px solid black;border-right: 2px solid black;outline: 1px solid #C4BDBC;;">
-                                &amp;nbsp;
-                            </td>
-                            <td colspan="1"
-                                style="border-left: 2px solid black;border-right: 2px solid black;text-align:center">
-                                &amp;nbsp;
-                            </td>
-                            <td colspan="1"
-                                style="border-left: 2px solid black;border-right: 2px solid black;outline: 1px solid #C4BDBC;text-align:center">
-                                &amp;nbsp;
-                            </td>
-                            <td colspan="1" style="border-left: 2px solid black;text-align:center">&amp;nbsp;</td>
-                            <td colspan="1"
-                                style="border-left: 2px solid black;border-right: 2px solid black;outline: 1px solid #C4BDBC;text-align:center">
-                                &amp;nbsp;
-                            </td>
-                            <td colspan="4"
-                                style="border-left: 2px solid black;border-right: 2px solid black;text-align:center">
-                                &amp;nbsp;
-                            </td>
-                        </tr>
-                        <tr style="border-left: 2px solid black;border-bottom: 2px solid black;">
-                            <td colspan="3" styl4e="border-left: 2px solid black;border-right: 2px solid black;">O2
-                                Cartridge 33 gm
-                            </td>
-                            <td colspan="1"
-                                style="border-left: 2px solid black;border-right: 2px solid black;outline: 1px solid #C4BDBC;text-align:center;">
-                                &amp;nbsp;
-                            </td>
-                            <td colspan="1"
-                                style="border-left: 2px solid black;border-right: 2px solid black;text-align:center">
-                                &amp;nbsp;
-                            </td>
-                            <td colspan="1"
-                                style="border-left: 2px solid black;border-right: 2px solid black;outline: 1px solid #C4BDBC;text-align:center">
-                                &amp;nbsp;
-                            </td>
-                            <td colspan="1"
-                                style="border-left: 2px solid black;border-right: 2px solid black;text-align:center">
-                                &amp;nbsp;
-                            </td>
-                            <td colspan="1"
-                                style="border-left: 2px solid black;border-right: 2px solid black;outline: 1px solid #C4BDBC;">
-                                &amp;nbsp;
-                            </td>
-                            <td colspan="4"
-                                style="border-left: 2px solid black;border-right: 2px solid black;text-align:center">
-                                &amp;nbsp;
-                            </td>
-                        </tr>
-                        <tr style="border-left: 2px solid black;border-right: 2px solid black;border-bottom: 2px solid black;">
-                            <td colspan="3" styl4e="border-left: 2px solid black;">Bobbin</td>
-                            <td colspan="1"
-                                style="border-left: 2px solid black;border-right: 2px solid black;outline: 1px solid #C4BDBC;text-align:center;">
-                                &amp;nbsp;
-                            </td>
-                            <td colspan="1"
-                                style="border-left: 2px solid black;border-right: 2px solid black;text-align:center">
-                                &amp;nbsp;
-                            </td>
-                            <td colspan="1"
-                                style="border-left: 2px solid black;border-right: 2px solid black;outline: 1px solid #C4BDBC;text-align:center">
-                                &amp;nbsp;
-                            </td>
-                            <td colspan="1"
-                                style="border-left: 2px solid black;border-right: 2px solid black;text-align:center">
-                                &amp;nbsp;
-                            </td>
-                            <td colspan="1"
-                                style="border-left: 2px solid black;border-right: 2px solid black;outline: 1px solid #C4BDBC;">
-                                &amp;nbsp;
-                            </td>
-                            <td colspan="4"
-                                style="border-left: 2px solid black;border-right: 2px solid black;border-right: 2px solid black;text-align:center">
-                                &amp;nbsp;
-                            </td>
-                        </tr>
-                        <tr style="border-left: 2px solid black;border-bottom: 2px solid black;">
-                            <td colspan="3"
-                                styl4e="border-left: 2px solid black;border-right: 2px solid black;border-top: 2px solid black;">
-                                Light Dans W3
-                            </td>
-                            <td colspan="1"
-                                style="border-left: 2px solid black; border-right: 2px solid black;outline: 1px solid #C4BDBC;">
-                                &amp;nbsp;
-                            </td>
-                            <td colspan="1"
-                                style="border-left: 2px solid black;border-right: 2px solid black;text-align:center">
-                                &amp;nbsp;
-                            </td>
-                            <td colspan="1"
-                                style="border-left: 2px solid black;border-right: 2px solid black;outline: 1px solid #C4BDBC;text-align:center;border-bottom: 2px solid black;">
-                                &amp;nbsp;
-                            </td>
-                            <td colspan="1"
-                                style="border-left: 2px solid black;border-right: 2px solid black;text-align:center">
-                                &amp;nbsp;
-                            </td>
-                            <td colspan="1"
-                                style="border-left: 2px solid black;border-right: 2px solid black;text-align:center;outline: 1px solid #C4BDBC;border-bottom: 2px solid black;">
-                                &amp;nbsp;
-                            </td>
-                            <td colspan="4"
-                                style="border-left: 2px solid black;border-right: 2px solid black;text-align:center">
-                                &amp;nbsp;
-                            </td>
-                        </tr>
+                        <t t-set="wordocsksheet_template_id"
+                           t-value="env[o.worksheet_template_id.sudo().model_id.model].search([('x_project_task_id', '=', o.id)])"></t>
+                        <t t-foreach="wordocsksheet_template_id.x_x_project_task_worksheet_template_10_ids" t-as="ws">
+                         <h1>
+                                  <t t-out="ws"/>
+                         </h1>
 
-                        <tr style="border-left: 2px solid black;border-bottom: 2px solid black;">
-                            <td colspan="3"
-                                styl4e="border-left: 2px solid black;border-right: 2px solid black;border-top: 2px solid black;">
-                                Safety pin
-                            </td>
-                            <td colspan="1"
-                                style="border-left: 2px solid black;border-right: 2px solid black; outline: 1px solid #C4BDBC;">
-                                &amp;nbsp;
-                            </td>
-                            <td colspan="1"
-                                style="border-left: 2px solid black;border-right: 2px solid black;text-align:center">
-                                &amp;nbsp;
-                            </td>
-                            <td colspan="1"
-                                style="border-left: 2px solid black;border-right: 2px solid black;outline: 1px solid #C4BDBC;text-align:center;border-bottom: 2px solid black;">
-                                &amp;nbsp;
-                            </td>
-                            <td colspan="1"
-                                style="border-left: 2px solid black;border-right: 2px solid black;text-align:center">
-                                &amp;nbsp;
-                            </td>
-                            <td colspan="1"
-                                style="border-left: 2px solid black;border-right: 2px solid black;text-align:center;outline: 1px solid #C4BDBC;border-bottom: 2px solid black;">
-                                &amp;nbsp;
-                            </td>
-                            <td colspan="4"
-                                style="border-left: 2px solid black;border-right: 2px solid black;text-align:center">
-                                &amp;nbsp;
-                            </td>
-                        </tr>
+                            <tr style="border-left: 2px solid black;border-bottom: 2px solid black;">
+                                <td colspan="3" styl4e="border-left: 2px solid black;border-right: 2px solid black;">
+                                    <t t-if="ws.x_visual_inspection"
+                                       t-esc="ws.x_visual_inspection"/>
+                                </td>
+                                <td colspan="1"
+                                    style="border-left: 2px solid black;border-right: 2px solid black;outline: 1px solid #C4BDBC;text-align:center;">
+                                    &amp;nbsp;
+                                </td>
+                                <td colspan="1"
+                                    style="border-left: 2px solid black;border-right: 2px solid black;text-align:center">
+                                    <t t-if="ws.x_result == True "
+                                    />Yes
+                                </td>
+                                <td colspan="1"
+                                    style="border-left: 2px solid black;border-right: 2px solid black;outline: 1px solid #C4BDBC;text-align:center">
+                                    &amp;nbsp;
+                                </td>
+                                <td colspan="1"
+                                    style="border-left: 2px solid black;border-right: 2px solid black;text-align:center">
+                                    <t t-if="ws.x_result == True"
+                                    />No
+                                </td>
+                                <td colspan="1"
+                                    style="border-left: 2px solid black;border-right: 2px solid black;outline: 1px solid #C4BDBC;text-align:center">
+                                    &amp;nbsp;
+
+                                </td>
+                                <td colspan="4"
+                                    style="border-left: 2px solid black;text-align:center;border-right: 2px solid black;">
+                                    <t t-if="ws.x_remarks"
+                                       t-esc="ws.x_remarks"/>
+                                </td>
+                            </tr>
+                        </t>
 
                     </tbody>
                 </table>
@@ -501,6 +290,13 @@
                 </div>
             </div>
         </template>
+        <template id="report_fischerbell_custom_life_jacket">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="fcb_service.fischerbell_custom_life_jacket" t-lang="o.partner_id.lang"/>
+                </t>
+            </t>
+        </template>
         <record id="paperformat_fischerbell_report_view" model="report.paperformat">
             <field name="name">Custom fischerbell report</field>
             <field name="default" eval="False"/>
@@ -520,8 +316,8 @@
             <field name="name">LIFE JACKET INSPECTION REPORT</field>
             <field name="model">project.task</field>
             <field name="report_type">qweb-pdf</field>
-            <field name="report_name">fcb_service.fischerbell_custom_life_jacket</field>
-            <field name="report_file">fcb_service.fischerbell_custom_life_jacket</field>
+            <field name="report_name">fcb_service.report_fischerbell_custom_life_jacket</field>
+            <field name="report_file">fcb_service.report_fischerbell_custom_life_jacket</field>
             <field name="print_report_name">'Worksheet %s - %s' % (object.name, object.partner_id.name)</field>
             <field name="binding_model_id" eval="False"/>
             <field name="binding_type">report</field>
