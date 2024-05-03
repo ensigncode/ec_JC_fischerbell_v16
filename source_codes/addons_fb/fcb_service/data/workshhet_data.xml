@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="worksheet_template1" model="worksheet.template">
+            <field name="name">CALIBRATION CERTIFICATE</field>
+            <field name="res_model">project.task</field>
+            <field name="color">1</field>
+        </record>
+
+        <record id="worksheet_template2" model="worksheet.template">
+            <field name="name">CERT TEAM INSPECTION REPORT</field>
+            <field name="res_model">project.task</field>
+            <field name="color">2</field>
+        </record>
+
+        <record id="worksheet_template3" model="worksheet.template">
+            <field name="name">EBA SERVICE CERTIFICATE</field>
+            <field name="res_model">project.task</field>
+            <field name="color">3</field>
+        </record>
+
+        <record id="worksheet_template4" model="worksheet.template">
+            <field name="name">HUZMAT SUIT INSPECTION REPORT</field>
+            <field name="res_model">project.task</field>
+            <field name="color">4</field>
+        </record>
+
+        <record id="worksheet_template5" model="worksheet.template">
+            <field name="name">INSTRUMENT EVALUATION/REPAIR REPORT</field>
+            <field name="res_model">project.task</field>
+            <field name="color">5</field>
+        </record>
+
+        <record id="worksheet_template6" model="worksheet.template">
+            <field name="name">LIFE JACKET INSPECTION REPORT</field>
+            <field name="res_model">project.task</field>
+            <field name="color">6</field>
+        </record>
+
+
+        <record id="worksheet_template7" model="worksheet.template">
+            <field name="name">MEDICAL OXYGEN RESUSCITATOR</field>
+            <field name="res_model">project.task</field>
+            <field name="color">7</field>
+        </record>
+
+        <record id="worksheet_template8" model="worksheet.template">
+            <field name="name">PAPER TEST CERTIFICATE</field>
+            <field name="res_model">project.task</field>
+            <field name="color">8</field>
+        </record>
+
+        <record id="worksheet_template9" model="worksheet.template">
+            <field name="name">PERSONAL FALL PROTECTION INSPECTION REPORT</field>
+            <field name="res_model">project.task</field>
+            <field name="color">9</field>
+        </record>
+
+
+        <record id="worksheet_template10" model="worksheet.template">
+            <field name="name">SCBA MASK INSPECTION REPORT</field>
+            <field name="res_model">project.task</field>
+            <field name="color">3</field>
+        </record>
+
+
+    </data>
+</odoo>
