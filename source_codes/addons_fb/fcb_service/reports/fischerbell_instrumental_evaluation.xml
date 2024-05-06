@@ -8,7 +8,7 @@
             <t t-if="not o or not 'company_id' in o">
                 <t t-set="company" t-value="res_company"></t>
             </t>
-            <div>
+    <t>
                 <div class="header">
                     <div class="col-6" style="float:left;width:50%;">
                         <img t-if="company.logo" t-att-src="image_data_uri(company.logo)"
@@ -79,7 +79,9 @@
 
                                 <td colspan="3"
                                     style="border-bottom: 1px solid black;text-align:left;width:25%;height:10px"
-                                ></td>
+                                >
+                                    <t t-out="o.partner_id.name"/>
+                                </td>
                                 <td colspan="2" style="width:25%">
                                     <strong>Reference No</strong>
                                 </td>
@@ -259,8 +261,6 @@
                     </tr>
                 </table>
                 <br/>
-
-
                 <div class="col-12" style="background-color:black;text-align:center;float:left;width:100%;">
                     <strong style="color:white;font-size:20px;text-align:center;height: 10px;">CONCLUSION/REMARKS
                     </strong>
@@ -283,13 +283,16 @@
                 <div>
                     <t t-call="fcb_service.print_custom_footer"/>
                 </div>
-            </div>
+            </t>
         </template>
         <template id="report_fischerbell_industry_ev_task_custom_report">
             <t t-call="web.html_container">
-                <t t-foreach="docs" t-as="o">
+                <t  t-call="web.basic_layout">
+                     <t t-foreach="docs" t-as="o">
                     <t t-call="fcb_service.fischerbell_industry_ev_task_custom_report" t-lang="o.partner_id.lang"/>
                 </t>
+                </t>
+
             </t>
         </template>
         <record id="paperformat_fischerbell_report_view" model="report.paperformat">
