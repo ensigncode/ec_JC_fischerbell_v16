@@ -22,7 +22,7 @@ class StockPicking(models.Model):
 					line_id.append(line.id)
 					equipment_service_vals = {
 						'product_id': line.product_id.id,
-						'lot_id': line.lot_id.id,
+						'serial_number': line.lot_id.name,
 						'partner_id': self.partner_id.id,
 						'so_ref': self.origin,
 						'manufacturing_date': line.lot_id.manufacturing_date,
