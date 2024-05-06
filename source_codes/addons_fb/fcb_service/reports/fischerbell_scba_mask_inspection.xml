@@ -8,7 +8,7 @@
             <t t-if="not o or not 'company_id' in o">
                 <t t-set="company" t-value="res_company"></t>
             </t>
-            <div>
+    <t>
                 <div class="header">
                     <div class="col-6" style="float:left;width:50%;">
                         <img t-if="company.logo" t-att-src="image_data_uri(company.logo)"
@@ -295,12 +295,14 @@
                 <div>
                     <t t-call="fcb_service.print_custom_footer"/>
                 </div>
-            </div>
+            </t>
         </template>
         <template id="report_fischerbell_scba_mask">
             <t t-call="web.html_container">
-                <t t-foreach="docs" t-as="o">
+                <t  t-call="web.basic_layout">
+                    <t t-foreach="docs" t-as="o">
                     <t t-call="fcb_service.fischerbell_scba_mask" t-lang="o.partner_id.lang"/>
+                </t>
                 </t>
             </t>
         </template>

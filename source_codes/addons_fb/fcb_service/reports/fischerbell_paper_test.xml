@@ -8,7 +8,7 @@
             <t t-if="not o or not 'company_id' in o">
                 <t t-set="company" t-value="res_company"></t>
             </t>
-            <div>
+            <t>
                 <div class="header">
                     <div class="col-6" style="float:left;width:50%;">
                         <img t-if="company.logo" t-att-src="image_data_uri(company.logo)"
@@ -74,8 +74,6 @@
                                 <td colspan="1">
                                     <strong style="text-align:right;">:</strong>
                                 </td>
-
-
                                 <td colspan="3"
                                     style="border-bottom: 1px solid black;text-align:left;width:25%;height:10px"
                                 ></td>
@@ -192,8 +190,8 @@
                     <br/>
                 </div>
 
-<t t-set="worksheet_template_id"
-                           t-value="env[o.worksheet_template_id.sudo().model_id.model].search([('x_project_task_id', '=', o.id)])"></t>
+                <t t-set="worksheet_template_id"
+                   t-value="env[o.worksheet_template_id.sudo().model_id.model].search([('x_project_task_id', '=', o.id)])"></t>
 
                 <div class="col-12" style="background-color:black;text-align:center;float:left;width:100%;">
                     <strong style="color:white;font-size:20px;text-align:center;height: 10px;">TEST RESULT (PASS/FAIL)
@@ -205,56 +203,61 @@
                             <th colspan="1" style="border-left: 2px solid black;">No.</th>
                             <th colspan="2" style="border-left: 2px solid black;">Serial No.
                             </th>
-                            <th colspan="2" style="border-left: 2px solid black;">Head top <p>(Hood/Helmet)</p>
+                            <th colspan="2" style="border-left: 2px solid black;">Head top<br/>(Hood/Helmet)
                             </th>
                             <th colspan="3" style="border-left: 2px solid black;">
                                 Fan
-                                <p>(Body,Belt<br/>Gasket)</p>
+                                <p>(Body,Belt<br/>Gasket)
+                                </p>
                             </th>
-                            <th colspan="2" style="border-left: 2px solid black;">Warning System/ <p>Alaram Signals</p>
+                            <th colspan="2" style="border-left: 2px solid black;">Warning System/
+                                <p>Alaram Signals</p>
                             </th>
-                            <th colspan="1" style="border-left: 2px solid black;">Battery<p>Voltage <br/>Test /S/N:</p></th>
-                            <th colspan="1" style="border-left: 2px solid black;">Airflow Test <p>Status</p>
+                            <th colspan="1" style="border-left: 2px solid black;">Battery
+                                <p>Voltage<br/>Test /S/N:
+                                </p>
+                            </th>
+                            <th colspan="1" style="border-left: 2px solid black;">Airflow Test
+                                <p>Status</p>
                             </th>
                         </tr>
                     </thead>
                     <tbody class="table-bordered;text-align:center">
                         <tr style="border-left: 2px solid black;vertical-align:middle">
                             <td colspan="1" style="border-left: 2px solid black;text-align:center">
-                                 <t t-if="worksheet_template_id.x_studio_eba_sn"
-                                   t-esc="worksheet_template_id.x_studio_eba_sn"/>
+                                1.
                             </td>
                             <td colspan="2" style="border-left: 2px solid black;text-align:center">
-                                   <t t-if="worksheet_template_id.x_studio_eba_sn"
-                                   t-esc="worksheet_template_id.x_studio_eba_sn"/>
+                                <t t-if="worksheet_template_id.x_studio_serial_no"
+                                   t-esc="worksheet_template_id.x_studio_serial_no"/>
                             </td>
                             <td colspan="2" style="border-left: 2px solid black;text-align:center">
-                                   <t t-if="worksheet_template_id.x_studio_eba_sn"
-                                   t-esc="worksheet_template_id.x_studio_eba_sn"/>
+                                <t t-if="worksheet_template_id.x_studio_head_top"
+                                   t-esc="worksheet_template_id.x_studio_head_top"/>
                             </td>
                             <td colspan="3" style="border-left: 2px solid black;text-align:center">
-                                   <t t-if="worksheet_template_id.x_studio_eba_sn"
-                                   t-esc="worksheet_template_id.x_studio_eba_sn"/>
+                                <t t-if="worksheet_template_id.x_studio_fan"
+                                   t-esc="worksheet_template_id.x_studio_fan"/>
                             </td>
                             <td colspan="2" style="border-left: 2px solid black;text-align:center">
-                                   <t t-if="worksheet_template_id.x_studio_eba_sn"
-                                   t-esc="worksheet_template_id.x_studio_eba_sn"/>
+                                <t t-if="worksheet_template_id.x_studio_warning_system_alaram_signals"
+                                   t-esc="worksheet_template_id.x_studio_warning_system_alaram_signals"/>
                             </td>
                             <td colspan="1" style="border-left: 2px solid black;text-align:center">
-                                   <t t-if="worksheet_template_id.x_studio_eba_sn"
-                                   t-esc="worksheet_template_id.x_studio_eba_sn"/>
+                                <t t-if="worksheet_template_id.x_studio_battery_voltage_test_sn"
+                                   t-esc="worksheet_template_id.x_studio_battery_voltage_test_sn"/>
                             </td>
                             <td colspan="1" style="border-left: 2px solid black;text-align:center">
-                                   <t t-if="worksheet_template_id.x_studio_eba_sn"
-                                   t-esc="worksheet_template_id.x_studio_eba_sn"/>
+                                <t t-if="worksheet_template_id.x_studio_airflow_test_status"
+                                   t-esc="worksheet_template_id.x_studio_airflow_test_status"/>
                             </td>
-
                         </tr>
                     </tbody>
                 </table>
                 <br/>
                 <div class="col-12" style="background-color:black;text-align:center;float:left;width:100%;">
-                    <strong style="color:white;font-size:20px;text-align:center;height: 10px;">Work / PARTS REQUIRED</strong>
+                    <strong style="color:white;font-size:20px;text-align:center;height: 10px;">Work / PARTS REQUIRED
+                    </strong>
                 </div>
 
                 <table style="border:1px solid black;width:100%;border-collapse: collapse;">
@@ -280,7 +283,10 @@
 
                 <table style="border:1px solid black;width:100%;border-collapse: collapse;">
                     <tr style="border-left: 2px solid white;border-right: 2px solid white;">
-                        <td style="border-bottom: 2px solid  #C4BDBC;">&amp;nbsp;</td>
+                        <td style="border-bottom: 2px solid  #C4BDBC;">
+                            <t t-if="worksheet_template_id.x_comments"
+                               t-esc="worksheet_template_id.x_comments"/>
+                        </td>
                     </tr>
                     <tr style="border-left: 2px solid white;border-right: 2px solid white;">
                         <td style="border-bottom: 2px solid  #C4BDBC;">&amp;nbsp;</td>
@@ -296,12 +302,14 @@
                 <div>
                     <t t-call="fcb_service.print_custom_footer"/>
                 </div>
-            </div>
+            </t>
         </template>
         <template id="report_fischerbell_custom_paper_test">
             <t t-call="web.html_container">
-                <t t-foreach="docs" t-as="o">
+                <t  t-call="web.basic_layout">
+                    <t t-foreach="docs" t-as="o">
                     <t t-call="fcb_service.fischerbell_custom_paper_test" t-lang="o.partner_id.lang"/>
+                </t>
                 </t>
             </t>
         </template>
