@@ -10,22 +10,22 @@ class EquipmentService(models.Model):
     _name = "equipment.service"
     _rec_name = 'partner_id'
 
+
     partner_id = fields.Many2one('res.partner', string="Customer ")
     product_id = fields.Many2one('product.product', string="Product")
     delivered_date = fields.Datetime(string="Equipment Purchase Date")
-    lot_id = fields.Many2one('stock.lot', string="Lot/Serial Number")
-    serial_number = fields.Float(string='Serial Number')
+    # lot_id = fields.Many2one('stock.lot', string="Lot/Serial Number")
+    serial_number = fields.Char(string='Serial Number')
     so_ref = fields.Char(string='So Ref')
-    categ_id = fields.Many2one('product.category', 'Product Category', readonly=True)
+    categ_id = fields.Many2one('product.category', 'Product Category',readonly=True)
     expire_date = fields.Datetime('Expire Date')
     manufacturing_date = fields.Datetime('Manufacturing Date')
     service_date = fields.Datetime('service Date')
     service_reminder_date = fields.Datetime('service Reminder Date')
     is_inhouse_service = fields.Boolean("Is Inhouse Service ?")
-    service_product_ids = fields.One2many('product.service', 'product_tmpl_id', 'Service Products',store=True
-                                         )
-    is_serviceable = fields.Boolean('Is Serviceable', related='product_id.is_serviceable')
-    product_variant_id = fields.Many2one('product.product', 'Products', )
+    service_product_ids = fields.One2many('product.service', 'product_tmpl_id', 'Service Products',related='product_id.service_product_ids')
+    is_serviceable = fields.Boolean('Is Serviceable',related='product_id.is_serviceable')
+    product_variant_id = fields.Many2one('product.product', 'Products',)
     service = fields.Boolean(compute='_compute_service_date', store=True)
     reminder_date = fields.Boolean(compute='_compute_reminder_date', store=True)
 
@@ -81,33 +81,10 @@ class EquipmentService(models.Model):
         #             })
         domain = []
 
-    # if self.product_id:
-    # 	domain = [('product_id', '=', self.product_id.id)]
-    # 	self.categ_id = self.product_id.categ_id.id or False
-    # 	if self.delivered_date:
-    # 		service_time = timedelta(days=self.product_id.service_time)
-    # 		reminder_time = timedelta(days=self.product_id.service_reminder_days)
-    # 		self.service_date = self.delivered_date + service_time
-    # 		self.service_reminder_date = self.service_date - reminder_time
-    # else:
-    # 	self.categ_id = False
-    # 	self.service_date = False
-    # 	self.service_reminder_date = False
-    # return {'domain': {'lot_id': domain}}
-
-    @api.onchange('lot_id')
-    def onchange_lot_id(self):
-        for record in self:
-            lot_id = self.env['stock.lot'].search([('id', '=', record.lot_id.id)])
-            record.product_id = lot_id.product_id.id or False
-            record.categ_id = lot_id.product_id.categ_id.id or False
-            record.expire_date = lot_id.expiration_date or False
-
     def name_get(self):
-        result = []
         if self._context.get("model_name") == 'project.task':
-            for rec in self:
-                result.append((rec.id, '%s' % (rec.serial_number)))
+            return [(rec.id, '%s' % (rec.serial_number)) for rec in self]
         else:
-            result = super(EquipmentService, self).name_get()
-        return result
+            return super(EquipmentService, self).name_get()
+
+
