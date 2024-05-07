@@ -36,5 +36,5 @@ class StockPicking(models.Model):
 						})
 						move_lines.append(move_line)
 					equipment_service_vals.update({'service_product_ids': move_lines})
-					self.env['equipment.service'].create(equipment_service_vals)
+				self.env['equipment.service'].create(equipment_service_vals)
 		return res
