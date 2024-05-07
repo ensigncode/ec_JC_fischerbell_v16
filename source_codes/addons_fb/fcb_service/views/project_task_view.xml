@@ -35,4 +35,34 @@
             </xpath>
 		</field>
 	</record>
+
+	<record id="view_task_search_form_hr_extended_service_fields" model="ir.ui.view">
+		<field name="name">helpdesk.ticket.view.search.inherit.service.task</field>
+		<field name="model">helpdesk.ticket</field>
+		<field name="inherit_id" ref="helpdesk.helpdesk_tickets_view_search"/>
+		<field name="arch" type="xml">
+			<xpath expr="//field[@name='team_id']" position="after">
+				<field name="service_type" string="Service Type"/>
+				<field name="service_priority" string="Service Priority"/>
+			</xpath>
+			<filter name="my_ticket" position="after">
+				<filter string="In House Service" name="In House Service"
+				        domain="[('service_type', '=', 'inhouse_service')]"/>
+				<filter string="Onsite Calibration" name="Onsite Calibration"
+				        domain="[('service_type', '=', 'onsite_service')]"/>
+				<filter string="Outsource to 3rd Party Supplier" name="outsource_service"
+				        domain="[('service_type', '=', 'outsource_service')]"/>
+				<filter string="Urgent Priority" name="urgent_priority"
+				        domain="[('service_priority', '=', 'urgent')]"/>
+				<filter string="Standard Priority" name="standard_priority"
+				        domain="[('service_priority', '=', 'standard')]"/>
+				<filter string="Express Priority" name="standard_priority"
+				        domain="[('service_priority', '=', 'standard')]"/>
+			</filter>
+			<group expand="0" string="Group By">
+                  <filter string="Service Type" name="service_type" context="{'group_by':'service_type'}"/>
+                  <filter string="Priority" name="service_priority" context="{'group_by':'service_priority'}"/>
+			</group>
+		</field>
+	</record>
 </odoo>

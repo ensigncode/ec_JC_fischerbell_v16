@@ -2,12 +2,15 @@
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 
 from odoo import models,api,fields, _
+from odoo.exceptions import UserError, ValidationError
+import json
+
 
 class HelpdeskTicket(models.Model):
     _inherit = 'helpdesk.ticket'
 
     picking_ticket_ids = fields.One2many('stock.picking', 'ticket_id', string='Transfers')
-    purchase_ticket_ids =  fields.One2many('purchase.order', 'ticket_id', string='Purchase')
+    purchase_ticket_ids = fields.One2many('purchase.order', 'ticket_id', string='Purchase')
     delivery_count = fields.Integer(string='Delivery Orders', compute='_compute_picking_ticket_ids')
     purchase_count = fields.Integer(string='Purchase Orders', compute='_compute_purchase_count')
     service_priority = fields.Selection([
@@ -41,8 +44,21 @@ class HelpdeskTicket(models.Model):
         ('direct_to_c', 'Salesperson will go to customer location for service'),
 
     ])
-    product_service_id = fields.Many2one('product.template','Service For Provider', domain="[('detailed_type', '=', 'service')]")
+    product_service_id = fields.Many2one('product.template','Products', domain="[('detailed_type', '=', 'service')]")
     vender_id = fields.Many2one('res.partner', string='Vendor', tracking=True, domain="['|', ('company_id', '=', False), ('company_id', '=', company_id)]", help="You can find a vendor by its Name, TIN, Email or Internal Reference.")
+    product_ids = fields.Char(compute="compute_product_ids", store=True)
+
+    @api.depends('service_line.product_id')
+    def compute_product_ids(self):
+        for res in self:
+            product_ids = []
+            for line in res.service_line:
+                if line.product_id.id:
+                    product_ids.append(line.product_id.id)
+            if product_ids:
+                res.product_ids = json.dumps([('id', 'not in', product_ids)])
+            else:
+                res.product_ids = json.dumps([('id', 'not in', [])])
 
     @api.model
     def create(self, vals):
@@ -145,6 +161,9 @@ class HelpdeskTicket(models.Model):
             'target': 'new',
         }
 
+
+
+
 class StockPicking(models.Model):
     _inherit = 'stock.picking'
     ticket_id = fields.Many2one('helpdesk.ticket', string="Ticket Order", store=True, readonly=False, )
@@ -165,9 +184,12 @@ class ServiceOrderLine(models.Model):
     _name = "service.order.line"
 
 
-    product_id = fields.Many2one('product.product', string='Equipments')
     ticket_id = fields.Many2one('helpdesk.ticket',string="Services")
+    product_id = fields.Many2one('product.product', string='Equipments')
     product_uom_qty = fields.Float(string="Quantity")
+    product_ids = fields.Char(related="ticket_id.product_ids")
+
+
 
 class PurchaseOrder(models.Model):
     _inherit = 'purchase.order'

@@ -44,12 +44,16 @@
                 <xpath expr='//field[@name="team_id"]' position="before">
                     <field name="service_type"/>
                     <field name="vender_id" attrs="{'invisible': [('service_type', 'not in', 'outsource_service')]}"/>
-                    <field name="product_service_id"
-                           attrs="{'invisible': [('service_type', 'not in', 'outsource_service')]}"/>
+                    <field name="product_service_id" attrs="{'invisible': [('service_type', 'not in', 'outsource_service')]}"/>
+                    <field name="product_ids" invisible="1"/>
                     <field name="outsource_service"
                            attrs="{'invisible': [('service_type', 'not in', 'outsource_service')]}"
                     />
                 </xpath>
+                 <xpath expr="//field[@name='priority']" position="replace">
+                 </xpath>
+                 <xpath expr="//field[@name='ticket_type_id']" position="replace">
+                 </xpath>
             </field>
         </record>
 
@@ -75,7 +79,8 @@
                     <page string="Equipments" name="equipments" attrs="{'invisible': [('is_servicing','=',False)]}">
                         <field name="service_line" widget="section_and_note_one2many" mode="tree">
                             <tree editable="bottom">
-                                <field name="product_id"/>
+                                 <field name="product_ids" invisible="1"/>
+                                <field name="product_id" domain="product_ids"/>
                                 <field name="product_uom_qty"/>
                             </tree>
                         </field>
@@ -127,7 +132,7 @@
             <field name="priority">80</field>
             <field name="inherit_id" ref="helpdesk_fsm.helpdesk_ticket_view_form"/>
             <field name="arch" type="xml">
-                <xpath expr="//header/button[@name='action_generate_fsm_task']" position="after">
+                <xpath expr="//header" position="inside">
                     <button class="btn btn-secondary" name="action_select_loc" type="object" string="Create Transfer"
                             attrs="{'invisible': [('service_type', '!=', 'inhouse_service')]}"
                     />
@@ -144,6 +149,8 @@
                             attrs="{'invisible': [('service_type', '!=', 'outsource_service')]}"
                     />
                 </xpath>
+                 <xpath expr="//header/button[@name='action_generate_fsm_task']" position="replace">
+                 </xpath>
             </field>
         </record>
     </data>
