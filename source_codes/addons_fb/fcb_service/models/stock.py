@@ -15,11 +15,8 @@ class StockPicking(models.Model):
 		res = super().button_validate()
 		if not self.is_to_check:
 			line_ids = self.move_line_ids.filtered(lambda x: x.product_id.is_serviceable)
-			line_id = []
-			equipment_services = []
 			for line in line_ids:
-				if line.id not in line_id:
-					line_id.append(line.id)
+				if line.product_id.service_product_ids:
 					equipment_service_vals = {
 						'product_id': line.product_id.id,
 						'serial_number': line.lot_id.name,
@@ -28,18 +25,16 @@ class StockPicking(models.Model):
 						'manufacturing_date': line.lot_id.manufacturing_date,
 						'expire_date': line.lot_id.expiration_date,
 						'categ_id': line.product_id.categ_id.id,
-						'service_date': self.date_done + timedelta(
-							days=line.product_id.service_time) if self.date_done else False,
 						'delivered_date': self.date_done,
 					}
-					if equipment_service_vals['service_date']:
-						equipment_service_vals['service_reminder_date'] = equipment_service_vals[
-							                                                  'service_date'] - timedelta(
-							days=line.product_id.service_reminder_days)
-					else:
-						equipment_service_vals['service_reminder_date'] = False
-					equipment_services.append(equipment_service_vals)
-
-			self.env['equipment.service'].create(equipment_services)
+					move_lines = []
+					for service in line.product_id.service_product_ids:
+						move_line = (0, 0, {
+							'product_variant_id': service.product_variant_id.id or False,
+							'name': service.product_variant_id.name,
+							'product_uom_qty': 1,
+						})
+						move_lines.append(move_line)
+					equipment_service_vals.update({'service_product_ids': move_lines})
+					self.env['equipment.service'].create(equipment_service_vals)
 		return res
-
