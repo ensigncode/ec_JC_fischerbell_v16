@@ -218,8 +218,12 @@
                                 </td>
                                 <td colspan="1"
                                     style="border-left: 2px solid black;border-right: 2px solid black;text-align:center">
-                                    <t t-if="ws.x_result == True "
-                                    />Yes
+                                     <t  t-if="ws.x_result == True ">
+                                        Yes
+                                    </t>
+                                    <t t-else="">
+                                         &amp;nbsp;
+                                    </t>
                                 </td>
                                 <td colspan="1"
                                     style="border-left: 2px solid black;border-right: 2px solid black;outline: 1px solid #C4BDBC;text-align:center">
@@ -227,8 +231,12 @@
                                 </td>
                                 <td colspan="1"
                                     style="border-left: 2px solid black;border-right: 2px solid black;text-align:center">
-                                    <t t-if="ws.x_result == False"
-                                    />No
+                                     <t  t-if="ws.x_result == True ">
+                                        Yes
+                                    </t>
+                                    <t t-else="">
+                                         &amp;nbsp;
+                                    </t>
                                 </td>
                                 <td colspan="1"
                                     style="border-left: 2px solid black;border-right: 2px solid black;outline: 1px solid #C4BDBC;text-align:center">

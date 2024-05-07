@@ -89,7 +89,7 @@
                             </tr>
                             <tr>
                                 <td colspan="2" style="width:25%">
-                                    <strong>Address</strong>
+                                    <strong style="font-weight: bold;font-size: 16px;">Address</strong>
                                 </td>
                                 <td colspan="1">
                                     <strong style="text-align:right;padding:5px">:</strong>
