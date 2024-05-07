@@ -8,7 +8,6 @@
                 <field name="partner_id"/>
                 <field name="product_id"/>
                 <field name="delivered_date"/>
-<!--                <field name="lot_id"/>-->
                 <field name="serial_number"/>
             </tree>
         </field>
@@ -27,15 +26,12 @@
                             <field name="so_ref"/>
                             <field name="categ_id"/>
                             <field name="delivered_date"/>
-                            <field name="is_inhouse_service" />
                         </group>
                         <group>
-<!--                            <field name="lot_id"/>-->
                             <field name="serial_number"/>
                             <field name="expire_date"/>
                             <field name="manufacturing_date"/>
-                            <field name="service_date"/>
-                            <field name="service_reminder_date"/>
+                            <field name="is_inhouse_service" />
                         </group>
                     </group>
 
@@ -62,27 +58,21 @@
         <field name="model">equipment.service</field>
         <field name="arch" type="xml">
             <search string="Product">
-<!--                <field name="lot_id"/>-->
                 <field name="partner_id"/>
                 <field name="product_id"/>
                 <separator/>
                 <filter string="Products" name="filter_product" />
                 <filter string="Customer" name="filter_customer" />
                 <filter string="Lot/Serial Number" name="product" />
-                <filter string="Today's Reminder" name="today"
-                        domain="[('service_date', '&gt;', (context_today() - datetime.timedelta(days=1)).strftime('%Y-%m-%d'))]"/>
-                <filter string="Today's service" name="today_service_reminder_date"
-                        domain="[('service_reminder_date', '&gt;', (context_today() - datetime.timedelta(days=1)).strftime('%Y-%m-%d'))]"/>
+<!--                <filter string="Today's Reminder" name="today"-->
+<!--                        domain="[('service_date', '&gt;', (context_today() - datetime.timedelta(days=1)).strftime('%Y-%m-%d'))]"/>-->
+<!--                <filter string="Today's service" name="today_service_reminder_date"-->
+<!--                        domain="[('service_reminder_date', '&gt;', (context_today() - datetime.timedelta(days=1)).strftime('%Y-%m-%d'))]"/>-->
 
                 <group expand="0" string="Group By...">
                     <filter string="Product" name="product" domain="[]" context="{'group_by': 'product_id'}"/>
                     <filter string="Customer" name="customer" domain="[]" context="{'group_by': 'partner_id'}"/>
-                    <separator orientation="vertical"/>
-                    <filter string="Reminder Date" name="group_by_reminder_date_day"
-                            context="{'group_by':'service_reminder_date:day'}"
-                    />
-                    <filter string="Service Date" name="month" context="{'group_by':'service_date:month'}"
-                    />
+<!--                    -->
                 </group>
             </search>
         </field>

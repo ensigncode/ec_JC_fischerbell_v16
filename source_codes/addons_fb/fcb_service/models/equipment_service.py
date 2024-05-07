@@ -3,7 +3,8 @@
 
 from odoo import api, fields, models
 from datetime import timedelta
-import pytz
+
+
 
 
 class EquipmentService(models.Model):
@@ -20,8 +21,6 @@ class EquipmentService(models.Model):
     categ_id = fields.Many2one('product.category', 'Product Category',readonly=True)
     expire_date = fields.Datetime('Expire Date')
     manufacturing_date = fields.Datetime('Manufacturing Date')
-    service_date = fields.Datetime('service Date')
-    service_reminder_date = fields.Datetime('service Reminder Date')
     is_inhouse_service = fields.Boolean("Is Inhouse Service ?")
     service_product_ids = fields.One2many('product.service', 'product_tmpl_id', 'Service Products',related='product_id.service_product_ids')
     is_serviceable = fields.Boolean('Is Serviceable',related='product_id.is_serviceable')
@@ -33,20 +32,20 @@ class EquipmentService(models.Model):
     def _compute_service_date(self):
         for record in self:
             for service in record.service_product_ids:
-                if record.delivered_date or record.service_date:
+                if record.delivered_date:
                     service.service_date = (record.delivered_date.date() + timedelta(
                         days=service.service_time)) if record.delivered_date and service.service_time else False
                     record.service = True
                 else:
                     record.service = False
 
-    @api.depends('service_date', 'service_product_ids', 'service_product_ids.reminder_time')
+    @api.depends('service_product_ids', 'service_product_ids.reminder_time')
     def _compute_reminder_date(self):
         for record in self:
             for service in record.service_product_ids:
-                if record.delivered_date or record.service_date:
-                    service.reminder_date = (record.service_date.date() - timedelta(
-                        days=service.reminder_time)) if record.service_date and service.reminder_time else False
+                if record.delivered_date:
+                    service.reminder_date = (service.service_date.date() - timedelta(
+                        days=service.reminder_time)) if service.reminder_time else False
                     record.reminder_date = True
                 else:
                     record.reminder_date = False
