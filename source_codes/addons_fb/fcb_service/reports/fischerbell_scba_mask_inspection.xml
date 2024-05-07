@@ -8,7 +8,7 @@
             <t t-if="not o or not 'company_id' in o">
                 <t t-set="company" t-value="res_company"></t>
             </t>
-    <t>
+            <t>
                 <div class="header">
                     <div class="col-6" style="float:left;width:50%;">
                         <img t-if="company.logo" t-att-src="image_data_uri(company.logo)"
@@ -59,8 +59,8 @@
                 <br/>
                 <div class="row mt32 mb32 ">
                     <div>
-                        <table>
-                            <tr>
+                        <table class="table-borderless" style=" border-color:white;  font-weight: bold;">
+                            <tr style="font-weight: bold;font-size: 21px;">
                                 <th colspan="2"></th>
                                 <th colspan="1"></th>
                                 <th colspan="3"></th>
@@ -70,10 +70,10 @@
                             </tr>
                             <tr>
                                 <td colspan="2" style="width:25%">
-                                    <strong>Customer</strong>
+                                    <strong style="font-weight: bold;font-size: 16px;">Customer</strong>
                                 </td>
                                 <td colspan="1">
-                                    <strong style="text-align:right;">:</strong>
+                                    <strong style="text-align:right;padding:5px">:</strong>
                                 </td>
 
 
@@ -81,26 +81,26 @@
                                     style="border-bottom: 1px solid black;text-align:left;width:25%;height:10px"
                                 ></td>
                                 <td colspan="2" style="width:25%">
-                                    <strong>Our Reference No</strong>
+                                    <strong style="font-weight: bold;font-size: 16px;">Our Reference No</strong>
                                 </td>
-                                <td colspan="1">:</td>
+                                <td colspan="1">:&amp;nbsp;</td>
                                 <td colspan="2" style="border-bottom: 1px solid black;text-align:center;width:25%;"
                                 ></td>
                             </tr>
                             <tr>
                                 <td colspan="2" style="width:25%">
-                                    <strong>Address</strong>
+                                    <strong style="font-weight: bold;font-size: 16px;">Address</strong>
                                 </td>
                                 <td colspan="1">
-                                    <strong style="text-align:right;">:</strong>
+                                    <strong style="text-align:right;padding:5px">:</strong>
                                 </td>
                                 <td colspan="3"
                                     style="border-bottom: 1px solid black;text-align:left;width:25%;height:10px"
                                 ></td>
                                 <td colspan="2" style="width:25%">
-                                    <strong>Your Reference No</strong>
+                                    <strong style="font-weight: bold;font-size: 16px;">Your Reference No</strong>
                                 </td>
-                                <td colspan="1">:</td>
+                                <td colspan="1">:&amp;nbsp;</td>
                                 <td colspan="2" style="border-bottom: 1px solid black;text-align:center;width:25%;"
                                 ></td>
                             </tr>
@@ -108,83 +108,83 @@
                                 <td colspan="2" style="width:25%">
                                 </td>
                                 <td colspan="1">
-                                    <strong style="text-align:right;">:</strong>
+                                    <strong style="text-align:right;padding:5px">:</strong>
                                 </td>
                                 <td colspan="3"
                                     style="border-bottom: 1px solid black;text-align:left;width:25%;height:10px"
                                 ></td>
                                 <td colspan="2" style="width:25%">
-                                    <strong>Requeste Date</strong>
+                                    <strong style="font-weight: bold;font-size: 16px;">Requeste Date</strong>
                                 </td>
-                                <td colspan="1">:</td>
+                                <td colspan="1">:&amp;nbsp;</td>
                                 <td colspan="2" style="border-bottom: 1px solid black;text-align:center;width:25%;"
                                 ></td>
                             </tr>
                             <tr>
                                 <td colspan="2" style="width:25%">
-                                    <strong>Cylinder No.</strong>
+                                    <strong style="font-weight: bold;font-size: 16px;">Cylinder No.</strong>
                                 </td>
                                 <td colspan="1">
-                                    <strong style="text-align:right;">:</strong>
+                                    <strong style="text-align:right;padding:5px">:</strong>
                                 </td>
                                 <td colspan="3"
                                     style="border-bottom: 1px solid black;text-align:left;width:25%;height:10px"
                                 ></td>
                                 <td colspan="2" style="width:25%">
-                                    <strong>Contact Person</strong>
+                                    <strong style="font-weight: bold;font-size: 16px;">Contact Person</strong>
                                 </td>
-                                <td colspan="1">:</td>
+                                <td colspan="1">:&amp;nbsp;</td>
                                 <td colspan="2" style="border-bottom: 1px solid black;text-align:center;width:25%;"
                                 ></td>
                             </tr>
                             <tr>
                                 <td colspan="2" style="width:25%">
-                                    <strong>Brand</strong>
+                                    <strong style="font-weight: bold;font-size: 16px;">Brand</strong>
                                 </td>
                                 <td colspan="1">
-                                    <strong style="text-align:right;">:</strong>
+                                    <strong style="text-align:right;padding:5px">:</strong>
                                 </td>
                                 <td colspan="3"
                                     style="border-bottom: 1px solid black;text-align:left;width:25%;height:10px"
                                 ></td>
                                 <td colspan="2" style="width:25%">
-                                    <strong>Contact No</strong>
+                                    <strong style="font-weight: bold;font-size: 16px;">Contact No</strong>
                                 </td>
-                                <td colspan="1">:</td>
+                                <td colspan="1">:&amp;nbsp;</td>
                                 <td colspan="2" style="border-bottom: 1px solid black;text-align:center;width:25%;"
                                 ></td>
                             </tr>
                             <tr>
                                 <td colspan="2" style="width:25%">
-                                    <strong>Model</strong>
+                                    <strong style="font-weight: bold;font-size: 16px;">Model</strong>
                                 </td>
                                 <td colspan="1">
-                                    <strong style="text-align:right;">:</strong>
+                                    <strong style="text-align:right;padding:5px">:</strong>
                                 </td>
                                 <td colspan="3"
                                     style="border-bottom: 1px solid black;text-align:left;width:25%;height:10px"
                                 ></td>
                                 <td colspan="2" style="width:25%">
-                                    <strong>Item Serial Number</strong>
+                                    <strong style="font-weight: bold;font-size: 16px;">Item Serial Number</strong>
                                 </td>
-                                <td colspan="1">:</td>
+                                <td colspan="1">:&amp;nbsp;</td>
                                 <td colspan="2" style="border-bottom: 1px solid black;text-align:center;width:25%;"
                                 ></td>
                             </tr>
                             <tr>
                                 <td colspan="2" style="width:25%">
-                                    <strong>Next Service Date</strong>
+                                    <strong style="font-weight: bold;font-size: 16px;">Next Service Date</strong>
                                 </td>
                                 <td colspan="1">
-                                    <strong style="text-align:right;">:</strong>
+                                    <strong style="text-align:right;padding:5px">:</strong>
                                 </td>
                                 <td colspan="3"
                                     style="border-bottom: 1px solid black;text-align:left;width:25%;height:10px"
                                 ></td>
                                 <td colspan="2" style="width:25%">
-                                    <strong>Completed Date</strong>
+                                    <strong style="font-weight: bold;font-size: 16px;">Completed Date</strong>
                                 </td>
-                                <td colspan="1">:</td>
+                                <td colspan="1">:&amp;nbsp;</td>
                                 <td colspan="2" style="border-bottom: 1px solid black;text-align:center;width:25%;"
                                 ></td>
                             </tr>
@@ -194,48 +194,57 @@
                 </div>
                 <br/>
                 <div class="col-12" style="background-color:black;text-align:center;float:left;width:100%;">
-                    <strong style="color:white;font-size:20px;text-align:center;height: 10px;">TEST RESULT
+                    <strong style="color:white;font-size:20px;text-align:center;height: 10px;font-weight: bold;font-size: 16px;">
+                        TEST RESULT
                     </strong>
                 </div>
                 <table style="border:2px solid black;width:100%;border-collapse: collapse;"
                        class="table o_main_table table-bordered">
                     <thead>
                         <tr style="border: 2px solid black;vertical-align:middle;">
-                            <th rowspan="2" style="border-left: 2px solid black;text-align:center">No.</th>
-                            <th rowspan="2" style="border-left: 2px solid black;text-align:center">
-                                <p>Fischer Bell</p>
-                                <p>Mask Label</p>
+                            <th rowspan="2"
+                                style="border-left: 2px solid black;text-align:center;font-weight: bold;font-size: 16px;">
+                                No.
                             </th>
                             <th rowspan="2"
-                                style="border-left: 2px solid black;text-align:center;border-right: 2px solid black;">
+                                style="border-left: 2px solid black;text-align:center;font-weight: bold;font-size: 16px;">
+                                Fischer Bell
+                                <br/>Mask Label
+                            </th>
+                            <th rowspan="2"
+                                style="border-left: 2px solid black;text-align:center;border-right: 2px solid black;font-weight: bold;font-size: 16px;">
                                 Mask S/N:
                             </th>
 
-                            <th colspan="5" style="border-left: 2px solid black;text-align:center">Factors
+                            <th colspan="5"
+                                style="border-left: 2px solid black;text-align:center;font-weight: bold;font-size: 16px;">
+                                Factors
                             </th>
-                            <th rowspan="2" style="border-left: 2px solid black;text-align:center">Results
+                            <th rowspan="2"
+                                style="border-left: 2px solid black;text-align:center;font-weight: bold;font-size: 16px;">
+                                Results
                                 (P/F)
                             </th>
                             <th rowspan="2"
-                                style="border-left: 2px solid black;text-align:center;border-right: 2px solid black;">
+                                style="border-left: 2px solid black;text-align:center;border-right: 2px solid black;font-weight: bold;font-size: 16px;">
                                 Remarks
                             </th>
                         </tr>
                         <tr style="vertical-align:middle;border-left: 2px solid black;">
-                            <th class="center" colspan="1">Nose Cup</th>
-                            <th class="center" colspan="1" style="border-left:2px solid black;">Inhalation
-                                <p>Valve</p>
+                            <th class="center" colspan="1" style="font-weight: bold;font-size: 16px;">Nose Cup</th>
+                            <th class="center" colspan="1" style="border-left:2px solid black;font-weight: bold;font-size: 16px;">Inhalation
+                               <br/> Valve
                             </th>
-                            <th class="center" colspan="1" style="border-left:2px solid black;">
-                                <p>Exhalation</p>
-                                <p>Valve</p>
+                            <th class="center" colspan="1" style="border-left:2px solid black;font-weight: bold;font-size: 16px;">
+                                Exhalation
+                                <br/>Valve
                             </th>
-                            <th class="center" colspan="1" style="border-left:2px solid black;">
+                            <th class="center" colspan="1" style="border-left:2px solid black;font-weight: bold;font-size: 16px;">
                                 Visor
                             </th>
-                            <th class="center" colspan="1" style="border-left:2px solid black;">
+                            <th class="center" colspan="1" style="border-left:2px solid black;font-weight: bold;font-size: 16px;">
                                 Silicone
-                                <p>Skirt</p>
+                                <br/>Skirt
                             </th>
                         </tr>
                     </thead>
@@ -299,10 +308,10 @@
         </template>
         <template id="report_fischerbell_scba_mask">
             <t t-call="web.html_container">
-                <t  t-call="web.basic_layout">
+                <t t-call="web.basic_layout">
                     <t t-foreach="docs" t-as="o">
-                    <t t-call="fcb_service.fischerbell_scba_mask" t-lang="o.partner_id.lang"/>
-                </t>
+                        <t t-call="fcb_service.fischerbell_scba_mask" t-lang="o.partner_id.lang"/>
+                    </t>
                 </t>
             </t>
         </template>
