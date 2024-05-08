@@ -231,7 +231,7 @@
                                 </td>
                                 <td colspan="1"
                                     style="border-left: 2px solid black;border-right: 2px solid black;text-align:center">
-                                     <t  t-if="ws.x_result == True ">
+                                     <t  t-if="ws.x_result != True ">
                                         Yes
                                     </t>
                                     <t t-else="">
