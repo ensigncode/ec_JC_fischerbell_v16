@@ -208,16 +208,16 @@
                     <tbody class="table-bordered">
                         <tr t-foreach="worksheet_template_id.x_cert_team_eqipment_ids" t-as="ws">
                             <t style="border-left: 2px solid black;border-bottom: 2px solid black;">
-                                <td colspan="3" style="border-left: 2px solid black;border-right: 2px solid black;">
+                                <td colspan="3" style="border-left: 2px solid black;border-right: 2px solid black;border-bottom: 2px solid black;">
                                     <t t-if="ws.x_equipment"
                                        t-esc="ws.x_equipment"/>
                                 </td>
                                 <td colspan="1"
-                                    style="border-left: 2px solid black;border-right: 2px solid black;outline: 1px solid #C4BDBC;text-align:center;">
+                                    style="border-left: 2px solid black;border-right: 2px solid black;outline: 1px solid #C4BDBC;text-align:center;border-bottom: 2px solid black;">
                                     &amp;nbsp;
                                 </td>
                                 <td colspan="1"
-                                    style="border-left: 2px solid black;border-right: 2px solid black;text-align:center">
+                                    style="border-left: 2px solid black;border-right: 2px solid black;text-align:center;border-bottom: 2px solid black;">
                                     <t t-if="ws.x_result == True ">
                                         Yes
                                     </t>
@@ -226,11 +226,11 @@
                                     </t>
                                 </td>
                                 <td colspan="1"
-                                    style="border-left: 2px solid black;border-right: 2px solid black;outline: 1px solid #C4BDBC;text-align:center">
+                                    style="border-left: 2px solid black;border-right: 2px solid black;outline: 1px solid #C4BDBC;text-align:center;border-bottom: 2px solid black;">
                                     &amp;nbsp;
                                 </td>
                                 <td colspan="1"
-                                    style="border-left: 2px solid black;border-right: 2px solid black;text-align:center">
+                                    style="border-left: 2px solid black;border-right: 2px solid black;text-align:center;border-bottom: 2px solid black;">
                                     <t t-if="ws.x_result != True ">
                                         Yes
                                     </t>
@@ -239,11 +239,11 @@
                                     </t>
                                 </td>
                                 <td colspan="1"
-                                    style="border-left: 2px solid black;border-right: 2px solid black;outline: 1px solid #C4BDBC;text-align:center">
+                                    style="border-left: 2px solid black;border-right: 2px solid black;outline: 1px solid #C4BDBC;text-align:center;border-bottom: 2px solid black;">
                                     &amp;nbsp;
                                 </td>
                                 <td colspan="4"
-                                    style="border-left: 2px solid black;text-align:center;border-right: 2px solid black;">
+                                    style="border-left: 2px solid black;text-align:center;border-right: 2px solid black;border-bottom: 2px solid black;">
                                     <t t-if="ws.x_comments"
                                        t-esc="ws.x_comments"/>
                                 </td>
