@@ -254,7 +254,7 @@
                             </th>
                         </tr>
                     </thead>
-                    <tbody class="table-bordered;text-align:center">
+                    <tbody class="table-bordered">
                         <tr style="border-left: 2px solid black;border-top:2px solid black">
                             <td style="border-left: 2px solid black; text-align:center">1</td>
                             <td style="border-left: 2px solid black; text-align:center">&amp;nbsp;</td>

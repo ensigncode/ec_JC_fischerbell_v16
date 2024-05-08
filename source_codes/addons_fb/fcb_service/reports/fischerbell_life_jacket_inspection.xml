@@ -203,7 +203,7 @@
                             </th>
                         </tr>
                     </thead>
-                    <tbody class="table-bordered;text-align:center">
+                    <tbody class="table-bordered">
                         <t t-set="wordocsksheet_template_id"
                            t-value="env[o.worksheet_template_id.sudo().model_id.model].search([('x_project_task_id', '=', o.id)])"></t>
                         <t t-foreach="wordocsksheet_template_id.x_x_project_task_worksheet_template_10_ids" t-as="ws">
@@ -279,6 +279,8 @@
 
                 <table style="border:1px solid black;width:100%;border-collapse: collapse;">
                     <tr style="border-left: 2px solid white;border-right: 2px solid white;">
+                        <t t-set="worksheet_template_id"
+                       t-value="env[o.worksheet_template_id.sudo().model_id.model].search([('x_project_task_id', '=', o.id)])"></t>
                         <td style="border-bottom: 2px solid #C4BDBC;padding-top: 5px;">
                             <t t-if="worksheet_template_id.x_comments" t-out="worksheet_template_id.x_comments"/>
                         </td>

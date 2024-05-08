@@ -211,7 +211,7 @@
 
                         </tr>
                     </thead>
-                    <tbody class="table-bordered;text-align:center">
+                    <tbody class="table-bordered">
                         <tr style="border-left: 2px solid black;">
                             <td colspan="1" style="border-left: 2px solid black;text-align:center">1</td>
                             <td colspan="2" style="border-left: 2px solid black;text-align:center">

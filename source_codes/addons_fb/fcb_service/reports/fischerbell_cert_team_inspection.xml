@@ -205,7 +205,7 @@
                             </th>
                         </tr>
                     </thead>
-                    <tbody class="table-bordered;text-align:center">
+                    <tbody class="table-bordered">
                         <tr t-foreach="worksheet_template_id.x_cert_team_eqipment_ids" t-as="ws">
                             <t style="border-left: 2px solid black;border-bottom: 2px solid black;">
                                 <td colspan="3" style="border-left: 2px solid black;border-right: 2px solid black;">

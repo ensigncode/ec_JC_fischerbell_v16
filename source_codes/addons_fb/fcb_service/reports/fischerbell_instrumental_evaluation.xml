@@ -181,6 +181,10 @@
                                     </th>
                                 </tr>
                             </thead>
+
+                            <t t-set="worksheet_template_id"
+                               t-value="env[o.worksheet_template_id.sudo().model_id.model].search([('x_project_task_id', '=', o.id)])"></t>
+
                             <tr t-foreach="worksheet_template_id.x_instrument_evaluation_ids" t-as="ws">
                                 <td colspan="2"
                                     style="width:25%;border-right: 1px solid white;border-bottom: 1px solid white;">
@@ -196,20 +200,19 @@
                                 </td>
                                 <td colspan="3"
                                     style="border-right: 1px solid white;border-left: 1px solid white;border-bottom: 1px solid black;text-align:left;width:25%;height:10px;border-right: 1px solid black;"
-                                ></td>
-                                <td colspan="2" style="width:25%;">
-                                    <strong>
-                                        <t t-if="ws.x_val"
-                                           t-esc="ws.x_val"/>
-                                    </strong>
-                                </td>
-                                <td colspan="1" style="border-right: 1px solid white;">&amp;nbsp;</td>
-                                <td colspan="2" style="text-align:center;width:25%;"
                                 >
+                                    <t t-if="ws.x_val"
+                                       t-esc="ws.x_val"/>
+                                </td>
+                                <td colspan="2" style="width:100%;">
                                     <strong>
                                         <t t-if="ws.x_accessories"
                                            t-esc="ws.x_accessories"/>
                                     </strong>
+                                </td>
+                                <td colspan="1" style="border-right: 1px solid white;width:0%;"></td>
+                                <td colspan="2" style="text-align:center;width:0%;"
+                                >
                                 </td>
                             </tr>
                         </table>
@@ -267,6 +270,8 @@
                 </div>
 
                 <table style="border:1px solid black;width:100%;border-collapse: collapse;">
+                    <t t-set="worksheet_template_id"
+                       t-value="env[o.worksheet_template_id.sudo().model_id.model].search([('x_project_task_id', '=', o.id)])"></t>
                     <tr style="border-left: 2px solid white;border-right: 2px solid white;">
                         <td style="border-bottom: 2px solid black;">
                             <t t-if="worksheet_template_id.x_comments" t-out="worksheet_template_id.x_comments"/>

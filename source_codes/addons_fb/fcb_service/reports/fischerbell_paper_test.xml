@@ -231,7 +231,7 @@
                             </th>
                         </tr>
                     </thead>
-                    <tbody class="table-bordered;text-align:center">
+                    <tbody class="table-bordered">
                         <tr style="border-left: 2px solid black;vertical-align:middle">
                             <td colspan="1" style="border-left: 2px solid black;text-align:center">
                                 1.

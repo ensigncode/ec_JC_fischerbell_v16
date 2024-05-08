@@ -202,6 +202,8 @@
                     </strong>
                 </div>
                 <t t-set="counter" t-value="0"/>
+                <t t-set="worksheet_template_id"
+                   t-value="env[o.worksheet_template_id.sudo().model_id.model].search([('x_project_task_id', '=', o.id)])"></t>
 
                 <table style="border:2px solid black;width:100%;border-collapse: collapse;"
                        class="table o_main_table table-bordered">
@@ -235,49 +237,59 @@
                             </th>
                         </tr>
                         <tr style="vertical-align:middle;border-left: 2px solid black;font-weight: bold;font-size: 16px;">
-                            <th class="center" colspan="1" style="font-weight: bold;font-size: 16px;">Webbing</th>
                             <th class="center" colspan="1"
-                                style="border-left:2px solid black;font-weight: bold;font-size: 16px;">Stitches
+                                style="font-weight: bold;font-size: 16px;border-bottom: 2px solid black;">Webbing
                             </th>
                             <th class="center" colspan="1"
-                                style="border-left:2px solid black;font-weight: bold;font-size: 16px;">
+                                style="border-left:2px solid black;font-weight: bold;font-size: 16px;border-bottom: 2px solid black;">
+                                Stitches
+                            </th>
+                            <th class="center" colspan="1"
+                                style="border-left:2px solid black;font-weight: bold;font-size: 16px;border-bottom: 2px solid black;">
                                 Rusty/Buckles
                             </th>
                         </tr>
                     </thead>
-                    <tbody class="table-bordered;text-align:center">
-                        <tr t-foreach="worksheet_template_id" t-as="ws">
+                    <tbody class="table-bordered">
+                        <tr t-foreach="worksheet_template_id.x_personal_fall_ids" t-as="ws">
                             <t t-set="counter" t-value="counter + 1"/>
 
                             <t style="border-left: 2px solid black;border-top:2px solid black">
-                                <td style="border-left: 2px solid black; text-align:center">
+                                <td style="border-left: 2px solid black; text-align:center;border-bottom: 2px solid black; ">
                                     <t t-esc="counter"/>.
                                 </td>
-                                <td style="border-left: 2px solid black; text-align:center">
-                                    <t t-if="worksheet_template_id.x_model"
-                                       t-esc="worksheet_template_id.x_model"/>
+                                <td style="border-left: 2px solid black; text-align:center;border-bottom: 2px solid black;">
+                                    <t t-if="ws.x_model"
+                                       t-esc="ws.x_model"/>
                                 </td>
-                                <td style="border-left: 2px solid black; text-align:center">
-                                    <t t-if="worksheet_template_id.x_serialnumber"
-                                       t-esc="worksheet_template_id.x_serialnumber"/>
+                                <td style="border-left: 2px solid black; text-align:center;border-bottom: 2px solid black;">
+                                    <t t-if="ws.x_serialnumber"
+                                       t-esc="ws.x_serialnumber"/>
                                 </td>
-                                <td style="border-left: 2px solid black; text-align:center;border-right: 2px solid black;">
-                                    <t t-if="worksheet_template_id.x_date"
-                                       t-esc="worksheet_template_id.x_date"/>
+                                <td style="border-left: 2px solid black; text-align:center;border-right: 2px solid black;border-bottom: 2px solid black;">
+                                    <t t-if="ws.x_date"
+                                       t-esc="ws.x_date"/>
                                 </td>
-                                <td class="center">&amp;nbsp;</td>
-                                <td class="center" style="border-left:2px solid black;">
-                                    <t t-if="worksheet_template_id.x_webbing"
-                                       t-esc="worksheet_template_id.x_webbing"/>
+                                <td class="center" style="border-left:2px solid black;border-bottom: 2px solid black;text-align:center">
+                                    <t t-if="ws.x_webbing"
+                                       t-esc="ws.x_webbing"/>
                                 </td>
-                                <td class="center" style="border-left:2px solid black;">
-                                    <t t-if="worksheet_template_id.x_stitches"
-                                       t-esc="worksheet_template_id.x_stitches"/>
+                                <td class="center" style="border-left:2px solid black;border-bottom: 2px solid black;">
+                                    <t t-if="ws.x_stitches"
+                                       t-esc="ws.x_stitches"/>
                                 </td>
-                                <td style="border-left: 2px solid black; text-align:center">
-                                    <t t-if="worksheet_template_id.x_rusty"
-                                       t-esc="worksheet_template_id.x_rusty"/>
+                                <td style="border-left: 2px solid black; text-align:center;border-bottom: 2px solid black;">
+                                    <t t-if="ws.x_rusty"
+                                       t-esc="ws.x_rusty"/>
                                 </td>
+                                <td style="border-left: 2px solid black; text-align:center;border-bottom: 2px solid black;">
+                                    <t t-if="ws.x_result == True ">
+                                        Yes
+                                    </t>
+                                    <t t-else="">
+                                        &amp;nbsp;
+                                    </t> </td>
+
                             </t>
                         </tr>
                     </tbody>
@@ -310,7 +322,10 @@
                 </div>
                 <table style="border:1px solid black;width:100%;border-collapse: collapse;">
                     <tr style="border-left: 2px solid white;border-right: 2px solid white;">
-                        <td style="border-bottom: 2px solid #C4BDBC;padding-top: 5px;">&amp;nbsp;</td>
+                        <td style="border-bottom: 2px solid #C4BDBC;padding-top: 5px;">
+                            <t t-if="worksheet_template_id.x_comments"
+                               t-esc="worksheet_template_id.x_comments"/>
+                        </td>
                     </tr>
                     <tr style="border-left: 2px solid white;border-right: 2px solid white;">
                         <td style="border-bottom: 2px solid #C4BDBC;padding-top:5px;">&amp;nbsp;</td>
