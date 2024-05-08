@@ -3,8 +3,7 @@
 
 from odoo import api, fields, models
 from datetime import timedelta
-
-
+import pytz
 
 
 class EquipmentService(models.Model):
@@ -54,15 +53,26 @@ class EquipmentService(models.Model):
         equipment_records = self.env['equipment.service'].search([])
         utc_now = fields.Datetime.now().astimezone(pytz.utc).date()  # Get current date in UTC
         for record in equipment_records:
-            if record.service_reminder_date and record.partner_id and record.is_inhouse_service:  # Check if service reminder date and partner are set
-                reminder_date = record.service_reminder_date.date()
-                if reminder_date == utc_now:
-                    template = self.env.ref('fcb_service.email_template_service_reminder')
-                    template_values = {
-                        'email_from': self.env.user.email,
-                        'email_to': record.partner_id.email,
-                    }
-                    template.sudo().send_mail(record.id, force_send=True, email_values=template_values)
+            if record.partner_id and record.is_inhouse_service:
+                if record.service_product_ids:
+                    for line in record.service_product_ids:
+                        reminder_date = line.reminder_date.date()
+                        if reminder_date == utc_now:
+                            body = f"""Hello {record.partner_id.name},<br>
+                                    <p> your service for {line.product_variant_id.name or ''} is due on {line.service_date.strftime('%d-%m-%Y') or ''} 
+                                    please contect sales team to get quote.</p>
+                                    <p>Regards,</p>
+                                    <p>{record.env.company.name or ''}</p>
+                            						"""
+                            mails = {
+                                'subject': "Service Reminder Email",
+                                'email_from': self.env.user.email,
+                                'email_to': record.partner_id.email,
+                                'body_html': body,
+                                'auto_delete': False,
+                            }
+                            mail = self.env['mail.mail'].create(mails)
+                            mail.send()
 
     @api.onchange('product_id','service_product_ids')
     def onchange_product_id(self):
