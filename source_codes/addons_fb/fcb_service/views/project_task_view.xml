@@ -6,7 +6,6 @@
 		<field name="inherit_id" ref="project.view_task_form2"/>
 		<field name="arch" type="xml">
 			<xpath expr="//button[@name='action_assign_to_me']" position="after">
-				<button class="btn-secondary" name="action_report" type="object" string="Report"/>
 				<button class="btn-secondary" name="send_for_inspection" type="object"
 				        string="Send for Inspection"/>
 <!--				<button class="btn-secondary" name="done_inspection" type="object" string="Done"/>-->

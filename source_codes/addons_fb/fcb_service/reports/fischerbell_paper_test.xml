@@ -72,11 +72,13 @@
                                     <strong style="font-weight: bold;font-size: 16px;">Customer</strong>
                                 </td>
                                 <td colspan="1">
-                                     <strong style="text-align:right;padding:5px">:</strong>
+                                    <strong style="text-align:right;padding:5px">:</strong>
                                 </td>
                                 <td colspan="3"
                                     style="border-bottom: 1px solid black;text-align:left;width:25%;height:10px"
-                                ></td>
+                                >
+                                    <t t-out="o.partner_id.name"/>
+                                </td>
                                 <td colspan="2" style="width:25%">
                                     <strong style="font-weight: bold;font-size: 16px;">Our Reference No</strong>
                                 </td>
@@ -89,7 +91,7 @@
                                     <strong style="font-weight: bold;font-size: 16px;">Address</strong>
                                 </td>
                                 <td colspan="1">
-                                     <strong style="text-align:right;padding:5px">:</strong>
+                                    <strong style="text-align:right;padding:5px">:</strong>
                                 </td>
                                 <td colspan="3"
                                     style="border-bottom: 1px solid black;text-align:left;width:25%;height:10px"
@@ -105,7 +107,7 @@
                                 <td colspan="2" style="width:25%">
                                 </td>
                                 <td colspan="1">
-                                     <strong style="text-align:right;padding:5px">:</strong>
+                                    <strong style="text-align:right;padding:5px">:</strong>
                                 </td>
                                 <td colspan="3"
                                     style="border-bottom: 1px solid black;text-align:left;width:25%;height:10px"
@@ -122,7 +124,7 @@
                                     <strong style="font-weight: bold;font-size: 16px;">Item Location</strong>
                                 </td>
                                 <td colspan="1">
-                                     <strong style="text-align:right;padding:5px">:</strong>
+                                    <strong style="text-align:right;padding:5px">:</strong>
                                 </td>
                                 <td colspan="3"
                                     style="border-bottom: 1px solid black;text-align:left;width:25%;height:10px"
@@ -139,7 +141,7 @@
                                     <strong></strong>
                                 </td>
                                 <td colspan="1">
-                                     <strong style="text-align:right;padding:5px"></strong>
+                                    <strong style="text-align:right;padding:5px"></strong>
                                 </td>
                                 <td colspan="3"
                                     style="border-bottom: 1px solid black;text-align:left;width:25%;height:10px"
@@ -156,7 +158,7 @@
                                     <strong style="font-weight: bold;font-size: 16px;">Next Inspection Date</strong>
                                 </td>
                                 <td colspan="1">
-                                     <strong style="text-align:right;padding:5px">:</strong>
+                                    <strong style="text-align:right;padding:5px">:</strong>
                                 </td>
                                 <td colspan="3"
                                     style="border-bottom: 1px solid black;text-align:left;width:25%;height:10px"
@@ -173,7 +175,7 @@
                                     <strong></strong>
                                 </td>
                                 <td colspan="1">
-                                     <strong style="text-align:right;padding:5px"></strong>
+                                    <strong style="text-align:right;padding:5px"></strong>
                                 </td>
                                 <td colspan="3"
                                     style="border-bottom: 1px solid black;text-align:left;width:25%;height:10px"
@@ -192,7 +194,7 @@
 
                 <t t-set="worksheet_template_id"
                    t-value="env[o.worksheet_template_id.sudo().model_id.model].search([('x_project_task_id', '=', o.id)])"></t>
-                f
+
                 <div class="col-12" style="background-color:black;text-align:center;float:left;width:100%;">
                     <strong style="color:white;ffont-size:20px;text-align:center;height: 10px;font-weight: bold;font-size: 16px;">
                         TEST RESULT (PASS/FAIL)
