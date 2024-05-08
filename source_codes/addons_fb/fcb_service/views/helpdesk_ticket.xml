@@ -143,13 +143,24 @@
                             string="Create Return Transfer"
                             attrs="{'invisible': [('service_type', '!=', 'inhouse_service')]}"
                     />
-
                     <button class="btn btn-secondary" name="action_select_loc_outsource" type="object"
                             string="Create Outsource Transfer"
                             attrs="{'invisible': [('service_type', '!=', 'outsource_service')]}"
                     />
                 </xpath>
                  <xpath expr="//header/button[@name='action_generate_fsm_task']" position="replace">
+                 </xpath>
+                <xpath expr="//field[@name='fsm_task_count']" position="replace">
+                        <div class="o_field_widget o_stat_info">
+                            <span class="o_stat_value">
+                                <field name="fsm_task_count" nolabel="1"/>
+                                <span class="text-secondary fw-normal"> Tasks</span>
+                            </span>
+                            <span class="o_stat_value">
+                                <field name="done_service" nolabel="1"/>
+                                <span class="text-secondary fw-normal"> Done</span>
+                            </span>
+                        </div>
                  </xpath>
             </field>
         </record>
