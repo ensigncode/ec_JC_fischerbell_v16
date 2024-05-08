@@ -20,8 +20,6 @@ class EquipmentService(models.Model):
     categ_id = fields.Many2one('product.category', 'Product Category',readonly=True)
     expire_date = fields.Datetime('Expire Date')
     manufacturing_date = fields.Datetime('Manufacturing Date')
-    service_date = fields.Datetime('service Date')
-    service_reminder_date = fields.Datetime('service Reminder Date')
     is_inhouse_service = fields.Boolean("Is Inhouse Service ?")
     service_product_ids = fields.One2many('product.service', 'product_tmpl_id', 'Service Products',related='product_id.service_product_ids')
     is_serviceable = fields.Boolean('Is Serviceable',related='product_id.is_serviceable')
@@ -33,20 +31,20 @@ class EquipmentService(models.Model):
     def _compute_service_date(self):
         for record in self:
             for service in record.service_product_ids:
-                if record.delivered_date or record.service_date:
+                if record.delivered_date:
                     service.service_date = (record.delivered_date.date() + timedelta(
                         days=service.service_time)) if record.delivered_date and service.service_time else False
                     record.service = True
                 else:
                     record.service = False
 
-    @api.depends('service_date', 'service_product_ids', 'service_product_ids.reminder_time')
+    @api.depends('service_product_ids', 'service_product_ids.reminder_time')
     def _compute_reminder_date(self):
         for record in self:
             for service in record.service_product_ids:
-                if record.delivered_date or record.service_date:
-                    service.reminder_date = (record.service_date.date() - timedelta(
-                        days=service.reminder_time)) if record.service_date and service.reminder_time else False
+                if record.delivered_date:
+                    service.reminder_date = (service.service_date.date() - timedelta(
+                        days=service.reminder_time)) if service.reminder_time else False
                     record.reminder_date = True
                 else:
                     record.reminder_date = False
@@ -55,15 +53,26 @@ class EquipmentService(models.Model):
         equipment_records = self.env['equipment.service'].search([])
         utc_now = fields.Datetime.now().astimezone(pytz.utc).date()  # Get current date in UTC
         for record in equipment_records:
-            if record.service_reminder_date and record.partner_id and record.is_inhouse_service:  # Check if service reminder date and partner are set
-                reminder_date = record.service_reminder_date.date()
-                if reminder_date == utc_now:
-                    template = self.env.ref('fcb_service.email_template_service_reminder')
-                    template_values = {
-                        'email_from': self.env.user.email,
-                        'email_to': record.partner_id.email,
-                    }
-                    template.sudo().send_mail(record.id, force_send=True, email_values=template_values)
+            if record.partner_id and record.is_inhouse_service:
+                if record.service_product_ids:
+                    for line in record.service_product_ids:
+                        reminder_date = line.reminder_date.date()
+                        if reminder_date == utc_now:
+                            body = f"""Hello {record.partner_id.name},<br>
+                                    <p> your service for {line.product_variant_id.name or ''} is due on {line.service_date.strftime('%d-%m-%Y') or ''} 
+                                    please contect sales team to get quote.</p>
+                                    <p>Regards,</p>
+                                    <p>{record.env.company.name or ''}</p>
+                            						"""
+                            mails = {
+                                'subject': "Service Reminder Email",
+                                'email_from': self.env.user.email,
+                                'email_to': record.partner_id.email,
+                                'body_html': body,
+                                'auto_delete': False,
+                            }
+                            mail = self.env['mail.mail'].create(mails)
+                            mail.send()
 
     @api.onchange('product_id','service_product_ids')
     def onchange_product_id(self):

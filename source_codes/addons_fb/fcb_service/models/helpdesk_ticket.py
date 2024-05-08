@@ -47,6 +47,12 @@ class HelpdeskTicket(models.Model):
     product_service_id = fields.Many2one('product.template','Products', domain="[('detailed_type', '=', 'service')]")
     vender_id = fields.Many2one('res.partner', string='Vendor', tracking=True, domain="['|', ('company_id', '=', False), ('company_id', '=', company_id)]", help="You can find a vendor by its Name, TIN, Email or Internal Reference.")
     product_ids = fields.Char(compute="compute_product_ids", store=True)
+    done_service = fields.Integer(compute="compute_done_service")
+
+    def compute_done_service(self):
+        done_stage = self.env.ref('industry_fsm.planning_project_stage_3').id
+        for res in self:
+            res.done_service = len(res.fsm_task_ids.filtered(lambda x:x.stage_id.id == done_stage))
 
     @api.depends('service_line.product_id')
     def compute_product_ids(self):
@@ -56,9 +62,9 @@ class HelpdeskTicket(models.Model):
                 if line.product_id.id:
                     product_ids.append(line.product_id.id)
             if product_ids:
-                res.product_ids = json.dumps([('id', 'not in', product_ids)])
+                res.product_ids = json.dumps([('id', 'not in', product_ids),('is_serviceable','!=', False)])
             else:
-                res.product_ids = json.dumps([('id', 'not in', [])])
+                res.product_ids = json.dumps([('id', 'not in', []),('is_serviceable','!=', False)])
 
     @api.model
     def create(self, vals):
