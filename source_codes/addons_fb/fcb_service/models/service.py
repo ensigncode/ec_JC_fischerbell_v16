@@ -15,7 +15,8 @@ class Task(models.Model):
 			picking.count_transfer = count
 
 	def send_for_inspection(self):
-		stage_id = self.env['helpdesk.stage'].search([('name', '=', 'Inspection pending')], limit=1)
+		stage_id = self.env.ref('fcb_service.stage_inspection_in_project_task')
+		self.stage_id = stage_id.id
 		if stage_id:
 			self._update_stage(stage_id)
 			repair_location = self.env.ref('fcb_service.location_repair')  # Replace 'module_name' with your module name
@@ -42,8 +43,8 @@ class Task(models.Model):
 			'task_id': self.id,
 		}
 		move_line = (0, 0, {
-			'product_id': self.product_id.id or False,
-			'name': self.product_id.name,
+			'product_id': self.equipment_product_id.id or False,
+			'name': self.equipment_product_id.name,
 			'product_uom_qty': 1,
 			'location_id': src_location.id,
 			'location_dest_id': dest_location.id,
@@ -52,10 +53,6 @@ class Task(models.Model):
 		vals.update({'move_ids_without_package': move_lines})
 		picking_obj = self.env['stock.picking'].create(vals)
 		picking_obj.action_confirm()
-
-		# Update the state of the picking based on the provided state parameter
-		# if state:
-		#     picking_obj.state = state
 
 		return picking_obj
 
