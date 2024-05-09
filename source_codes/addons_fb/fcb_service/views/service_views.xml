@@ -49,7 +49,7 @@
                         attrs="{'invisible': ['|',('is_fsm', '!=', True),('worksheet_template_id','!=',6)]}"
                         title="Fischerbell Report" data-hotkey="x"/>
                 <button class="btn-secondary" name="action_print_huzmal_task_custom_report" type="object"
-                        string="HUZMAT SUIT INSPECTION REPORT"
+                        string="HAZMAT SUIT INSPECTION REPORT"
                         attrs="{'invisible': ['|',('is_fsm', '!=', True),('worksheet_template_id','!=',8)]}"
                         title="Fischerbell Report" data-hotkey="x"/>
                 <button class="btn-secondary" name="action_fischerbell_custom_life_jacket_report" type="object"

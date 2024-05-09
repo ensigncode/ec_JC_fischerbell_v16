@@ -72,7 +72,10 @@
                                     <strong style="text-align:right;">:</strong>
                                 </td>
                                 <td style="border-bottom: 1px solid black;text-align:left;width:25%;height:10px"
-                                    class="w-50"></td>
+                                    class="w-50">
+                                    <t t-out="o.partner_id.name"/>
+
+                                </td>
                                 <td style="width:25%;">
                                     <strong>Our Reference No:</strong>
                                 </td>
@@ -156,7 +159,7 @@
                             <th colspan="2" style="border-left: 2px solid black;">Result</th>
                         </tr>
                     </thead>
-                    <tbody class="table-bordered;text-align:center">
+                    <tbody class="table-bordered">
                         <tr style="border-left: 2px solid black;">
                             <td colspan="1" style="border-left: 2px solid black;">1</td>
                             <td colspan="2" style="border-left: 2px solid black;">&amp;nbsp;</td>
@@ -218,16 +221,16 @@
             </xpath>
         </template>
 
-<!--        <record id="action_report_fischerbell_custom_header_1" model="ir.actions.report">-->
-<!--            <field name="name">Exchange Notwwwwwwwwwwwwe</field>-->
-<!--            <field name="model">sale.order</field>-->
-<!--            <field name="report_type">qweb-pdf</field>-->
-<!--            <field name="report_name">fcb_service.fischerbell_custom_header_1</field>-->
-<!--            <field name="report_file">fcb_service.fischerbell_custom_header_1</field>-->
-<!--            <field name="print_report_name">'Exchange Order - %s' % (object.name or '')</field>-->
-<!--            <field name="binding_model_id" ref="sale.model_sale_order"/>-->
-<!--            <field name="binding_type">report</field>-->
-<!--        </record>-->
+        <!--        <record id="action_report_fischerbell_custom_header_1" model="ir.actions.report">-->
+        <!--            <field name="name">Exchange Notwwwwwwwwwwwwe</field>-->
+        <!--            <field name="model">sale.order</field>-->
+        <!--            <field name="report_type">qweb-pdf</field>-->
+        <!--            <field name="report_name">fcb_service.fischerbell_custom_header_1</field>-->
+        <!--            <field name="report_file">fcb_service.fischerbell_custom_header_1</field>-->
+        <!--            <field name="print_report_name">'Exchange Order - %s' % (object.name or '')</field>-->
+        <!--            <field name="binding_model_id" ref="sale.model_sale_order"/>-->
+        <!--            <field name="binding_type">report</field>-->
+        <!--        </record>-->
 
     </data>
 </odoo>

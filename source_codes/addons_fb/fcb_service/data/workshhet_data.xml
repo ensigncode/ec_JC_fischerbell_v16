@@ -21,7 +21,7 @@
         </record>
 
         <record id="worksheet_template4" model="worksheet.template">
-            <field name="name">HUZMAT SUIT INSPECTION REPORT</field>
+            <field name="name">HAZMAT SUIT INSPECTION REPORT</field>
             <field name="res_model">project.task</field>
             <field name="color">4</field>
         </record>

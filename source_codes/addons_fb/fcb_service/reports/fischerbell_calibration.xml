@@ -236,7 +236,7 @@
                                 </th>
                             </tr>
                         </thead>
-                        <tbody class="table-bordered;text-align:center">
+                        <tbody class="table-bordered;">
                             <tr t-if="worksheet_template_id" style="border-left: 2px solid black;">
                                 <td colspan="1" style="border-left: 2px solid black;text-align:center">
                                     1.
