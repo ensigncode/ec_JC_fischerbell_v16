@@ -8,14 +8,13 @@
 			<xpath expr="//button[@name='action_assign_to_me']" position="after">
 				<button class="btn-secondary" name="action_report" type="object" string="Report"/>
 				<button class="btn-secondary" name="send_for_inspection" type="object"
-				        string="Send for Inspection"/>
-<!--				<button class="btn-secondary" name="done_inspection" type="object" string="Done"/>-->
+				        string="Send for Inspection" attrs="{'invisible': ['|', ('count_transfer', '>', 0), ('equipment_product_id', '=', False)]}"/>
 			</xpath>
 			<xpath expr="//div[hasclass('oe_button_box')]" position="inside">
 				<button type="object" name="show_transfer" class="oe_stat_button" icon="fa-list"
-				        >
+				       attrs="{'invisible': [('count_transfer', '=', 0)]}">
 					<field name="count_transfer" widget="statinfo" string="Show Transfer"
-					       />
+					      attrs="{'invisible': [('count_transfer', '=', 0)]}" />
 				</button>
 			</xpath>
 			<xpath expr="//field[@name='tag_ids']" position="after">

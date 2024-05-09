@@ -2,12 +2,10 @@
 <odoo noupdate="1">
 
 	<!-- stage "New" gets created by default with sequence 0-->
-	<record id="stage_inspection" model="helpdesk.stage">
+	<record id="stage_inspection_in_project_task" model="project.task.type">
 		<field name="name">Inspection pending</field>
-		<field name="sequence">6</field>
-	</record>
-	<record id="stage_in_done" model="helpdesk.stage">
-		<field name="name">Done</field>
-		<field name="sequence">7</field>
+		<field name="sequence">8</field>
+		<field name="legend_blocked">Blocked</field>
+		<field name="fold" eval="True"/>
 	</record>
 </odoo>
