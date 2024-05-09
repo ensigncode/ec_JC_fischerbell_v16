@@ -280,15 +280,6 @@
                                 <t t-if="worksheet_template_id.x_comments" t-out="worksheet_template_id.x_comments"/>
                           </td>
                     </tr>
-                    <tr style="border-left: 2px solid white;border-right: 2px solid white;">
-                        <td style="border-bottom: 2px solid #C4BDBC;padding-top:5px;">&amp;nbsp;</td>
-                    </tr>
-                    <tr style="border-left: 2px solid white;border-right: 2px solid white;">
-                        <td style="border-bottom: 2px solid #C4BDBC;padding-top: 5px;">&amp;nbsp;</td>
-                    </tr>
-                    <tr style="border-left: 2px solid white;border-right: 2px solid white;">
-                        <td style="border-bottom: 2px solid white;padding-top: 5px;">&amp;nbsp;</td>
-                    </tr>
                     <br/>
                 </table>
                 <div>
