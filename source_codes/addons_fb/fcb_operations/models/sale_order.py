@@ -30,7 +30,7 @@ class SaleOrder(models.Model):
 						if template_id and self.user_id.login:
 							template_values = {
 								'email_from': product_buyer_id.email,
-								'email_to': self.user_id.login,
+								'email_to': self.user_id.partner_id.email,
 							}
 							template_id.sudo().send_mail(self.id, force_send=True, email_values=template_values)
 
