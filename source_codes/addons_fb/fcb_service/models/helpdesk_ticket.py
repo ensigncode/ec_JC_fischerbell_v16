@@ -48,7 +48,8 @@ class HelpdeskTicket(models.Model):
     vender_id = fields.Many2one('res.partner', string='Vendor', tracking=True, domain="['|', ('company_id', '=', False), ('company_id', '=', company_id)]", help="You can find a vendor by its Name, TIN, Email or Internal Reference.")
     product_ids = fields.Char(compute="compute_product_ids", store=True)
     done_service = fields.Integer(compute="compute_done_service")
-
+    attachment_ids = fields.Many2many(
+        'ir.attachment','attachment_id', string='Attachments')
     def compute_done_service(self):
         done_stage = self.env.ref('industry_fsm.planning_project_stage_3').id
         for res in self:

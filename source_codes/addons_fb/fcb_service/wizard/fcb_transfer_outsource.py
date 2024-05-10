@@ -18,7 +18,13 @@ class FcbOutsourceLocation(models.TransientModel):
         ('direct_to_c', 'To customer'),
 
     ], required=True)
-
+    pick_up = fields.Selection([
+        ('pc_driver', "Pickup by Driver"),
+        ('pc_supplier', "Pickup by Supplier"),
+    ],)
+    attachment_ids = fields.Many2many(
+        'ir.attachment',
+        'wizard_id', 'attachment_id', string='Attachments')
     @api.model
     def default_get(self, default_fields):
         ticket = self.env['helpdesk.ticket'].browse(self._context.get('active_ids'))
@@ -41,6 +47,7 @@ class FcbOutsourceLocation(models.TransientModel):
 
     def action_create_outsource_transfer(self):
         '''to_fcb >> Salesman/Driver picks item from customer and brings to FCB > FCB will send item to supplier'''
+
         if self.ticket_id.outsource_service == 'to_fcb':
             # src:partner
             # dest:van .fcb
@@ -153,43 +160,46 @@ class FcbOutsourceLocation(models.TransientModel):
             pick_output.action_confirm()
 
             # d_to_supplier >> Salesman/Driver picks item from customer and brings to Supplier location
-        # if self.ticket_id.outsource_service == 'd_to_supplier':
-        #     pick_in = self.env['stock.picking'].create({
-        #         # 'name': 'Driver Pickup',
-        #         'partner_id': self.ticket_id.partner_id.id,
-        #         'picking_type_id': self.env.ref('stock.picking_type_in').id,
-        #         'location_id': self.env.ref('stock.stock_location_customers').id,
-        #         'location_dest_id': self.dest_location_id.id,
-        #         'ticket_id': self.ticket_id.id,
-        #         'move_ids': [(0, 0, {
-        #             'name': 'Driver Pickup',
-        #             'product_id': self.ticket_id.product_id.id,
-        #             'product_uom_qty': 1,
-        #             'quantity_done': 1,
-        #             'product_uom': self.env.ref('uom.product_uom_unit').id,
-        #             'location_id': self.env.ref('stock.stock_location_customers').id,
-        #             'location_dest_id': self.dest_location_id.id,
-        #         })],
-        #     })
-        #
-        #     pick_output = self.env['stock.picking'].create({
-        #         # 'name': 'Unload to Warehouse',
-        #         'partner_id': self.ticket_id.partner_id.id,
-        #         'picking_type_id': self.env.ref('stock.picking_type_out').id,
-        #         'location_id': self.dest_location_id.id,
-        #         'location_dest_id': self.env.ref('fcb_service.location_repair').id,
-        #         'ticket_id': self.ticket_id.id,
-        #         'move_ids': [(0, 0, {
-        #             'name': ' Unload to Warehouse ',
-        #             'product_id': self.ticket_id.product_id.id,
-        #             'product_uom_qty': 1,
-        #             'product_uom': self.env.ref('uom.product_uom_unit').id,
-        #             'location_id': self.dest_location_id.id,
-        #             'location_dest_id': self.env.ref('fcb_service.location_repair').id,
-        #         })],
-        #     })
-        #     pick_in.action_confirm()
-        #     pick_output.action_confirm()
+        if self.ticket_id.outsource_service == 'd_to_supplier':
+            line_vals_list = []
+            for sl in self.ticket_id.service_line:
+                line_vals_list.append((0, 0, {
+                    'name': 'Driver Pickup',
+                    'product_id': sl.product_id.id,
+                    'product_uom_qty': sl.product_uom_qty,
+                    'product_uom': self.env.ref('uom.product_uom_unit').id,
+                    'location_id': self.env.ref('stock.stock_location_customers').id,
+                    'location_dest_id': self.env.ref('fcb_service.location_repair').id,
+                }))
+            pick_in = self.env['stock.picking'].create({
+                # 'name': 'Driver Pickup',
+                'partner_id': self.ticket_id.partner_id.id,
+                'picking_type_id': self.env.ref('stock.picking_type_in').id,
+                'location_id': self.env.ref('stock.stock_location_customers').id,
+                'location_dest_id': self.env.ref('fcb_service.location_repair').id,
+                'ticket_id': self.ticket_id.id,
+                'move_ids': line_vals_list})
+            pick_in.action_confirm()
+            pick_in.write({'attachment_ids': self.attachment_ids.ids})
+
+            po = self.env['purchase.order'].create({
+                "partner_id": self.ticket_id.vender_id.id,
+                "picking_type_id": self.env.ref('stock.picking_type_in').id,
+                "mail_sended": True,
+                "request_delivery_date": datetime.now(),
+                "estimated_delivery_date": datetime.now(),
+                "ticket_id": self.ticket_id.id,
+                "order_line": [(0, 0, {
+                    'product_id': self.ticket_id.product_service_id.product_variant_id.id,
+                    'name': '/',
+                    'product_qty': 1.0,
+                    'price_unit': 1,
+                    'taxes_id': False,
+                })],
+            })
+            po.button_confirm()
+
+            delivery = po.picking_ids
         # direct_to_c >> Salesperson will go to customer location for service
         # if self.ticket_id.outsource_service == 'direct_to_c':
         #     pick_in = self.env['stock.picking'].create({

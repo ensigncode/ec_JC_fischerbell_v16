@@ -10,7 +10,8 @@ class StockPicking(models.Model):
 
 
 	task_id = fields.Many2one('project.task', string="Task")
-
+	attachment_ids = fields.Many2many(
+		'ir.attachment','stock_attachment_rel', string='Attachments')
 	def button_validate(self):
 		res = super().button_validate()
 		if not self.is_to_check:
