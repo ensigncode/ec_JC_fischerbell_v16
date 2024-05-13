@@ -17,20 +17,23 @@ class FcbOutsourceLocation(models.TransientModel):
         ('to_fcb', 'To FCB'),
         ('direct_to_c', 'To customer'),
 
-    ], required=True)
+    ],)
     pick_up = fields.Selection([
         ('pc_driver', "Pickup by Driver"),
         ('pc_supplier', "Pickup by Supplier"),
     ],)
-    attachment_ids = fields.Many2many(
-        'ir.attachment',
-        'wizard_id', 'attachment_id', string='Attachments')
+    outsource_service = fields.Selection([
+        ('to_fcb', 'Salesman/Driver picks item from customer and brings to FCB > FCB will send item to supplier'),
+        ('d_to_supplier', 'Salesman/Driver picks item from customer and brings to Supplier location'),
+        ('direct_to_c', 'Salesperson will go to customer location for service'),
+    ])
     @api.model
     def default_get(self, default_fields):
         ticket = self.env['helpdesk.ticket'].browse(self._context.get('active_ids'))
         res = super(FcbOutsourceLocation, self).default_get(default_fields)
         res['ticket_id'] = ticket.id
         res['product_id'] = ticket.product_id.id
+        res['outsource_service'] =ticket.outsource_service
         locations = self.env['stock.location'].search([]).filtered(lambda x: x.location_id.name == 'Van')
         if 'location_ids' in default_fields:
             if locations:
@@ -178,9 +181,9 @@ class FcbOutsourceLocation(models.TransientModel):
                 'location_id': self.env.ref('stock.stock_location_customers').id,
                 'location_dest_id': self.env.ref('fcb_service.location_repair').id,
                 'ticket_id': self.ticket_id.id,
+                'pick_up': self.pick_up,
                 'move_ids': line_vals_list})
             pick_in.action_confirm()
-            pick_in.write({'attachment_ids': self.attachment_ids.ids})
 
             po = self.env['purchase.order'].create({
                 "partner_id": self.ticket_id.vender_id.id,

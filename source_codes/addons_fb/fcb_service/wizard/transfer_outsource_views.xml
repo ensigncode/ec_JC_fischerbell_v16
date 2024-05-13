@@ -11,13 +11,11 @@
                         <field name="ticket_id" invisible='1'/>
                         <field name="product_id" invisible='1'/>
                         <field name="location_ids" invisible="1"/>
-                        <field name="to_destination"/>
-                        <field name="dest_location_id" domain="[('id','in',location_ids)]"/>
-                    </group>
-                    <group>
-                        <field name="pick_up"/>
-
-                        <field name="attachment_ids" widget="many2many_binary"/>
+                        <field name="outsource_service" invisible="1"/>
+                        <field name="to_destination" attrs="{'invisible': [('outsource_service', '!=', 'to_fcb')]}"/>
+                        <field name="dest_location_id" domain="[('id','in',location_ids)]"
+                               attrs="{'invisible': [('outsource_service', '!=', 'to_fcb')]}"/>
+                        <field name="pick_up" attrs="{'invisible': [('outsource_service', '!=', 'd_to_supplier')]}"/>
                     </group>
                 </group>
                 <footer>
