@@ -24,7 +24,7 @@
                         <tree editable="bottom">
                             <field name="reason_date"/>
                             <field name="name"/>
-                        </tree>    
+                        </tree>
                     </field>
                 </page>
             </xpath>

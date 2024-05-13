@@ -19,7 +19,7 @@ class FcbLocation(models.TransientModel):
         res = super(FcbLocation, self).default_get(default_fields)
         res['ticket_id'] = ticket.id
         res['product_id'] = ticket.product_id.id
-        locations = self.env['stock.location'].search([]).filtered(lambda x:x.location_id.name == 'Van')
+        locations = self.env['stock.location'].search([]).filtered(lambda x: x.location_id.name == 'Van')
         if 'location_ids' in default_fields:
             if locations:
                 if len((locations)) == 1:
@@ -34,6 +34,17 @@ class FcbLocation(models.TransientModel):
         return res
 
     def action_create_return_transfer(self):
+        line_vals_list = []
+        for sl in self.ticket_id.service_line:
+            line_vals_list.append((0, 0, {
+            'name': 'Driver Pickup',
+            'product_id': sl.product_id.id,
+            'product_uom_qty': sl.product_uom_qty,
+            'quantity_done': sl.product_uom_qty,
+            'product_uom': self.env.ref('uom.product_uom_unit').id,
+            'location_id': self.env.ref('stock.stock_location_output').id,
+            'location_dest_id': self.dest_location_id.id,
+        }))
         pick_in = self.env['stock.picking'].create({
             # 'name': 'Load to van',
             'partner_id': self.ticket_id.partner_id.id,
@@ -41,32 +52,24 @@ class FcbLocation(models.TransientModel):
             'location_id': self.env.ref('stock.stock_location_output').id,
             'location_dest_id': self.dest_location_id.id,
             'ticket_id': self.ticket_id.id,
-            'move_ids': [(0, 0, {
-                'name': 'Driver Pickup',
-                'product_id': self.ticket_id.product_id.id,
-                'product_uom_qty': 1,
-                'quantity_done': 1,
-                'product_uom': self.env.ref('uom.product_uom_unit').id,
-                'location_id': self.env.ref('stock.stock_location_output').id,
-                'location_dest_id': self.dest_location_id.id,
-            })],
-        })
+            'move_ids': line_vals_list})
 
+        line_valsout_list = []
+        for sl in self.ticket_id.service_line:
+            line_valsout_list.append((0, 0, {
+                'name': ' Unload to Warehouse ',
+                'product_id': sl.product_id.id,
+                'product_uom_qty': sl.product_uom_qty,
+                'product_uom': self.env.ref('uom.product_uom_unit').id,
+                'location_id': self.dest_location_id.id,
+                'location_dest_id': self.env.ref('stock.stock_location_customers').id,
+            }))
         pick_output = self.env['stock.picking'].create({
             # 'name': 'Deliver to customer',
             'partner_id': self.ticket_id.partner_id.id,
             'picking_type_id': self.env.ref('stock.picking_type_out').id,
-            'location_id':self.dest_location_id.id,
+            'location_id': self.dest_location_id.id,
             'location_dest_id': self.env.ref('stock.stock_location_customers').id,
             'ticket_id': self.ticket_id.id,
-            'move_ids': [(0, 0, {
-                'name': ' Unload to Warehouse ',
-                'product_id': self.ticket_id.product_id.id,
-                'product_uom_qty': 1,
-                'product_uom': self.env.ref('uom.product_uom_unit').id,
-                'location_id': self.dest_location_id.id,
-                'location_dest_id': self.env.ref('stock.stock_location_customers').id,
-            })],
-        })
-        pick_in.action_confirm()
+            'move_ids': line_valsout_list})
         pick_output.action_confirm()

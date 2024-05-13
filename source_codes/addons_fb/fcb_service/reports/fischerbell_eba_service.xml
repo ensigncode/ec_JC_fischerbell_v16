@@ -283,21 +283,6 @@
                             <t t-if="worksheet_template_id.x_comments" t-out="worksheet_template_id.x_comments"/>
                         </td>
                     </tr>
-                    <tr style="border-left: 2px solid white;border-right: 2px solid white;">
-                        <td style="border-bottom: 2px solid black;">
-                            <p>&amp;nbsp;</p>
-                        </td>
-                    </tr>
-                    <tr style="border-left: 2px solid white;border-right: 2px solid white;">
-                        <td style="border-bottom: 2px solid black;">
-                            <p>&amp;nbsp;</p>
-                        </td>
-                    </tr>
-                    <tr style="border-right: 1px solid white;border-left: 2px solid white;">
-                        <td style="border-bottom: 2px solid white;">
-                            <p>&amp;nbsp;</p>
-                        </td>
-                    </tr>
                 </table>
 
                 <div>

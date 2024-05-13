@@ -44,11 +44,12 @@ class HelpdeskTicket(models.Model):
         ('direct_to_c', 'Salesperson will go to customer location for service'),
 
     ])
-    product_service_id = fields.Many2one('product.template','Products', domain="[('detailed_type', '=', 'service')]")
+    product_service_id = fields.Many2one('product.template','Service For Vender', domain="[('detailed_type', '=', 'service')]")
     vender_id = fields.Many2one('res.partner', string='Vendor', tracking=True, domain="['|', ('company_id', '=', False), ('company_id', '=', company_id)]", help="You can find a vendor by its Name, TIN, Email or Internal Reference.")
     product_ids = fields.Char(compute="compute_product_ids", store=True)
     done_service = fields.Integer(compute="compute_done_service")
-
+    attachment_ids = fields.Many2many(
+        'ir.attachment','attachment_id', string='Attachments')
     def compute_done_service(self):
         done_stage = self.env.ref('industry_fsm.planning_project_stage_3').id
         for res in self:

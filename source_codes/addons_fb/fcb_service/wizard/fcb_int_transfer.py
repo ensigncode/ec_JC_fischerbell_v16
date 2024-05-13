@@ -34,6 +34,17 @@ class FcbIntLocation(models.TransientModel):
         return res
 
     def action_create_int_transfer(self):
+        line_vals_list = []
+        for sl in self.ticket_id.service_line:
+            line_vals_list.append((0,0,{
+                'name': 'Driver Pickup',
+                'product_id': sl.product_id.id,
+                'product_uom_qty': sl.product_uom_qty,
+                'quantity_done': sl.product_uom_qty,
+                'product_uom': self.env.ref('uom.product_uom_unit').id,
+                'location_id': self.env.ref('fcb_service.location_repair').id,
+                'location_dest_id': self.dest_location_id.id,
+            }))
         pick_in = self.env['stock.picking'].create({
             # 'name': 'Driver Pickup',
             'partner_id': self.ticket_id.partner_id.id,
@@ -41,16 +52,18 @@ class FcbIntLocation(models.TransientModel):
             'location_id':self.env.ref('fcb_service.location_repair').id,
             'location_dest_id': self.dest_location_id.id,
             'ticket_id': self.ticket_id.id,
-            'move_ids': [(0, 0, {
-                'name': 'Driver Pickup',
-                'product_id': self.ticket_id.product_id.id,
-                'product_uom_qty': 1,
-                'quantity_done': 1,
+            'move_ids': line_vals_list})
+
+        line_valsout_list = []
+        for sl in self.ticket_id.service_line:
+            line_valsout_list.append((0,0,{
+                'name': ' Unload to Warehouse ',
+                'product_id': sl.product_id.id,
+                'product_uom_qty': sl.product_uom_qty,
                 'product_uom': self.env.ref('uom.product_uom_unit').id,
-                'location_id': self.env.ref('fcb_service.location_repair').id,
-                'location_dest_id': self.dest_location_id.id,
-            })],
-        })
+                'location_id': self.dest_location_id.id,
+                'location_dest_id': self.env.ref('stock.stock_location_output').id,
+            }))
 
         pick_output = self.env['stock.picking'].create({
             # 'name': 'Unload to Warehouse',
@@ -59,14 +72,7 @@ class FcbIntLocation(models.TransientModel):
             'location_id': self.dest_location_id.id,
             'location_dest_id':  self.env.ref('stock.stock_location_output').id,
             'ticket_id': self.ticket_id.id,
-            'move_ids': [(0, 0, {
-                'name': ' Unload to Warehouse ',
-                'product_id': self.ticket_id.product_id.id,
-                'product_uom_qty': 1,
-                'product_uom': self.env.ref('uom.product_uom_unit').id,
-                'location_id': self.dest_location_id.id,
-                'location_dest_id': self.env.ref('stock.stock_location_output').id,
-            })],
+            'move_ids': line_valsout_list
         })
         pick_in.action_confirm()
         pick_output.action_confirm()

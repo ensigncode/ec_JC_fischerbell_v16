@@ -322,15 +322,6 @@
                            t-esc="worksheet_template_id.x_comments"/>
                     </td>
                 </tr>
-                <tr style="border-left: 2px solid white;border-right: 2px solid white;">
-                    <td style="border-bottom: 2px solid black;">&amp;nbsp;</td>
-                </tr>
-                <tr style="border-left: 2px solid white;border-right: 2px solid white;">
-                    <td style="border-bottom: 2px solid black;">&amp;nbsp;</td>
-                </tr>
-                <tr style="border-right: 1px solid white;border-left: 2px solid white;">
-                    <td style="border-bottom: 2px solid white;">&amp;nbsp;</td>
-                </tr>
             </table>
 
             <div>
