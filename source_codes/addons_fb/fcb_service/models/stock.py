@@ -15,6 +15,7 @@ class StockPicking(models.Model):
 		('pc_driver', "Pickup by Driver"),
 		('pc_supplier', "Pickup by Supplier"),
 	], )
+
 	def button_validate(self):
 		res = super().button_validate()
 		if not self.is_to_check:
