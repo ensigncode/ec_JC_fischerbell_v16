@@ -145,7 +145,11 @@
                     />
                     <button class="btn btn-secondary" name="action_select_loc_outsource" type="object"
                             string="Create Outsource Transfer"
-                            attrs="{'invisible': [('service_type', '!=', 'outsource_service')]}"
+                            attrs="{'invisible': ['|',('service_type', '!=', 'outsource_service'),('outsource_service', '=', 'direct_to_c')]}"
+                    />
+                    <button class="btn btn-secondary" name="action_create_po" type="object"
+                            string="Create Purchase Order"
+                            attrs="{'invisible': ['|',('service_type', '!=', 'outsource_service'),('outsource_service', '!=', 'direct_to_c')]}"
                     />
                 </xpath>
                  <xpath expr="//header/button[@name='action_generate_fsm_task']" position="replace">

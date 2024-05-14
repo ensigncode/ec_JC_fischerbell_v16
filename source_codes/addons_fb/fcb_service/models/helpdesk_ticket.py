@@ -2,7 +2,7 @@
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 
 from odoo import models,api,fields, _
-from odoo.exceptions import UserError, ValidationError
+from datetime import datetime
 import json
 
 
@@ -167,8 +167,23 @@ class HelpdeskTicket(models.Model):
             'view_mode': 'form',
             'target': 'new',
         }
-
-
+    def action_create_po(self):
+        po = self.env['purchase.order'].create({
+            "partner_id": self.vender_id.id,
+            "picking_type_id": self.env.ref('stock.picking_type_in').id,
+            "mail_sended": True,
+            "request_delivery_date": datetime.now(),
+            "estimated_delivery_date": datetime.now(),
+            "ticket_id": self.id,
+            "order_line": [(0, 0, {
+                'product_id': self.product_service_id.product_variant_id.id,
+                'name': self.product_service_id.product_variant_id.name,
+                'product_qty': 1.0,
+                'price_unit': 1,
+                'taxes_id': False,
+            })],
+        })
+        po.button_confirm()
 
 
 class StockPicking(models.Model):
