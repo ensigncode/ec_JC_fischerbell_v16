@@ -24,6 +24,7 @@
         'views/equipment_service_views.xml',
         'views/helpdesk_ticket.xml',
         'views/stock_picking_view.xml',
+        'views/sale_order_view.xml',
         'wizard/transfer_details_views.xml',
         'wizard/transfer_return_details_views.xml',
         'wizard/transfer_outsource_views.xml',

@@ -18,8 +18,10 @@ class ProductService(models.Model):
     extra_product_ids = fields.Many2many('product.product',related="product_tmpl_id.extra_product_ids")
     product_variant_id = fields.Many2one('product.product','Products', domain="[('detailed_type', '=', 'service'),('id','not in',extra_product_ids)]")
     equipment_id = fields.Many2one('equipment.service','equipment service')
-    service_date = fields.Datetime(string='Service Days',)
-    reminder_date = fields.Datetime(string='Reminder Days',)
+    service_date = fields.Datetime(string='Service Date',)
+    reminder_date = fields.Datetime(string='Reminder Date',)
+    sale_product_tmp_id = fields.Many2one('sale.order','sale Products')
+    service_product_id = fields.Many2one('product.product', string="Service Product")
 
     @api.constrains('service_time', 'reminder_time')
     def _check_service_time(self):
