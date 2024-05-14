@@ -1,92 +1,81 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <record id="equipment_service_tree_view" model="ir.ui.view">
-        <field name="name">equipment.service.tree.view</field>
-        <field name="model">equipment.service</field>
-        <field name="arch" type="xml">
-            <tree string="Equipment Service">
-                <field name="partner_id"/>
-                <field name="product_id"/>
-                <field name="delivered_date"/>
-                <field name="serial_number"/>
-            </tree>
-        </field>
-    </record>
+	<record id="equipment_service_tree_view" model="ir.ui.view">
+		<field name="name">equipment.service.tree.view</field>
+		<field name="model">equipment.service</field>
+		<field name="arch" type="xml">
+			<tree string="Equipment Service">
+				<field name="partner_id"/>
+				<field name="product_id"/>
+				<field name="delivered_date"/>
+				<field name="serial_number"/>
+			</tree>
+		</field>
+	</record>
 
-    <record id="equipment_service_form_view" model="ir.ui.view">
-        <field name="name">equipment.service.form.view</field>
-        <field name="model">equipment.service</field>
-        <field name="arch" type="xml">
-            <form string="Equipment Service">
-                <sheet>
-                    <group>
-                        <group>
-                            <field name="partner_id"/>
-                            <field name="product_id"/>
-                            <field name="so_ref"/>
-                            <field name="categ_id"/>
-                            <field name="delivered_date"/>
-                        </group>
-                        <group>
-                            <field name="serial_number"/>
-                            <field name="expire_date"/>
-                            <field name="manufacturing_date"/>
-                            <field name="is_inhouse_service" />
-                        </group>
-                    </group>
+	<record id="equipment_service_form_view" model="ir.ui.view">
+		<field name="name">equipment.service.form.view</field>
+		<field name="model">equipment.service</field>
+		<field name="arch" type="xml">
+			<form string="Equipment Service">
+				<sheet>
+					<group>
+						<group>
+							<field name="partner_id"/>
+							<field name="product_id"/>
+							<field name="so_ref"/>
+							<field name="categ_id"/>
+							<field name="delivered_date"/>
+							<field name="service_product_id"/>
+						</group>
+						<group>
+							<field name="serial_number"/>
+							<field name="expire_date"/>
+							<field name="manufacturing_date"/>
+							<field name="is_inhouse_service"/>
+							<field name="eq_service_date"/>
+							<field name="eq_reminder_date"/>
 
-                    <br/>
-                    <br/>
-                    <field name="is_serviceable" invisible="1"/>
-                    <group string="Service Products" attrs="{'invisible': [('is_serviceable', '=',False)]}">
-                        <field name="service_product_ids" colspan="2" nolabel="1">
-                            <tree editable="bottom" string="Service Products">
-                                <field name="extra_product_ids" widget="many2many_tags" invisible="1"/>
-                                <field name="product_variant_id"/>
-                                <field name="service_date"/>
-                                <field name="reminder_date"/>
-                            </tree>
-                        </field>
-                    </group>
+						</group>
+					</group>
+				</sheet>
+			</form>
+		</field>
+	</record>
+	<record id="equipment_service_view_search" model="ir.ui.view">
+		<field name="name">equipment.service.view.search</field>
+		<field name="model">equipment.service</field>
+		<field name="arch" type="xml">
+			<search string="Product">
+				<field name="partner_id"/>
+				<field name="product_id"/>
+				<separator/>
+				<filter string="Products" name="filter_product"/>
+				<filter string="Customer" name="filter_customer"/>
+				<filter string="Lot/Serial Number" name="product"/>
+				<!--                <filter string="Today's Reminder" name="today"-->
+				<!--                        domain="[('service_date', '&gt;', (context_today() - datetime.timedelta(days=1)).strftime('%Y-%m-%d'))]"/>-->
+				<!--                <filter string="Today's service" name="today_service_reminder_date"-->
+				<!--                        domain="[('service_reminder_date', '&gt;', (context_today() - datetime.timedelta(days=1)).strftime('%Y-%m-%d'))]"/>-->
 
-                </sheet>
-            </form>
-        </field>
-    </record>
-    <record id="equipment_service_view_search" model="ir.ui.view">
-        <field name="name">equipment.service.view.search</field>
-        <field name="model">equipment.service</field>
-        <field name="arch" type="xml">
-            <search string="Product">
-                <field name="partner_id"/>
-                <field name="product_id"/>
-                <separator/>
-                <filter string="Products" name="filter_product" />
-                <filter string="Customer" name="filter_customer" />
-                <filter string="Lot/Serial Number" name="product" />
-<!--                <filter string="Today's Reminder" name="today"-->
-<!--                        domain="[('service_date', '&gt;', (context_today() - datetime.timedelta(days=1)).strftime('%Y-%m-%d'))]"/>-->
-<!--                <filter string="Today's service" name="today_service_reminder_date"-->
-<!--                        domain="[('service_reminder_date', '&gt;', (context_today() - datetime.timedelta(days=1)).strftime('%Y-%m-%d'))]"/>-->
+				<group expand="0" string="Group By...">
+					<filter string="Product" name="product" domain="[]" context="{'group_by': 'product_id'}"/>
+					<filter string="Customer" name="customer" domain="[]" context="{'group_by': 'partner_id'}"/>
+					<!--                    -->
+				</group>
+			</search>
+		</field>
+	</record>
 
-                <group expand="0" string="Group By...">
-                    <filter string="Product" name="product" domain="[]" context="{'group_by': 'product_id'}"/>
-                    <filter string="Customer" name="customer" domain="[]" context="{'group_by': 'partner_id'}"/>
-<!--                    -->
-                </group>
-            </search>
-        </field>
-    </record>
+	<record model="ir.actions.act_window" id="action_equipment_service">
+		<field name="name">Equipment Service</field>
+		<field name="type">ir.actions.act_window</field>
+		<field name="res_model">equipment.service</field>
+		<field name="view_mode">tree,form</field>
+	</record>
 
-    <record model="ir.actions.act_window" id="action_equipment_service">
-        <field name="name">Equipment Service</field>
-        <field name="type">ir.actions.act_window</field>
-        <field name="res_model">equipment.service</field>
-        <field name="view_mode">tree,form</field>
-    </record>
-
-    <menuitem name="Equipment Service Database"
-              id="menu_equipment_service"
-              action="action_equipment_service"
-              parent="sale.sale_menu_root"/>
+	<menuitem name="Equipment Service Database"
+	          id="menu_equipment_service"
+	          action="action_equipment_service"
+	          parent="sale.sale_menu_root"/>
 </odoo>
