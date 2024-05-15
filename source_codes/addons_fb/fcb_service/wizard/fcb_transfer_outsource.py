@@ -85,7 +85,7 @@ class FcbOutsourceLocation(models.TransientModel):
                 "ticket_id": self.ticket_id.id,
                 "order_line": [(0, 0, {
                     'product_id': self.ticket_id.product_service_id.product_variant_id.id,
-                    'name': self.product_service_id.product_variant_id.name,
+                    'name': self.ticket_id.product_service_id.product_variant_id.name,
                     'product_qty': 1.0,
                     'price_unit': 1,
                     'taxes_id': False,
@@ -194,7 +194,7 @@ class FcbOutsourceLocation(models.TransientModel):
                 "ticket_id": self.ticket_id.id,
                 "order_line": [(0, 0, {
                     'product_id': self.ticket_id.product_service_id.product_variant_id.id,
-                    'name': self.product_service_id.product_variant_id.name,
+                    'name': self.ticket_id.product_service_id.product_variant_id.name,
                     'product_qty': 1.0,
                     'price_unit': 1,
                     'taxes_id': False,
