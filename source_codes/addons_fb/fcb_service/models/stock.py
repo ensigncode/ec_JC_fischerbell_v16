@@ -30,4 +30,7 @@ class StockPicking(models.Model):
 						                   'manufacturing_date': line.lot_id.manufacturing_date or False,
 						                   'expire_date': line.lot_id.expiration_date or False})
 
-		return res
+			return res
+		else:
+			return res
+
