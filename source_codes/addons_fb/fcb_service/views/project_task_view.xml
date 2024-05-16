@@ -18,6 +18,8 @@
 			</xpath>
 			<xpath expr="//field[@name='tag_ids']" position="after">
 				<field name="product_id"/>
+				<field name="service_date"/>
+				<field name="next_service_date"/>
 				<field name="equipment_database_product" invisible="1"/>
 				<field name="equipment_database_serial" invisible="1"/>
 			</xpath>

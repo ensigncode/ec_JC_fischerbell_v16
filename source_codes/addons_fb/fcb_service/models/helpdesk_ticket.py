@@ -1,9 +1,13 @@
 # -*- coding: utf-8 -*-
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
-
+import qrcode
+from io import BytesIO
 from odoo import models,api,fields, _
 from datetime import datetime
 import json
+import base64
+
+
 
 
 class HelpdeskTicket(models.Model):
@@ -50,6 +54,9 @@ class HelpdeskTicket(models.Model):
     done_service = fields.Integer(compute="compute_done_service")
     attachment_ids = fields.Many2many(
         'ir.attachment','attachment_id', string='Attachments')
+
+
+
     def compute_done_service(self):
         done_stage = self.env.ref('industry_fsm.planning_project_stage_3').id
         for res in self:

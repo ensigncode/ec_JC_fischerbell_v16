@@ -39,6 +39,7 @@
         'reports/fischerbell_scba_mask_inspection.xml',
         'reports/fischerbell_paper_test.xml',
         'reports/fischerbell_cert_team_inspection.xml',
+        'reports/fischerbell_service_qr_code.xml',
 
     ],
     'demo': [

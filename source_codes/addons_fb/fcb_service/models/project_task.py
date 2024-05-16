@@ -2,6 +2,7 @@
 
 from odoo import api, models, fields
 import json
+from odoo.tools import html2plaintext
 
 
 class Task(models.Model):
@@ -12,6 +13,8 @@ class Task(models.Model):
     equipment_database_product = fields.Char("Equipment Database Product", compute="_get_equipment_database_domain")
     equipment_database_serial = fields.Char("Equipment Database Serial", compute="_get_equipment_database_domain")
     equipment_database_id = fields.Many2one("equipment.service","Serial Number")
+    service_date = fields.Datetime("Service Date")
+    next_service_date = fields.Datetime("Next Service Date")
 
 
     @api.depends("partner_id")
@@ -59,6 +62,20 @@ class Task(models.Model):
 
 
     def action_report(self):
-        report_action = self.env.ref('fcb_service.calibration_report')  # Replace 'module_name' with the actual name of your module
+        report_action = self.env.ref('fcb_service.calibration_report')
         return report_action.report_action(self)
 
+    def _generate_qr_code(self):
+        formatted_string = ''
+        for record in self:
+            service_ids = self.search([('partner_id', '=', record.partner_id.id)])
+            for service in service_ids:
+                name = service.name
+                status = service.stage_id.name
+                equipment_sku = record.product_id.default_code if record.product_id.default_code else ''
+                equipment = record.product_id.name
+                service_date = record.service_date
+                next_service_date = record.next_service_date
+                formatted_string += "Name: {:<20} Status: {} SKU/Model No.: {} Equipment: {} Service Date: {}  Next Service Date:{}".format(name, status, equipment_sku, equipment, service_date, next_service_date) + '\n\n\n'
+        plain_text = html2plaintext(formatted_string).strip()
+        return plain_text
