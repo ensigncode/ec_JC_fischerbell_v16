@@ -1,21 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-	<template id="purchase_order_portal_content_inherit" inherit_id="purchase.purchase_order_portal_content">
-		<xpath expr="//div[@class='row'][2]" position="after">
-			<div>
-				<form id="purchase_order_form" action="/purchase_order/submit_data" method="post">
-					<div t-att-class="'d-inline'">
-                      <strong>Estimated Date:</strong><span class="ms-1" t-field="order.estimated_delivery_date" t-options='{"widget": "date"}'/>
+    <template id="purchase_order_portal_content_inherit" inherit_id="purchase.purchase_order_portal_content">
+        <xpath expr="//div[@class='row'][2]" position="after">
+            <div>
+                <form id="purchase_order_form" action="/purchase_order/submit_data" method="post">
+                    <div t-att-class="'d-inline'">
+                        <strong>Estimated Date:</strong>
+                        <span class="ms-1" t-field="order.estimated_delivery_date" t-options='{"widget": "date"}'/>
                     </div>
-					<div>
-						<strong>Update Estimated Date:</strong>
-						<input type="date" id="estimated_delivery_date" name="estimated_delivery_date"/>
-					</div>
-					<input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
-					<input type="hidden" name="purchase_order_name" t-att-value="order.name"/>
-					<button type="submit" class="btn btn-secondary btn-block o_download_btn">Update</button>
-				</form>
-			</div>
-		</xpath>
-	</template>
+                    <div>
+                        <strong>Update Estimated Date:</strong>
+                        <input type="date" id="estimated_delivery_date" name="estimated_delivery_date"/>
+                    </div>
+                    <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                    <input type="hidden" name="purchase_order_name" t-att-value="order.name"/>
+                    <button type="submit" class="btn btn-secondary btn-block o_download_btn">Update</button>
+                </form>
+            </div>
+        </xpath>
+        <xpath expr="//th[1]" position="after">
+            <th class="text-center">Estimated Date</th>
+            <th class="text-center">Update Estimated Date</th>
+        </xpath>
+        <xpath expr="//tbody/t/tr/t[1]/td[1]" position="after">
+            <td id="estimated_delivery_dates">
+                <span t-field="line.estimated_delivery_date"/>
+            </td>
+            <td>
+                <div >
+                    <form id="purchase_order_form" action="/purchase_order/submit_data" method="post" style=" display: flex;">
+                        <input type="date" id="estimated_delivery_date1" name="estimated_delivery_date1"/>
+                        <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                        <input type="hidden" name="purchase_order_name" t-att-value="order.name"/>
+                        <input type="hidden" name="purchase_order_line" t-att-value="line.id"/>
+                        <button type="submit" class="btn btn-secondary btn-block o_download_btn" style="padding:5px;margin-left:5px">Update</button>
+                    </form>
+                </div>
+            </td>
+        </xpath>
+    </template>
 </odoo>
