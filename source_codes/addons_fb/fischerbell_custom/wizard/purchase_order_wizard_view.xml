@@ -27,7 +27,7 @@
             <field name="target">new</field>
         </record>
 
-        <menuitem action="action_purchase_order_wizard" id="purchase.menu_purchase_root"/>
+<!--        <menuitem action="action_purchase_order_wizard" id="purchase.menu_purchase_root"/>-->
 
     </data>
 </odoo>
