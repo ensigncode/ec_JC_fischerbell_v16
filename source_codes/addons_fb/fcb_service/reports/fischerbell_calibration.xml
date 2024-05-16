@@ -317,6 +317,7 @@
 
             </t>
         </template>
+
         <record id="paperformat_fischerbell_report_view" model="report.paperformat">
             <field name="name">Custom fischerbell report</field>
             <field name="default" eval="False"/>
