@@ -3,6 +3,11 @@
 from odoo import api, models, fields
 import json
 from odoo.tools import html2plaintext
+import qrcode
+
+# import qrcode
+import base64
+from io import BytesIO
 
 
 class Task(models.Model):
@@ -68,7 +73,7 @@ class Task(models.Model):
     def _generate_qr_code(self):
         formatted_string = ''
         for record in self:
-            service_ids = self.search([('partner_id', '=', record.partner_id.id)], limit=5)
+            service_ids = self.search([('partner_id', '=', record.partner_id.id)])
             for service in service_ids:
                 name = service.name
                 status = service.stage_id.name
@@ -78,4 +83,18 @@ class Task(models.Model):
                 next_service_date = record.next_service_date if record.next_service_date else ''
                 formatted_string += "Name: {:<20} Status: {} SKU/Model No.: {} Equipment: {} Service Date: {}  Next Service Date:{}".format(name, status, equipment_sku, equipment, service_date, next_service_date) + "\n\n\n"
         plain_text = html2plaintext(formatted_string).strip()
-        return plain_text
+        url = plain_text
+        qr = qrcode.QRCode(
+            version=1,
+            error_correction=qrcode.constants.ERROR_CORRECT_L,
+            box_size=10,
+            border=4,
+        )
+        qr.add_data(url)
+        qr.make(fit=True)
+        img =  qr.make_image(fill_color="black", back_color="white")
+        buffer = BytesIO()
+        img.save(buffer, format="PNG")
+        encoded_image = base64.b64encode(buffer.getvalue()).decode()
+        image_src = f"data:image/png;base64,{encoded_image}"
+        return image_src
