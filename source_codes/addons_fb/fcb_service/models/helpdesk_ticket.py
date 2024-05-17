@@ -175,6 +175,7 @@ class HelpdeskTicket(models.Model):
             "request_delivery_date": datetime.now(),
             "estimated_delivery_date": datetime.now(),
             "ticket_id": self.id,
+            "origin": self.name,
             "order_line": [(0, 0, {
                 'product_id': self.product_service_id.product_variant_id.id,
                 'name': self.product_service_id.product_variant_id.name,

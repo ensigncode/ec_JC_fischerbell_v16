@@ -83,6 +83,7 @@ class FcbOutsourceLocation(models.TransientModel):
                 "request_delivery_date": datetime.now(),
                 "estimated_delivery_date": datetime.now(),
                 "ticket_id": self.ticket_id.id,
+                "origin":self.ticket_id.name,
                 "order_line": [(0, 0, {
                     'product_id': self.ticket_id.product_service_id.product_variant_id.id,
                     'name': self.ticket_id.product_service_id.product_variant_id.name,
@@ -192,6 +193,7 @@ class FcbOutsourceLocation(models.TransientModel):
                 "request_delivery_date": datetime.now(),
                 "estimated_delivery_date": datetime.now(),
                 "ticket_id": self.ticket_id.id,
+                "origin": self.ticket_id.name,
                 "order_line": [(0, 0, {
                     'product_id': self.ticket_id.product_service_id.product_variant_id.id,
                     'name': self.ticket_id.product_service_id.product_variant_id.name,
@@ -203,41 +205,3 @@ class FcbOutsourceLocation(models.TransientModel):
             po.button_confirm()
 
             delivery = po.picking_ids
-        # direct_to_c >> Salesperson will go to customer location for service
-        # if self.ticket_id.outsource_service == 'direct_to_c':
-        #     pick_in = self.env['stock.picking'].create({
-        #         # 'name': 'Driver Pickup',
-        #         'partner_id': self.ticket_id.partner_id.id,
-        #         'picking_type_id': self.env.ref('stock.picking_type_in').id,
-        #         'location_id': self.env.ref('stock.stock_location_customers').id,
-        #         'location_dest_id': self.dest_location_id.id,
-        #         'ticket_id': self.ticket_id.id,
-        #         'move_ids': [(0, 0, {
-        #             'name': 'Driver Pickup',
-        #             'product_id': self.ticket_id.product_id.id,
-        #             'product_uom_qty': 1,
-        #             'quantity_done': 1,
-        #             'product_uom': self.env.ref('uom.product_uom_unit').id,
-        #             'location_id': self.env.ref('stock.stock_location_customers').id,
-        #             'location_dest_id': self.dest_location_id.id,
-        #         })],
-        #     })
-        #
-        #     pick_output = self.env['stock.picking'].create({
-        #         # 'name': 'Unload to Warehouse',
-        #         'partner_id': self.ticket_id.partner_id.id,
-        #         'picking_type_id': self.env.ref('stock.picking_type_out').id,
-        #         'location_id': self.dest_location_id.id,
-        #         'location_dest_id': self.env.ref('fcb_service.location_repair').id,
-        #         'ticket_id': self.ticket_id.id,
-        #         'move_ids': [(0, 0, {
-        #             'name': ' Unload to Warehouse ',
-        #             'product_id': self.ticket_id.product_id.id,
-        #             'product_uom_qty': 1,
-        #             'product_uom': self.env.ref('uom.product_uom_unit').id,
-        #             'location_id': self.dest_location_id.id,
-        #             'location_dest_id': self.env.ref('fcb_service.location_repair').id,
-        #         })],
-        #     })
-        #     pick_in.action_confirm()
-        #     pick_output.action_confirm()
