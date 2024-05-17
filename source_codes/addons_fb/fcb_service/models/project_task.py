@@ -68,14 +68,14 @@ class Task(models.Model):
     def _generate_qr_code(self):
         formatted_string = ''
         for record in self:
-            service_ids = self.search([('partner_id', '=', record.partner_id.id)])
+            service_ids = self.search([('partner_id', '=', record.partner_id.id)], limit=5)
             for service in service_ids:
                 name = service.name
                 status = service.stage_id.name
                 equipment_sku = record.product_id.default_code if record.product_id.default_code else ''
-                equipment = record.product_id.name
-                service_date = record.service_date
-                next_service_date = record.next_service_date
-                formatted_string += "Name: {:<20} Status: {} SKU/Model No.: {} Equipment: {} Service Date: {}  Next Service Date:{}".format(name, status, equipment_sku, equipment, service_date, next_service_date) + '\n\n\n'
+                equipment = record.product_id.name if record.product_id.name  else ''
+                service_date = record.service_date if record.service_date else ''
+                next_service_date = record.next_service_date if record.next_service_date else ''
+                formatted_string += "Name: {:<20} Status: {} SKU/Model No.: {} Equipment: {} Service Date: {}  Next Service Date:{}".format(name, status, equipment_sku, equipment, service_date, next_service_date) + "\n\n\n"
         plain_text = html2plaintext(formatted_string).strip()
         return plain_text
