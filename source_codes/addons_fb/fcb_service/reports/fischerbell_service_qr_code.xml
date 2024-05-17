@@ -4,9 +4,8 @@
         <template id="fischerbell_qr_service_info_temp">
                <div>
                    <t t-foreach="docs" t-as="o">
-                    <img t-if="o._generate_qr_code()"
-                         style="display:block;"
-                         t-att-src="'/report/barcode/?barcode_type=%s&amp;value=%s&amp;width=%s&amp;height=%s'%('QR', o._generate_qr_code(), 230, 230)"/>
+                    <img t-if="o._generate_qr_code()" hight="230" width="230"
+                         t-att-src="o._generate_qr_code()"/>
                    </t>
                </div>
         </template>
