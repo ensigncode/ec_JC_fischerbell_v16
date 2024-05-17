@@ -34,3 +34,4 @@ class StockPicking(models.Model):
 		else:
 			return res
 
+

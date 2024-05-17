@@ -20,10 +20,10 @@
                         </tree>
                     </field>
                 </page>
-                <page string="Attachments" name="attachments">
+                <page string="Attachments" name="attachments" attrs="{'invisible':[('picking_type_code', '!=', 'incoming')]}" >
                     <group>
                         <field name="attachment_ids" widget="many2many_binary" nolabel="1"
-                        />
+                       />
                     </group>
                 </page>
             </xpath>
