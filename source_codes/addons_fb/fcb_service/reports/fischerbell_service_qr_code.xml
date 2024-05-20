@@ -4,7 +4,7 @@
         <template id="fischerbell_qr_service_info_temp">
                <div>
                    <t t-foreach="docs" t-as="o">
-                    <img t-if="o._generate_qr_code()" hight="230" width="230"
+                    <img t-if="o._generate_qr_code()" hight="400" width="400"
                          t-att-src="o._generate_qr_code()"/>
                    </t>
                </div>
@@ -22,8 +22,8 @@
             <field name="name">Qr Code</field>
             <field name="default" eval="True" />
             <field name="format">custom</field>
-            <field name="page_height">100</field>
-            <field name="page_width">150</field>
+            <field name="page_height">200</field>
+            <field name="page_width">250</field>
             <field name="orientation">Portrait</field>
             <field name="margin_top">5</field>
             <field name="margin_bottom">5</field>
