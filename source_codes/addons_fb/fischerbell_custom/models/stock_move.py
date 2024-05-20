@@ -3,6 +3,7 @@
 
 from odoo import api,fields, models
 from odoo.exceptions import UserError, ValidationError
+from datetime import datetime, timedelta, date
 
 class StockMove(models.Model):
 	_inherit = "stock.move"
@@ -17,9 +18,6 @@ class StockMove(models.Model):
 	manufacturing_date = fields.Date('manufacturing date')
 	expiration_date = fields.Date('expiration date')
 	serial_number = fields.Char('Serial Number')
-
-
-
 
 	def _get_new_picking_values(self):
 		"""Inherit method for pass value from sale order to delivery order."""
@@ -73,6 +71,10 @@ class StockMoveLine(models.Model):
 	serial_number = fields.Char('Serial Number')
 	batch_number = fields.Char('Batch Number')
 
+	@api.onchange('expiration_date')
+	def onchange_expiration_date(self):
+		if self.expiration_date < date.today():
+			raise ValidationError("Sorry, you cannot input the date which are previous date from the date of today .uuy")
 
 class StockWarehouseOrderpoint(models.Model):
 	_inherit = "stock.warehouse.orderpoint"

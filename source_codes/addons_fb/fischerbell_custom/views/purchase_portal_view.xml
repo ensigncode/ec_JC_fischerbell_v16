@@ -25,7 +25,7 @@
         <xpath expr="//tbody/t/tr/t[1]/td[1]" position="after">
             <td id="estimated_delivery_dates">
                 <span t-field="line.estimated_delivery_date"/>
-            </td>
+            </td>5
             <td>
                 <div >
                     <form id="purchase_order_form" action="/purchase_order/submit_data" method="post" style=" display: flex;">
