@@ -11,3 +11,4 @@ from . import product_service
 from . import helpdesk_ticket
 from . import stock_lot
 from . import sale_order
+from . import res_company
