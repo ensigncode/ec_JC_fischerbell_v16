@@ -30,37 +30,39 @@
 							<b>3 months warranty starts from the completion date for parts changed and repair.</b>
 						</li>
 						<b>Inspected by:</b>
+						<t t-set="worksheet_template_id"
+                       t-value="env[o.worksheet_template_id.sudo().model_id.model].search([('x_project_task_id', '=', o.id)])"></t>
 						<div class="row">
 							<div class="col-6">
-								<t t-if="worksheet_template_id.x_studio_signature_calibration_certificate and o.worksheet_template_id.name.find('CALIBRATION CERTIFICATE') != -1">
+								<t t-if="o.worksheet_template_id.name in 'CALIBRATION CERTIFICATE'">
 									<img t-if="worksheet_template_id.x_studio_signature_calibration_certificate" t-att-src="image_data_uri(worksheet_template_id.x_studio_signature_calibration_certificate)" width="130" height="100" style="display: block; width: 200px; text-align: left; border-bottom: 1px solid;"/>
 								</t>
-								<t t-if="worksheet_template_id.x_studio_signature_cert_team_inspection_report and o.worksheet_template_id.name.find('CERT TEAM INSPECTION REPORT') != -1">
+								<t t-if="o.worksheet_template_id.name in 'CERT TEAM INSPECTION REPORT'">
 									<img t-if="worksheet_template_id.x_studio_signature_cert_team_inspection_report" t-att-src="image_data_uri(worksheet_template_id.x_studio_signature_cert_team_inspection_report)" width="130" height="100" style="display: block; width: 200px; text-align: left; border-bottom: 1px solid;"/>
 								</t>
-								<t t-if="worksheet_template_id.x_studio_signature_eba_service_certificate and o.worksheet_template_id.name.find('EBA SERVICE CERTIFICATE') != -1">
+								<t t-if="o.worksheet_template_id.name in 'EBA SERVICE CERTIFICATE'">
 									<img t-if="worksheet_template_id.x_studio_signature_eba_service_certificate" t-att-src="image_data_uri(worksheet_template_id.x_studio_signature_eba_service_certificate)" width="130" height="100" style="display: block; width: 200px; text-align: left; border-bottom: 1px solid;"/>
 								</t>
-								<t t-if="worksheet_template_id.signature_hazmat_suit_inspection_report and o.worksheet_template_id.name.find('HAZMAT SUIT INSPECTION REPORT') != -1">
-									<img t-if="worksheet_template_id.signature_hazmat_suit_inspection_report" t-att-src="image_data_uri(worksheet_template_id.signature_hazmat_suit_inspection_report)" width="130" height="100" style="display: block; width: 200px; text-align: left; border-bottom: 1px solid;"/>
+								<t t-if="o.worksheet_template_id.name in 'HAZMAT SUIT INSPECTION REPORT'">
+									<img t-if="worksheet_template_id.x_studio_signature_hazmat_suit_inspection_report" t-att-src="image_data_uri(worksheet_template_id.x_studio_signature_hazmat_suit_inspection_report)" width="130" height="100" style="display: block; width: 200px; text-align: left; border-bottom: 1px solid;"/>
 								</t>
-								<t t-if="worksheet_template_id.signature_instrument_evaluation_report and o.worksheet_template_id.name.find('INSTRUMENT EVALUATION/REPAIR REPORT') != -1">
-									<img t-if="worksheet_template_id.signature_instrument_evaluation_report" t-att-src="image_data_uri(worksheet_template_id.signature_instrument_evaluation_report)" width="130" height="100" style="display: block; width: 200px; text-align: left; border-bottom: 1px solid;"/>
+								<t t-if="o.worksheet_template_id.name in 'INSTRUMENT EVALUATION/REPAIR REPORT'">
+									<img t-if="worksheet_template_id.x_studio_signature_instrument_evaluation_report" t-att-src="image_data_uri(worksheet_template_id.x_studio_signature_instrument_evaluation_report)" width="130" height="100" style="display: block; width: 200px; text-align: left; border-bottom: 1px solid;"/>
 								</t>
-								<t t-if="worksheet_template_id.signature_life_jacket_inspection_report and o.worksheet_template_id.name.find('LIFE JACKET INSPECTION REPORT') != -1">
-									<img t-if="worksheet_template_id.signature_life_jacket_inspection_report" t-att-src="image_data_uri(worksheet_template_id.signature_life_jacket_inspection_report)" width="130" height="100" style="display: block; width: 200px; text-align: left; border-bottom: 1px solid;"/>
+								<t t-if="o.worksheet_template_id.name in 'LIFE JACKET INSPECTION REPORT'">
+									<img t-if="worksheet_template_id.x_studio_signature_life_jacket_inspection_report" t-att-src="image_data_uri(worksheet_template_id.x_studio_signature_life_jacket_inspection_report)" width="130" height="100" style="display: block; width: 200px; text-align: left; border-bottom: 1px solid;"/>
 								</t>
-								<t t-if="worksheet_template_id.signature_medical_oxygen_resuscitator and o.worksheet_template_id.name.find('MEDICAL OXYGEN RESUSCITATOR') != -1">
-									<img t-if="worksheet_template_id.signature_medical_oxygen_resuscitator" t-att-src="image_data_uri(worksheet_template_id.signature_medical_oxygen_resuscitator)" width="130" height="100" style="display: block; width: 200px; text-align: left; border-bottom: 1px solid;"/>
+								<t t-if="o.worksheet_template_id.name in 'MEDICAL OXYGEN RESUSCITATOR'">
+									<img t-if="worksheet_template_id.x_studio_signature_medical_oxygen_resuscitator" t-att-src="image_data_uri(worksheet_template_id.x_studio_signature_medical_oxygen_resuscitator)" width="130" height="100" style="display: block; width: 200px; text-align: left; border-bottom: 1px solid;"/>
 								</t>
-								<t t-if="worksheet_template_id.signature_paper_test_certificate and o.worksheet_template_id.name.find('PAPER TEST CERTIFICATE') != -1">
-									<img t-if="worksheet_template_id.signature_paper_test_certificate" t-att-src="image_data_uri(worksheet_template_id.signature_paper_test_certificate)" width="130" height="100" style="display: block; width: 200px; text-align: left; border-bottom: 1px solid;"/>
+								<t t-if="o.worksheet_template_id.name in 'PAPER TEST CERTIFICATE'">
+									<img t-if="worksheet_template_id.x_studio_signature_paper_test_certificate" t-att-src="image_data_uri(worksheet_template_id.x_studio_signature_paper_test_certificate)" width="130" height="100" style="display: block; width: 200px; text-align: left; border-bottom: 1px solid;"/>
 								</t>
-								<t t-if="worksheet_template_id.signature_personal_fall_protection and o.worksheet_template_id.name.find('PERSONAL FALL PROTECTION INSPECTION REPORT') != -1">
-									<img t-if="worksheet_template_id.signature_personal_fall_protection" t-att-src="image_data_uri(worksheet_template_id.signature_personal_fall_protection)" width="130" height="100" style="display: block; width: 200px; text-align: left; border-bottom: 1px solid;"/>
+								<t t-if="o.worksheet_template_id.name in 'PERSONAL FALL PROTECTION INSPECTION REPORT'">
+									<img t-if="worksheet_template_id.x_studio_signature_personal_fall_protection" t-att-src="image_data_uri(worksheet_template_id.x_studio_signature_personal_fall_protection)" width="130" height="100" style="display: block; width: 200px; text-align: left; border-bottom: 1px solid;"/>
 								</t>
-								<t t-if="worksheet_template_id.signature_scba_mask_inspection_report and o.worksheet_template_id.name.find('SCBA MASK INSPECTION REPORT') != -1">
-									<img t-if="worksheet_template_id.signature_scba_mask_inspection_report" t-att-src="image_data_uri(worksheet_template_id.signature_scba_mask_inspection_report)" width="130" height="100" style="display: block; width: 200px; text-align: left; border-bottom: 1px solid;"/>
+								<t t-if="o.worksheet_template_id.name in 'SCBA MASK INSPECTION REPORT'">
+									<img t-if="worksheet_template_id.x_studio_signature_scba_mask_inspection_report" t-att-src="image_data_uri(worksheet_template_id.x_studio_signature_scba_mask_inspection_report)" width="130" height="100" style="display: block; width: 200px; text-align: left; border-bottom: 1px solid;"/>
 								</t>
 							</div>
 							<div class="col-6">
