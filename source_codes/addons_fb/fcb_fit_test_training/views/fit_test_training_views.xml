@@ -38,7 +38,7 @@
                         <group>
                             <field name="date"/>
                             <field name="phone"/>
-                            <field name="number_of_person"/>
+<!--                            <field name="number_of_person"/>-->
                             <field name="location"/>
                         </group>
                     </group>
