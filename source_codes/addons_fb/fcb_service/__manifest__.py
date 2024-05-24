@@ -12,6 +12,7 @@
     ],
     'data': [
         'security/ir.model.access.csv',
+        'security/fischerbell_security.xml',
         'data/service_email_reminder.xml',
         'data/stock_demo.xml',
         'data/workshhet_data.xml',

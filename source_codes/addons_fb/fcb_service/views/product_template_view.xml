@@ -10,11 +10,12 @@
                 <field name="is_serviceable"/>
             </xpath>
             <xpath expr="//page[@name='invoicing']" position="after">
-                <page string="Service" name="service" attrs="{'invisible': ['|',('detailed_type', '=', 'service'),('is_serviceable', '=',False)]}">
+                <page string="Service" name="service"
+                      attrs="{'invisible': ['|',('detailed_type', '=', 'service'),('is_serviceable', '=',False)]}">
                     <div>
                         <field name="extra_product_ids" widget="many2many_tags" invisible="1"/>
                         <group string="Service Products" attrs="{'invisible': [('is_serviceable', '=',False)]}">
-                            <field name="service_product_ids" colspan="2" nolabel="1" >
+                            <field name="service_product_ids" colspan="2" nolabel="1">
                                 <tree editable="bottom" string="Service Products">
                                     <field name="extra_product_ids" widget="many2many_tags" invisible="1"/>
                                     <field name="product_variant_id"/>
@@ -25,6 +26,28 @@
                         </group>
                     </div>
                 </page>
+            </xpath>
+        </field>
+    </record>
+    <record model="ir.ui.view" id="product_template_form_view_ext">
+        <field name="name">product.template_procurement</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="stock.product_template_form_view_procurement_button"/>
+        <field name="priority" eval="15"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='button_box']/t/button[@name='action_open_quants']" position="replace">
+                <button type="object" groups="fcb_service.group_onhand_qty"
+                        name="action_open_quants"
+                        attrs="{'invisible':[('show_on_hand_qty_status_button', '=', False)]}"
+                        class="oe_stat_button" icon="fa-cubes">
+                    <div class="o_field_widget o_stat_info">
+                        <span class="o_stat_value" widget="statinfo">
+                            <field name="qty_available" widget="statinfo" nolabel="1" class="mr4"/>
+                            <field name="uom_name"/>
+                        </span>
+                        <span class="o_stat_text">On Hand</span>
+                    </div>
+                </button>
             </xpath>
         </field>
     </record>
