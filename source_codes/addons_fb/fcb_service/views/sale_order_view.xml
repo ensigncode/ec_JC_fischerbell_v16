@@ -7,7 +7,7 @@
         <field name="arch" type="xml">
             <field name="partner_invoice_id" position="after">
                 <field name="have_special_permission"/>
-                <field name="note"/>
+                <field name="have_special_permission_note" placeholder="Log Note ..."/>
             </field>
             <page name="customer_signature" position="after">
                 <page string="Service" name="service">

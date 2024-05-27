@@ -10,7 +10,7 @@ class SaleOrder(models.Model):
 
 	service_product_ids = fields.One2many('product.service', 'sale_product_tmp_id', 'Service Products')
 	have_special_permission = fields.Boolean("Special Permission")
-	note = fields.Text(string='Description',)
+	have_special_permission_note = fields.Text(string='Description', required=False)
 
 	# invoice_ids
 
