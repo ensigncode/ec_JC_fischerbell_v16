@@ -19,11 +19,9 @@ class StockPicking(models.Model):
 
 	def button_validate(self):
 		res = super().button_validate()
-		pay_or_not = self.sale_id.invoice_ids.sudo().search([('payment_state', 'in', ['paid', 'in_payment'])])
-		if self.partner_id.l10n_in_gst_treatment == 'overseas' and not pay_or_not.filtered(
+		pay_or_not = self.sale_id.invoice_ids.sudo().search([('payment_state', 'not in', ['paid', 'in_payment'])])
+		if self.partner_id.l10n_in_gst_treatment == 'overseas' and  pay_or_not.filtered(
 				lambda x: x.sale_id == self.sale_id) and not self.sale_id.have_special_permission:
-			print("----------self.invoice_ids.filtered(lambda x:x.payment_state in  ['paid', 'in_payment']",
-				  pay_or_not)
 			raise UserError(_(
 				" Before goes to validate transfer, accounts must register payment for the %s."
 			) %self.sale_id.name)
