@@ -34,6 +34,7 @@
                             <field name="company"/>
                             <field name="training_types"/>
                             <field name="trainer_sign" widget="signature"/>
+                            <field name="trainer_sign" widget="binary" string="Download Signature"/>
                         </group>
                         <group>
                             <field name="date"/>
