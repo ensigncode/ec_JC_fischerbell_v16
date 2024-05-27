@@ -44,71 +44,71 @@
 <!--                                                                   name="name" required="true"-->
 <!--                                                            />-->
                                                         <div class="col-sm">
-                                                        <select id="partner_id" name="partner_id" required="true">
+                                                        <select id="partner_id" name="partner_id" t-attf-class="form-control s_website_form_input" required="true">
                                                                 <option value="">select...</option>
-                                                                <t t-foreach="request.env['res.partner'].sudo().search([('company_type','=','person')]) or []"
+                                                                <t t-foreach="request.env['res.partner'].sudo().search([('is_company','!=',True),('parent_id','=', False)]) or []"
                                                                    t-as="partner_id">
                                                                     <option t-att-value="partner_id.id"
                                                                             t-att-selected="partner_id.id == (partner_id and partner_id.id and 'selected')">
                                                                         <t t-esc="partner_id.name"/>
                                                                     </option>
                                                                 </t>
-                                                            </select>
+                                                        </select>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="mb-0 py-2 col-12 s_website_form_field s_website_form_custom s_website_form_required"
-                                                 data-type="date" data-name="Field">
-                                                <div class="row s_col_no_resize s_col_no_bgcolor">
-                                                    <label class="col-form-label col-sm-auto s_website_form_label"
-                                                           style="width: 200px" for="fitestraining2">
-                                                        <span class="s_website_form_label_content">
-                                                            Date of Training
-                                                        </span>
-                                                        <span class="s_website_form_mark">*</span>
-                                                    </label>
-                                                    <div class="col-sm">
-                                                        <input id="fitestraining2" type="date"
-                                                               class="form-control s_website_form_input"
-                                                               name="date" required="true"
-                                                        />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="mb-0 py-2 col-12 s_website_form_field s_website_form_custom"
-                                                 data-type="char" data-name="Field">
-                                                <div class="row s_col_no_resize s_col_no_bgcolor">
-                                                    <label class="col-form-label col-sm-auto s_website_form_label"
-                                                           style="width: 200px" for="fitestraining3">
-                                                        <span class="s_website_form_label_content">Person
-                                                            In-charge
-                                                        </span>
-                                                    </label>
-                                                    <div class="col-sm">
-                                                        <input id="fitestraining3" type="text"
-                                                               class="form-control s_website_form_input"
-                                                               name="charge_name"
-                                                               data-fill-with="charge_name"/>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="mb-0 py-2 col-12 s_website_form_field s_website_form_custom"
-                                                 data-type="char" data-name="Field">
-                                                <div class="row s_col_no_resize s_col_no_bgcolor">
-                                                    <label class="col-form-label col-sm-auto s_website_form_label"
-                                                           style="width: 200px" for="fitestraining4">
-                                                        <span class="s_website_form_label_content">
-                                                            Contact No.
-                                                        </span>
-                                                    </label>
-                                                    <div class="col-sm">
-                                                        <input id="fitestraining4" type="tel"
-                                                               class="form-control s_website_form_input"
-                                                               name="phone"/>
-                                                    </div>
-                                                </div>
-                                            </div>
+<!--                                            <div class="mb-0 py-2 col-12 s_website_form_field s_website_form_custom s_website_form_required"-->
+<!--                                                 data-type="date" data-name="Field">-->
+<!--                                                <div class="row s_col_no_resize s_col_no_bgcolor">-->
+<!--                                                    <label class="col-form-label col-sm-auto s_website_form_label"-->
+<!--                                                           style="width: 200px" for="fitestraining2">-->
+<!--                                                        <span class="s_website_form_label_content">-->
+<!--                                                            Date of Training-->
+<!--                                                        </span>-->
+<!--                                                        <span class="s_website_form_mark">*</span>-->
+<!--                                                    </label>-->
+<!--                                                    <div class="col-sm">-->
+<!--                                                        <input id="fitestraining2" type="date"-->
+<!--                                                               class="form-control s_website_form_input"-->
+<!--                                                               name="date" required="true"-->
+<!--                                                        />-->
+<!--                                                    </div>-->
+<!--                                                </div>-->
+<!--                                            </div>-->
+<!--                                            <div class="mb-0 py-2 col-12 s_website_form_field s_website_form_custom"-->
+<!--                                                 data-type="char" data-name="Field">-->
+<!--                                                <div class="row s_col_no_resize s_col_no_bgcolor">-->
+<!--                                                    <label class="col-form-label col-sm-auto s_website_form_label"-->
+<!--                                                           style="width: 200px" for="fitestraining3">-->
+<!--                                                        <span class="s_website_form_label_content">Person-->
+<!--                                                            In-charge-->
+<!--                                                        </span>-->
+<!--                                                    </label>-->
+<!--                                                    <div class="col-sm">-->
+<!--                                                        <input id="fitestraining3" type="text"-->
+<!--                                                               class="form-control s_website_form_input"-->
+<!--                                                               name="charge_name"-->
+<!--                                                               data-fill-with="charge_name"/>-->
+<!--                                                    </div>-->
+<!--                                                </div>-->
+<!--                                            </div>-->
+<!--                                            <div class="mb-0 py-2 col-12 s_website_form_field s_website_form_custom"-->
+<!--                                                 data-type="char" data-name="Field">-->
+<!--                                                <div class="row s_col_no_resize s_col_no_bgcolor">-->
+<!--                                                    <label class="col-form-label col-sm-auto s_website_form_label"-->
+<!--                                                           style="width: 200px" for="fitestraining4">-->
+<!--                                                        <span class="s_website_form_label_content">-->
+<!--                                                            Contact No.-->
+<!--                                                        </span>-->
+<!--                                                    </label>-->
+<!--                                                    <div class="col-sm">-->
+<!--                                                        <input id="fitestraining4" type="tel"-->
+<!--                                                               class="form-control s_website_form_input"-->
+<!--                                                               name="phone"/>-->
+<!--                                                    </div>-->
+<!--                                                </div>-->
+<!--                                            </div>-->
                                             <div class="mb-0 py-2 col-12 s_website_form_field s_website_form_custom"
                                                  data-type="char" data-name="Field">
                                                 <div class="row s_col_no_resize s_col_no_bgcolor">
@@ -123,9 +123,9 @@
 <!--                                                               class="form-control s_website_form_input"-->
 <!--                                                               name="company"-->
 <!--                                                               data-fill-with="commercial_company_name"/>-->
-                                                        <select id="company_id" name="company_id" required="true">
+                                                        <select id="company_id" t-attf-class="form-control s_website_form_input" name="company_id" required="true">
                                                                 <option value="">select...</option>
-                                                                <t t-foreach="request.env['res.partner'].sudo().search([('company_type','=','person')]) or []"
+                                                                <t t-foreach="request.env['res.partner'].sudo().search([('is_company','=',True)]) or []"
                                                                    t-as="company_id">
                                                                     <option t-att-value="company_id.id"
                                                                             t-att-selected="company_id.id == (company_id and company_id.id and 'selected')">
@@ -136,23 +136,23 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="mb-0 py-2 col-12 s_website_form_field s_website_form_required s_website_form_model_required"
-                                                 data-type="char" data-name="Field">
-                                                <div class="row s_col_no_resize s_col_no_bgcolor">
-                                                    <label class="col-form-label col-sm-auto s_website_form_label"
-                                                           style="width: 200px" for="contact5">
-                                                        <span class="s_website_form_label_content">Type of
-                                                            Training
-                                                        </span>
-                                                        <span class="s_website_form_mark">*</span>
-                                                    </label>
-                                                    <div class="col-sm">
-                                                        <input id="contact5" type="text"
-                                                               class="form-control s_website_form_input"
-                                                               name="training_type" required=""/>
-                                                    </div>
-                                                </div>
-                                            </div>
+<!--                                            <div class="mb-0 py-2 col-12 s_website_form_field s_website_form_required s_website_form_model_required"-->
+<!--                                                 data-type="char" data-name="Field">-->
+<!--                                                <div class="row s_col_no_resize s_col_no_bgcolor">-->
+<!--                                                    <label class="col-form-label col-sm-auto s_website_form_label"-->
+<!--                                                           style="width: 200px" for="contact5">-->
+<!--                                                        <span class="s_website_form_label_content">Type of-->
+<!--                                                            Training-->
+<!--                                                        </span>-->
+<!--                                                        <span class="s_website_form_mark">*</span>-->
+<!--                                                    </label>-->
+<!--                                                    <div class="col-sm">-->
+<!--                                                        <input id="contact5" type="text"-->
+<!--                                                               class="form-control s_website_form_input"-->
+<!--                                                               name="training_type" required=""/>-->
+<!--                                                    </div>-->
+<!--                                                </div>-->
+<!--                                            </div>-->
 <!--                                            <div class="mb-0 py-2 col-12 s_website_form_field s_website_form_required s_website_form_model_required"-->
 <!--                                                 data-type="Integer" data-name="Field">-->
 <!--                                                <div class="row s_col_no_resize s_col_no_bgcolor">-->
