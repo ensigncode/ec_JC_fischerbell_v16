@@ -73,8 +73,8 @@ class StockMoveLine(models.Model):
 
 	@api.onchange('expiration_date')
 	def onchange_expiration_date(self):
-		if self.expiration_date < date.today():
-			raise ValidationError("Sorry, you cannot input the date which are previous date from the date of today .uuy")
+		if self.expiration_date and self.expiration_date < date.today():
+			raise ValidationError("Sorry, you cannot input the date which are previous date from the date of today ")
 
 class StockWarehouseOrderpoint(models.Model):
 	_inherit = "stock.warehouse.orderpoint"
