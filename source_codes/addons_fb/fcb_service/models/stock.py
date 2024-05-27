@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 
-from odoo import api, fields, models
+from odoo import api, fields, models,_
 from datetime import timedelta
+from odoo.exceptions import UserError
 
 
 class StockPicking(models.Model):
@@ -18,6 +19,15 @@ class StockPicking(models.Model):
 
 	def button_validate(self):
 		res = super().button_validate()
+		pay_or_not = self.sale_id.invoice_ids.sudo().search([('payment_state', 'in', ['paid', 'in_payment'])])
+		if self.partner_id.l10n_in_gst_treatment == 'overseas' and not pay_or_not.filtered(
+				lambda x: x.sale_id == self.sale_id) and not self.sale_id.have_special_permission:
+			print("----------self.invoice_ids.filtered(lambda x:x.payment_state in  ['paid', 'in_payment']",
+				  pay_or_not)
+			raise UserError(_(
+				" Before goes to validate transfer, accounts must register payment for the %s."
+			) %self.sale_id.name)
+
 		if not self.is_to_check:
 			line_ids = self.move_line_ids.filtered(lambda x: x.product_id.is_serviceable)
 			for line in line_ids:
