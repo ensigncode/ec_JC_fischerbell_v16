@@ -40,13 +40,6 @@ class SaleOrder(models.Model):
 		# picking_ids = self.picking_ids.fillter
 		# print('vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv',equipment_records)
 		for record in self:
-			pay_or_not = self.invoice_ids.sudo().search([('payment_state', 'in', ['paid', 'in_payment'])])
-			if self.partner_id.l10n_in_gst_treatment == 'overseas' and pay_or_not.filtered(
-					lambda x: x.sale_id == self) and  not self.have_special_permission:
-				print("----------self.invoice_ids.filtered(lambda x:x.payment_state in  ['paid', 'in_payment']",
-					  pay_or_not)
-
-
 			if record.service_product_ids:
 				for service in record.service_product_ids:
 					equipment_service_vals = {

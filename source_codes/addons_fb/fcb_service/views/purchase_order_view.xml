@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<odoo>
+    <record id="fischerbell_purchase_order_view_form_inherit" model="ir.ui.view">
+        <field name="name">fischerbell.purchase.order.form.inherit</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase_stock.purchase_order_view_form_inherit"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='incoterm_id']" position="replace">
+                <field name="incoterm_id" attrs="{'invisible': [('l10n_in_gst_treatment', '!=', 'overseas')]}"/>
+                <field name="incoterm_location" attrs="{'invisible': [('l10n_in_gst_treatment', '!=', 'overseas')]}"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>
