@@ -4,7 +4,6 @@ from odoo.addons.base.models.res_partner import WARNING_MESSAGE, WARNING_HELP
 
 class ResPartner(models.Model):
     _inherit = 'res.partner'
-
     @api.model
     def default_get(self, fields):
         res = super(ResPartner, self).default_get(fields)

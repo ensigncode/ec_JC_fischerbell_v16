@@ -8,7 +8,7 @@
     'website': '',
     'depends': [
         'industry_fsm', 'sale', 'stock', 'industry_fsm_sale',
-        'helpdesk','purchase','industry_fsm_report'
+        'helpdesk','purchase','industry_fsm_report','portal_signature'
     ],
     'data': [
         'security/ir.model.access.csv',
@@ -28,6 +28,7 @@
         'views/sale_order_view.xml',
         'views/res_company_view.xml',
         'views/purchase_order_view.xml',
+        'views/transfer_portal.xml',
         'wizard/transfer_details_views.xml',
         'wizard/transfer_return_details_views.xml',
         'wizard/transfer_outsource_views.xml',
