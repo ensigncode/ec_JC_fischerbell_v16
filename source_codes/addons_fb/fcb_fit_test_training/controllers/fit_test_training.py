@@ -14,14 +14,19 @@ class FitTestTrainingController(http.Controller):
 		partner_id = int(kw.get('partner_id', False)) if kw.get('partner_id') else False
 		company_id = int(kw.get('company_id', False)) if kw.get('company_id') else False
 		trainer_id = request.env['fit.test.training'].sudo().create({
-			'name': request.env['res.partner'].sudo().browse(partner_id).name,
-			# 'date': kw.get('date'),
-			# 'charge_name': kw.get('charge_name'),
-			# 'training_type': kw.get('training_type'),
-			'company': request.env['res.partner'].sudo().browse(company_id).name,
-			# 'phone': kw.get('phone'),
+			'name': kw.get('name'),
+			'name_of_trainer': request.env['res.partner'].sudo().browse(partner_id).id,
+			'date': kw.get('date'),
+			'charge_name': kw.get('charge_name'),
+			'training_type': kw.get('training_type'),
+			'company': request.env['res.partner'].sudo().browse(company_id).id,
+			'phone': kw.get('phone'),
 			# 'number_of_person': kw.get('number_of_person'),
 			'location': kw.get('location'),
+			'fit_ids' : [(0, 0, {
+                    'trainee': kw.get('trainee_name'),
+					'passport_no': kw.get('passport_no'),
+                })]
 		})
 		vals = {
 			'trainer_id': trainer_id
