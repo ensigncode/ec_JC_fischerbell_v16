@@ -17,6 +17,19 @@ class StockPicking(models.Model):
 	contact_one = fields.Many2one('res.partner',string="Contact 1")
 	contact_two = fields.Many2one('res.partner',string="Contact 2")
 	
+	@api.model
+	def create(self,vals):
+		res = super(StockPicking,self).create(vals)
+		res.contact_one = res.partner_id.id
+
+		return res
+	
+	def write(self,vals):
+		for obj in self :
+			if 'partner_id' in vals and vals['partner_id'] :
+				obj.contact_one = vals['partner_id']
+		return super(StockPicking,self).write(vals)
+
 	@api.depends('partner_id')
 	def _compute_contact_ids(self):
 		for res in self : 
