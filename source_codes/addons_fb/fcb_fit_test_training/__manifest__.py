@@ -16,6 +16,7 @@
     'data': [
         'security/ir.model.access.csv',
         'data/website_data.xml',
+        'data/mail_template_data.xml',
         'views/fittest_training_template.xml',
         'views/fit_test_training_views.xml',
         'report/fit_test_certificate_report.xml',
