@@ -20,10 +20,14 @@
                     .pl-35 {
                         padding-left : 35px;
                     }
+                    .packing_table.table.table-bordered tr td {
+                        padding-top: 12px;
+                        padding-bottom: 12px;
+                    }
                 </style>
                 <div class="container">
                     <div class="row justify-content-center">
-                        <table class="table table-bordered">
+                        <table class="table table-bordered packing_table">
                             <tbody>
                                 <tr>
                                     <td class="text-center" colspan="3">
@@ -154,15 +158,15 @@
         <field name="name">Packing label paperformat</field>
         <field name="default" eval="True" />
         <field name="format">custom</field>
-        <field name="page_height">280</field>
-        <field name="page_width">170</field>
+        <field name="page_height">150</field>
+        <field name="page_width">100</field>
         <field name="orientation">Portrait</field>
         <field name="margin_top">5</field>
         <field name="margin_bottom">0</field>
         <field name="margin_left">0</field>
         <field name="margin_right">0</field>
         <field name="disable_shrinking" eval="True"/>
-        <field name="dpi">90</field>
+        <field name="dpi">120</field>
     </record>
 
     <record id="action_report_delivery_order_packing_label_label" model="ir.actions.report">
