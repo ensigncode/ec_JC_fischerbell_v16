@@ -17,7 +17,7 @@
             </li>
         </xpath>
      </template>
-    
+
      <template
         id="portal_my_home_transfer"
         name="Portal My Home : Transfer entries"
@@ -40,7 +40,7 @@
                 </t>
             </t>
             <t t-if="not page_name">
-                <p>There are currently no transfer information for your
+                <p>There are currently tno transfer information for your
                     account.
                 </p>
             </t>
@@ -50,7 +50,7 @@
                         <th>
                             <span class='d-none d-md-inline'>Name</span>
                         </th>
-                        
+
                         <th class='d-none'>
                             <span class='d-none'>Delivery</span>
                         </th>
@@ -71,15 +71,13 @@
                 </thead>
                 <tbody class="tbody_class">
                   <t t-foreach="picking_ids" t-as="picking_id">
-                    <tr draggable="true"> 
-                        <td class="d-none" id="picking">
-                            <t t-esc="picking_id.id"/>
-                        </td>
-                        <td>
+                    <tr draggable="true">
+                            <td class="d-none" id="picking">
+                                <t t-esc="picking_id.id"/>
+                            </td>
+                            <td>
                             <a t-attf-href="/my/transfer/#{picking_id.id}?{{ keep_query() }}"><span t-field="picking_id.name"/></a>
                         </td>
-                       
-                        
                         <td>
                             <t t-esc="picking_id.scheduled_date" t-options='{"widget": "date","format": "dd-MM-yyyy"}'/>
                         </td>
@@ -130,12 +128,12 @@
                                             <t t-esc="status_list[status]"/>
                                         </span>
                                     </t>
-                                    
+
                                 </t>
-                                
+
                             </t>
                         </td>
-                        
+
                         <div class="modal fade" t-attf-id="modalsignatureaccept_{{ picking_id.id }}" tabindex="-1" aria-labelledby="signature" role="dialog" aria-hidden="true">
                             <div class="modal-dialog modal-dialog-centered" style="margin-left: 263px;" role="document">
                                 <div class="modal-content">
@@ -177,17 +175,17 @@
                             </div>
                         </div>
                         <td class="portal_btn_blocks" t-if="picking_id.state in ['assigned']">
-                           
+
                                 <button class="btn btn-link o_icon_button text-primary approve_btn" t-att-data-id="picking_id.id" type="button">
                                     <i class="fa fa-pencil"/>
                                     Signature
                                 </button>
-                                <button  class="btn btn-primary skip_delivery" 
+                                <button  class="btn btn-primary skip_delivery"
                                 t-att-disabled="picking_id.next_delivery_date and picking_id.next_delivery_date.date() &gt; current_date"
                                     t-att-data-id="picking_id.id" type="button">
                                     Skip
                                 </button>
-                           
+
                         </td>
                         <td class="portal_btn_blocks" t-else="">
                         </td>
@@ -256,7 +254,7 @@
                                         </p>
                                     </t>
                                 </t>
-                               
+
                             </td>
                         </tr>
                         <tr>
@@ -271,12 +269,12 @@
                             <td style="font-weight:bold;width:20%;">Phone Number</td>
                             <td><t t-esc="picking_id.partner_id.phone"/></td>
                         </tr>
-                        
+
                     </tbody>
                 </table>
             </t>
     </template>
 
-      
-      
+
+
 </odoo>

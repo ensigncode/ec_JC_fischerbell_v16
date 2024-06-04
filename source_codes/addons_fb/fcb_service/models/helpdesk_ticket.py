@@ -225,3 +225,13 @@ class PurchaseOrder(models.Model):
     _inherit = 'purchase.order'
 
     ticket_id = fields.Many2one('helpdesk.ticket', string="Ticket Order", store=True, readonly=False, )
+    l10n_in_gst_treatment = fields.Selection([
+        ('regular', 'Registered Business - Regular'),
+        ('composition', 'Registered Business - Composition'),
+        ('unregistered', 'Unregistered Business'),
+        ('consumer', 'Consumer'),
+        ('overseas', 'Overseas'),
+        ('special_economic_zone', 'Special Economic Zone'),
+        ('deemed_export', 'Deemed Export'),
+        ('uin_holders', 'UIN Holders'),
+    ], string="GST Treatment",related = 'partner_id.l10n_in_gst_treatment')
