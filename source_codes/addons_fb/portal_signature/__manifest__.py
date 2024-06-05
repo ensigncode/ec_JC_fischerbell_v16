@@ -6,7 +6,7 @@
     'category': '',
     'summary': '',
     'website': '',
-    'depends': ['website','stock'],
+    'depends': ['website','stock','fischerbell_custom'],
     'data': [
         'security/ir.model.access.csv',
         "data/mail_template.xml",

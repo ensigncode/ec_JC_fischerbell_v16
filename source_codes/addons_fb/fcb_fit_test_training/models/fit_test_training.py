@@ -22,6 +22,8 @@ class FitTestTraining(models.Model):
 	                               ('fit_test','Fit Test')],default="fit_test")
 	trainer_sign = fields.Binary(string="Trainer signature")
 	partner_id = fields.Many2one('res.partner','Partner')
+	reference_no = fields.Char(string='Training Reference', required=True,
+							   readonly=True, default=lambda self: _('New'))
 
 	def action_send_email(self):
 		self.ensure_one()
@@ -50,6 +52,13 @@ class FitTestTraining(models.Model):
 			'target': 'new',
 			'context': ctx,
 		}
+
+	@api.model
+	def create(self, vals):
+		if vals.get('reference_no', _('New')) == _('New'):
+				vals['reference_no'] = self.env['ir.sequence'].next_by_code(
+					'fcb_fit_test_training_seq') or _('New')
+		return super(FitTestTraining, self).create(vals)
 
 class FitTestTrainingTrainee(models.Model):
 	_name = "fit.trainee"
