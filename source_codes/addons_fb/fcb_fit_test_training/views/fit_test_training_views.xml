@@ -30,6 +30,11 @@
                             <field name="name"/>
                         </h1>
                     </div>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="reference_no"/>
+                        </h1>
+                    </div>
                     <group>
                         <group>
                             <field name="name_of_trainer"/>
