@@ -63,6 +63,13 @@ class StockMove(models.Model):
 						move.mrp_customer_id = line.customer_id.id
 						move.mrp_phone = line.phone
 
+	def action_assign_serial_show_details(self):
+		res = super(StockMove, self).action_assign_serial_show_details()
+		for line in self.move_line_ids:
+			line.update({'expiration_date':False})
+		return res
+
+
 class StockMoveLine(models.Model):
 	_inherit = "stock.move.line"
 
@@ -75,6 +82,8 @@ class StockMoveLine(models.Model):
 	def onchange_expiration_date(self):
 		if self.expiration_date and self.expiration_date < date.today():
 			raise ValidationError("Sorry, you cannot input the date which are previous date from the date of today ")
+		if not self.lot_name:
+			self.expiration_date = False
 
 class StockWarehouseOrderpoint(models.Model):
 	_inherit = "stock.warehouse.orderpoint"
