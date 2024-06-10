@@ -23,6 +23,11 @@
         'report/fit_test_certificate_report.xml',
         'report/fit_test_certificate_template.xml',
     ],
+    'assets': {
+            'web.assets_frontend': [
+                'fcb_fit_test_training/static/src/js/onchange_ref.js',
+            ],
+        },
     'auto_install': False,
     'installable': True,
     'application': False,
