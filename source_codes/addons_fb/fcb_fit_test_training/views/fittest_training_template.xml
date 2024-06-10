@@ -26,18 +26,35 @@
                                         <form id="fitestraining_form" action="/fittest_training/submit"
                                               class="o_mark_required"
                                               data-mark="*" data-success-mode="redirect">
+
                                             <div class="s_website_form_rows row s_col_no_bgcolor">
+                                                <div class="mb-0 py-2 col-12 s_website_form_field s_website_form_required s_website_form_model_required"
+                                                 data-type="char" data-name="Field">
+                                                    <div class="row s_col_no_resize s_col_no_bgcolor">
+                                                        <label class="col-form-label col-sm-auto s_website_form_label"
+                                                               style="width: 200px" for="reference_no">
+                                                            <span class="s_website_form_label_content">Reference No
+                                                            </span>
+<!--                                                            <span class="s_website_form_mark">*</span>-->
+                                                        </label>
+                                                        <div class="col-sm">
+                                                            <input id="reference_no" type="text"
+                                                                   class="form-control s_website_form_input"
+                                                                   name="reference_no"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                                  <div class="mb-0 py-2 col-12 s_website_form_field s_website_form_required s_website_form_model_required"
                                                  data-type="char" data-name="Field">
                                                     <div class="row s_col_no_resize s_col_no_bgcolor">
                                                         <label class="col-form-label col-sm-auto s_website_form_label"
-                                                               style="width: 200px" for="contact11">
+                                                               style="width: 200px" for="namee">
                                                             <span class="s_website_form_label_content">Training Name
                                                             </span>
                                                             <span class="s_website_form_mark">*</span>
                                                         </label>
                                                         <div class="col-sm">
-                                                            <input id="contact11" type="text"
+                                                            <input id="namee" type="text"
                                                                    class="form-control s_website_form_input"
                                                                    name="name" required=""/>
                                                         </div>
@@ -78,14 +95,14 @@
                                                  data-type="date" data-name="Field">
                                                 <div class="row s_col_no_resize s_col_no_bgcolor">
                                                     <label class="col-form-label col-sm-auto s_website_form_label"
-                                                           style="width: 200px" for="fitestraining2">
+                                                           style="width: 200px" for="date_of_training">
                                                         <span class="s_website_form_label_content">
                                                             Date of Training
                                                         </span>
                                                         <span class="s_website_form_mark">*</span>
                                                     </label>
                                                     <div class="col-sm">
-                                                        <input id="fitestraining2" type="date"
+                                                        <input id="date_of_training" type="date"
                                                                class="form-control s_website_form_input"
                                                                name="date" required="true"
                                                         />
@@ -96,13 +113,13 @@
                                                  data-type="char" data-name="Field">
                                                 <div class="row s_col_no_resize s_col_no_bgcolor">
                                                     <label class="col-form-label col-sm-auto s_website_form_label"
-                                                           style="width: 200px" for="fitestraining3">
+                                                           style="width: 200px" for="charge_name">
                                                         <span class="s_website_form_label_content">Person
                                                             In-charge
                                                         </span>
                                                     </label>
                                                     <div class="col-sm">
-                                                        <input id="fitestraining3" type="text"
+                                                        <input id="charge_name" type="text"
                                                                class="form-control s_website_form_input"
                                                                name="charge_name"
                                                                data-fill-with="charge_name"/>
@@ -113,13 +130,13 @@
                                                  data-type="char" data-name="Field">
                                                 <div class="row s_col_no_resize s_col_no_bgcolor">
                                                     <label class="col-form-label col-sm-auto s_website_form_label"
-                                                           style="width: 200px" for="fitestraining4">
+                                                           style="width: 200px" for="phone">
                                                         <span class="s_website_form_label_content">
                                                             Contact No.
                                                         </span>
                                                     </label>
                                                     <div class="col-sm">
-                                                        <input id="fitestraining4" type="tel"
+                                                        <input id="phone" type="tel"
                                                                class="form-control s_website_form_input"
                                                                name="phone"/>
                                                     </div>
@@ -197,67 +214,177 @@
                                                  data-type="char" data-name="Field">
                                                 <div class="row s_col_no_resize s_col_no_bgcolor">
                                                     <label class="col-form-label col-sm-auto s_website_form_label"
-                                                           style="width: 200px" for="contact7">
+                                                           style="width: 200px" for="location">
                                                         <span class="s_website_form_label_content">Location
                                                         </span>
                                                         <span class="s_website_form_mark">*</span>
                                                     </label>
                                                     <div class="col-sm">
-                                                        <input id="contact7" type="text"
+                                                        <input id="location" type="text"
                                                                class="form-control s_website_form_input"
                                                                name="location" required=""/>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="mb-0 py-2 col-12 s_website_form_field s_website_form_required s_website_form_model_required"
-                                                 data-type="char" data-name="Field">
-                                                <div class="row s_col_no_resize s_col_no_bgcolor">
-                                                    <label class="col-form-label col-sm-auto s_website_form_label"
-                                                           style="width: 200px" for="contact8">
-                                                        <span class="s_website_form_label_content">Trainee name
-                                                        </span>
-                                                        <span class="s_website_form_mark">*</span>
-                                                    </label>
-                                                    <div class="col-sm">
-                                                        <input id="contact8" type="text"
-                                                               class="form-control s_website_form_input"
-                                                               name="trainee_name" required=""/>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                             <div class="mb-0 py-2 col-12 s_website_form_field s_website_form_required s_website_form_model_required"
-                                                 data-type="char" data-name="Field">
-                                                <div class="row s_col_no_resize s_col_no_bgcolor">
-                                                    <label class="col-form-label col-sm-auto s_website_form_label"
-                                                           style="width: 200px" for="contact9">
-                                                        <span class="s_website_form_label_content">NRIC/Passport No./Employee No.
-                                                        </span>
-                                                        <span class="s_website_form_mark">*</span>
-                                                    </label>
-                                                    <div class="col-sm">
-                                                        <input id="contact9" type="text"
-                                                               class="form-control s_website_form_input"
-                                                               name="passport_no" required=""/>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="mb-0 py-2 col-12 s_website_form_field s_website_form_required s_website_form_model_required"
-                                                 data-type="char" data-name="Field">
-                                                <div class="row s_col_no_resize s_col_no_bgcolor">
-                                                    <label class="col-form-label col-sm-auto s_website_form_label"
-                                                           style="width: 200px" for="contact10">
-                                                        <span class="s_website_form_label_content">Trainee Email
-                                                        </span>
-                                                        <span class="s_website_form_mark">*</span>
-                                                    </label>
-                                                    <div class="col-sm">
-                                                        <input id="contact10" type="text"
-                                                               class="form-control s_website_form_input"
-                                                               name="trainee_email" required=""/>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <button type="submit" class="btn btn-primary">Submit</button>
+<!--                                            <div class="mb-0 py-2 col-12 s_website_form_field s_website_form_required s_website_form_model_required"-->
+<!--                                                 data-type="char" data-name="Field">-->
+<!--                                                <div class="row s_col_no_resize s_col_no_bgcolor">-->
+<!--                                                    <label class="col-form-label col-sm-auto s_website_form_label"-->
+<!--                                                           style="width: 200px" for="contact8">-->
+<!--                                                        <span class="s_website_form_label_content">Trainee name-->
+<!--                                                        </span>-->
+<!--                                                        <span class="s_website_form_mark">*</span>-->
+<!--                                                    </label>-->
+<!--                                                    <div class="col-sm">-->
+<!--                                                        <input id="contact8" type="text"-->
+<!--                                                               class="form-control s_website_form_input"-->
+<!--                                                               name="trainee_name" required=""/>-->
+<!--                                                    </div>-->
+<!--                                                </div>-->
+<!--                                            </div>-->
+<!--                                             <div class="mb-0 py-2 col-12 s_website_form_field s_website_form_required s_website_form_model_required"-->
+<!--                                                 data-type="char" data-name="Field">-->
+<!--                                                <div class="row s_col_no_resize s_col_no_bgcolor">-->
+<!--                                                    <label class="col-form-label col-sm-auto s_website_form_label"-->
+<!--                                                           style="width: 200px" for="contact9">-->
+<!--                                                        <span class="s_website_form_label_content">NRIC/Passport No./Employee No.-->
+<!--                                                        </span>-->
+<!--                                                        <span class="s_website_form_mark">*</span>-->
+<!--                                                    </label>-->
+<!--                                                    <div class="col-sm">-->
+<!--                                                        <input id="contact9" type="text"-->
+<!--                                                               class="form-control s_website_form_input"-->
+<!--                                                               name="passport_no" required=""/>-->
+<!--                                                    </div>-->
+<!--                                                </div>-->
+<!--                                            </div>-->
+<!--                                            <div class="mb-0 py-2 col-12 s_website_form_field s_website_form_required s_website_form_model_required"-->
+<!--                                                 data-type="char" data-name="Field">-->
+<!--                                                <div class="row s_col_no_resize s_col_no_bgcolor">-->
+<!--                                                    <label class="col-form-label col-sm-auto s_website_form_label"-->
+<!--                                                           style="width: 200px" for="contact10">-->
+<!--                                                        <span class="s_website_form_label_content">Trainee Email-->
+<!--                                                        </span>-->
+<!--                                                        <span class="s_website_form_mark">*</span>-->
+<!--                                                    </label>-->
+<!--                                                    <div class="col-sm">-->
+<!--                                                        <input id="contact10" type="text"-->
+<!--                                                               class="form-control s_website_form_input"-->
+<!--                                                               name="trainee_email" required=""/>-->
+<!--                                                    </div>-->
+<!--                                                </div>-->
+<!--                                            </div>-->
+                                            <div class="form-group">
+                                    	<div class='row ml-1'
+                                         	style="width:99%;">
+                                        	<div class="form-group col-12 show_total_project">
+                                            	<div class="row s_col_no_resize s_col_no_bgcolor">
+                                                	<table class="table table-bordered mt-3 total_tranee">
+                                                    	<thead>
+                                                        	<tr>
+                                                            	<td>
+                                                                	<strong>
+                                                                    	Tranee *
+                                                                	</strong>
+                                                            	</td>
+                                                            	<td>
+                                                                	<strong>NRIC / FIN NO./ Employee No. *
+                                                                	</strong>
+                                                            	</td>
+                                                                <td>
+                                                                	<strong>
+                                                                    	Size *
+                                                                	</strong>
+                                                            	</td>
+                                                            	<td width="5%"></td>
+                                                        	</tr>
+                                                    	</thead>
+                                                    	<div class="collapse">
+                                                        	<tbody>
+                                                            	<tr class="info_line">
+                                                                	<td>
+                                                                    	<input required="True"
+                                                                           	type="text"
+                                                                           	class="form-control"
+                                                                           	name="tranee_name"
+                                                                           	placeholder="Enter Tranee Name"
+                                                                           	id="tranee_name"/>
+                                                                	</td>
+                                                                	<td>
+<!--                                                                    	<div class="d-flex">-->
+<!--                                                                        	<span class="mt-2"-->
+<!--                                                                              	style="margin-right: 0.5rem !important;"-->
+<!--                                                                              	t-esc="request.env.company.currency_id.symbol"/>-->
+                                                                        	<input required="True"
+                                                                               	placeholder="Enter NRIC / FIN NO./ Employee No"
+                                                                               	type="text"
+                                                                               	class="form-control"
+                                                                               	name="passport_no"
+                                                                               	id="passport_no"/>
+<!--                                                                    	</div>-->
+                                                                	</td>
+                                                                    <td>
+                                                                    	<input required="True"
+                                                                           	type="text"
+                                                                           	class="form-control"
+                                                                           	name="size"
+                                                                           	placeholder="Enter Size"
+                                                                           	id="size"/>
+                                                                	</td>
+                                                                	<td>
+                                                                    	<button class="btn fa fa-trash-o remove_line"
+                                                                            	style="color: red; padding: 0px; margin-left: -6px; margin-top: 6px;margin-bottom:15px;"
+                                                                            	name="delete"
+                                                                            	aria-label="Delete row 1"></button>
+                                                                	</td>
+                                                            	</tr>
+
+                                                            	<tr class="add_extra_line d-none">
+                                                                	<td>
+                                                                    	<input type="text"
+                                                                           	class="form-control"
+                                                                           	name="tranee_name"
+                                                                           	placeholder="Enter Tranee Name"
+                                                                           	id="tranee_name"/>
+                                                                	</td>
+                                                                	<td>
+                                                                        <input placeholder="Enter NRIC / FIN NO./ Employee No"
+                                                                            type="text"
+                                                                            class="form-control"
+                                                                            name="passport_no"
+                                                                            id="passport_no"/>
+                                                                	</td>
+                                                                    <td>
+                                                                    	<input
+                                                                           	type="text"
+                                                                           	class="form-control"
+                                                                           	name="size"
+                                                                           	placeholder="Enter Size"
+                                                                           	id="size"/>
+                                                                	</td>
+                                                                	<td>
+                                                                    	<button class="btn fa fa-trash-o remove_line"
+                                                                            	style="color: red; padding: 0px; margin-left: -6px; margin-top: 6px;margin-bottom:15px;"
+                                                                            	name="delete"
+                                                                            	aria-label="Delete row 1"></button>
+                                                                	</td>
+                                                            	</tr>
+                                                        	</tbody>
+                                                    	</div>
+                                                	</table>
+                                            	</div>
+                                            	<textarea class="d-none"
+                                                      	name="fit_ids">
+                                            	</textarea>
+                                            	<button type="button"
+                                                    	class="btn btn-info add_new_line button-color"
+                                                    	style="float: right; margin-right: -15px;">
+                                                	<i class="fa fa-plus"/>
+                                            	</button>
+                                        	</div>
+                                    	</div>
+                                	</div>
+                                            <button type="submit" class="custom_create btn btn-primary btn-block">Submit</button>
                                         </form>
                                     </div>
                                 </section>
