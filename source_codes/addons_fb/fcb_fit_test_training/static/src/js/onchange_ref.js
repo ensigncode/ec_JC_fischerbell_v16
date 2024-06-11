@@ -62,11 +62,12 @@ var CustomForm = publicWidget.Widget.extend({
         	var rows = $('.total_tranee > tbody > tr.info_line');
         	_.each(rows, function(row) {
             	let tranee_name = $(row).find('input[name="tranee_name"]').val();
+            	let trainee_email = $(row).find('input[name="trainee_email"]').val();
             	let passport_no = $(row).find('input[name="passport_no"]').val();
             	let size = $(row).find('input[name="size"]').val();
-            	console.log(tranee_name, passport_no, size)
             	fit_test_data.push({
                 	'trainee': tranee_name,
+                	'trainee_email': trainee_email,
                 	'passport_no': passport_no,
                 	'size':size,
             	});
@@ -89,8 +90,6 @@ var CustomForm = publicWidget.Widget.extend({
                     $(val).find('input').attr('required', 'required');
                 });
             },
-
-
 });
 publicWidget.registry.Many2many_tag = CustomForm;
 return CustomForm;
