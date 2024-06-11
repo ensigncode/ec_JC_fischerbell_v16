@@ -43,7 +43,7 @@
                             <field name="company"/>
                             <field name="training_types"/>
                             <field name="trainer_sign" widget="signature"/>
-                            <field name="trainer_sign" widget="binary" string="Download Signature"/>
+                            <field name="trainer_sign" widget="binary" string="Signature"/>
                         </group>
                         <group>
                             <field name="date"/>
@@ -63,6 +63,7 @@
                                     </control>
                                      <field name="fit_id" invisible="1"/>
                                      <field name="trainee"/>
+                                     <field name="trainee_email"/>
                                      <field name="passport_no"/>
                                      <field name="size"/>
                                      <field name="is_pass_fail"/>
@@ -77,7 +78,7 @@
     </record>
 
     <record model="ir.actions.act_window" id="action_fit_test_training">
-        <field name="name">Fit Test Training Detail</field>
+        <field name="name">Training Details</field>
         <field name="type">ir.actions.act_window</field>
         <field name="res_model">fit.test.training</field>
         <field name="view_mode">tree,form</field>

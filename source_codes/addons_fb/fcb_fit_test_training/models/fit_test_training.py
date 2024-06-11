@@ -70,6 +70,7 @@ class FitTestTrainingTrainee(models.Model):
 	is_pass_fail = fields.Boolean(string="Pass / Fail")
 	tested_on = fields.Date(string="Tested On")
 	fit_id = fields.Many2one('fit.test.training', string="Fit")
+	trainee_email = fields.Char(string="Trainee Email")
 
 
 

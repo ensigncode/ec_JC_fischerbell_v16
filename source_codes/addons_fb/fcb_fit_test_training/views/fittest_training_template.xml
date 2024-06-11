@@ -287,6 +287,11 @@
                                                                     	Tranee *
                                                                 	</strong>
                                                             	</td>
+                                                                <td>
+                                                                	<strong>
+                                                                    	Tranee Email *
+                                                                	</strong>
+                                                            	</td>
                                                             	<td>
                                                                 	<strong>NRIC / FIN NO./ Employee No. *
                                                                 	</strong>
@@ -309,6 +314,14 @@
                                                                            	name="tranee_name"
                                                                            	placeholder="Enter Tranee Name"
                                                                            	id="tranee_name"/>
+                                                                	</td>
+                                                                    <td>
+                                                                    	<input required="True"
+                                                                           	type="text"
+                                                                           	class="form-control"
+                                                                           	name="trainee_email"
+                                                                           	placeholder="Enter Tranee Email"
+                                                                           	id="trainee_email"/>
                                                                 	</td>
                                                                 	<td>
 <!--                                                                    	<div class="d-flex">-->
@@ -346,6 +359,13 @@
                                                                            	name="tranee_name"
                                                                            	placeholder="Enter Tranee Name"
                                                                            	id="tranee_name"/>
+                                                                	</td>
+                                                                    <td>
+                                                                    	<input type="text"
+                                                                           	class="form-control"
+                                                                           	name="trainee_email"
+                                                                           	placeholder="Enter Tranee Email"
+                                                                           	id="trainee_email"/>
                                                                 	</td>
                                                                 	<td>
                                                                         <input placeholder="Enter NRIC / FIN NO./ Employee No"
