@@ -12,6 +12,7 @@
         "data/mail_template.xml",
         'views/portal_signature_template.xml',
         'views/stock_picking_views.xml',
+        "report/picking_info_driver_report.xml",
     ],
     'demo': [
     ],

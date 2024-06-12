@@ -58,12 +58,18 @@
                         <th>
                             <span class='d-none d-md-inline'>Scheduled Date</span>
                         </th>
-                         <th>
-                            <span class='d-none d-md-inline'>Deadline</span>
+                        <th>
+                            <span class='d-none d-md-inline'>Company address</span>
                         </th>
                         <th>
-                            <span class='d-none d-md-inline'>Source Document</span>
+                            <span class='d-none d-md-inline'>Phone Number</span>
                         </th>
+                         <!-- <th>
+                            <span class='d-none d-md-inline'>Deadline</span>
+                        </th> -->
+                        <!-- <th>
+                            <span class='d-none d-md-inline'>Source Document</span>
+                        </th> -->
                          <th>
                             <span class='d-none d-md-inline'>Status</span>
                         </th>
@@ -82,11 +88,67 @@
                             <t t-esc="picking_id.scheduled_date" t-options='{"widget": "date","format": "dd-MM-yyyy"}'/>
                         </td>
                         <td>
+                            <t t-if="picking_id.is_dropship">
+                                <t t-if="picking_id.responsible_customer_id">
+                                    <p>
+                                        <t t-esc="picking_id.responsible_customer_id.street"/>
+                                        <t t-if="picking_id.responsible_customer_id.street2">, <t t-esc="picking_id.responsible_customer_id.street2"/></t>
+                                        <br t-if="picking_id.responsible_customer_id.street or picking_id.responsible_customer_id.street2"/>
+                                        <t t-esc="picking_id.responsible_customer_id.city"/>
+                                        <t t-if="picking_id.responsible_customer_id.state_id">, <t t-esc="picking_id.responsible_customer_id.state_id.name"/></t>
+                                        <br t-if="picking_id.responsible_customer_id.city or picking_id.responsible_customer_id.state_id"/>
+                                        <t t-if="picking_id.responsible_customer_id.country_id"><t t-esc="picking_id.responsible_customer_id.country_id.name"/>, </t>
+                                        <t t-esc="picking_id.responsible_customer_id.zip"/>
+                                    </p>
+                                </t>
+                                <t t-else="">
+                                    <p>
+                                        <t t-esc="picking_id.partner_id.street"/>
+                                        <t t-if="picking_id.partner_id.street2">, <t t-esc="picking_id.partner_id.street2"/></t>
+                                        <br t-if="picking_id.partner_id.street or picking_id.partner_id.street2"/>
+                                        <t t-esc="picking_id.partner_id.city"/>
+                                        <t t-if="picking_id.partner_id.state_id">, <t t-esc="picking_id.partner_id.state_id.name"/></t>
+                                        <br t-if="picking_id.partner_id.city or picking_id.partner_id.state_id"/>
+                                        <t t-if="picking_id.partner_id.country_id"><t t-esc="picking_id.partner_id.country_id.name"/>, </t>
+                                        <t t-esc="picking_id.partner_id.zip"/>
+                                    </p>
+                                </t>
+                            </t>
+                            <t t-else="">
+                                <t t-if="picking_id.partner_id.parent_id">
+                                    <p>
+                                        <t t-esc="picking_id.partner_id.parent_id.street"/>
+                                        <t t-if="picking_id.partner_id.parent_id.street2">, <t t-esc="picking_id.partner_id.parent_id.street2"/></t>
+                                        <br t-if="picking_id.partner_id.parent_id.street or picking_id.partner_id.parent_id.street2"/>
+                                        <t t-esc="picking_id.partner_id.parent_id.city"/>
+                                        <t t-if="picking_id.partner_id.parent_id.state_id">, <t t-esc="picking_id.partner_id.parent_id.state_id.name"/></t>
+                                        <br t-if="picking_id.partner_id.parent_id.city or picking_id.partner_id.parent_id.state_id"/>
+                                        <t t-if="picking_id.partner_id.parent_id.country_id"><t t-esc="picking_id.partner_id.parent_id.country_id.name"/>, </t>
+                                        <t t-esc="picking_id.partner_id.parent_id.zip"/>
+                                    </p>
+                                </t>
+                                <t t-else="">
+                                    <p>
+                                        <t t-esc="picking_id.partner_id.street"/>
+                                        <t t-if="picking_id.partner_id.street2">, <t t-esc="picking_id.partner_id.street2"/></t>
+                                        <br t-if="picking_id.partner_id.street or picking_id.partner_id.street2"/>
+                                        <t t-esc="picking_id.partner_id.city"/>
+                                        <t t-if="picking_id.partner_id.state_id">, <t t-esc="picking_id.partner_id.state_id.name"/></t>
+                                        <br t-if="picking_id.partner_id.city or picking_id.partner_id.state_id"/>
+                                        <t t-if="picking_id.partner_id.country_id"><t t-esc="picking_id.partner_id.country_id.name"/>, </t>
+                                        <t t-esc="picking_id.partner_id.zip"/>
+                                    </p>
+                                </t>
+                            </t>
+                           
+                        </td>
+                        <td><t t-esc="picking_id.partner_id.phone"/></td>
+                        <!-- <td>
                             <t t-esc="picking_id.date_deadline" t-options='{"widget": "date","format": "dd-MM-yyyy"}'/>
-                        </td>
-                         <td>
+                        </td> -->
+                         <!-- <td>
                             <t t-esc="picking_id.origin"/>
-                        </td>
+                        </td> -->
                           <t t-set="status_list" t-value="{
                         'draft':'Draft',
                         'waiting': 'Waiting another operation',
@@ -195,7 +257,11 @@
                      </tr>
                   </t>
                </tbody>
-             </t>
+            </t>
+            <a t-attf-href="/my_picking_info_download" class="btn btn-primary mt-4">
+                <i class="fa fa-download"></i>
+                Download All
+            </a>
          </t>
        </template>
        <template id="portal_my_transfer_detail" name="My Transfer">
