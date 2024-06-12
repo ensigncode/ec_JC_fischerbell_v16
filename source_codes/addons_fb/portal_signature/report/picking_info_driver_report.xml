@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="report_pickingdetails">
+            <t t-set="company" t-value="env.company"/>
+            <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <div class="page">
+                    <div class="text-center">
+                        <h2>Picking Details</h2>
+                    </div>
+                    <table class="table table-bordered mt-4">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Customer</th>
+                                <th>Scheduled Date</th>
+                                <th>Company address</th>
+                                <th>Phone Number</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr t-foreach='picking_ids' t-as='picking_id'>
+                                <td><t t-esc="picking_id.name" /></td>
+                                <td><t t-esc="picking_id.partner_id.name" /></td>
+                                <td><t t-esc="picking_id.scheduled_date" t-options='{"widget": "date","format": "dd-MM-yyyy"}'/></td>
+                                <td>
+                                    <t t-if="picking_id.is_dropship">
+                                        <t t-if="picking_id.responsible_customer_id">
+                                            <p>
+                                                <t t-esc="picking_id.responsible_customer_id.street"/>
+                                                <t t-if="picking_id.responsible_customer_id.street2">, <t t-esc="picking_id.responsible_customer_id.street2"/></t>
+                                                <br t-if="picking_id.responsible_customer_id.street or picking_id.responsible_customer_id.street2"/>
+                                                <t t-esc="picking_id.responsible_customer_id.city"/>
+                                                <t t-if="picking_id.responsible_customer_id.state_id">, <t t-esc="picking_id.responsible_customer_id.state_id.name"/></t>
+                                                <br t-if="picking_id.responsible_customer_id.city or picking_id.responsible_customer_id.state_id"/>
+                                                <t t-if="picking_id.responsible_customer_id.country_id"><t t-esc="picking_id.responsible_customer_id.country_id.name"/>, </t>
+                                                <t t-esc="picking_id.responsible_customer_id.zip"/>
+                                            </p>
+                                        </t>
+                                        <t t-else="">
+                                            <p>
+                                                <t t-esc="picking_id.partner_id.street"/>
+                                                <t t-if="picking_id.partner_id.street2">, <t t-esc="picking_id.partner_id.street2"/></t>
+                                                <br t-if="picking_id.partner_id.street or picking_id.partner_id.street2"/>
+                                                <t t-esc="picking_id.partner_id.city"/>
+                                                <t t-if="picking_id.partner_id.state_id">, <t t-esc="picking_id.partner_id.state_id.name"/></t>
+                                                <br t-if="picking_id.partner_id.city or picking_id.partner_id.state_id"/>
+                                                <t t-if="picking_id.partner_id.country_id"><t t-esc="picking_id.partner_id.country_id.name"/>, </t>
+                                                <t t-esc="picking_id.partner_id.zip"/>
+                                            </p>
+                                        </t>
+                                    </t>
+                                    <t t-else="">
+                                        <t t-if="picking_id.partner_id.parent_id">
+                                            <p>
+                                                <t t-esc="picking_id.partner_id.parent_id.street"/>
+                                                <t t-if="picking_id.partner_id.parent_id.street2">, <t t-esc="picking_id.partner_id.parent_id.street2"/></t>
+                                                <br t-if="picking_id.partner_id.parent_id.street or picking_id.partner_id.parent_id.street2"/>
+                                                <t t-esc="picking_id.partner_id.parent_id.city"/>
+                                                <t t-if="picking_id.partner_id.parent_id.state_id">, <t t-esc="picking_id.partner_id.parent_id.state_id.name"/></t>
+                                                <br t-if="picking_id.partner_id.parent_id.city or picking_id.partner_id.parent_id.state_id"/>
+                                                <t t-if="picking_id.partner_id.parent_id.country_id"><t t-esc="picking_id.partner_id.parent_id.country_id.name"/>, </t>
+                                                <t t-esc="picking_id.partner_id.parent_id.zip"/>
+                                            </p>
+                                        </t>
+                                        <t t-else="">
+                                            <p>
+                                                <t t-esc="picking_id.partner_id.street"/>
+                                                <t t-if="picking_id.partner_id.street2">, <t t-esc="picking_id.partner_id.street2"/></t>
+                                                <br t-if="picking_id.partner_id.street or picking_id.partner_id.street2"/>
+                                                <t t-esc="picking_id.partner_id.city"/>
+                                                <t t-if="picking_id.partner_id.state_id">, <t t-esc="picking_id.partner_id.state_id.name"/></t>
+                                                <br t-if="picking_id.partner_id.city or picking_id.partner_id.state_id"/>
+                                                <t t-if="picking_id.partner_id.country_id"><t t-esc="picking_id.partner_id.country_id.name"/>, </t>
+                                                <t t-esc="picking_id.partner_id.zip"/>
+                                            </p>
+                                        </t>
+                                    </t>
+                                </td>
+                                <td><t t-esc="picking_id.partner_id.phone"/></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </t>
+            </t>
+        </template>
+
+        <record id="picking_details_report" model="ir.actions.report">
+            <field name="name">Picking Details</field>
+            <field name="model">stock.picking</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">portal_signature.report_pickingdetails</field>
+        </record>
+    
+    </data>
+</odoo>
+                

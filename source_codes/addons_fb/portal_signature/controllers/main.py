@@ -6,7 +6,7 @@ from datetime import datetime
 from dateutil.relativedelta import relativedelta
 from odoo import fields
 from odoo import http
-from odoo.http import request
+from odoo.http import request, content_disposition
 from odoo.tools import date_utils
 from odoo.addons.portal.controllers import portal
 from odoo.addons.portal.controllers.portal import pager
@@ -15,6 +15,19 @@ import base64
 
 
 class PortalAttendance(portal.CustomerPortal):
+
+	@http.route(['/my_picking_info_download'], type='http', auth="user", website=True)
+	def download_pdf_picking_info(self):
+		uid = request.session.uid
+		user_id = request.env['res.users'].sudo().browse(uid)
+		picking_ids = request.env['stock.picking'].sudo().search([('driver_id', '=', user_id.partner_id.id),('state','in',['assigned','done'])])
+		r = request.env['stock.picking']
+		pdf, _ = request.env['ir.actions.report'].with_context(picking_ids=picking_ids)._render_qweb_pdf('portal_signature.picking_details_report', r)
+		pdf_http_headers = [('Content-Type', 'application/pdf'), ('Content-Length', len(pdf)),
+							('Content-Disposition', content_disposition('Picking-detail.pdf'))]
+		return request.make_response(pdf, headers=pdf_http_headers)
+
+			
 	def _prepare_home_portal_values(self, counters):
 		"""To get the count of the attendance in portal"""
 		values = super(PortalAttendance, self)._prepare_home_portal_values(
@@ -29,6 +42,7 @@ class PortalAttendance(portal.CustomerPortal):
 				'transfer_count': transfer_count,
 			})
 		return values
+	
 	@http.route(['/my/transfer', '/my/transfer/page/<int:page>'],
 				type='http',search=None, website=True)
 	def my_transfer_search_sort_view(self, page=1,**kwargs):
