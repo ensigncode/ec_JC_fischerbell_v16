@@ -417,6 +417,8 @@ class PurchaseOrder(models.Model):
         '''
         This function opens a window to compose an email, with the edi purchase template message loaded by default
         '''
+        import pdb
+        pdb.set_trace()
         self.ensure_one()
         ir_model_data = self.env['ir.model.data']
         try:
