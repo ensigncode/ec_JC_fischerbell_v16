@@ -2,12 +2,14 @@
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 
 from odoo import models, fields, api, _
+import json
 
 class SaleOrder(models.Model):
     _inherit = 'sale.order'
 
     optician_detail_id = fields.Many2one('optician.detail',string="Optician Detail")
     optician_detail_ids = fields.Many2many('optician.detail',string="Optician Detail")
+    serial_number = fields.Char(string="Serial Number")
 
 class SaleOrderLine(models.Model):
     _inherit = 'sale.order.line'
@@ -46,3 +48,35 @@ class StockMoveLine(models.Model):
     _inherit = 'stock.move.line'
 
     child_id = fields.Many2one("res.partner",string="Employee Id",related='move_id.child_id')
+    lot_domain = fields.Char("Lot Domain", compute="_get_lot_domain")
+
+    @api.depends("product_id")
+    def _get_lot_domain(self):
+        for line in self:
+            if line.product_id.is_optic:
+                stock_lot_ids = self.env['stock.lot'].search([('related_customer', '=', line.picking_id.partner_id.id)])
+                lot_ids = [lot.id for lot in stock_lot_ids]
+                if lot_ids:
+                    line.lot_domain = json.dumps([('id', 'in', lot_ids)])
+                else:
+                    line.lot_domain = json.dumps([('id', 'in', [])])
+            else:
+                line.lot_domain = json.dumps([('product_id', '=', line.product_id.id), ('company_id', '=', line.company_id.id)])
+
+
+
+
+
+    def _get_value_production_lot(self):
+        res = super(StockMoveLine, self)._get_value_production_lot()
+        if self.move_id.picking_id.purchase_id.sale_id.partner_id:
+            res.update({
+                'related_customer': self.move_id.picking_id.purchase_id.sale_id.partner_id.id
+            })
+        return res
+
+
+class StockLot(models.Model):
+    _inherit = 'stock.lot'
+
+    related_customer = fields.Many2one('res.partner',string="Related Customer")
