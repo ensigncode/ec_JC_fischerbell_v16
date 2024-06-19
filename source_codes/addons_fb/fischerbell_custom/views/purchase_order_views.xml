@@ -13,14 +13,14 @@
 				<field name="supplier_code"/>
 			</xpath>
 			<xpath expr="//field[@name='order_line']//field[@name='name']" position="after">
-				<field name="comments" sting="Comments"/>
-				<field name="customer_id" />
-				<field name="customer_sku"/>
-				<field name="manufacture_lot_id"/>
+				<field name="comments" sting="Comments" optional="hide"/>
+				<field name="customer_id"  optional="hide"/>
+				<field name="customer_sku" optional="hide"/>
+				<field name="manufacture_lot_id" optional="hide"/>
 				<field name="batch_number" invisible="1"/>
-				<field name="lot_id"/>
-				<field name="request_delivery_date" />
-				<field name="estimated_delivery_date" />
+				<field name="lot_id" optional="hide"/>
+				<field name="request_delivery_date"  optional="hide"/>
+				<field name="estimated_delivery_date"  optional="hide"/>
 				<field name="sale_line_id" invisible="1"/>
 			</xpath>
 			<xpath expr="//field[@name='order_line']//field[@name='date_planned']" position="attributes">
