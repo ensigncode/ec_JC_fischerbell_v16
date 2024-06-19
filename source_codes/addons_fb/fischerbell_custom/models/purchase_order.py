@@ -13,6 +13,16 @@ PURCHASE_LINE_FIELDS = ['product_qty','price_unit','price_subtotal','taxes_id']
 class PurchaseOrder(models.Model):
 	_inherit = "purchase.order"
 
+	READONLY_STATES = {
+        'purchase': [('readonly', True)],
+        'done': [('readonly', True)],
+        'cancel': [('readonly', True)],
+    }
+
+	partner_id = fields.Many2one('res.partner', string='Vendor', required=True, states=READONLY_STATES, 
+												change_default=True, tracking=True, 
+												domain="['|','&', ('company_id', '=', False), ('company_id', '=', company_id), ('supplier_rank', '>', 0)]", 
+												help="You can find a vendor by its Name, TIN, Email or Internal Reference.")
 	internal_note = fields.Text('Notes')
 	supplier_code = fields.Char('Vendor Code', related="partner_id.supplier_code")
 	amount_undiscounted = fields.Float('Amount Before Discount', compute='_compute_purchase_amount_undiscounted', digits=0)
@@ -209,8 +219,8 @@ class PurchaseOrderLine(models.Model):
 	def onchange_sake_product_image(self):
 		for product in self:
 			if product.order_id.estimated_delivery_date:
-			   product.estimated_delivery_date = product.order_id.estimated_delivery_date
-			   product.request_delivery_date = product.order_id.request_delivery_date
+				product.estimated_delivery_date = product.order_id.estimated_delivery_date
+				product.request_delivery_date = product.order_id.request_delivery_date
 			else:
 				product.estimated_delivery_date = False
 				product.request_delivery_date = False
