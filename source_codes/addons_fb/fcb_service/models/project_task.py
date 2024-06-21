@@ -20,6 +20,7 @@ class Task(models.Model):
     equipment_database_id = fields.Many2one("equipment.service","Serial Number")
     service_date = fields.Datetime("Service Date")
     next_service_date = fields.Datetime("Next Service Date")
+    worksheet_name = fields.Char('Worksheet Name', compute='_compute_worksheet_name')
 
 
     @api.depends("partner_id")
@@ -64,6 +65,15 @@ class Task(models.Model):
         return self.env.ref('fcb_service.action_worksheet_personal_fall_protection').report_action(self)
     def action_scba_task_custom_report(self):
         return self.env.ref('fcb_service.action_scba_task_custom_report').report_action(self)
+
+    @api.depends('worksheet_template_id')
+    def _compute_worksheet_name(self):
+        for rec in self:
+            if rec.worksheet_template_id:
+                rec.worksheet_name = rec.worksheet_template_id.name
+            else:
+                rec.worksheet_name = ''
+
 
 
     def action_report(self):
