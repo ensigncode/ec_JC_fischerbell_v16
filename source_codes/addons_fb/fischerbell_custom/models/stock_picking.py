@@ -238,6 +238,12 @@ class Picking(models.Model):
 
 	def button_validate(self):
 		for picking in self:
+			if picking.picking_type_code == 'incoming' and not self.env.user.has_group('fischerbell_custom.group_purchase_user_approval'):
+				raise UserError(
+					'You do not have rights to create a Back order. Please contact your Purchase manager.')
+			elif  picking.picking_type_code == 'outgoing' and not self.env.user.has_group('fischerbell_custom.group_sale_user_approval'):
+				raise UserError(
+					'You do not have rights to create a Back order. Please contact your sale manager.')
 			if not picking.enough_stock and picking.sale_id.delivery_option != 'partial_delivery':
 				no_stock_line_ids = any(line.product_uom_qty > line.product_template_id.qty_available for line in picking.sale_id.order_line)
 				if no_stock_line_ids:
