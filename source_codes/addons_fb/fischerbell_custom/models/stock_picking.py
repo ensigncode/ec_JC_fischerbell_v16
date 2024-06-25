@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 
-from odoo import api,fields, models
+from odoo import api,fields, models, _
 from odoo.exceptions import UserError, ValidationError
 from odoo.tests import Form
 from datetime import datetime, date
@@ -236,14 +236,31 @@ class Picking(models.Model):
 			else:
 				pick.partner_address = ''
 
+	def _action_generate_backorder_wizard(self, show_transfers=False):
+		if self.picking_type_code == 'incoming' and not self.env.user.has_group(
+				'fischerbell_custom.group_purchase_user_approval'):
+			raise UserError(
+				'You do not have rights to create a Back order. Please contact your Purchase manager.')
+		elif self.picking_type_code == 'outgoing' and not self.env.user.has_group(
+				'fischerbell_custom.group_sale_user_approval'):
+			raise UserError(
+				'You do not have rights to create a Back order. Please contact your sale manager.')
+		else:
+			view = self.env.ref('stock.view_backorder_confirmation')
+			return {
+				'name': _('Create Backorder?'),
+				'type': 'ir.actions.act_window',
+				'view_mode': 'form',
+				'res_model': 'stock.backorder.confirmation',
+				'views': [(view.id, 'form')],
+				'view_id': view.id,
+				'target': 'new',
+				'context': dict(self.env.context, default_show_transfers=show_transfers,
+								default_pick_ids=[(4, p.id) for p in self]),
+			}
+
 	def button_validate(self):
 		for picking in self:
-			if picking.picking_type_code == 'incoming' and not self.env.user.has_group('fischerbell_custom.group_purchase_user_approval'):
-				raise UserError(
-					'You do not have rights to create a Back order. Please contact your Purchase manager.')
-			elif  picking.picking_type_code == 'outgoing' and not self.env.user.has_group('fischerbell_custom.group_sale_user_approval'):
-				raise UserError(
-					'You do not have rights to create a Back order. Please contact your sale manager.')
 			if not picking.enough_stock and picking.sale_id.delivery_option != 'partial_delivery':
 				no_stock_line_ids = any(line.product_uom_qty > line.product_template_id.qty_available for line in picking.sale_id.order_line)
 				if no_stock_line_ids:
