@@ -104,25 +104,23 @@ class Task(models.Model):
     def _send_reminder_incomplete_work_order(self):
         project_task_ids = self.env['project.task'].search([('worksheet_template_id', '!=', False)])
         for task in project_task_ids:
-            if task.service_date:
-                reminder_date = task.planned_date_begin.date() + timedelta(days=5)
-                if reminder_date == fields.Datetime.now().astimezone(pytz.utc).date():
-                    for user in task.user_ids:
-                        body = f"""Hello {user.partner_id.name},<br>
-                                <p> your Work Order {task.partner_id.name or ''} is not completed on {task.planned_date_begin.date().strftime('%d-%m-%Y') or ''} 
-                                .</p>
-                                <p>Regards,</p>
-                                <p>{task.env.company.name or ''}</p>
-                                """
-                        mails = {
-                            'subject': "Work order Reminder Email",
-                            'email_from': self.env.user.email,
-                            'email_to': task.partner_id.email,
-                            'body_html': body,
-                            'auto_delete': False,
-                        }
-                        mail = self.env['mail.mail'].create(mails)
-                        mail.send()
+            reminder_date = task.create_date.date() + timedelta(days=5)
+            if reminder_date == fields.Datetime.now().astimezone(pytz.utc).date():
+                body = f"""Hello {task.partner_id.name},<br>
+                        <p> Your workorder {task.name or ''} is not completed on {task.create_date.date().strftime('%d-%m-%Y') or ''} 
+                        .</p>
+                        <p>Regards,</p>
+                        <p>{task.env.company.name or ''}</p>
+                        """
+                mails = {
+                    'subject': "Work order Reminder Email",
+                    'email_from': self.env.user.email,
+                    'email_to': task.partner_id.email,
+                    'body_html': body,
+                    'auto_delete': False,
+                }
+                mail = self.env['mail.mail'].create(mails)
+                mail.send()
 
 
 
