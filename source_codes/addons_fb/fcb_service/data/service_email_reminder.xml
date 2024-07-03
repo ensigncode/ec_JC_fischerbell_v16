@@ -19,4 +19,14 @@
 		<field name='interval_type'>days</field>
 		<field name="numbercall">-1</field>
 	</record>
+
+	<record forcecreate="True" id="send_email_work_order" model="ir.cron">
+		<field name="name">Reminder incomplete Work order</field>
+		<field name="model_id" ref="model_project_task"/>
+		<field name="state">code</field>
+		<field name="code">model._send_reminder_incomplete_work_order()</field>
+		<field name='interval_number'>1</field>
+		<field name='interval_type'>days</field>
+		<field name="numbercall">-1</field>
+	</record>
 </odoo>
