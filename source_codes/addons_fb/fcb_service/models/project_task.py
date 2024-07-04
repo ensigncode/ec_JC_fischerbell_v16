@@ -22,6 +22,16 @@ class Task(models.Model):
     equipment_database_id = fields.Many2one("equipment.service","Serial Number")
     service_date = fields.Datetime("Service Date")
     next_service_date = fields.Datetime("Next Service Date")
+    worksheet_template_id = fields.Many2one("worksheet.template","Worksheet Template")
+    worksheet_name = fields.Char('Worksheet Name', compute='_compute_worksheet_name')
+
+    @api.depends('worksheet_template_id')
+    def _compute_worksheet_name(self):
+        for rec in self:
+            if rec.worksheet_template_id:
+                rec.worksheet_name = rec.worksheet_template_id.name
+            else:
+                rec.worksheet_name = ''
 
 
     @api.depends("partner_id")
