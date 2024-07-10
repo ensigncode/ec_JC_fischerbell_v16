@@ -14,11 +14,11 @@
                         Does this product requires traceability?
                     </div>
             </xpath>
-            <field name="categ_id" position="after">
-                <field name="default_code" attrs="{'invisible': [('product_variant_count', '>', 1)]}"/>
-                <field name="barcode" attrs="{'invisible': [('product_variant_count', '>', 1)]}"/>
-                <field name="qr_code_image" widget="image" options="{'size': [80, 80]}" attrs="{'invisible': [('product_variant_count', '>', 1)]}"/>
-            </field>
+<!--            <field name="categ_id" position="after">-->
+<!--                <field name="default_code" attrs="{'invisible': [('product_variant_count', '>', 1)]}"/>-->
+<!--                <field name="barcode" attrs="{'invisible': [('product_variant_count', '>', 1)]}"/>-->
+<!--                <field name="qr_code_image" widget="image" options="{'size': [80, 80]}" attrs="{'invisible': [('product_variant_count', '>', 1)]}"/>-->
+<!--            </field>-->
             <div name="button_box" position="inside">
                 <button name="%(product.product_variant_action)d" type="action"
                     icon="fa-sitemap" class="oe_stat_button"
