@@ -10,7 +10,6 @@ class MailComposerMessage(models.TransientModel):
     @api.onchange('template_id')
     def _onchange_template_id_wrapper(self):
         self.ensure_one()
-        # atrwork = self.env[self._context.get("active_model")].browse(self._context.get("active_id"))
         if self._context.get("active_model") in {'sale.order', 'purchase.order', 'stock.picking'}:
             atrwork = self.env[self._context.get("active_model")].browse(self._context.get("active_id"))
             if atrwork.artwork_attachment_ids:
