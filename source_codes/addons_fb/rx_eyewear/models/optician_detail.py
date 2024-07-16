@@ -34,6 +34,8 @@ class OpticianDetail(models.Model):
     sale_order_id = fields.Many2one("sale.order",string="Sale Order")
     sale_order_ids = fields.Many2many("sale.order","optician_detail_id",string="Sale Order")
     sale_order_count = fields.Integer(string="Sale Order",compute="_compute_sale_order_count")
+    form_no = fields.Integer(string="Form No")
+
 
     @api.depends('sale_order_ids')
     def _compute_sale_order_count(self):
