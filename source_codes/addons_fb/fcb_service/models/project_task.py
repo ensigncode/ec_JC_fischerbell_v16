@@ -8,6 +8,8 @@ import qrcode
 # import qrcode
 import base64
 from io import BytesIO
+from datetime import timedelta
+import pytz
 
 
 class Task(models.Model):
@@ -20,7 +22,16 @@ class Task(models.Model):
     equipment_database_id = fields.Many2one("equipment.service","Serial Number")
     service_date = fields.Datetime("Service Date")
     next_service_date = fields.Datetime("Next Service Date")
+    worksheet_template_id = fields.Many2one("worksheet.template","Worksheet Template")
     worksheet_name = fields.Char('Worksheet Name', compute='_compute_worksheet_name')
+
+    @api.depends('worksheet_template_id')
+    def _compute_worksheet_name(self):
+        for rec in self:
+            if rec.worksheet_template_id:
+                rec.worksheet_name = rec.worksheet_template_id.name
+            else:
+                rec.worksheet_name = ''
 
 
     @api.depends("partner_id")
@@ -66,15 +77,6 @@ class Task(models.Model):
     def action_scba_task_custom_report(self):
         return self.env.ref('fcb_service.action_scba_task_custom_report').report_action(self)
 
-    @api.depends('worksheet_template_id')
-    def _compute_worksheet_name(self):
-        for rec in self:
-            if rec.worksheet_template_id:
-                rec.worksheet_name = rec.worksheet_template_id.name
-            else:
-                rec.worksheet_name = ''
-
-
 
     def action_report(self):
         report_action = self.env.ref('fcb_service.calibration_report')
@@ -108,3 +110,37 @@ class Task(models.Model):
         encoded_image = base64.b64encode(buffer.getvalue()).decode()
         image_src = f"data:image/png;base64,{encoded_image}"
         return image_src
+
+    def _send_reminder_incomplete_work_order(self):
+        project_task_ids = self.env['project.task'].search([('worksheet_template_id', '!=', False)])
+        for task in project_task_ids:
+            reminder_date = task.create_date.date() + timedelta(days=5)
+            if reminder_date == fields.Datetime.now().astimezone(pytz.utc).date():
+                body = f"""Hello {task.partner_id.name},<br>
+                        <p> Your workorder {task.name or ''} is not completed on {task.create_date.date().strftime('%d-%m-%Y') or ''} 
+                        .</p>
+                        <p>Regards,</p>
+                        <p>{task.env.company.name or ''}</p>
+                        """
+                mails = {
+                    'subject': "Work order Reminder Email",
+                    'email_from': self.env.user.email,
+                    'email_to': task.partner_id.email,
+                    'body_html': body,
+                    'auto_delete': False,
+                }
+                mail = self.env['mail.mail'].create(mails)
+                mail.send()
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -57,6 +57,7 @@ class OpticianPortalController(http.Controller):
 				'axis_right' : kw.get('axis_right') if kw.get('axis_right') else '',
 				'add' : kw.get('add') if kw.get('add') else '',
 				'pd' : kw.get('pd') if kw.get('pd') else '',
+				'form_no': kw.get('form_no') if kw.get('form_no') else 0,
 				'requirements' : kw.get('requirements') if kw.get('requirements') else '',
 				"user_id" : request.env.uid,
 				"partner_id" : partner_id.id,

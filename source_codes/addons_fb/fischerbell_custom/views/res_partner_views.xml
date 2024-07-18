@@ -55,7 +55,7 @@
                     <group>
                         <field name="platform_name"/>
                         <field name="platform_login"/>
-                        <field name="platform_pwd" password="True"/>
+                        <field name="platform_pwd"/>
                     </group>
                 </page>
             </xpath>
