@@ -170,6 +170,7 @@
         <field name="name">Purchase Analysis</field>
         <field name="res_model">purchase.order.line</field>
         <field name="view_mode">tree,form</field>
+		 <field name="domain">[('state', '=', 'purchase')]</field>
         <field name="target">current</field>
     </record>
 
