@@ -9,6 +9,7 @@ from . import update_vendor
 from . import weekly_product_report_wizard
 from . import purchase_order_ref
 from . import purchase_order_wizard
+from . import sale_order_approval_wizard
 from . import followup_manual_reminder
 from . import land_cost_wizard
 

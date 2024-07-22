@@ -54,6 +54,7 @@
 	    'wizard/weekly_product_report_wizard_view.xml',
         'wizard/purchase_order_ref_views.xml',
 	    # 'wizard/purchase_order_wizard_view.xml',
+	    'wizard/sale_order_approval_wizard.xml',
         'wizard/followup_manual_reminder_views.xml',
 	    'wizard/land_cost_wizard_view.xml',
         'views/account_move_views.xml',
