@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from odoo import api, fields, models
+from odoo import api, fields, models, _
 from odoo.exceptions import UserError, ValidationError
 from datetime import datetime, date
 from odoo.tools.float_utils import float_round
@@ -42,6 +42,7 @@ class ProductTemplate(models.Model):
 	expiration_date = fields.Date('expiration date')
 	serial_number = fields.Char('Serial Number')
 	requires_traceability = fields.Boolean('Requires Traceability')
+
 
 
 	@api.depends_context('company')
