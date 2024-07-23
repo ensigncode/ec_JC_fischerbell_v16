@@ -86,4 +86,18 @@
             </xpath>
         </field>
     </record>
+
+    <record id="fischerbell_view_res_partner_inherit" model="ir.ui.view">
+        <field name="name">fischerbell_view_res_partner_inherit</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="postal_management.view_res_partner_inherit"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='postal_code_ids']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='postal_ids']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+        </field>
+    </record>
 </odoo>
