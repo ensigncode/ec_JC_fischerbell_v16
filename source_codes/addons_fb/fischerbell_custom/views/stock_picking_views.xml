@@ -29,7 +29,6 @@
 			</xpath>
 			<xpath expr="//group//group//field[@name='origin']" position="after">
 				<field name="operation_id" invisible="1"/>
-				<field name="is_to_check" attrs="{'invisible': [('picking_type_code','!=','internal')], 'readonly': [('state','=','done')]}"/>
 				<field name="pick_id" string="Pick Number" readonly="1" attrs="{'invisible': [('picking_type_code','!=','outgoing')]}"/>
 				<field name="partner_note"/>
 				<field name="delivery_instruction"/>

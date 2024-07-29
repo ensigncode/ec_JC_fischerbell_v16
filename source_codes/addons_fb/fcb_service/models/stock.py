@@ -29,8 +29,6 @@ class StockPicking(models.Model):
 				raise UserError(_(
 					" Before going to validate transfer, accounts must register payment for the %s."
 				) % picking.sale_id.name)
-
-			if not picking.is_to_check:
 				line_ids = picking.move_line_ids.filtered(lambda x: x.product_id.is_serviceable)
 				for line in line_ids:
 					if line.product_id.service_product_ids:
