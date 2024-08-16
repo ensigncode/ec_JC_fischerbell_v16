@@ -135,6 +135,7 @@
             </xpath>
             <xpath expr="//field[@name='order_line']//tree//field[@name='price_unit']" position="after">
                 <field name="last_price"/>
+                <field name="last_purchase_date"/>
             </xpath>
             <!-- <xpath expr="//field[@name='partner_id']" position="attributes">
                 <attribute name="domain">[('company_type','=','person'),('type','!=','private'),('company_id','in',[False,company_id])]</attribute>                
