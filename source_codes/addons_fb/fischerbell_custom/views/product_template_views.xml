@@ -98,8 +98,22 @@
                             <field name="partner_id" string="Supplier" />
                             <field name="price_unit"/>
                             <field name="price_total" string="Amount" />
-                            <field name="order_id" string="Purchase Order" />
+                            <field name="order_id" string="Purchase Order" domain="[('state', '=', 'purchase')]"/>
                         </tree>
+                        <form string="Purchase History">
+                            <sheet>
+                                <group>
+                                    <field name="order_id" string="Purchase Order"
+                                           domain="[('state', '=', 'purchase')]"/>
+                                    <field name="date_order" string="Last Purchase"/>
+                                    <field name="partner_id" string="Supplier"/>
+                                    <field name="price_unit"/>
+                                    <field name="price_total" string="Amount"/>
+                                </group>
+
+                            </sheet>
+
+                        </form>
                     </field>
                 </page>
             </xpath>

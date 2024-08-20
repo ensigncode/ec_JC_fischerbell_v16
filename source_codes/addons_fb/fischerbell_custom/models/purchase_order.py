@@ -118,6 +118,20 @@ class PurchaseOrder(models.Model):
 				total += line.price_subtotal + line.price_unit * ((line.discount or 0.0) / 100.0) * line.product_uom_qty  # why is there a discount in a field named amount_undiscounted ??
 			order.amount_undiscounted = total
 
+	def action_rfq_send(self):
+		# Call the super method to get the original result
+		res = super(PurchaseOrder, self).action_rfq_send()
+
+		# Access the template and modify the subject
+		if res.get('context') and res['context'].get('default_use_template') and res['context'].get(
+				'default_template_id'):
+			email_template = self.env['mail.template'].browse(res['context']['default_template_id'])
+			if email_template and self.partner_id:
+				# Modify the subject to include the supplier's name
+				email_template.subject = f"{email_template.subject} - {self.partner_id.name}"
+
+		return res
+	
 	def _prepare_invoice(self):
 		"""Prepare the dict of values to create the new invoice for a purchase order.
 		"""
