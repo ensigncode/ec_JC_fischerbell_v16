@@ -62,6 +62,16 @@ class PurchaseOrder(models.Model):
 		for rec in self:
 			rec.state = "approved"
 
+	def action_is_default_terms_purchase(self):
+		purchase = self.env['stock.picking'].search([('is_default_terms','=',True)], limit=1)
+		if purchase:
+			purchase.is_default_terms = False
+		else:
+			for po in self:
+				po.is_default_terms = True
+		for po in self:
+			po.is_default_terms = True
+
 	@api.onchange('partner_id')
 	def _onchange_partner_id(self):
 		landed_cost_product = self.env['product.product'].search([('landed_cost_ok', '=', True)], limit=1)
@@ -84,25 +94,16 @@ class PurchaseOrder(models.Model):
 				if line.product_id != landed_cost_product
 			]
 
-	def action_is_default_terms_purchase(self):
-		purchase = self.env['stock.picking'].search([('is_default_terms','=',True)], limit=1)
-		if purchase:
-			purchase.is_default_terms = False
-		else:
-			for po in self:
-				po.is_default_terms = True
-		for po in self:
-			po.is_default_terms = True
-
-
 	@api.model
 	def create(self, vals):
-		res = super(PurchaseOrder, self).create(vals)
-		default_terms = self.env['purchase.order'].search([('is_default_terms','=',True)], limit=1).notes
+		if 'name' not in vals or vals['name'] == 'New':
+			vals['name'] = self.env['ir.sequence'].next_by_code('purchase.order.rfq')
+		res =  super(PurchaseOrder, self).create(vals)
+		default_terms = self.env['purchase.order'].search([('is_default_terms', '=', True)], limit=1).notes
 		if default_terms:
 			vals['notes'] = default_terms
 		return res
-	
+
 	def write(self,vals):
 		for purchase in self:
 			if vals.get('order_line'):
@@ -153,7 +154,7 @@ class PurchaseOrder(models.Model):
 				email_template.subject = f"{email_template.subject} - {self.partner_id.name}"
 
 		return res
-	
+
 	def _prepare_invoice(self):
 		"""Prepare the dict of values to create the new invoice for a purchase order.
 		"""
@@ -199,6 +200,8 @@ class PurchaseOrder(models.Model):
 		if self.mail_sended:
 			res = super().button_confirm()
 			for order in self:
+				if order.state == 'purchase':
+					order.write({'name': self.env['ir.sequence'].next_by_code('purchase.order.po')})
 				if order.picking_ids:
 					for pick in order.picking_ids:
 						pick.user = self.env.user.id
@@ -250,6 +253,7 @@ class PurchaseOrderLine(models.Model):
 	comments = fields.Char()
 	request_delivery_date = fields.Datetime("Request Delivery Date")
 	estimated_delivery_date = fields.Datetime("Estimated Delivery Date")
+
 
 	@api.onchange('product_id')
 	def onchange_sake_product_image(self):
