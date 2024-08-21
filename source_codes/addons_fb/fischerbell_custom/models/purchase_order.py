@@ -62,6 +62,28 @@ class PurchaseOrder(models.Model):
 		for rec in self:
 			rec.state = "approved"
 
+	@api.onchange('partner_id')
+	def _onchange_partner_id(self):
+		landed_cost_product = self.env['product.product'].search([('landed_cost_ok', '=', True)], limit=1)
+		if self.partner_id.currency_type == 'overseas':
+			if not landed_cost_product:
+				raise UserError("Please create a freight charge product.")
+			else:
+				self.order_line = [(0, 0, {
+					'product_id': landed_cost_product.id,
+					'product_qty': 1.0,
+					'price_unit': landed_cost_product.standard_price,
+					'name': landed_cost_product.name,
+					'date_planned': fields.Date.today(),
+					'product_uom': landed_cost_product.uom_id.id,
+				})]
+		else:
+			# Remove the landed cost product from the order lines if it's there
+			self.order_line = [(5, 0, 0)] + [
+				(1, line.id, {}) for line in self.order_line
+				if line.product_id != landed_cost_product
+			]
+
 	def action_is_default_terms_purchase(self):
 		purchase = self.env['stock.picking'].search([('is_default_terms','=',True)], limit=1)
 		if purchase:
