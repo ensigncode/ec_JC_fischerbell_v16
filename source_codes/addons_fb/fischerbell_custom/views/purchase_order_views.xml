@@ -11,6 +11,7 @@
 			</xpath>
 			<xpath expr="//group//group//field[@name='partner_id']" position="after">
 				<field name="supplier_code"/>
+				<field name="is_delivery_done"/>
 			</xpath>
 			<xpath expr="//field[@name='order_line']//field[@name='name']" position="after">
 				<field name="comments" sting="Comments" optional="hide"/>
@@ -46,8 +47,9 @@
 			<xpath expr="//header//button[@name='button_cancel']" position="before">
 				<button name="sc_approved" string="Approved" type="object" attrs="{'invisible': [('state','=','approved')]}" class="btn-primary"/>
 			</xpath>
-			<xpath expr="//header//button[@name='button_cancel']" position="attributes">
-				 <attribute name="states">draft,to approve,sent,purchase,approved</attribute>
+			<xpath expr="//header//button[@name='button_cancel']" position="replace">
+				 <button name="button_cancel"  string="Cancel" type="object" data-hotkey="x" attrs="{'invisible':['|', ('is_delivery_done', '=', True), ('state', 'not in', ['draft', 'to approve', 'sent', 'purchase', 'approved'])]}"/>
+
 			</xpath>
 			<xpath expr="//notebook//page[@name='special_remark']" position="after">
 				<page string="Shipment Tracking">

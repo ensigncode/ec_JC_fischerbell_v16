@@ -57,6 +57,15 @@ class PurchaseOrder(models.Model):
 	remarks_two = fields.Char('Remarks 2')
 	status = fields.Char('Status')
 	next_delivery_date = fields.Datetime('Next(Earliest) Delivery Date')
+	is_delivery_done = fields.Boolean(compute='_compute_delivery_done')
+
+	def _compute_delivery_done(self):
+		for order in self:
+			if all(picking_id.state == 'done' for picking_id in order.picking_ids) and order.picking_ids:
+				order.is_delivery_done = True
+			else:
+				order.is_delivery_done = False
+
 
 	def sc_approved(self):
 		for rec in self:
