@@ -8,18 +8,41 @@
             <field name="arch" type="xml">
                 <xpath expr="//div[@name='purchase_setting_container']" position="inside">
                     <div class="col-12 col-lg-6 o_setting_box" id="freight_charge">
-                        <div class="o_setting_left_pane"/>
+                        <div class="o_setting_left_pane" />
                         <div class="o_setting_right_pane">
                             <span class="o_form_label">Product</span>
                             <div class="row mt16 mb16">
-                                <field name="freight_charge_id" class="text-center "/>
+                                <field name="freight_charge_id" class="text-center " />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-6 o_setting_box" id="note_limit">
+                        <div class="o_setting_right_pane">
+                            <label for="note_limit" />
+                            <span class="fa fa-lg fa-building-o" title="Values set here are company-specific." aria-label="Values set here are company-specific." groups="base.group_multi_company" role="img" />
+                            <div class="text-muted">
+                                Request managers to approve orders above a minimum amount
+                            </div>
+                            <div class="content-group">
+                                <div class="row mt16">
+                                    <label for="note_limit" class="col-lg-4 o_light_label" />
+                                    <field name="note_limit" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-6 o_setting_box" id="note_limit">
+                        <div class="o_setting_left_pane" />
+                        <div class="o_setting_right_pane">
+                            <span class="o_form_label">Note</span>
+                            <div class="row mt16 mb16">
+                                <field name="note_limit" class="text-center " />
                             </div>
                         </div>
                     </div>
                 </xpath>
             </field>
         </record>
-
         <record id="fischerbell_res_config_settings_view_form" model="ir.ui.view">
             <field name="name">fischerbell.res.config.settings.view.form</field>
             <field name="model">res.config.settings</field>
@@ -27,12 +50,12 @@
             <field name="arch" type="xml">
                 <xpath expr="//div[@id='proforma_configuration']" position="after">
                     <div class="col-12 col-lg-6 o_setting_box" id="proforma_configuration">
-                        <div class="o_setting_left_pane"/>
+                        <div class="o_setting_left_pane" />
                         <div class="o_setting_right_pane">
                             <span class="o_form_label">Return Time (Weeks)</span>
                             <div class="row mt16 mb16">
                                 <div class="content-group col-lg-3">
-                                    <field name="return_time" class="text-center "/>
+                                    <field name="return_time" class="text-center " />
                                 </div>
                             </div>
                         </div>

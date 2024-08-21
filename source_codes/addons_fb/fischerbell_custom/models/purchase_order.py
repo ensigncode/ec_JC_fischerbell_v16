@@ -59,6 +59,13 @@ class PurchaseOrder(models.Model):
 	next_delivery_date = fields.Datetime('Next(Earliest) Delivery Date')
 	is_delivery_done = fields.Boolean(compute='_compute_delivery_done')
 
+
+	@api.onchange('partner_note')
+	def onchange_partner_note(self):
+		if self.partner_note:
+		    if len( self.partner_note) > self.env.company.note_limit:
+		            raise ValidationError("Please add only %d Character !" % self.env.company.note_limit)
+
 	def _compute_delivery_done(self):
 		for order in self:
 			if all(picking_id.state == 'done' for picking_id in order.picking_ids) and order.picking_ids:

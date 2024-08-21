@@ -6,6 +6,7 @@ class ResConfigSettings(models.TransientModel):
 
     freight_charge_id = fields.Many2one('product.product', 'Freight Charge')
     return_time = fields.Integer('Return Time')
+    note_limit = fields.Integer('Note Limit', related='company_id.note_limit', readonly=False, default=20)
 
 
     def set_values(self):

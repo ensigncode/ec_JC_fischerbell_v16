@@ -10,3 +10,4 @@ class Company(models.Model):
     social_lazada = fields.Char('Lazada Account')
     social_store = fields.Char('Woocommerce Account')
     social_shopee = fields.Char('Shopee Account')
+    note_limit = fields.Integer('Note Limit', default=20)
