@@ -1113,6 +1113,39 @@ class SaleOrder(models.Model):
 				mail = self.env['mail.mail'].create(mails)
 				mail.send()
 
+	@api.model
+	def merge_quotations(self):
+		active_ids = self.env.context.get('active_ids', [])
+		if len(active_ids) < 2:
+			raise ValidationError(_("You must select at least two sale orders to merge."))
+		sale_orders = self.browse(active_ids)
+		partner_ids = sale_orders.mapped('partner_id.id')
+		if len(set(partner_ids)) > 1:
+			raise ValidationError(_("Selected sale orders must belong to the same customer."))
+		draft_orders = sale_orders.filtered(lambda so: so.state == 'draft')
+		if len(draft_orders) != len(sale_orders):
+			raise ValidationError(_("All selected sale orders must be in the Quotation."))
+		latest_order = draft_orders.sorted(lambda so: so.create_date, reverse=True)[0]
+		for order in draft_orders - latest_order:
+			for line in order.order_line:
+				existing_line = latest_order.order_line.filtered(lambda l: l.product_id == line.product_id)
+				if existing_line:
+					existing_line.write({'product_uom_qty': existing_line.product_uom_qty + line.product_uom_qty,
+										'price_unit':line.price_unit})
+					existing_line._compute_amount()
+				else:
+					line.copy(default={'order_id': latest_order.id})
+					line._compute_amount()
+			order.action_cancel()
+		return {
+		          'type': 'ir.actions.act_window',
+		          'name': _('Quotation'),
+		          'res_model': 'sale.order',
+		          'view_mode': 'form',
+		          'view_type': 'form',
+		          'res_id':latest_order.id,
+		      }
+
 
 class SaleOrderLine(models.Model):
 	_inherit = "sale.order.line"
