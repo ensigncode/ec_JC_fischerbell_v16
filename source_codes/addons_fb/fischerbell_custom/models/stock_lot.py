@@ -47,3 +47,10 @@ class StockLocation(models.Model):
 
 	inventory_status = fields.Boolean('Show in Inventory Status')
 
+
+class StockQuant(models.Model):
+	_inherit = 'stock.quant'
+
+
+	expiration_date = fields.Datetime(related='lot_id.expiration_date', string='Expiration Date', store=True)
+
