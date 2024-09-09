@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_inventory_tree" model="ir.ui.view">
+        <field name="name">stock.inventory.tree</field>
+        <field name="model">stock.inventory</field>
+        <field name="arch" type="xml">
+            <tree string="Lot/Serial Number Inventory" sample="1">
+                <field name="date" />
+                <field name="name" />
+                <field name="location_ids" widget="many2many_tags" optional="hide" groups="stock.group_stock_multi_locations" />
+                <field name="product_ids" widget="many2many_tags" optional="hide" />
+                <field name="company_id" groups="base.group_multi_company" optional="show" />
+            </tree>
+        </field>
+    </record>
+    <record id="view_inventory_form" model="ir.ui.view">
+        <field name="name">stock.inventory.form</field>
+        <field name="model">stock.inventory</field>
+        <field name="arch" type="xml">
+            <form string="Inventory Adjustment">
+                <header>
+                    <button name="action_validate" string="Validate Inventory" type="object"  groups="stock.group_stock_manager" attrs="{'invisible': [('state', '=', 'done')]}"/>
+                    <button name="open_product_quant" string="Start Inventory" type="object" class="oe_highlight" attrs="{'invisible': [('state', '=', 'done')]}"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,confirm,done"/>
+
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button string="Product Moves" type="object"
+                                name="action_view_related_move_lines"
+                                class="oe_stat_button" icon="fa-exchange"
+                                attrs="{'invisible': [('state', '!=', 'done')]}"
+                                context="{'no_reference': True}"/>
+                    </div>
+                    <div class="oe_title">
+                        <label for="name" class="oe_edit_only" />
+                        <h1>
+                            <field name="name" placeholder="e.g. Annual inventory" />
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="location_ids" options="{'no_create': True}" widget="many2many_tags" force_save="1" groups="stock.group_stock_multi_locations" ttrs="{'readonly': [('state', '=', 'done')]}"/>
+                            <field name="product_ids" context="{'default_type': 'product'}" widget="many2many_tags"  ttrs="{'readonly': [('state', '=', 'done')]}"/>
+                        </group>
+                        <group>
+                            <field name="date" options="{'no_create': True}" ttrs="{'readonly': [('state', '=', 'done')]}"/>
+                            <field name="company_id" options="{'no_create': True}" ttrs="{'readonly': [('state', '=', 'done')]}"/>
+                        </group>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers" />
+                    <field name="activity_ids" widget="mail_activity" />
+                    <field name="message_ids" widget="mail_thread" />
+                </div>
+            </form>
+        </field>
+    </record>
+    <record id="action_inventory_form" model="ir.actions.act_window">
+        <field name="name">Inventory Adjustments</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">stock.inventory</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="view_inventory_tree" />
+        <field name="help" type="html">
+            <p class="o_view_nocontent_barcode_scanner">
+                Want to speed up your inventory counts? Try our Barcode app
+            </p>
+            <p>
+                Barcode scanner can be activated via inventory settings.
+                Manual inventory adjustments can also be performed and pre-filled with
+                suggested counted quantity.
+            </p>
+        </field>
+    </record>
+    <!-- <menuitem id="menu_action_inventory_form" name="Inventory Adjustment" action="action_inventory_form" parent="stock.menu_stock_warehouse_mgmt"/> -->
+    <menuitem id="stock.menu_action_inventory_tree" name="Inventory Adjustments" parent="stock.menu_stock_warehouse_mgmt" sequence="10" action="action_inventory_form"/>
+</odoo>

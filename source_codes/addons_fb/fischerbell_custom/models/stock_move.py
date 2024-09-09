@@ -18,6 +18,15 @@ class StockMove(models.Model):
 	manufacturing_date = fields.Date('manufacturing date')
 	expiration_date = fields.Date('expiration date')
 	serial_number = fields.Char('Serial Number')
+	inventory_id = fields.Many2one('stock.inventory')
+
+	@api.model
+	def create(self, vals):
+		# assigning the sequence for the record
+		if self._context.get('inventory_id'):
+			vals['inventory_id'] = self._context.get('inventory_id')
+		res = super(StockMove, self).create(vals)
+		return res
 
 	def _get_new_picking_values(self):
 		"""Inherit method for pass value from sale order to delivery order."""
