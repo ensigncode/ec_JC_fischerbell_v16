@@ -18,8 +18,6 @@ class Picking(models.Model):
 				return rec.sale_id.no_enough_stock
 			else:
 				True
-
-	is_to_check = fields.Boolean('Check Pick Transfer')
 	is_return_loan = fields.Boolean("Is Return Loan", default=False)
 	partner_address = fields.Char('Address')
 	partner_type =  fields.Selection(
@@ -265,8 +263,8 @@ class Picking(models.Model):
 				no_stock_line_ids = any(line.product_uom_qty > line.product_template_id.qty_available for line in picking.sale_id.order_line)
 				if no_stock_line_ids:
 					raise UserError('Product stock is not enough as demand. Customers wants wait till all stocks be ready for shipment.')
-			if picking.picking_type_code == 'internal' and not picking.is_to_check:
-				raise ValidationError("Sorry you cannot validate, as this transfer is not yet check.")
+			#if picking.picking_type_code == 'internal:
+				#raise ValidationError("Sorry you cannot validate, as this transfer is not yet check.")
 			if picking.picking_type_code == 'incoming':
 				for move_line in picking.move_ids_without_package:
 					qty = int(move_line.product_uom_qty)

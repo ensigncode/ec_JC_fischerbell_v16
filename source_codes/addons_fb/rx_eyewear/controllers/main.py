@@ -48,7 +48,7 @@ class OpticianPortalController(http.Controller):
 				'presc_type' : kw.get('presc_type') if kw.get('presc_type') else '',
 				'add_on_type' : kw.get('add_on_type') if kw.get('add_on_type') else '',
 				'product_id' : kw.get('product_id') if kw.get('product_id') else '',
-				'company_id' : company_id.id if company_id else Fal,
+				'company_id' : company_id.id if company_id else False,
 				'sphere_left' : kw.get('sphere_left') if kw.get('sphere_left') else '',
 				'cyl_left' : kw.get('cyl_left') if kw.get('cyl_left') else '',
 				'axis_left' : kw.get('axis_left') if kw.get('axis_left') else '',

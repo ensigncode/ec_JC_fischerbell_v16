@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+        <record id="removal_fmfo" model="product.removal">
+            <field name="name">First Manufactured First Out (FEFO)</field>
+            <field name="method">fmfo</field>
+        </record>
+</odoo>
