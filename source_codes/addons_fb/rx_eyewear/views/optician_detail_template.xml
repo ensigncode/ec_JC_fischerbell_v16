@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
-        <template id="opptician_detail_page_template" name="Optician Detail Form">
+        <template id="opptician_detail_page_template" name="Prescriptive Eyewear Order Form">
             <t t-call="website.layout">
                 <div id="optician_detail_form">
                     <div class="oe_structure ">
@@ -9,7 +9,7 @@
                             data-vcss="001" data-snippet="s_title" data-name="Title">
                             <div class="container s_allow_columns">
                                 <h1 style="text-align: center;">
-                                    <font style="font-size: 62px;">Optician Detail</font>
+                                    <font style="font-size: 62px;">Prescriptive Eyewear Order</font>
                                 </h1>
                             </div>
                         </section>
@@ -20,7 +20,7 @@
                                     <input type="hidden" name="leave_hours" id="leave_hours" />
                                     <input type="hidden" name="csrf_token"
                                         t-att-value="request.csrf_token()" />
-                                    <h2 class="form_title">Optician Detail Form</h2>
+                                    <h2 class="form_title">Prescriptive Eyewear Order Form</h2>
                                     <div class="row">
                                         <div class="col-6">
                                             <div class="input-group">
