@@ -44,6 +44,8 @@ class Partner(models.Model):
 		('6', 'Sunday')], string="Delivery Restriction")
 	delivery_restriction_start_date = fields.Date(string="Delivery Restriction Start")
 	delivery_restriction_end_date = fields.Date(string="Delivery Restriction End")
+	code = fields.Char(string = 'Sequence', readonly=True)
+	is_contact_created = fields.Boolean(string = 'Is Contact Created')
 
 
 
@@ -73,4 +75,13 @@ class Partner(models.Model):
 				customer.customer_code = vals.get('customer_code')
 		res = super().write(vals)
 		return res
+	
+	def unlink(self):
+		for rec in self:
+			partner_id = rec.search([('name','=',rec.name),('email','=',rec.email),
+									('phone','=',rec.phone),('mobile','=',rec.mobile),
+									('is_contact_created','=',True)])
+			if partner_id:
+				partner_id.write({'is_contact_created':False})
+		return super().unlink()
 

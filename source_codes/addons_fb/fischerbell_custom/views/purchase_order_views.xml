@@ -45,6 +45,8 @@
 			</xpath>
 			<xpath expr="//header//button[@name='button_cancel']" position="before">
 				<button name="sc_approved" string="Approved" type="object" attrs="{'invisible': [('state','=','approved')]}" class="btn-primary"/>
+                <button name="create_sequance_contact" string="Financial Approval" type="object" 
+                        class="btn-primary"/>
 			</xpath>
 			<xpath expr="//header//button[@name='button_cancel']" position="attributes">
 				 <attribute name="states">draft,to approve,sent,purchase,approved</attribute>
