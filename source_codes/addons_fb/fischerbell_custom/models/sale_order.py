@@ -335,11 +335,11 @@ class SaleOrder(models.Model):
 						'approval_state': 'approved',
 						'reviewed_by': self.env.user.id
 					})
-					if order.partner_id.partner_seq == _('New'):
-						partner = self.env['res.partner'].browse(order.partner_id.id)
-						partner.update({
-							'partner_seq': self.env['ir.sequence'].next_by_code('res.partner') or _('New')
-						})
+				     # if order.partner_id.partner_seq == _('New'):
+				     # 	partner = self.env['res.partner'].browse(order.partner_id.id)
+				     # 	partner.update({
+				     # 		'partner_seq': self.env['ir.sequence'].next_by_code('res.partner') or _('New')
+				     # 	})
 					order.with_context(vendor_wizard=True).action_confirm()
 					purchase_order_ids = self._get_purchase_orders()
 					if purchase_order_ids:
@@ -377,11 +377,11 @@ class SaleOrder(models.Model):
 						'approval_state': 'approved',
 						'reviewed_by': self.env.user.id
 					})
-					if order.partner_id.partner_seq == _('New'):
-						partner = self.env['res.partner'].browse(order.partner_id.id)
-						partner.update({
-							'partner_seq': self.env['ir.sequence'].next_by_code('res.partner') or _('New')
-						})
+				     # if order.partner_id.partner_seq == _('New'):
+				     # 	partner = self.env['res.partner'].browse(order.partner_id.id)
+				     # 	partner.update({
+				     # 		'partner_seq': self.env['ir.sequence'].next_by_code('res.partner') or _('New')
+				     # 	})
 					order.with_context(vendor_wizard=True).action_confirm()
 					purchase_order_ids = self._get_purchase_orders()
 					if purchase_order_ids:
@@ -1150,6 +1150,60 @@ class SaleOrder(models.Model):
 				}
 				mail = self.env['mail.mail'].create(mails)
 				mail.send()
+
+	@api.model
+	def merge_quotations(self):
+		active_ids = self.env.context.get('active_ids', [])
+		if len(active_ids) < 2:
+			raise ValidationError(_("You must select at least two sale orders to merge."))
+		sale_orders = self.browse(active_ids)
+		partner_ids = sale_orders.mapped('partner_id.id')
+		if len(set(partner_ids)) > 1:
+			raise ValidationError(_("Selected sale orders must belong to the same customer."))
+		draft_orders = sale_orders.filtered(lambda so: so.state == 'draft')
+		if len(draft_orders) != len(sale_orders):
+			raise ValidationError(_("All selected sale orders must be in the Quotation."))
+		latest_order = draft_orders.sorted(lambda so: so.create_date, reverse=True)[0]
+		for order in draft_orders - latest_order:
+			for line in order.order_line:
+				existing_line = latest_order.order_line.filtered(lambda l: l.product_id == line.product_id)
+				if existing_line:
+					existing_line.write({'product_uom_qty': existing_line.product_uom_qty + line.product_uom_qty,
+										'price_unit':line.price_unit})
+					existing_line._compute_amount()
+				else:
+					line.copy(default={'order_id': latest_order.id})
+					line._compute_amount()
+			order.action_cancel()
+		return {
+		          'type': 'ir.actions.act_window',
+		          'name': _('Quotation'),
+		          'res_model': 'sale.order',
+		          'view_mode': 'form',
+		          'view_type': 'form',
+		          'res_id':latest_order.id,
+		      }
+	
+	def create_sequance_contact(self):
+		for sale in self:
+			channel = (self._cr.dbname, 'res.partner', self.env.user.partner_id.id)
+			if not sale.partner_id.is_contact_created:
+				partner_id = sale.partner_id.copy({'name':sale.partner_id.name,
+												'code':self.env['ir.sequence'].next_by_code('res.partner.customer') 
+													or	_('New'),
+													'is_contact_created':True})
+				bus_service = self.env['bus.bus']._sendone(channel, 'simple_notification', {
+			            'title': _("Record Created"),
+			            'message': _('Contact create with this Sequence: %s'%(partner_id.code)),
+			            'type': 'info',
+			        })
+				sale.write({'partner_id':partner_id.id})
+			else:
+				bus_service = self.env['bus.bus']._sendone(channel, 'simple_notification', {
+			            'title': _("Warning"),
+			            'message': _('Sequence already created with Partner:  %s - %s'%(sale.partner_id.name,sale.partner_id.code)),
+			        })
+			
 
 
 class SaleOrderLine(models.Model):

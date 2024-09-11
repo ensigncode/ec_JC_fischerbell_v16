@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="fischerbell_view_quant_tree_inherit" model="ir.ui.view">
+            <field name="name">stock.quant.tree</field>
+            <field name="model">stock.quant</field>
+            <field name="inherit_id" ref="product_expiry.view_stock_quant_tree_editable_expiry" />
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='removal_date']" position="after">
+                    <field name="expiration_date" />
+                </xpath>
+            </field>
+        </record>
+
+
+        <record id="fischerbell_view_quant_filter_inherit" model="ir.ui.view">
+            <field name="name">stock.quant.filter</field>
+            <field name="model">stock.quant</field>
+            <field name="inherit_id" ref="product_expiry.quant_search_view_inherit_product_expiry" />
+            <field name="arch" type="xml">
+                <xpath
+                    expr="//search//group//filter[@name='expiration_alerts']"
+                    position="after">
+                    <separator />
+                    <filter string="Expired" name="expired" domain="[('expiration_date', '&lt;', context_today().strftime('%Y-%m-%d'))]"/>
+                    <filter string="Expire Today" name="expire_today" domain="[('expiration_date', '=', context_today().strftime('%Y-%m-%d'))]"/>
+                    <filter string="Will Expire" name="will_expire" domain="[('expiration_date', '&gt;', context_today().strftime('%Y-%m-%d'))]"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>
