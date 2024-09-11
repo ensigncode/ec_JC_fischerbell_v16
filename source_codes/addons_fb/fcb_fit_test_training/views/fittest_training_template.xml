@@ -55,6 +55,7 @@
                                                         </label>
                                                         <div class="col-sm">
                                                             <input id="namee" type="text"
+                                                                   readonly="readonly"
                                                                    class="form-control s_website_form_input"
                                                                    name="name" required=""/>
                                                         </div>
@@ -77,16 +78,21 @@
 <!--                                                                   name="name" required="true"-->
 <!--                                                            />-->
                                                         <div class="col-sm">
-                                                        <select id="partner_id" name="partner_id" t-attf-class="form-control s_website_form_input" required="true">
-                                                                <option value="">select...</option>
-                                                                <t t-foreach="request.env['res.partner'].sudo().search([('is_company','!=',True),('parent_id','=', False)]) or []"
-                                                                   t-as="partner_id">
-                                                                    <option t-att-value="partner_id.id"
-                                                                            t-att-selected="partner_id.id == (partner_id and partner_id.id and 'selected')">
-                                                                        <t t-esc="partner_id.name"/>
-                                                                    </option>
-                                                                </t>
-                                                        </select>
+<!--                                                        <select id="partner_id" name="partner_id" readonly="readonly" t-attf-class="form-control s_website_form_input" required="true">-->
+<!--                                                                <option value="">select...</option>-->
+<!--                                                                <t t-foreach="request.env['res.partner'].sudo().search([('is_company','!=',True),('parent_id','=', False)]) or []"-->
+<!--                                                                   t-as="partner_id">-->
+<!--                                                                    <option t-att-value="partner_id.id"-->
+<!--                                                                            t-att-selected="partner_id.id == (partner_id and partner_id.id and 'selected')">-->
+<!--                                                                        <t t-esc="partner_id.name"/>-->
+<!--                                                                    </option>-->
+<!--                                                                </t>-->
+<!--                                                        </select>-->
+<!--                                                            set partner_id as text field to show partner name only-->
+                                                            <input id="partner_id" type="text"
+                                                                   class="form-control s_website_form_input"
+                                                                   readonly="readonly"
+                                                                   name="partner_id" required=""/>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -103,6 +109,7 @@
                                                     </label>
                                                     <div class="col-sm">
                                                         <input id="date_of_training" type="date"
+                                                               readonly="readonly"
                                                                class="form-control s_website_form_input"
                                                                name="date" required="true"
                                                         />
@@ -120,6 +127,7 @@
                                                     </label>
                                                     <div class="col-sm">
                                                         <input id="charge_name" type="text"
+                                                               readonly="readonly"
                                                                class="form-control s_website_form_input"
                                                                name="charge_name"
                                                                data-fill-with="charge_name"/>
@@ -137,6 +145,7 @@
                                                     </label>
                                                     <div class="col-sm">
                                                         <input id="phone" type="tel"
+                                                               readonly="readonly"
                                                                class="form-control s_website_form_input"
                                                                name="phone"/>
                                                     </div>
@@ -156,16 +165,22 @@
 <!--                                                               class="form-control s_website_form_input"-->
 <!--                                                               name="company"-->
 <!--                                                               data-fill-with="commercial_company_name"/>-->
-                                                        <select id="company_id" t-attf-class="form-control s_website_form_input" name="company_id" required="true">
-                                                                <option value="">select...</option>
-                                                                <t t-foreach="request.env['res.partner'].sudo().search([('is_company','=',True)]) or []"
-                                                                   t-as="company_id">
-                                                                    <option t-att-value="company_id.id"
-                                                                            t-att-selected="company_id.id == (company_id and company_id.id and 'selected')">
-                                                                        <t t-esc="company_id.name"/>
-                                                                    </option>
-                                                                </t>
-                                                        </select>
+<!--                                                        <select id="company_id" t-attf-class="form-control s_website_form_input" readonly="readonly" name="company_id" required="true">-->
+<!--                                                                <option value="">select...</option>-->
+<!--                                                                <t t-foreach="request.env['res.partner'].sudo().search([('is_company','=',True)]) or []"-->
+<!--                                                                   t-as="company_id">-->
+<!--                                                                    <option t-att-value="company_id.id"-->
+<!--                                                                            t-att-selected="company_id.id == (company_id and company_id.id and 'selected')">-->
+<!--                                                                        <t t-esc="company_id.name"/>-->
+<!--                                                                    </option>-->
+<!--                                                                </t>-->
+<!--                                                        </select>-->
+<!--                                                        set company_id as text field to show company name only-->
+                                                        <input id="company_id" type="text"
+                                                               readonly="readonly"
+                                                               class="form-control s_website_form_input"
+                                                               name="company_id" required=""/>
+
                                                     </div>
                                                 </div>
                                             </div>
@@ -185,7 +200,7 @@
 <!--                                                               name="training_type" required=""/>-->
 <!--                                                    </div>-->
                                                      <div class="col-sm">
-                                                        <select id="training_type" name="training_type" t-attf-class="form-control s_website_form_input" required="true">
+                                                        <select id="training_type" name="training_type" readonly="readonly" style="pointer-events: none;" t-attf-class="form-control s_website_form_input" required="true">
                                                                 <option value="fit_test"> Fit Test</option>
                                                                 <option value="aed">Fit Test - AED</option>
                                                                 <option value="scba">Fit Test - SCBA</option>
@@ -221,6 +236,7 @@
                                                     </label>
                                                     <div class="col-sm">
                                                         <input id="location" type="text"
+                                                               readonly="readonly"
                                                                class="form-control s_website_form_input"
                                                                name="location" required=""/>
                                                     </div>

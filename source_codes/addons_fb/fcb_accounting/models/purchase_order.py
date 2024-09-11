@@ -7,7 +7,8 @@ from odoo.exceptions import UserError
 class PurchaseOrder(models.Model):
 	_inherit = 'purchase.order'
 
- 
+
+
 	def _prepare_picking(self):
 		context = self.env.context
 		if 'picking_type_code' and 'dest_address_id' and 'picking_type_id' in context:
@@ -73,6 +74,12 @@ class PurchaseOrder(models.Model):
 	def onchange_picking_type_id_custom(self):
 		for line in self.order_line:
 			line.picking_type_id = self.picking_type_id.id
+
+	@api.onchange('partner_id')
+	def _vendor_payment_term_id(self):
+		is_purchase = self.env['account.payment.term'].search([('is_purchase', '=', True)], limit=1).id
+		for order in self:
+			order.payment_term_id = is_purchase
 
 
 class PurchaseOrderLine(models.Model):

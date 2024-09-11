@@ -9,7 +9,7 @@ class SaleOrder(models.Model):
 	_inherit = "sale.order"
 
 	service_product_ids = fields.One2many('product.service', 'sale_product_tmp_id', 'Service Products')
-	have_special_permission = fields.Boolean("Special Permission")
+	have_special_permission = fields.Boolean("Perfoma Invoice")
 	have_special_permission_note = fields.Text(string='Description', required=False)
 
 

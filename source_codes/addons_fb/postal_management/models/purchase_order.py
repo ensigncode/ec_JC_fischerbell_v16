@@ -5,7 +5,7 @@ from odoo import api, fields, models, _
 class PurchaseOrder(models.Model):
 	_inherit = 'purchase.order'
 
-	collection = fields.Selection([('self_collection', 'Send Driver For Self Collection'),('assigned_driver', 'Delivery')],string="Collection",default="self_collection")
+	collection = fields.Selection([('tbc', 'TBC'),('self_collection', 'Send Driver For Self Collection'),('assigned_driver', 'Delivery')],string="Collection",default="tbc")
 	# Function will assign Vehicle And Driver in Transfer
 	def assign_driver(self):
 		driver_ids = False

@@ -4,7 +4,7 @@
 from itertools import groupby
 from odoo.exceptions import MissingError, ValidationError, AccessError
 
-from odoo import api,fields, models, _
+from odoo import api, fields, models, _
 from odoo.exceptions import UserError, ValidationError
 from datetime import datetime, timedelta, date
 from odoo.fields import Command
@@ -17,17 +17,17 @@ READONLY_FIELD_STATES = {
 	for state in {'sale', 'done', 'cancel'}
 }
 
-ORDER_LINE_FIELDS = ['product_uom_qty','price_unit','price_subtotal','tax_id']
+ORDER_LINE_FIELDS = ['product_uom_qty', 'price_unit', 'price_subtotal', 'tax_id']
 
 
 class ProductVendorConf(models.Model):
 	_name = "product.vendor.conf"
 	_description = "Product Vendor Conf"
 
-	product_id = fields.Many2one('product.product',string="Product")
-	partner_id = fields.Many2one('res.partner',string="Vendor")
-	sale_id = fields.Many2one('sale.order',string="Order")
-	sale_line_id = fields.Many2one('sale.order.line',string="Sale Order Line")
+	product_id = fields.Many2one('product.product', string="Product")
+	partner_id = fields.Many2one('res.partner', string="Vendor")
+	sale_id = fields.Many2one('sale.order', string="Order")
+	sale_line_id = fields.Many2one('sale.order.line', string="Sale Order Line")
 	supplier_info_id = fields.Many2one('product.supplierinfo')
 	bom_line_id = fields.Many2one('mrp.bom.line')
 
@@ -52,12 +52,12 @@ class SaleOrder(models.Model):
 	billing_state = fields.Selection([
 		('open', 'Open'),
 		('closed', 'Closed'),
-		('no_invoice','No Invoice')
+		('no_invoice', 'No Invoice')
 	], compute="_compute_billing_state")
 	sale_id = fields.Many2one('sale.order', 'Sale')
 	# exchange_order_ids = fields.One2many('sale.order', 'sale_id', string="Exchange Order")
 	# exchange_order_count = fields.Integer('Exchange Order Count', compute="_compute_exchange_order_ids")
-	loan_ids = fields.One2many('sale.order','sale_id',string="Loan Order")
+	loan_ids = fields.One2many('sale.order', 'sale_id', string="Loan Order")
 	loan_order_count = fields.Integer('Loan Order Count', compute="_compute_loan_ids")
 	# replacement_order_ids = fields.One2many('sale.order', 'sale_id', string="Replacement Order")
 	# replacement_order_count = fields.Integer('Replacement Order Count', compute="_compute_replacement_order_ids")
@@ -74,7 +74,7 @@ class SaleOrder(models.Model):
 	delivery_type = fields.Selection([
 		('self_collection', 'Self Collection'),
 		('in_house_driver', 'Delivery by In-house Driver'),
-		('third_party_logistics','Delivery by Third-party Logistics')
+		('third_party_logistics', 'Delivery by Third-party Logistics')
 	], default='self_collection')
 	route_id = fields.Many2one('fischerbell.delivery.route', 'Delivery Route')
 	approval_state = fields.Selection(
@@ -101,13 +101,14 @@ class SaleOrder(models.Model):
 		default='draft')
 
 	contact_person_id = fields.Many2one('res.partner', string='Contact Person')
-	contact_person_comp_id = fields.Many2one('res.partner', string='Contact Person Company',compute="_get_contact_person_company")
+	contact_person_comp_id = fields.Many2one('res.partner', string='Contact Person Company',
+	                                         compute="_get_contact_person_company")
 	# contact_person_comp_id = fields.Many2one('res.partner', string='Contact Person Company',related="contact_person_id.parent_id")
-	contact_per_name = fields.Char(string="Contact Person Name",readonly=True)
-	revision_order_count = fields.Float(sting="Revision Order Count",default=1.0)
+	contact_per_name = fields.Char(string="Contact Person Name", readonly=True)
+	revision_order_count = fields.Float(sting="Revision Order Count", default=1.0)
 	revision_order_name = fields.Char(sting="Revision Order Name")
 	is_order_revise = fields.Boolean(default=False)
-	reviewed_by = fields.Many2one("res.users",string="Reviewed By")
+	reviewed_by = fields.Many2one("res.users", string="Reviewed By")
 	email_to_customer = fields.Datetime(string="Email To Customer")
 	first_followup_date = fields.Datetime(string="First Follow Up")
 	sec_followup_date = fields.Datetime(string="Sec Follow Up")
@@ -116,28 +117,27 @@ class SaleOrder(models.Model):
 	no_enough_stock = fields.Boolean(compute='_compute_order_stock')
 	over_credit_limit = fields.Boolean(compute='_compute_credit_limit', store=True)
 	submited_date = fields.Date('Submited Date')
-	artwork_attachment_ids = fields.Many2many('ir.attachment',string="ArtWork")
+	artwork_attachment_ids = fields.Many2many('ir.attachment', string="ArtWork")
 	delivery_instruction = fields.Html(string="Delivery Instruction")
 	invoice_instruction = fields.Html(string="Invoice Instruction")
 	delivery_option = fields.Selection(
 		selection=[('partial_delivery', 'Partial Delivery'),
-			('full_delivery', 'Wait for the receival of all goods')],
+		           ('full_delivery', 'Wait for the receival of all goods')],
 		string="Delivery Option", default='partial_delivery')
 
-	product_vendor_conf_ids = fields.One2many('product.vendor.conf','sale_id',string="Product Vendor Conf")
-
+	product_vendor_conf_ids = fields.One2many('product.vendor.conf', 'sale_id', string="Product Vendor Conf")
 
 	@api.depends('partner_id')
 	def _compute_partner_shipping_id(self):
 		for order in self:
-			order.partner_shipping_id = order.partner_id.address_get(['delivery'])['delivery'] if order.partner_id else False
+			order.partner_shipping_id = order.partner_id.address_get(['delivery'])[
+				'delivery'] if order.partner_id else False
 			order.route_id = order.get_route_id(order.partner_shipping_id)
-
 
 	def get_route_id(self, partner_shipping_id):
 		if partner_shipping_id and partner_shipping_id.zip:
 			postal_code = '{:.2}'.format(partner_shipping_id.zip)
-			zip_number = self.env['fischerbell.delivery.route.line'].search([('name','=',postal_code)], limit=1)
+			zip_number = self.env['fischerbell.delivery.route.line'].search([('name', '=', postal_code)], limit=1)
 			return zip_number.route_id.id if zip_number else False
 		else:
 			return False
@@ -156,29 +156,30 @@ class SaleOrder(models.Model):
 			if order.amount_total > order.partner_id.credit_limit and order.partner_id.credit_limit != 0:
 				order.over_credit_limit = True
 
-
 	@api.onchange('scheduled_delivery_date')
 	def _onchange_partner_not_avalibale(self):
 		partner = self.partner_id.parent_id if self.partner_id.parent_id else self.partner_id
-		if partner.no_delivery_days_selection == 'days' and int(partner.no_delivery_days) == self.scheduled_delivery_date.weekday():
+		if partner.no_delivery_days_selection == 'days' and int(
+				partner.no_delivery_days) == self.scheduled_delivery_date.weekday():
 			raise ValidationError("Customer is not available during this date")
 		if partner.no_delivery_days_selection == 'date' and partner.delivery_restriction_start_date <= self.scheduled_delivery_date.date() <= partner.delivery_restriction_end_date:
-			raise ValidationError(f"Customer is not available from {partner.delivery_restriction_start_date.strftime('%d-%m-%Y')} to {partner.delivery_restriction_end_date.strftime('%d-%m-%Y')}")
-		# if self.partner_id.parent_id:
-		# 	if self.partner_id.parent_id.no_delivery_days_selection == 'days':
-		# 		if int(self.partner_id.parent_id.no_delivery_days) == self.scheduled_delivery_date.weekday():
-		# 			raise ValidationError("Customer is not avaliable during this date")
-		# 	if self.partner_id.parent_id.no_delivery_days_selection == 'date':
-		# 		if self.partner_id.parent_id.delivery_restriction_start_date <= self.scheduled_delivery_date.date() <= self.partner_id.parent_id.delivery_restriction_end_date:
-		# 			raise ValidationError(f"Customer is not avaliable from {self.partner_id.parent_id.delivery_restriction_start_date} to {self.partner_id.parent_id.delivery_restriction_end_date}")
-		# else:
-		# 	if self.partner_id.no_delivery_days_selection == 'days':
-		# 		if int(self.partner_id.no_delivery_days) == self.scheduled_delivery_date.weekday():
-		# 			raise ValidationError("Customer is not avaliable during this date")
-		# 	if self.partner_id.no_delivery_days_selection == 'date':
-		# 		if self.partner_id.delivery_restriction_start_date <= self.scheduled_delivery_date.date() <= self.partner_id.delivery_restriction_end_date:
-		# 			raise ValidationError(f"Customer is not avaliable from {self.partner_id.delivery_restriction_start_date} to {self.partner_id.delivery_restriction_end_date}")
+			raise ValidationError(
+				f"Customer is not available from {partner.delivery_restriction_start_date.strftime('%d-%m-%Y')} to {partner.delivery_restriction_end_date.strftime('%d-%m-%Y')}")
 
+	# if self.partner_id.parent_id:
+	# 	if self.partner_id.parent_id.no_delivery_days_selection == 'days':
+	# 		if int(self.partner_id.parent_id.no_delivery_days) == self.scheduled_delivery_date.weekday():
+	# 			raise ValidationError("Customer is not avaliable during this date")
+	# 	if self.partner_id.parent_id.no_delivery_days_selection == 'date':
+	# 		if self.partner_id.parent_id.delivery_restriction_start_date <= self.scheduled_delivery_date.date() <= self.partner_id.parent_id.delivery_restriction_end_date:
+	# 			raise ValidationError(f"Customer is not avaliable from {self.partner_id.parent_id.delivery_restriction_start_date} to {self.partner_id.parent_id.delivery_restriction_end_date}")
+	# else:
+	# 	if self.partner_id.no_delivery_days_selection == 'days':
+	# 		if int(self.partner_id.no_delivery_days) == self.scheduled_delivery_date.weekday():
+	# 			raise ValidationError("Customer is not avaliable during this date")
+	# 	if self.partner_id.no_delivery_days_selection == 'date':
+	# 		if self.partner_id.delivery_restriction_start_date <= self.scheduled_delivery_date.date() <= self.partner_id.delivery_restriction_end_date:
+	# 			raise ValidationError(f"Customer is not avaliable from {self.partner_id.delivery_restriction_start_date} to {self.partner_id.delivery_restriction_end_date}")
 
 	# @api.onchange('contact_person_id')
 	# def _onchange_set_customer(self):
@@ -195,7 +196,7 @@ class SaleOrder(models.Model):
 				rec.contact_person_comp_id = False
 
 	def _update_approval_state(self):
-		orders = self.env['sale.order'].search([('approval_state','=','no')])
+		orders = self.env['sale.order'].search([('approval_state', '=', 'no')])
 		for order in orders:
 			if order.state == 'draft':
 				order.approval_state = 'no'
@@ -203,8 +204,6 @@ class SaleOrder(models.Model):
 				order.approval_state = 'approved'
 			if order.state == 'cancel':
 				order.approval_state = 'reject'
-
-
 
 	# def action_to_approve(self):
 	# 	for order in self:
@@ -237,7 +236,6 @@ class SaleOrder(models.Model):
 	# 			else:
 	# 				raise ValidationError("Sorry, you are not allowed to approve this order.")
 	# 	return True
-
 
 	# @api.model_create_multi
 	# def create(self, vals_list):
@@ -272,10 +270,29 @@ class SaleOrder(models.Model):
 	# 			self.approval_order()
 	#
 	# 	return True
+ 
+	@api.returns('mail.message', lambda value: value.id)
+	def message_post(self, **kwargs):
+		res = super(SaleOrder, self.with_context(
+            mail_post_autofollow=self.env.context.get('mail_post_autofollow', True),
+            lang=self.partner_id.lang,
+        )).message_post(**kwargs)
+		if self.env.context.get('mark_so_as_sent'):
+			self.filtered(lambda o: o.state == 'waiting_approval').with_context(tracking_disable=True).write({'state': 'sent'})
+		return res
 
 	def action_to_approve(self):
 		self.submited_date = date.today()
-		self.approval_order()
+		return {
+			'name': "Low Stock Alert",
+			'type': 'ir.actions.act_window',
+			'view_type': 'form',
+			'view_mode': 'form',
+			'res_model': 'sale.order.approval.wizard',
+			'view_id': self.env.ref('fischerbell_custom.sale_order_approval_wizard_view_form').id,
+			'target': 'new'
+		}
+		# self.approval_order()
 		# if not 'vendor_wizard' in self._context:
 		# 	line_ids = []
 		# 	for rec in self.order_line:
@@ -304,7 +321,6 @@ class SaleOrder(models.Model):
 		# 				'target': 'new',
 		# 				}
 		# 	else:
-
 
 		return True
 
@@ -351,8 +367,8 @@ class SaleOrder(models.Model):
 						pass
 				else:
 					raise ValidationError("Sorry, you are not allowed to approve this order.")
-				# else:
-				# 	raise ValidationError("Customer exceeded the credit limit.")
+			# else:
+			# 	raise ValidationError("Customer exceeded the credit limit.")
 			else:
 				if order.state == 'waiting_approval' and order.approval_state == 'waiting_approval' and self.env.user.has_group(
 						"fischerbell_custom.group_sales_order_approver"):
@@ -402,13 +418,15 @@ class SaleOrder(models.Model):
 
 	def action_to_reject(self):
 		for order in self:
-			if order.state == 'waiting_approval' and order.approval_state == 'waiting_approval' and self.env.user.has_group("fischerbell_custom.group_sales_order_approver"):
+			if order.state == 'waiting_approval' and order.approval_state == 'waiting_approval' and self.env.user.has_group(
+					"fischerbell_custom.group_sales_order_approver"):
 				order.write({
 					'state': 'cancel',
 					'approval_state': 'reject',
 					'reviewed_by': self.env.user.id
 				})
-			elif order.state == 'waiting_approval_user' and order.approval_state == 'waiting_approval' and self.env.user.has_group("fischerbell_custom.group_sales_order_approver"):
+			elif order.state == 'waiting_approval_user' and order.approval_state == 'waiting_approval' and self.env.user.has_group(
+					"fischerbell_custom.group_sales_order_approver"):
 				order.write({
 					'state': 'cancel',
 					'approval_state': 'reject',
@@ -428,6 +446,15 @@ class SaleOrder(models.Model):
 			else:
 				inv.len_note = False
 
+	def action_submit_to_approval(self):
+		for order in self:
+			# Sent email to customer based on the state
+			order.send_mail_triggers_based_on_state()
+			order.write({
+				'state': 'waiting_approval',
+				'approval_state': 'waiting_approval'
+			})    
+
 	def action_confirm(self):
 		# self.submited_date = date.today()
 		# for rec in self.order_line:
@@ -445,7 +472,6 @@ class SaleOrder(models.Model):
 			# Sent email to customer based on the state
 			order.send_mail_triggers_based_on_state()
 		return super_call
-
 
 	# def action_confirm(self):
 	# 	self.submited_date = date.today()
@@ -472,13 +498,11 @@ class SaleOrder(models.Model):
 	# 					}
 	# 		else:
 	# 			return super(SaleOrder, self).action_confirm()
-				
+
 	# 	super_call = super(SaleOrder, self).action_confirm()
 	# 	for order in self:
 	# 		order.send_mail_triggers_based_on_state()
 	# 	return super_call
-
-
 
 	# def action_confirm(self):
 	# 	res = super().action_confirm()
@@ -530,11 +554,12 @@ class SaleOrder(models.Model):
 
 	# 	return res
 
-	@api.onchange('partner_id','type')
+	@api.onchange('partner_id', 'type')
 	def _onchange_trainer_desc(self):
 		for order in self:
 			if order.partner_id.user_training_ids and order.type == 'training':
-				product = self.env['product.product'].sudo().search([('type','not in',['service','product']),('categ_id.is_training','=',True)], limit=1)
+				product = self.env['product.product'].sudo().search(
+					[('type', 'not in', ['service', 'product']), ('categ_id.is_training', '=', True)], limit=1)
 				if product:
 					for trainer in order.partner_id.user_training_ids:
 						description = ''
@@ -560,10 +585,12 @@ class SaleOrder(models.Model):
 							description += description_sale + '\n' + trainer_desc
 						else:
 							description += trainer_desc
-						self.update({'order_line': [(0,0,{'product_template_id': product.product_tmpl_id.id, 'product_id': product.id, 'name': description, 'product_uom_qty': 1})]})
+						self.update({'order_line': [(0, 0, {'product_template_id': product.product_tmpl_id.id,
+						                                    'product_id': product.id, 'name': description,
+						                                    'product_uom_qty': 1})]})
 				else:
 					pass
-					# line[0].update({'name': 'state no. of trainess : '})
+				# line[0].update({'name': 'state no. of trainess : '})
 			else:
 				self.update({'order_line': False})
 
@@ -573,7 +600,6 @@ class SaleOrder(models.Model):
 					('partner_ids', 'in', [order.partner_id.id])  # Use a list to compare with a Many2many field
 				], limit=1)
 				order.partner_note = config_note.note
-
 
 	def _create_invoices(self, grouped=False, final=False, date=None):
 		""" Create invoice(s) for the given Sales Order(s).
@@ -595,7 +621,7 @@ class SaleOrder(models.Model):
 
 		# 1) Create invoices.
 		invoice_vals_list = []
-		invoice_item_sequence = 0 # Incremental sequencing to keep the lines order on the invoice.
+		invoice_item_sequence = 0  # Incremental sequencing to keep the lines order on the invoice.
 		for order in self:
 			if order.type == 'loan':
 				for pick in order.picking_ids:
@@ -647,7 +673,9 @@ class SaleOrder(models.Model):
 					x.get(grouping_key) for grouping_key in invoice_grouping_keys
 				]
 			)
-			for _grouping_keys, invoices in groupby(invoice_vals_list, key=lambda x: [x.get(grouping_key) for grouping_key in invoice_grouping_keys]):
+			for _grouping_keys, invoices in groupby(invoice_vals_list,
+			                                        key=lambda x: [x.get(grouping_key) for grouping_key in
+			                                                       invoice_grouping_keys]):
 				origins = set()
 				payment_refs = set()
 				refs = set()
@@ -693,7 +721,8 @@ class SaleOrder(models.Model):
 			for invoice in invoice_vals_list:
 				sequence = 1
 				for line in invoice['invoice_line_ids']:
-					line[2]['sequence'] = SaleOrderLine._get_invoice_line_sequence(new=sequence, old=line[2]['sequence'])
+					line[2]['sequence'] = SaleOrderLine._get_invoice_line_sequence(new=sequence,
+					                                                               old=line[2]['sequence'])
 					sequence += 1
 
 		# Manage the creation of invoices in sudo because a salesperson must be able to generate an invoice from a
@@ -712,12 +741,11 @@ class SaleOrder(models.Model):
 				subtype_id=self.env['ir.model.data']._xmlid_to_res_id('mail.mt_note'))
 		return moves
 
-
 	@api.depends('purchase_order_count')
 	def _compute_purchase_ref(self):
 		self.purchase_ref = ''
 		for order in self:
-			purchase_order_line = self.env['purchase.order.line'].search([('sale_id','=',order.id)])
+			purchase_order_line = self.env['purchase.order.line'].search([('sale_id', '=', order.id)])
 			if purchase_order_line:
 				for po_line in purchase_order_line:
 					order.purchase_ref = po_line.order_id.name + ', '
@@ -725,27 +753,31 @@ class SaleOrder(models.Model):
 				order.purchase_ref = ''
 
 	def _get_terms_and_conditions(self):
-		quo_terms = self.env['fischerbell.sale.terms.and.conditions'].search([('type','=','quotation')], limit=1)
+		quo_terms = self.env['fischerbell.sale.terms.and.conditions'].search([('type', '=', 'quotation')], limit=1)
 		for order in self:
 			if order.state == 'draft':
 				order.terms_and_conditions = quo_terms.note
 			else:
 				if order.type == 'sale':
-					sale_terms = self.env['fischerbell.sale.terms.and.conditions'].search([('type','=','sale')], limit=1)
+					sale_terms = self.env['fischerbell.sale.terms.and.conditions'].search([('type', '=', 'sale')],
+					                                                                      limit=1)
 					order.terms_and_conditions = sale_terms.note
 				elif order.type == 'loan':
-					loan_terms = self.env['fischerbell.sale.terms.and.conditions'].search([('type','=','loan')], limit=1)
+					loan_terms = self.env['fischerbell.sale.terms.and.conditions'].search([('type', '=', 'loan')],
+					                                                                      limit=1)
 					order.terms_and_conditions = loan_terms.note
 				elif order.type == 'exchange':
-					exchange_terms = self.env['fischerbell.sale.terms.and.conditions'].search([('type','=','exchange')], limit=1)
+					exchange_terms = self.env['fischerbell.sale.terms.and.conditions'].search(
+						[('type', '=', 'exchange')], limit=1)
 					order.terms_and_conditions = exchange_terms.note
 				elif order.type == 'training':
-					training_terms = self.env['fischerbell.sale.terms.and.conditions'].search([('type','=','training')], limit=1)
+					training_terms = self.env['fischerbell.sale.terms.and.conditions'].search(
+						[('type', '=', 'training')], limit=1)
 					order.terms_and_conditions = training_terms.note
 				else:
-					replacement_terms = self.env['fischerbell.sale.terms.and.conditions'].search([('type','=','replacement')], limit=1)
+					replacement_terms = self.env['fischerbell.sale.terms.and.conditions'].search(
+						[('type', '=', 'replacement')], limit=1)
 					order.terms_and_conditions = replacement_terms.note
-
 
 	def _prepare_invoice(self):
 		invoice_vals = super()._prepare_invoice()
@@ -773,13 +805,12 @@ class SaleOrder(models.Model):
 			})
 		return action
 
-
 	def _compute_billing_state(self):
 		for order in self:
 			order.billing_state = 'no_invoice'
 			if order.invoice_status == 'invoiced':
 				for inv in order.invoice_ids:
-					if inv.payment_state in ['paid','in_payment']:
+					if inv.payment_state in ['paid', 'in_payment']:
 						order.billing_state = 'closed'
 					else:
 						order.billing_state = 'open'
@@ -797,7 +828,6 @@ class SaleOrder(models.Model):
 			'context': {'picking_id': self.mapped('picking_ids').ids}
 		}
 
-
 	@api.onchange('partner_id')
 	def onchange_partner_invoice_id(self):
 		relation_ids = []
@@ -805,18 +835,20 @@ class SaleOrder(models.Model):
 		if self.partner_invoice_id:
 			self.invoice_instruction = self.partner_invoice_id.invoice_instruction
 			relation_ids = [x.id for x in self.partner_id.child_ids]
-			# return {'domain':{'partner_invoice_id': [('id', 'in', relation_ids)],}}
+		# return {'domain':{'partner_invoice_id': [('id', 'in', relation_ids)],}}
 		if self.partner_shipping_id:
 			self.delivery_instruction = self.partner_shipping_id.delivery_instruction
 			child_ids = [x.id for x in self.partner_id.child_ids]
-			# return {'domain': {'partner_shipping_id': [('id', 'in', child_ids)]}}
+		# return {'domain': {'partner_shipping_id': [('id', 'in', child_ids)]}}
 		if self.partner_invoice_id and not self.partner_invoice_id.street and not self.partner_invoice_id.street2 and not self.partner_invoice_id.city and not self.partner_invoice_id.state_id and not self.partner_invoice_id.zip and not self.partner_invoice_id.country_id:
 			self.check_partner_address = False
 		else:
 			self.check_partner_address = True
 		if not self.partner_invoice_id:
 			self.check_partner_address = False
-		return {'domain': {'partner_shipping_id': [('id', 'in', child_ids),('type','=','delivery')],'partner_invoice_id': [('id', 'in', relation_ids),('type','=','invoice')],'contact_person_id': [('id', 'in', child_ids),('type','=','contact')]}}
+		return {'domain': {'partner_shipping_id': [('id', 'in', child_ids), ('type', '=', 'delivery')],
+		                   'partner_invoice_id': [('id', 'in', relation_ids), ('type', '=', 'invoice')],
+		                   'contact_person_id': [('id', 'in', child_ids), ('type', '=', 'contact')]}}
 
 	# ---------------------------------------------------------------------------------
 	# ----------------- SEND MAIL TRIGGERS --------------------------------------------
@@ -839,7 +871,7 @@ class SaleOrder(models.Model):
 		name = ''
 		partner = False
 		if vals.get('partner_invoice_id'):
-			partner = self.env['res.partner'].search([('id','=',vals.get('partner_invoice_id'))],limit=1)
+			partner = self.env['res.partner'].search([('id', '=', vals.get('partner_invoice_id'))], limit=1)
 
 			if partner:
 				name = name + "\n" + partner._display_address(without_company=True)
@@ -853,8 +885,10 @@ class SaleOrder(models.Model):
 	@api.depends('picking_ids', 'picking_ids.state')
 	def _compute_delivery_status(self):
 		super(SaleOrder, self)._compute_delivery_status()
-		sale_picking_pending_state_trigger_templ = self.env.ref('fischerbell_custom.email_template_sale_picking_pending_state_trigger')
-		sale_picking_done_state_trigger_templ = self.env.ref('fischerbell_custom.email_template_sale_picking_done_state_trigger')
+		sale_picking_pending_state_trigger_templ = self.env.ref(
+			'fischerbell_custom.email_template_sale_picking_pending_state_trigger')
+		sale_picking_done_state_trigger_templ = self.env.ref(
+			'fischerbell_custom.email_template_sale_picking_done_state_trigger')
 		for order in self:
 			if order.delivery_status == 'pending':
 				sale_picking_pending_state_trigger_templ.send_mail(res_id=order.id)
@@ -866,7 +900,7 @@ class SaleOrder(models.Model):
 		name = ''
 		partner = False
 		if vals.get('partner_invoice_id'):
-			partner = self.env['res.partner'].search([('id','=',vals.get('partner_invoice_id'))],limit=1)
+			partner = self.env['res.partner'].search([('id', '=', vals.get('partner_invoice_id'))], limit=1)
 
 			for order in self:
 				if partner:
@@ -877,7 +911,7 @@ class SaleOrder(models.Model):
 					order.check_partner_address = False
 
 		for order in self:
-			if vals.get('state') == 'sale' and order.approval_state == 'no':
+			if vals.get('state') == 'draft' and order.approval_state == 'no':
 				vals['approval_state'] = 'waiting_approval'
 				vals['state'] = 'waiting_approval'
 
@@ -893,10 +927,19 @@ class SaleOrder(models.Model):
 				vals['email_to_customer'] = datetime.now()
 
 			if vals.get('order_line'):
-				order_line_vals = list(map(lambda y:list(y[-1].keys()),filter(lambda x:isinstance(x,list) and isinstance(x[-1],dict),vals.get('order_line'))))
+				order_line_vals = list(map(lambda y: list(y[-1].keys()),
+				                           filter(lambda x: isinstance(x, list) and isinstance(x[-1], dict),
+				                                  vals.get('order_line'))))
 				if any(field in ORDER_LINE_FIELDS for field in list(itertools.chain(*order_line_vals))):
-					vals['revision_order_name'] = (order.name.split('-')[0] if not order.revision_order_name else order.revision_order_name.split('-')[0]) + '-R%s'%(int(order.revision_order_count + 1) if int(order.revision_order_count) == 0 else int(order.revision_order_count))
-					vals['name'] = (order.name.split('-')[0] if not order.revision_order_name else order.revision_order_name.split('-')[0]) + '-R%s'%(int(order.revision_order_count + 1) if int(order.revision_order_count) == 0 else int(order.revision_order_count))
+					vals['revision_order_name'] = (order.name.split('-')[0] if not order.revision_order_name else
+					                               order.revision_order_name.split('-')[0]) + '-R%s' % (
+						                              int(order.revision_order_count + 1) if int(
+							                              order.revision_order_count) == 0 else int(
+							                              order.revision_order_count))
+					vals['name'] = (order.name.split('-')[0] if not order.revision_order_name else
+					                order.revision_order_name.split('-')[0]) + '-R%s' % (
+						               int(order.revision_order_count + 1) if int(
+							               order.revision_order_count) == 0 else int(order.revision_order_count))
 					vals['revision_order_count'] = order.revision_order_count + 1
 					vals['is_order_revise'] = True
 
@@ -908,8 +951,7 @@ class SaleOrder(models.Model):
 
 		return res
 
-
-	@api.depends('type','picking_ids', 'picking_ids.state')
+	@api.depends('type', 'picking_ids', 'picking_ids.state')
 	def _compute_loan_state(self):
 		for order in self:
 			order.loan_date = False
@@ -928,8 +970,6 @@ class SaleOrder(models.Model):
 			else:
 				order.loan_state = 'not_loan'
 
-
-
 	def create_loan_orders(self):
 		for sale in self:
 			sale_id = sale.create({
@@ -944,13 +984,11 @@ class SaleOrder(models.Model):
 
 		return
 
-
 	@api.depends('loan_ids')
 	def _compute_loan_ids(self):
 		for order in self:
 			loan_ids = list(filter(lambda x: (x.type == 'loan'), order.loan_ids))
 			order.loan_order_count = len(loan_ids)
-
 
 	def action_view_loan_order(self):
 		self.ensure_one()
@@ -959,8 +997,9 @@ class SaleOrder(models.Model):
 			'name': 'Loan Orders',
 			'view_mode': 'tree,form',
 			'res_model': 'sale.order',
-			'domain': [('sale_id', '=', self.id),('type','=','loan')],
-			'context': {'default_sale_id':self.id, 'default_type': 'loan', 'form_view_ref': 'sale.view_order_form', 'tree_view_ref':'sale.view_order_tree'},
+			'domain': [('sale_id', '=', self.id), ('type', '=', 'loan')],
+			'context': {'default_sale_id': self.id, 'default_type': 'loan', 'form_view_ref': 'sale.view_order_form',
+			            'tree_view_ref': 'sale.view_order_tree'},
 			'tag': 'reload'
 		}
 
@@ -984,7 +1023,6 @@ class SaleOrder(models.Model):
 	# 		exchange = list(filter(lambda x: (x.type == 'exchange'), order.exchange_order_ids))
 	# 		order.exchange_order_count = len(exchange)
 
-
 	# def action_view_exchange_order(self, order=False):
 	# 	self.ensure_one()
 	#
@@ -996,7 +1034,6 @@ class SaleOrder(models.Model):
 	# 		'domain': [('sale_id', '=', self.id),('type','=','exchange')],
 	# 		'context': {'default_sale_id':self.id, 'default_type': 'exchange', 'form_view_ref': 'sale.view_order_form', 'tree_view_ref':'sale.view_order_tree'}
 	# 	}
-
 
 	# def create_replacement_orders(self):
 	# 	for sale in self:
@@ -1012,13 +1049,11 @@ class SaleOrder(models.Model):
 	#
 	# 	return
 
-
 	# @api.depends('replacement_order_ids')
 	# def _compute_replacement_order_ids(self):
 	# 	for order in self:
 	# 		replacement = list(filter(lambda x: (x.type == 'replacement'), order.replacement_order_ids))
 	# 		order.replacement_order_count = len(replacement)
-
 
 	# def action_view_replacement_order(self, order=False):
 	# 	self.ensure_one()
@@ -1034,30 +1069,32 @@ class SaleOrder(models.Model):
 
 	def get_report_name(self):
 		self.ensure_one()
-		return '%s - %s %s'%(datetime.now().year,self.name or '',self.partner_id.parent_id.name or self.partner_id.name)
+		return '%s - %s %s' % (
+		datetime.now().year, self.name or '', self.partner_id.parent_id.name or self.partner_id.name)
 
 	def get_order_template_subject(self):
 		self.ensure_one()
 		if self.is_order_revise and self.user_id.id == self.env.user.id:
-			return "This is a revised quotation %s."%(self.revision_order_name)
+			return "This is a revised quotation %s." % (self.revision_order_name)
 		else:
-			return "%s %s (%s)"%(self.company_id.name,self.state in ('draft', 'sent') and (self._context.get('proforma') and 'Proforma' or 'Quotation') or 'Order',self.name or 'n/a')
+			return "%s %s (%s)" % (self.company_id.name, self.state in ('draft', 'sent') and (
+						self._context.get('proforma') and 'Proforma' or 'Quotation') or 'Order', self.name or 'n/a')
 
 	# Set first followup date in order cron.
 	def cron_set_followup_date(self):
 		for rec in self.search([
-				('state', '=', 'draft'),  # Assuming 'draft' is the status of quotations
-				('date_order', '<=', fields.Date.today() - timedelta(days=7)),
-				('first_followup_date', '=', False)
-			]):
+			('state', '=', 'draft'),  # Assuming 'draft' is the status of quotations
+			('date_order', '<=', fields.Date.today() - timedelta(days=7)),
+			('first_followup_date', '=', False)
+		]):
 			rec.first_followup_date = datetime.now()
 
 	def cron_set_sec_followup_date(self):
 		for rec in self.search([
-				('state', '=', 'draft'),  # Assuming 'draft' is the status of quotations
-				('first_followup_date', '!=', False),
-				('first_followup_date', '<=', fields.Date.today() - timedelta(days=7))
-			]):
+			('state', '=', 'draft'),  # Assuming 'draft' is the status of quotations
+			('first_followup_date', '!=', False),
+			('first_followup_date', '<=', fields.Date.today() - timedelta(days=7))
+		]):
 			rec.sec_followup_date = datetime.now()
 
 	def cron_reminder_customer_to_status(self):
@@ -1066,10 +1103,10 @@ class SaleOrder(models.Model):
 		date_start = today.astimezone(pytz.timezone('UTC'))
 		date_stop = date_start + timedelta(days=1, seconds=-1)
 		for rec in self.env['sale.order'].search([
-									('state', '!=', 'sale'),
-									('create_date', '>=', date_start),
-									('create_date', '<=', date_stop),
-				]):
+			('state', '!=', 'sale'),
+			('create_date', '>=', date_start),
+			('create_date', '<=', date_stop),
+		]):
 			if rec:
 				display_message = """
 										<p>We noticed that your order with reference number """ + rec.name + """ is still pending confirmation. 
@@ -1087,16 +1124,17 @@ class SaleOrder(models.Model):
 				}
 				mail = self.env['mail.mail'].create(mails)
 				mail.send()
+
 	def cron_reminder_processing_team_to_followup(self):
 		user_tz = pytz.timezone(self.env.context.get('tz') or self.env.user.tz or 'UTC')
 		today = user_tz.localize(fields.Datetime.from_string(fields.Date.context_today(self))) - timedelta(days=14)
 		date_start = today.astimezone(pytz.timezone('UTC'))
 		date_stop = date_start + timedelta(days=1, seconds=-1)
 		for rec in self.env['sale.order'].search([
-									('state', '!=', 'sale'),
-									('create_date', '>=', date_start),
-									('create_date', '<=', date_stop),
-				]):
+			('state', '!=', 'sale'),
+			('create_date', '>=', date_start),
+			('create_date', '<=', date_stop),
+		]):
 			if rec:
 				display_message = """
 										<p>For this order """ + rec.name + """, since the customer has not responded, kindly proceed with a follow-up, meeting, or phone call to engage with the customer.</p>
@@ -1176,34 +1214,52 @@ class SaleOrderLine(models.Model):
 	customer_sku = fields.Char('Customer SKU')
 	bp_code = fields.Char('BP Code')
 	batch_number = fields.Char('Batch Number')
-	use_bp_code = fields.Boolean('Use BP code',related="product_template_id.use_bp_code")
-	use_product_batch_number = fields.Boolean('Use Product Batch Number', related="product_template_id.use_product_batch_number")
+	use_bp_code = fields.Boolean('Use BP code', related="product_template_id.use_bp_code")
+	use_product_batch_number = fields.Boolean('Use Product Batch Number',
+	                                          related="product_template_id.use_product_batch_number")
 	lead_time_stock = fields.Char('Lead Time Stock', compute="_compute_lead_time_stock", store=True)
-	terms_and_condition_ids = fields.Many2many('fischerbell.product.terms.and.conditions', string="Terms & Conditions", related="product_id.terms_and_condition_ids")
-	last_invoice_date = fields.Datetime(string="Last Invoice Date",compute="_compute_get_last_invoice_date")
-	last_invoice_price = fields.Float(string="Last Invoice Price",compute="_compute_get_last_invoice_date")
+	terms_and_condition_ids = fields.Many2many('fischerbell.product.terms.and.conditions', string="Terms & Conditions",
+	                                           related="product_id.terms_and_condition_ids")
+	last_invoice_date = fields.Datetime(string="Last Invoice Date", compute="_compute_get_last_invoice_date")
+	last_purchase_date = fields.Datetime(string="Last Purchase date", compute="_compute_get_last_purchase_date")
+	last_invoice_price = fields.Float(string="Last Invoice Price", compute="_compute_get_last_invoice_date")
 	last_price = fields.Float('Last Order Price', compute="_compute_last_order_price", store=True)
 	picking_id = fields.Many2one('stock.picking', 'Picking')
 	product_detail_sheet_url = fields.Char(related="product_id.product_detail_sheet_url")
 
-
-	@api.depends('customer_id','product_id')
+	@api.depends('customer_id', 'product_id')
 	def _compute_last_order_price(self):
 		for price in self:
-			last_price = self.search([('customer_id','=', price.customer_id.id),('product_id','=',price.product_id.id ),('state','=','sale')],limit=1)
+			last_price = self.search(
+				[('customer_id', '=', price.customer_id.id), ('product_id', '=', price.product_id.id),
+				 ('state', '=', 'sale')], limit=1)
 			price.last_price = last_price.price_unit if last_price else 0
+
+	def _compute_get_last_purchase_date(self):
+		order_line_obj = self.env['purchase.order.line']
+		for rec in self:
+			rec.last_purchase_date = False
+			if rec.product_id and rec.order_id.partner_id:
+				purchase_order_line = order_line_obj.search(
+					[('order_id.partner_id', '=', rec.order_id.partner_id.id),
+					 ('product_id', '=', rec.product_id.id),
+					 ('state', '=', 'purchase')], limit=1)
+				if purchase_order_line:
+					rec.last_purchase_date = purchase_order_line.order_id.date_approve
 
 	def _compute_get_last_invoice_date(self):
 		move_line_obj = self.env['account.move.line']
 		for rec in self:
-			invoice_ids = move_line_obj.search([('product_id','=',rec.product_id.id),('move_id.state','=','posted')]).mapped('move_id')
+			invoice_ids = move_line_obj.search(
+				[('product_id', '=', rec.product_id.id), ('move_id.state', '=', 'posted')]).mapped('move_id')
 			rec.last_invoice_date = False
 			rec.last_invoice_price = False
 			if invoice_ids:
 				last_invoice_date = min(invoice_ids.mapped('create_date'))
-				last_invoice_id = self.env['account.move'].search([('create_date','=',last_invoice_date)])
+				last_invoice_id = self.env['account.move'].search([('create_date', '=', last_invoice_date)])
 				rec.last_invoice_date = last_invoice_id.create_date
-				rec.last_invoice_price = move_line_obj.search([('product_id','=',rec.product_id.id),('move_id','=',last_invoice_id.id)],limit=1).price_unit
+				rec.last_invoice_price = move_line_obj.search(
+					[('product_id', '=', rec.product_id.id), ('move_id', '=', last_invoice_id.id)], limit=1).price_unit
 
 	@api.depends('product_template_id.virtual_available')
 	def _compute_lead_time_stock(self):
@@ -1213,7 +1269,6 @@ class SaleOrderLine(models.Model):
 				line.lead_time_stock = 'Ex-Stock'
 			else:
 				line.lead_time_stock = 'Indent'
-
 
 	@api.onchange('product_template_id')
 	def onchange_sale_customer_sku(self):
@@ -1233,7 +1288,6 @@ class SaleOrderLine(models.Model):
 			self.bp_code = self.product_template_id.bp_code
 		else:
 			self.bp_code = ''
-
 
 	@api.onchange('price_unit')
 	def onchange_price_unit(self):

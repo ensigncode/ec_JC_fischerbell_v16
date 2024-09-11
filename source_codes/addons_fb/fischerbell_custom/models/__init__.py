@@ -17,6 +17,7 @@ from . import res_config_settings
 from . import res_partner
 from . import sale_order
 from . import stock_lot
+from . import stock_quant
 from . import stock_move
 from . import stock_picking
 from . import crm_lead
@@ -25,3 +26,4 @@ from . import account_payment
 from . import mail_compose_message
 from . import res_users
 from . import res_company
+from . import pricelist_comparison

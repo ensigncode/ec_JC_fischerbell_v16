@@ -12,5 +12,26 @@
         <record id="group_sale_user_approval" model="res.groups">
             <field name="name">Sale user Approval for Backorder</field>
         </record>
+
+        <!-- Application -->
+        <record id="inventory_adjustment_module_category" model="ir.module.category">
+            <field name="name">Inventory Adjustment</field>
+            <field name="parent_id" ref="base.module_category_inventory"/>
+            <field name="description">Manage Inventory Adjustments.</field>
+        </record>
+        <!-- Access Groups -->
+        <record id="inventory_adjustment_level_2" model="res.groups">
+            <field name="name">Level 2 Access Right</field>
+            <field name="category_id" ref="inventory_adjustment_module_category"/>
+            <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+            <field name="comment">Level 2 Access Right</field>
+        </record>
+        <record id="inventory_adjustment_level_1" model="res.groups">
+            <field name="name">Level 1 Access Right</field>
+            <field name="category_id" ref="inventory_adjustment_module_category"/>
+            <field name="implied_ids" eval="[(4, ref('inventory_adjustment_level_2'))]"/>
+            <field name="comment">Level 1 Access Right</field>
+        </record>
+
     </data>
 </odoo>

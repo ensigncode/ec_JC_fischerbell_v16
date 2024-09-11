@@ -40,7 +40,6 @@ class FcbLocation(models.TransientModel):
                 'name': 'Driver Pickup',
                 'product_id': sl.product_id.id,
                 'product_uom_qty':  sl.product_uom_qty,
-                'quantity_done':  sl.product_uom_qty,
                 'product_uom': self.env.ref('uom.product_uom_unit').id,
                 'location_id': self.env.ref('stock.stock_location_customers').id,
                 'location_dest_id': self.dest_location_id.id,
@@ -48,7 +47,7 @@ class FcbLocation(models.TransientModel):
         pick_in = self.env['stock.picking'].create({
             # 'name': 'Driver Pickup',
             'partner_id': self.ticket_id.partner_id.id,
-            'picking_type_id': self.env.ref('stock.picking_type_in').id,
+            'picking_type_id': self.env.ref('stock.picking_type_out').id,
             'location_id': self.env.ref('stock.stock_location_customers').id,
             'location_dest_id': self.dest_location_id.id,
             'ticket_id': self.ticket_id.id,
@@ -60,6 +59,7 @@ class FcbLocation(models.TransientModel):
                 'name': ' Unload to Warehouse ',
                 'product_id': sl.product_id.id,
                 'product_uom_qty': sl.product_uom_qty,
+                'quantity_done':  sl.product_uom_qty,
                 'product_uom': self.env.ref('uom.product_uom_unit').id,
                 'location_id': self.dest_location_id.id,
                 'location_dest_id': self.env.ref('fcb_service.location_repair').id,
@@ -67,7 +67,7 @@ class FcbLocation(models.TransientModel):
         pick_output = self.env['stock.picking'].create({
             # 'name': 'Unload to Warehouse',
             'partner_id': self.ticket_id.partner_id.id,
-            'picking_type_id': self.env.ref('stock.picking_type_out').id,
+            'picking_type_id': self.env.ref('stock.picking_type_in').id,
             'location_id': self.dest_location_id.id,
             'location_dest_id': self.env.ref('fcb_service.location_repair').id,
             'ticket_id': self.ticket_id.id,

@@ -72,15 +72,38 @@ class PurchaseOrder(models.Model):
 		for po in self:
 			po.is_default_terms = True
 
+	@api.onchange('partner_id')
+	def _onchange_partner_id(self):
+		landed_cost_product = self.env['product.product'].search([('landed_cost_ok', '=', True)], limit=1)
+		if self.partner_id.currency_type == 'overseas':
+			if not landed_cost_product:
+				raise UserError("Please create a freight charge product.")
+			else:
+				self.order_line = [(0, 0, {
+					'product_id': landed_cost_product.id,
+					'product_qty': 1.0,
+					'price_unit': landed_cost_product.standard_price,
+					'name': landed_cost_product.name,
+					'date_planned': fields.Date.today(),
+					'product_uom': landed_cost_product.uom_id.id,
+				})]
+		else:
+			# Remove the landed cost product from the order lines if it's there
+			self.order_line = [(5, 0, 0)] + [
+				(1, line.id, {}) for line in self.order_line
+				if line.product_id != landed_cost_product
+			]
 
 	@api.model
 	def create(self, vals):
-		res = super(PurchaseOrder, self).create(vals)
-		default_terms = self.env['purchase.order'].search([('is_default_terms','=',True)], limit=1).notes
+		if 'name' not in vals or vals['name'] == 'New':
+			vals['name'] = self.env['ir.sequence'].next_by_code('purchase.order.rfq')
+		res =  super(PurchaseOrder, self).create(vals)
+		default_terms = self.env['purchase.order'].search([('is_default_terms', '=', True)], limit=1).notes
 		if default_terms:
 			vals['notes'] = default_terms
 		return res
-	
+
 	def write(self,vals):
 		for purchase in self:
 			if vals.get('order_line'):
@@ -117,6 +140,20 @@ class PurchaseOrder(models.Model):
 			for line in order.order_line:
 				total += line.price_subtotal + line.price_unit * ((line.discount or 0.0) / 100.0) * line.product_uom_qty  # why is there a discount in a field named amount_undiscounted ??
 			order.amount_undiscounted = total
+
+	def action_rfq_send(self):
+		# Call the super method to get the original result
+		res = super(PurchaseOrder, self).action_rfq_send()
+
+		# Access the template and modify the subject
+		if res.get('context') and res['context'].get('default_use_template') and res['context'].get(
+				'default_template_id'):
+			email_template = self.env['mail.template'].browse(res['context']['default_template_id'])
+			if email_template and self.partner_id:
+				# Modify the subject to include the supplier's name
+				email_template.subject = f"{email_template.subject} - {self.partner_id.name}"
+
+		return res
 
 	def _prepare_invoice(self):
 		"""Prepare the dict of values to create the new invoice for a purchase order.
@@ -163,6 +200,8 @@ class PurchaseOrder(models.Model):
 		if self.mail_sended:
 			res = super().button_confirm()
 			for order in self:
+				if order.state == 'purchase':
+					order.write({'name': self.env['ir.sequence'].next_by_code('purchase.order.po')})
 				if order.picking_ids:
 					for pick in order.picking_ids:
 						pick.user = self.env.user.id
@@ -224,17 +263,24 @@ class PurchaseOrderLine(models.Model):
 	_inherit = "purchase.order.line"
 
 	customer_id = fields.Many2one('res.partner', 'Customer Name')
+
 	batch_number = fields.Char('Batch Number', related="customer_id.batch_number")
 	lot_id = fields.Many2one('stock.lot', 'Serial Number')
 	product_tmpl_id = fields.Many2one('product.template')
 	discount = fields.Float(string='Discount (%)', digits='Discount', default=0.0)
-	product_template_id = fields.Many2one('product.template', 'Product Template', related="product_id.product_tmpl_id")
 	customer_sku = fields.Char('Customer SKU')
 	sale_id = fields.Many2one('sale.order', related="sale_line_id.order_id")
 	manufacture_lot_id = fields.Many2one('fischerbell.manufacture.lot', 'Manufacture No')
 	comments = fields.Char()
 	request_delivery_date = fields.Datetime("Request Delivery Date")
 	estimated_delivery_date = fields.Datetime("Estimated Delivery Date")
+
+	product_template_id = fields.Many2one(
+		comodel_name='product.template',
+		string='Product Template',
+		related='product_id.product_tmpl_id',
+		store=True,
+	)
 
 	@api.onchange('product_id')
 	def onchange_sake_product_image(self):

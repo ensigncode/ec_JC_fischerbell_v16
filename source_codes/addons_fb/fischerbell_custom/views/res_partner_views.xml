@@ -91,6 +91,19 @@
         </field>
     </record>
 
+    <record id="fischerbell_view_partner_property_form_currency" model="ir.ui.view">
+        <field name="name">fischerbell.res.partner.currency.property.form.inherit</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="account.view_partner_property_form"/>
+        <field name="priority">37</field>
+        <field name="arch" type="xml">
+            <field name="currency_id" position="attributes">
+                <attribute name="invisible">0</attribute>
+                <attribute name="readonly">0</attribute>
+            </field>
+        </field>
+    </record>
+
     <record id="fischerbell_view_res_partner_inherit" model="ir.ui.view">
         <field name="name">fischerbell_view_res_partner_inherit</field>
         <field name="model">res.partner</field>
