@@ -75,7 +75,7 @@
             <xpath expr="//field[@name='zip']" position="attributes">
                 <attribute name="placeholder">Postal Code</attribute>
             </xpath>
-            <xpath expr="//div[@name='partner_address_country']" position="after">
+            <xpath expr="//div[hasclass('o_address_format')]" position="after">
                 <field name="district_code" placeholder='District Code' 
                         readonly="1"/>
             </xpath>

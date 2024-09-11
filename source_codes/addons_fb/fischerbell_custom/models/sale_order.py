@@ -125,6 +125,7 @@ class SaleOrder(models.Model):
 		string="Delivery Option", default='partial_delivery')
 
 	product_vendor_conf_ids = fields.One2many('product.vendor.conf','sale_id',string="Product Vendor Conf")
+	have_special_permission = fields.Boolean("Pro-Forma Invoices")
 
 
 	@api.depends('partner_id')
@@ -1133,11 +1134,13 @@ class SaleOrderLine(models.Model):
 	product_detail_sheet_url = fields.Char(related="product_id.product_detail_sheet_url")
 
 
-	@api.depends('customer_id','product_id')
+	@api.depends('customer_id','product_id','state')
 	def _compute_last_order_price(self):
 		for price in self:
-			last_price = self.search([('customer_id','=', price.customer_id.id),('product_id','=',price.product_id.id ),('state','=','sale')],limit=1)
-			price.last_price = last_price.price_unit if last_price else 0
+			last_price = self.search([('customer_id','=', price.customer_id.id),
+									('product_id','=',price.product_id.id ),('state','=','sale')],
+									limit=1, order='id desc')
+			price.last_price = last_price.price_unit  * last_price.product_uom_qty if last_price else 0
 
 	def _compute_get_last_invoice_date(self):
 		move_line_obj = self.env['account.move.line']
