@@ -19,8 +19,8 @@
                 <field name="notes" placeholder="Terms and Conditions..."/>
             </xpath>
             <xpath expr="//group//group[@name='group_extra_info']//field[@name='user_id']" position="before">
-                <field name="delivery_date" required="1"/>
-                <field name="consignment_period_id" required="1"/>
+                <field name="delivery_date"/>
+                <field name="consignment_period_id"/>
                 <field name="sale_id"/>
                 <field name="procurement_group_id" invisible="1"/>
             </xpath>

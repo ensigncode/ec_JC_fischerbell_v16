@@ -9,7 +9,7 @@ from odoo.tools import float_compare, format_date
 class OpticianPortalController(http.Controller):
 
 
-	@http.route('/optician-detail', auth='public', type='http', website=True, csrf=False)
+	@http.route('/optician-detail', auth='user', type='http', website=True, csrf=False)
 	def optician_detail(self, **kw):
 		optic_product_ids = request.env['product.template'].sudo().search([('is_optic','=',True)])
 		company_ids = request.env['res.partner'].sudo().search([('is_company','=',True)])
