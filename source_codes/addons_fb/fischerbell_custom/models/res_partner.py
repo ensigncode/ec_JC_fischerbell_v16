@@ -44,7 +44,7 @@ class Partner(models.Model):
 		('6', 'Sunday')], string="Delivery Restriction")
 	delivery_restriction_start_date = fields.Date(string="Delivery Restriction Start")
 	delivery_restriction_end_date = fields.Date(string="Delivery Restriction End")
-	district_code = fields.Char(compute='_compute_distrct_code', store=True)
+	district_code = fields.Char(string='District Code', compute='_compute_distrct_code', store=True)
 
 
 
