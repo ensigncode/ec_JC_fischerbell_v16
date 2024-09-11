@@ -270,10 +270,29 @@ class SaleOrder(models.Model):
 	# 			self.approval_order()
 	#
 	# 	return True
+ 
+	@api.returns('mail.message', lambda value: value.id)
+	def message_post(self, **kwargs):
+		res = super(SaleOrder, self.with_context(
+            mail_post_autofollow=self.env.context.get('mail_post_autofollow', True),
+            lang=self.partner_id.lang,
+        )).message_post(**kwargs)
+		if self.env.context.get('mark_so_as_sent'):
+			self.filtered(lambda o: o.state == 'waiting_approval').with_context(tracking_disable=True).write({'state': 'sent'})
+		return res
 
 	def action_to_approve(self):
 		self.submited_date = date.today()
-		self.approval_order()
+		return {
+			'name': "Low Stock Alert",
+			'type': 'ir.actions.act_window',
+			'view_type': 'form',
+			'view_mode': 'form',
+			'res_model': 'sale.order.approval.wizard',
+			'view_id': self.env.ref('fischerbell_custom.sale_order_approval_wizard_view_form').id,
+			'target': 'new'
+		}
+		# self.approval_order()
 		# if not 'vendor_wizard' in self._context:
 		# 	line_ids = []
 		# 	for rec in self.order_line:
@@ -426,6 +445,15 @@ class SaleOrder(models.Model):
 				inv.len_note = len(inv.partner_note)
 			else:
 				inv.len_note = False
+
+	def action_submit_to_approval(self):
+		for order in self:
+			# Sent email to customer based on the state
+			order.send_mail_triggers_based_on_state()
+			order.write({
+				'state': 'waiting_approval',
+				'approval_state': 'waiting_approval'
+			})    
 
 	def action_confirm(self):
 		# self.submited_date = date.today()
@@ -883,7 +911,7 @@ class SaleOrder(models.Model):
 					order.check_partner_address = False
 
 		for order in self:
-			if vals.get('state') == 'sale' and order.approval_state == 'no':
+			if vals.get('state') == 'draft' and order.approval_state == 'no':
 				vals['approval_state'] = 'waiting_approval'
 				vals['state'] = 'waiting_approval'
 

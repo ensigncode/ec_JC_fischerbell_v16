@@ -39,11 +39,17 @@ var CustomForm = publicWidget.Widget.extend({
                     var location = document.querySelector('#location');
                     if (data[0]){
                         namee.value = data[0].name || '';
-                        partner_id.value = data[0].name_of_trainer[0] || '';
+                        // set partner_id as selection field
+                        // partner_id.value = data[0].name_of_trainer[0] || '';
+                        // set partner_id as text field
+                        partner_id.value = data[0].name_of_trainer[1] || '';
                         date_of_training.value = data[0].date || '';
                         charge_name.value = data[0].charge_name || '';
                         phone.value = data[0].phone || '';
-                        company.value = data[0].company[0] || '';
+                        // set company_id as selection field
+                        // company_id.value = data[0].company[0] || '';
+                        // set company_id as text field
+                        company.value = data[0].company[1] || '';
                         training_types.value = data[0].training_types || '';
                         location.value = data[0].location || '';
                     }

@@ -14,6 +14,7 @@
         'data/ir_server_actions.xml',
         'data/ir_crons.xml',
         'data/ir_sequence.xml',
+        'data/product_manufacturing_data.xml',
         'report/fischerbell_quotation_templates.xml',
         'data/sale_email_template.xml',
         'data/purchase_email_template.xml',
@@ -54,6 +55,7 @@
 	    'wizard/weekly_product_report_wizard_view.xml',
         'wizard/purchase_order_ref_views.xml',
 	    # 'wizard/purchase_order_wizard_view.xml',
+	    'wizard/sale_order_approval_wizard.xml',
         'wizard/followup_manual_reminder_views.xml',
 	    'wizard/land_cost_wizard_view.xml',
         'views/account_move_views.xml',
@@ -78,7 +80,8 @@
         'views/stock_picking_views.xml',
         'views/crm_lead_view.xml',
         'views/mail_compose_message_views.xml',
-        'views/purchase_portal_view.xml'
+        'views/purchase_portal_view.xml',
+        'views/product_pricelist_comparison_views.xml',
         
         # 'wizard/fischerbell_wizard_report_delivery_with_training.xml',
     ],
