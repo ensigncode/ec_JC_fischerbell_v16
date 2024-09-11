@@ -44,6 +44,7 @@ class Partner(models.Model):
 		('6', 'Sunday')], string="Delivery Restriction")
 	delivery_restriction_start_date = fields.Date(string="Delivery Restriction Start")
 	delivery_restriction_end_date = fields.Date(string="Delivery Restriction End")
+	district_code = fields.Char(compute='_compute_distrct_code', store=True)
 
 
 
@@ -73,4 +74,11 @@ class Partner(models.Model):
 				customer.customer_code = vals.get('customer_code')
 		res = super().write(vals)
 		return res
+	
+	@api.depends('zip')
+	def _compute_distrct_code(self):
+		for rec in self:
+			if rec.zip:
+				district_code = self.env['postal.postal'].search([('postal_code_ids.code','in',[rec.zip[:2]])])
+				rec.write({'district_code':district_code and district_code.postal_district or ''})
 
