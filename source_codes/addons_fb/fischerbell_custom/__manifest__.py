@@ -87,11 +87,11 @@
     'css': [
         "static/src/xml/*.xml']",
     ],
-    # 'assets': {
-    #         'web.assets_backend': [
-    #             # 'fischerbell_custom/static/src/js/*.js',
-    #         ],
-    #     },
+    'assets': {
+            'web.assets_backend': [
+                'fischerbell_custom/static/src/xml/purchase_order_form.xml',
+            ],
+        },
 
     'installable': True,
     'auto_install': False,
