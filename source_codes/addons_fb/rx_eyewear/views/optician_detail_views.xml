@@ -15,7 +15,7 @@
 		<field name="name">optician.detail.view.tree</field>
 		<field name="model">optician.detail</field>
 		<field name="arch" type="xml">
-			<tree string="Optician Detail">
+			<tree string="Prescriptive Eyewear Order">
 				<field name="user_id"/>
 				<field name="partner_id"/>
 				<field name="name"/>
@@ -39,7 +39,7 @@
 		<field name="name">optician.detail.view.form</field>
 		<field name="model">optician.detail</field>
 		<field name="arch" type="xml">
-			<form string="Optician Detail">
+			<form string="Prescriptive Eyewear Order">
 				<header>
 
 				</header>
@@ -107,7 +107,7 @@
 	</record>
 
 	<record id="optician_detail_action" model="ir.actions.act_window">
-		<field name="name">Optician Detail</field>
+		<field name="name">Prescriptive Eyewear Order</field>
 		<field name="res_model">optician.detail</field>
 		<field name="view_mode">tree,form</field>
 		<field name="search_view_id" ref="rx_eyewear.view_optician_detail_filter"/>

@@ -17,6 +17,7 @@
         "views/cash_flow_report.xml",
         "views/account_asset_views.xml",
         "views/purchase_views.xml",
+        "views/account_payment_views.xml",
     ],
     'demo': [
     ],

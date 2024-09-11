@@ -242,11 +242,11 @@ class PurchaseOrderLine(models.Model):
 	_inherit = "purchase.order.line"
 
 	customer_id = fields.Many2one('res.partner', 'Customer Name')
+
 	batch_number = fields.Char('Batch Number', related="customer_id.batch_number")
 	lot_id = fields.Many2one('stock.lot', 'Serial Number')
 	product_tmpl_id = fields.Many2one('product.template')
 	discount = fields.Float(string='Discount (%)', digits='Discount', default=0.0)
-	product_template_id = fields.Many2one('product.template', 'Product Template', related="product_id.product_tmpl_id")
 	customer_sku = fields.Char('Customer SKU')
 	sale_id = fields.Many2one('sale.order', related="sale_line_id.order_id")
 	manufacture_lot_id = fields.Many2one('fischerbell.manufacture.lot', 'Manufacture No')
@@ -254,6 +254,12 @@ class PurchaseOrderLine(models.Model):
 	request_delivery_date = fields.Datetime("Request Delivery Date")
 	estimated_delivery_date = fields.Datetime("Estimated Delivery Date")
 
+	product_template_id = fields.Many2one(
+		comodel_name='product.template',
+		string='Product Template',
+		related='product_id.product_tmpl_id',
+		store=True,
+	)
 
 	@api.onchange('product_id')
 	def onchange_sake_product_image(self):

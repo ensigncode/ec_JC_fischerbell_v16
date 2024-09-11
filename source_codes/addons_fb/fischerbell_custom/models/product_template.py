@@ -30,20 +30,26 @@ class ProductTemplate(models.Model):
 		('serial', 'By Unique Serial Number'),
 		('lot', 'By Batch'),
 		('none', 'No Tracking')],
-		string="Tracking", required=True, default='none', # Not having a default value here causes issues when migrating.
+		string="Tracking", required=True, default='none',
+		# Not having a default value here causes issues when migrating.
 		compute='_compute_tracking', store=True, readonly=False, precompute=True,
 		help="Ensure the traceability of a storable product in your warehouse.", copy=True)
 	model = fields.Char('Model')
 	terms_and_condition_ids = fields.Many2many(
-		comodel_name='fischerbell.product.terms.and.conditions', 
+		comodel_name='fischerbell.product.terms.and.conditions',
 		string='Terms & Conditions'
-		)
+	)
 	manufacturing_date = fields.Date('manufacturing date')
 	expiration_date = fields.Date('expiration date')
 	serial_number = fields.Char('Serial Number')
 	requires_traceability = fields.Boolean('Requires Traceability')
 
-
+	rfq_ids = fields.One2many(
+		comodel_name='purchase.order.line',
+		inverse_name='product_template_id',
+		string='RFQs',
+		domain=[('order_id.state', '=', 'draft')],
+	)
 
 	@api.depends_context('company')
 	@api.depends('product_variant_ids', 'product_variant_ids.standard_price', 'purchase_line_ids')
@@ -66,7 +72,6 @@ class ProductTemplate(models.Model):
 					template.standard_price = template.product_variant_ids.standard_price
 				for template in (self - unique_variants):
 					template.standard_price = 0.0
-
 
 	def generate_qr_code(self, data):
 		# Assuming you have the URL as a string
@@ -91,7 +96,7 @@ class ProductTemplate(models.Model):
 
 		base_url = 'http://13.214.221.125'  # Replace with your Odoo website URL
 		product_url = f'{base_url}/web#id={self.id}&menu_id={menu_id}&cids={cids}&action={action}&model=product.template&view_type=form'
-		
+
 		qr = qrcode.QRCode(
 			version=1,
 			error_correction=qrcode.constants.ERROR_CORRECT_L,
@@ -130,7 +135,6 @@ class ProductTemplate(models.Model):
 
 			if vals.get('min_price') and product.list_price < vals['min_price']:
 				raise ValidationError("Sales price is less than minimal price")
-
 
 		return res
 
@@ -173,11 +177,9 @@ class ProductProduct(models.Model):
 
 	qr_code_image = fields.Binary(string='QR Code', attachment=True, readonly=True)
 	product_detail_sheet = fields.Many2one('ir.attachment')
-	product_detail_sheet_url = fields.Char('Sheet Url',compute="_compute_sheet_url")
+	product_detail_sheet_url = fields.Char('Sheet Url', compute="_compute_sheet_url")
+
 	# requires_traceability = fields.Boolean('Requires Traceability')
-
-
-
 
 	def _compute_sheet_url(self):
 		base_url = self.env.company.get_base_url()
@@ -189,8 +191,6 @@ class ProductProduct(models.Model):
 			else:
 				rec.product_detail_sheet_url = ''
 
-
-
 	def get_product_multiline_description_sale(self):
 		""" Compute a multiline description of this product, in the context of sales
 				(do not use for purchases or other display reasons that don't intend to use "description_sale").
@@ -201,7 +201,6 @@ class ProductProduct(models.Model):
 			name += '\n' + self.description_sale
 
 		return name
-
 
 	def generate_qr_code(self, data):
 		# Assuming you have the URL as a string
@@ -226,7 +225,7 @@ class ProductProduct(models.Model):
 
 		base_url = 'http://13.214.221.125'  # Replace with your Odoo website URL
 		product_url = f'{base_url}/web#id={self.id}&menu_id={menu_id}&cids={cids}&action={action}&model=product.product&view_type=form'
-		
+
 		qr = qrcode.QRCode(
 			version=1,
 			error_correction=qrcode.constants.ERROR_CORRECT_L,
@@ -259,7 +258,6 @@ class ProductProduct(models.Model):
 			vals['qr_code_image'] = self.generate_qr_code(vals['barcode'])
 		else:
 			vals['qr_code_image'] = False
-		rec =  super().create(vals)
+		rec = super().create(vals)
 		rec.requires_traceability = True
 		return rec
-
