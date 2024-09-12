@@ -198,6 +198,27 @@ class PurchaseOrder(models.Model):
 			else:
 				order.date_planned = False
 			self.check_planned_date(order.date_planned)
+	
+	def create_sequance_contact(self):
+		for purchase in self:
+			channel = (self._cr.dbname, 'res.partner', self.env.user.partner_id.id)
+			if not purchase.partner_id.is_contact_created:
+				partner_id = purchase.partner_id.copy({'name':purchase.partner_id.name,
+													'code':self.env['ir.sequence'].next_by_code('res.partner.vendor') 
+													or	_('New'),
+													'is_contact_created':True})
+				self.env['bus.bus']._sendone(channel, 'simple_notification', {
+			            'title': _("Create"),
+			            'message': _('Contact create with this Sequence: %s'%(partner_id.code)),
+			            'type': 'success',
+			        })
+				self.env.user.notify_success(_('Contact create with this Sequence: %s'%(partner_id.code)))
+				purchase.write({'partner_id':partner_id.id})
+			else:
+				self.env['bus.bus']._sendone(channel, 'simple_notification', {
+			            'title': _("Warning"),
+			            'message': _('Sequence already created with Partner:  %s - %s'%(purchase.partner_id.name,purchase.partner_id.code)),
+			        })
 
 class PurchaseOrderLine(models.Model):
 	_inherit = "purchase.order.line"

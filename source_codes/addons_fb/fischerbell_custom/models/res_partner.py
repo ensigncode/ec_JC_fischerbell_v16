@@ -45,6 +45,8 @@ class Partner(models.Model):
 	delivery_restriction_start_date = fields.Date(string="Delivery Restriction Start")
 	delivery_restriction_end_date = fields.Date(string="Delivery Restriction End")
 	district_code = fields.Char(string='District Code', compute='_compute_distrct_code', store=True)
+	code = fields.Char(string = 'Sequence', readonly=True)
+	is_contact_created = fields.Boolean(string = 'Is Contact Created')
 
 
 
@@ -81,4 +83,13 @@ class Partner(models.Model):
 			if rec.zip:
 				district_code = self.env['postal.postal'].search([('postal_code_ids.code','in',[rec.zip[:2]])])
 				rec.write({'district_code':district_code and district_code.postal_district or ''})
+	
+	def unlink(self):
+		for rec in self:
+			partner_id = rec.search([('name','=',rec.name),('email','=',rec.email),
+									('phone','=',rec.phone),('mobile','=',rec.mobile),
+									('is_contact_created','=',True)])
+			if partner_id:
+				partner_id.write({'is_contact_created':False})
+		return super().unlink()
 

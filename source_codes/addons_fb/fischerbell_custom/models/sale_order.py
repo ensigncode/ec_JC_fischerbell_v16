@@ -125,8 +125,6 @@ class SaleOrder(models.Model):
 		string="Delivery Option", default='partial_delivery')
 
 	product_vendor_conf_ids = fields.One2many('product.vendor.conf','sale_id',string="Product Vendor Conf")
-	have_special_permission = fields.Boolean("Pro-Forma Invoices")
-
 
 	@api.depends('partner_id')
 	def _compute_partner_shipping_id(self):
@@ -320,11 +318,11 @@ class SaleOrder(models.Model):
 						'approval_state': 'approved',
 						'reviewed_by': self.env.user.id
 					})
-					if order.partner_id.partner_seq == _('New'):
-						partner = self.env['res.partner'].browse(order.partner_id.id)
-						partner.update({
-							'partner_seq': self.env['ir.sequence'].next_by_code('res.partner') or _('New')
-						})
+     # if order.partner_id.partner_seq == _('New'):
+     # 	partner = self.env['res.partner'].browse(order.partner_id.id)
+     # 	partner.update({
+     # 		'partner_seq': self.env['ir.sequence'].next_by_code('res.partner') or _('New')
+     # 	})
 					order.with_context(vendor_wizard=True).action_confirm()
 					purchase_order_ids = self._get_purchase_orders()
 					if purchase_order_ids:
@@ -362,11 +360,11 @@ class SaleOrder(models.Model):
 						'approval_state': 'approved',
 						'reviewed_by': self.env.user.id
 					})
-					if order.partner_id.partner_seq == _('New'):
-						partner = self.env['res.partner'].browse(order.partner_id.id)
-						partner.update({
-							'partner_seq': self.env['ir.sequence'].next_by_code('res.partner') or _('New')
-						})
+     # if order.partner_id.partner_seq == _('New'):
+     # 	partner = self.env['res.partner'].browse(order.partner_id.id)
+     # 	partner.update({
+     # 		'partner_seq': self.env['ir.sequence'].next_by_code('res.partner') or _('New')
+     # 	})
 					order.with_context(vendor_wizard=True).action_confirm()
 					purchase_order_ids = self._get_purchase_orders()
 					if purchase_order_ids:
@@ -1113,7 +1111,65 @@ class SaleOrder(models.Model):
 				}
 				mail = self.env['mail.mail'].create(mails)
 				mail.send()
-
+	
+	def action_draft(self):
+		res = super().action_draft()
+		line_ids = self.order_line
+		line_ids.write({'approval_state':False})
+		return res
+	
+	def create_sequance_contact(self):
+		for sale in self:
+			channel = (self._cr.dbname, 'res.partner', self.env.user.partner_id.id)
+			if not sale.partner_id.is_contact_created:
+				partner_id = sale.partner_id.copy({'name':sale.partner_id.name,
+												'code':self.env['ir.sequence'].next_by_code('res.partner.customer') 
+													or	_('New'),
+													'is_contact_created':True})
+				self.env['bus.bus']._sendone(channel, 'simple_notification', {
+			            'title': _("Record Created"),
+			            'message': _('Contact create with this Sequence: %s'%(partner_id.code)),
+			            'type': 'info',
+			        })
+				sale.write({'partner_id':partner_id.id})
+			else:
+				self.env['bus.bus']._sendone(channel, 'simple_notification', {
+			            'title': _("Warning"),
+			            'message': _('Sequence already created with Partner:  %s - %s'%(sale.partner_id.name,sale.partner_id.code)),
+			        })
+	
+	@api.model
+	def merge_quotations(self):
+		active_ids = self.env.context.get('active_ids', [])
+		if len(active_ids) < 2:
+			raise ValidationError(_("You must select at least two sale orders to merge."))
+		sale_orders = self.browse(active_ids)
+		partner_ids = sale_orders.mapped('partner_id.id')
+		if len(set(partner_ids)) > 1:
+			raise ValidationError(_("Selected sale orders must belong to the same customer."))
+		draft_orders = sale_orders.filtered(lambda so: so.state == 'draft')
+		if len(draft_orders) != len(sale_orders):
+			raise ValidationError(_("All selected sale orders must be in the Quotation."))
+		latest_order = draft_orders.sorted(lambda so: so.create_date, reverse=True)[0]
+		for order in draft_orders - latest_order:
+			for line in order.order_line:
+				existing_line = latest_order.order_line.filtered(lambda l: l.product_id == line.product_id)
+				if existing_line:
+					existing_line.write({'product_uom_qty': existing_line.product_uom_qty + line.product_uom_qty,
+										'price_unit':line.price_unit})
+					existing_line._compute_amount()
+				else:
+					line.copy(default={'order_id': latest_order.id})
+					line._compute_amount()
+			order.action_cancel()
+		return {
+		          'type': 'ir.actions.act_window',
+		          'name': _('Quotation'),
+		          'res_model': 'sale.order',
+		          'view_mode': 'form',
+		          'view_type': 'form',
+		          'res_id':latest_order.id,
+		      }
 
 class SaleOrderLine(models.Model):
 	_name = 'sale.order.line'
@@ -1142,12 +1198,16 @@ class SaleOrderLine(models.Model):
         compute='_compute_price_unit',
         digits='Product Price',
         store=True, readonly=False, required=True, precompute=True, tracking=True)
+	approval_state = fields.Selection([('pending','Pending'),('approved','Approved'),
+										('rejected','Rejected')
+										], string="Approval", 
+										tracking=True, copy=False)
 
 
 	@api.depends('customer_id','product_id','state')
 	def _compute_last_order_price(self):
 		for price in self:
-			last_price = self.search([('customer_id','=', price.customer_id.id),
+			last_price = self.search([('id','!=', price._origin.id),('customer_id','=', price.customer_id.id),
 									('product_id','=',price.product_id.id ),('state','=','sale')],
 									limit=1, order='id desc')
 			price.last_price = last_price.price_unit  * last_price.product_uom_qty if last_price else 0
@@ -1206,6 +1266,11 @@ class SaleOrderLine(models.Model):
 		for line in self:
 			if line.is_requested:
 				line.update({'price_unit':line.request_price,
-							'is_request_updated':True})
+							'is_request_updated':True,
+							'approval_state':'approved'})
 			else:
 				raise ValidationError(_('This Line is not requested for the Update Price, Order Ref:% and Product:%s')%(line.order_id.name,line.product_id.name))
+			
+	def reject_request(self):
+		for line in self:
+			line.write({'approval_state':'rejected','is_request_updated':True})
