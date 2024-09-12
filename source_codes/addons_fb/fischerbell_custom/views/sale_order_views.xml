@@ -143,6 +143,14 @@
                 <field name="scheduled_delivery_date" />
                 <field name="requested_delivery_date" />
             </xpath>
+            <xpath expr="//field[@name='order_line']//tree//field[@name='price_subtotal']" position="after">
+                <button name="%(fischerbell_custom.action_request_sale_line_price_wizard)d" 
+                type="action" class="oe_highlight" string="Update Price"
+                groups="sales_team.group_sale_manager" attrs="{'invisible':[('state','not in',('draft','sent'))]}"/>
+            </xpath>
+            <xpath expr="//field[@name='order_line']//tree//field[@name='price_unit']" position="attributes">
+                <attribute name="readonly">True</attribute>
+            </xpath>
         </field>
     </record>
     <record id="inherit_view_sales_order_filter" model="ir.ui.view">
@@ -287,6 +295,11 @@
         <field name="name">sale.order.analysis.report.tree.view</field>
         <field name="model">sale.order.line</field>
         <field name="arch" type="xml">
+            <header>
+                 <button name="update_request_price" type="object" 
+                            class="btn-primary" string="Update Price"
+                            groups="account.group_account_manager"/>
+            </header>
             <tree string="Sales Order Lines" create="false">
                 <field name="order_id"/>
                 <field name="product_id" string="Product"/>
@@ -299,6 +312,8 @@
                 <field name="product_uom" string="Unit of Measure" groups="uom.group_uom"/>
                 <field name="last_invoice_date" />
                 <field name="last_invoice_price" />
+                <field name="price_unit"/>
+                <field name="request_price" groups="account.group_account_manager"/>
                 <field name="price_subtotal" sum="Total" widget="monetary"/>
                 <field name="currency_id" invisible="1"/>
             </tree>
@@ -344,4 +359,50 @@
             <xpath expr="//div[hasclass('badge') and hasclass('rounded-pill') and hasclass('text-bg-success')  and hasclass('float-end') and hasclass('border-0')]" position="replace"/>
         </field>
     </record>
+    
+    <record id="sale_order_line_form_inherit_chater" model="ir.ui.view">
+        <field name="name">sale.order.line.form.inherit.chatter</field>
+        <field name="model">sale.order.line</field>
+        <field name="inherit_id" ref="sale.sale_order_line_view_form_readonly"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form/sheet" position="before">
+                <header>
+                    <field name="is_requested" invisible="1"/>
+                    <button name="update_request_price" type="object" class="btn-primary" string="Update Price"
+                            groups="account.group_account_manager" attrs="{'invisible':[('is_requested','=',False)]}"/>
+                </header>
+            </xpath>
+            <xpath expr="//field[@name='price_unit']" position="after">
+                <field name="request_price" groups="account.group_account_manager"/>
+            </xpath>
+            <xpath expr="//form/sheet" position="after">
+                <div class="oe_chatter">
+	                <field name="message_follower_ids"/>
+	                <field name="activity_ids"/>
+	                <field name="message_ids"/>
+                </div>
+            </xpath>
+        </field>
+     </record>
+
+    <record id="fischerbell_action_order_update_request" model="ir.actions.act_window">
+        <field name="name">Update Request</field>
+        <field name="res_model">sale.order.line</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{'create':0,'edit':0}</field>
+        <field name="domain">[('is_requested','=',True),('is_request_updated','=',False)]</field>
+        <field name="target">current</field>
+    </record>
+    
+    <menuitem id="fischerbell_menu_sale_main_request"
+        name="Update Requests"
+        groups="account.group_account_manager"
+        parent="sale.sale_menu_root"
+        sequence="40"/>
+    
+    <menuitem id="fischerbell_menu_sale_price_update_request"
+        name="Price Update Requests"
+        action="fischerbell_custom.fischerbell_action_order_update_request"
+        parent="fischerbell_custom.fischerbell_menu_sale_main_request"
+        sequence="1"/>
 </odoo>

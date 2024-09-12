@@ -1116,7 +1116,9 @@ class SaleOrder(models.Model):
 
 
 class SaleOrderLine(models.Model):
-	_inherit = "sale.order.line"
+	_name = 'sale.order.line'
+	_inherit = ['sale.order.line','mail.thread', 
+				'mail.activity.mixin']
 
 	product_code = fields.Char('Product Code', related="product_template_id.default_code")
 	customer_id = fields.Many2one('res.partner', 'Customer', related="order_id.partner_id")
@@ -1132,6 +1134,14 @@ class SaleOrderLine(models.Model):
 	last_price = fields.Float('Last Order Price', compute="_compute_last_order_price", store=True)
 	picking_id = fields.Many2one('stock.picking', 'Picking')
 	product_detail_sheet_url = fields.Char(related="product_id.product_detail_sheet_url")
+	request_price = fields.Float('Requested Price', readonly=True)
+	is_requested = fields.Boolean('Is Update Requested',readonly=True)
+	is_request_updated = fields.Boolean('Is Request Updated',readonly=True)
+	price_unit = fields.Float(
+        string="Unit Price",
+        compute='_compute_price_unit',
+        digits='Product Price',
+        store=True, readonly=False, required=True, precompute=True, tracking=True)
 
 
 	@api.depends('customer_id','product_id','state')
@@ -1191,3 +1201,11 @@ class SaleOrderLine(models.Model):
 				raise ValidationError("Sales price is greater than maximal price")
 			if self.price_unit < self.product_template_id.min_price:
 				raise ValidationError("Sales price is less than minimal price")
+	
+	def update_request_price(self):
+		for line in self:
+			if line.is_requested:
+				line.update({'price_unit':line.request_price,
+							'is_request_updated':True})
+			else:
+				raise ValidationError(_('This Line is not requested for the Update Price, Order Ref:% and Product:%s')%(line.order_id.name,line.product_id.name))
