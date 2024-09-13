@@ -79,7 +79,8 @@
         'views/stock_picking_views.xml',
         'views/crm_lead_view.xml',
         'views/mail_compose_message_views.xml',
-        'views/purchase_portal_view.xml'
+        'views/purchase_portal_view.xml',
+        'views/product_pricelist_comparison_views.xml'
         
         # 'wizard/fischerbell_wizard_report_delivery_with_training.xml',
     ],
