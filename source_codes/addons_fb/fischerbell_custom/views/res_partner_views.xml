@@ -16,6 +16,7 @@
 <!--                <field name="partner_seq"/>-->
                 <field name="e_invoice_email" widget="email"/>
                 <field name="soa_email" widget="email"/>
+                <field name="currency_id"/>
             </xpath>
             <xpath expr="//field[@name='vat']" position="after">
                 <field name="no_delivery_days_selection"/>
