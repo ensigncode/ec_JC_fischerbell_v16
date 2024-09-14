@@ -21,6 +21,7 @@ class SaleOrderApprovalWizard(models.TransientModel):
             self.order_id.with_context(context).approval_order()
         elif self.operation_type == 'approve':
             self.order_id.write({
+                'state': 'approve',
                 'approval_state': 'approved'
             })
         else:

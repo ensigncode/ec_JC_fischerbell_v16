@@ -90,6 +90,7 @@ class SaleOrder(models.Model):
 		selection=[
 			('draft', "Quotation"),
 			('sent', "Quotation Sent"),
+			('approve', "Approved"),
 			('sale', "Sales Order"),
 			('done', "Locked"),
 			('cancel', "Cancelled"),
@@ -286,7 +287,7 @@ class SaleOrder(models.Model):
 	def action_to_approve(self):
 		self.submited_date = date.today()
 		return {
-			'name': "Low Stock Alert",
+			'name': "Approve Sale Order",
 			'type': 'ir.actions.act_window',
 			'view_type': 'form',
 			'view_mode': 'form',
@@ -423,13 +424,13 @@ class SaleOrder(models.Model):
 		for order in self:
 			if order.state == 'waiting_approval' and order.approval_state == 'waiting_approval' and self.env.user.has_group("fischerbell_custom.group_sales_order_approver"):
 				order.write({
-					'state': 'cancel',
+					'state': 'draft',
 					'approval_state': 'reject',
 					'reviewed_by': self.env.user.id
 				})
 			elif order.state == 'waiting_approval_user' and order.approval_state == 'waiting_approval' and self.env.user.has_group("fischerbell_custom.group_sales_order_approver"):
 				order.write({
-					'state': 'cancel',
+					'state': 'draft',
 					'approval_state': 'reject',
 					'reviewed_by': self.env.user.id
 				})
@@ -450,6 +451,15 @@ class SaleOrder(models.Model):
 	def action_submit_to_approval(self):
 		for order in self:
 			# Sent email to customer based on the state
+			user_id = self.env['res.users'].sudo().search([('groups_id', 'in', self.env.ref('account.group_account_manager').id)], limit = 1)
+			self.env['mail.activity'].sudo().create({
+				'res_model_id': self.env.ref('sale.model_sale_order').id,
+				'res_id': order.id,
+				'user_id': user_id.id,
+				'activity_type_id': self.env.ref('mail.mail_activity_data_todo').id,
+				'summary': _('Approval of Quotation : %s'%order.name),
+				'note': _('<span>Hello, <b>%s</b>, just a quick reminder to review and approve the pending quotation <b>%s</b>.</br> Thanks!')%(user_id.name, order.name)
+			})
 			order.send_mail_triggers_based_on_state()
 			order.write({
 				'state': 'waiting_approval',
