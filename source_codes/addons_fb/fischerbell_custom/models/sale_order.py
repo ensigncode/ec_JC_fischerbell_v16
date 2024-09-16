@@ -90,6 +90,7 @@ class SaleOrder(models.Model):
 		selection=[
 			('draft', "Quotation"),
 			('sent', "Quotation Sent"),
+			('approve', "Approved"),
 			('sale', "Sales Order"),
 			('done', "Locked"),
 			('cancel', "Cancelled"),
@@ -125,7 +126,6 @@ class SaleOrder(models.Model):
 		string="Delivery Option", default='partial_delivery')
 
 	product_vendor_conf_ids = fields.One2many('product.vendor.conf','sale_id',string="Product Vendor Conf")
-
 
 	@api.depends('partner_id')
 	def _compute_partner_shipping_id(self):
@@ -315,16 +315,17 @@ class SaleOrder(models.Model):
 				if order.state == 'waiting_approval' and order.approval_state == 'waiting_approval' and self.env.user.has_group(
 						"fischerbell_custom.group_sales_order_approver"):
 					order.write({
-						'state': 'sale',
+						'state': 'approve',
 						'approval_state': 'approved',
 						'reviewed_by': self.env.user.id
 					})
-					if order.partner_id.partner_seq == _('New'):
-						partner = self.env['res.partner'].browse(order.partner_id.id)
-						partner.update({
-							'partner_seq': self.env['ir.sequence'].next_by_code('res.partner') or _('New')
-						})
+     # if order.partner_id.partner_seq == _('New'):
+     # 	partner = self.env['res.partner'].browse(order.partner_id.id)
+     # 	partner.update({
+     # 		'partner_seq': self.env['ir.sequence'].next_by_code('res.partner') or _('New')
+     # 	})
 					order.with_context(vendor_wizard=True).action_confirm()
+
 					purchase_order_ids = self._get_purchase_orders()
 					if purchase_order_ids:
 						purchase_id = purchase_order_ids[0]
@@ -357,16 +358,18 @@ class SaleOrder(models.Model):
 				if order.state == 'waiting_approval' and order.approval_state == 'waiting_approval' and self.env.user.has_group(
 						"fischerbell_custom.group_sales_order_approver"):
 					order.write({
-						'state': 'sale',
+						'state': 'approve',
 						'approval_state': 'approved',
 						'reviewed_by': self.env.user.id
 					})
-					if order.partner_id.partner_seq == _('New'):
-						partner = self.env['res.partner'].browse(order.partner_id.id)
-						partner.update({
-							'partner_seq': self.env['ir.sequence'].next_by_code('res.partner') or _('New')
-						})
+          
+     # if order.partner_id.partner_seq == _('New'):
+     # 	partner = self.env['res.partner'].browse(order.partner_id.id)
+     # 	partner.update({
+     # 		'partner_seq': self.env['ir.sequence'].next_by_code('res.partner') or _('New')
+     # 	})
 					order.with_context(vendor_wizard=True).action_confirm()
+
 					purchase_order_ids = self._get_purchase_orders()
 					if purchase_order_ids:
 						purchase_id = purchase_order_ids[0]
@@ -404,13 +407,13 @@ class SaleOrder(models.Model):
 		for order in self:
 			if order.state == 'waiting_approval' and order.approval_state == 'waiting_approval' and self.env.user.has_group("fischerbell_custom.group_sales_order_approver"):
 				order.write({
-					'state': 'cancel',
+					'state': 'draft',
 					'approval_state': 'reject',
 					'reviewed_by': self.env.user.id
 				})
 			elif order.state == 'waiting_approval_user' and order.approval_state == 'waiting_approval' and self.env.user.has_group("fischerbell_custom.group_sales_order_approver"):
 				order.write({
-					'state': 'cancel',
+					'state': 'draft',
 					'approval_state': 'reject',
 					'reviewed_by': self.env.user.id
 				})
@@ -427,6 +430,22 @@ class SaleOrder(models.Model):
 				inv.len_note = len(inv.partner_note)
 			else:
 				inv.len_note = False
+
+	def action_submit_to_approval(self):
+		for order in self:
+			user_id = self.env['res.users'].sudo().search([('groups_id', 'in', self.env.ref('account.group_account_manager').id)], limit = 1)
+			self.env['mail.activity'].sudo().create({
+				'res_model_id': self.env.ref('sale.model_sale_order').id,
+				'res_id': order.id,
+				'user_id': user_id.id,
+				'activity_type_id': self.env.ref('mail.mail_activity_data_todo').id,
+				'summary': _('Approval of Quotation : %s'%order.name),
+				'note': _('<span>Hello, <b>%s</b>, just a quick reminder to review and approve the pending quotation <b>%s</b>.</br> Thanks!')%(user_id.name, order.name)
+			})
+			order.write({
+				'state': 'waiting_approval',
+				'approval_state': 'waiting_approval'
+			})    
 
 	def action_confirm(self):
 		# self.submited_date = date.today()
@@ -1112,10 +1131,70 @@ class SaleOrder(models.Model):
 				}
 				mail = self.env['mail.mail'].create(mails)
 				mail.send()
-
+	
+	def action_draft(self):
+		res = super().action_draft()
+		line_ids = self.order_line
+		line_ids.write({'approval_state':False})
+		return res
+	
+	def create_sequance_contact(self):
+		for sale in self:
+			channel = (self._cr.dbname, 'res.partner', self.env.user.partner_id.id)
+			if not sale.partner_id.is_contact_created:
+				partner_id = sale.partner_id.copy({'name':sale.partner_id.name,
+												'code':self.env['ir.sequence'].next_by_code('res.partner.customer') 
+													or	_('New'),
+													'is_contact_created':True})
+				self.env['bus.bus']._sendone(channel, 'simple_notification', {
+			            'title': _("Record Created"),
+			            'message': _('Contact create with this Sequence: %s'%(partner_id.code)),
+			            'type': 'info',
+			        })
+				sale.write({'partner_id':partner_id.id})
+			else:
+				self.env['bus.bus']._sendone(channel, 'simple_notification', {
+			            'title': _("Warning"),
+			            'message': _('Sequence already created with Partner:  %s - %s'%(sale.partner_id.name,sale.partner_id.code)),
+			        })
+	
+	@api.model
+	def merge_quotations(self):
+		active_ids = self.env.context.get('active_ids', [])
+		if len(active_ids) < 2:
+			raise ValidationError(_("You must select at least two sale orders to merge."))
+		sale_orders = self.browse(active_ids)
+		partner_ids = sale_orders.mapped('partner_id.id')
+		if len(set(partner_ids)) > 1:
+			raise ValidationError(_("Selected sale orders must belong to the same customer."))
+		draft_orders = sale_orders.filtered(lambda so: so.state == 'draft')
+		if len(draft_orders) != len(sale_orders):
+			raise ValidationError(_("All selected sale orders must be in the Quotation."))
+		latest_order = draft_orders.sorted(lambda so: so.create_date, reverse=True)[0]
+		for order in draft_orders - latest_order:
+			for line in order.order_line:
+				existing_line = latest_order.order_line.filtered(lambda l: l.product_id == line.product_id)
+				if existing_line:
+					existing_line.write({'product_uom_qty': existing_line.product_uom_qty + line.product_uom_qty,
+										'price_unit':line.price_unit})
+					existing_line._compute_amount()
+				else:
+					line.copy(default={'order_id': latest_order.id})
+					line._compute_amount()
+			order.action_cancel()
+		return {
+		          'type': 'ir.actions.act_window',
+		          'name': _('Quotation'),
+		          'res_model': 'sale.order',
+		          'view_mode': 'form',
+		          'view_type': 'form',
+		          'res_id':latest_order.id,
+		      }
 
 class SaleOrderLine(models.Model):
-	_inherit = "sale.order.line"
+	_name = 'sale.order.line'
+	_inherit = ['sale.order.line','mail.thread', 
+				'mail.activity.mixin']
 
 	product_code = fields.Char('Product Code', related="product_template_id.default_code")
 	customer_id = fields.Many2one('res.partner', 'Customer', related="order_id.partner_id")
@@ -1131,13 +1210,27 @@ class SaleOrderLine(models.Model):
 	last_price = fields.Float('Last Order Price', compute="_compute_last_order_price", store=True)
 	picking_id = fields.Many2one('stock.picking', 'Picking')
 	product_detail_sheet_url = fields.Char(related="product_id.product_detail_sheet_url")
+	request_price = fields.Float('Requested Price', readonly=True)
+	is_requested = fields.Boolean('Is Update Requested',readonly=True)
+	is_request_updated = fields.Boolean('Is Request Updated',readonly=True)
+	price_unit = fields.Float(
+        string="Unit Price",
+        compute='_compute_price_unit',
+        digits='Product Price',
+        store=True, readonly=False, required=True, precompute=True, tracking=True)
+	approval_state = fields.Selection([('pending','Pending'),('approved','Approved'),
+										('rejected','Rejected')
+										], string="Approval", 
+										tracking=True, copy=False)
 
 
-	@api.depends('customer_id','product_id')
+	@api.depends('customer_id','product_id','state')
 	def _compute_last_order_price(self):
 		for price in self:
-			last_price = self.search([('customer_id','=', price.customer_id.id),('product_id','=',price.product_id.id ),('state','=','sale')],limit=1)
-			price.last_price = last_price.price_unit if last_price else 0
+			last_price = self.search([('id','!=', price._origin.id),('customer_id','=', price.customer_id.id),
+									('product_id','=',price.product_id.id ),('state','=','sale')],
+									limit=1, order='id desc')
+			price.last_price = last_price.price_unit  * last_price.product_uom_qty if last_price else 0
 
 	def _compute_get_last_invoice_date(self):
 		move_line_obj = self.env['account.move.line']
@@ -1188,3 +1281,16 @@ class SaleOrderLine(models.Model):
 				raise ValidationError("Sales price is greater than maximal price")
 			if self.price_unit < self.product_template_id.min_price:
 				raise ValidationError("Sales price is less than minimal price")
+	
+	def update_request_price(self):
+		for line in self:
+			if line.is_requested:
+				line.update({'price_unit':line.request_price,
+							'is_request_updated':True,
+							'approval_state':'approved'})
+			else:
+				raise ValidationError(_('This Line is not requested for the Update Price, Order Ref:% and Product:%s')%(line.order_id.name,line.product_id.name))
+			
+	def reject_request(self):
+		for line in self:
+			line.write({'approval_state':'rejected','is_request_updated':True})

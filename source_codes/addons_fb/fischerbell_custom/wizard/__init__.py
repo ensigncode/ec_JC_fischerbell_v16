@@ -11,5 +11,6 @@ from . import purchase_order_ref
 from . import purchase_order_wizard
 from . import followup_manual_reminder
 from . import land_cost_wizard
+from . import request_sale_line_price
 
 
