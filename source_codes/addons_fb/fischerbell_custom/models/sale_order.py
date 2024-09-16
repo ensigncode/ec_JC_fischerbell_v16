@@ -90,6 +90,7 @@ class SaleOrder(models.Model):
 		selection=[
 			('draft', "Quotation"),
 			('sent', "Quotation Sent"),
+			('approve', "Approved"),
 			('sale', "Sales Order"),
 			('done', "Locked"),
 			('cancel', "Cancelled"),
@@ -316,7 +317,7 @@ class SaleOrder(models.Model):
 				if order.state == 'waiting_approval' and order.approval_state == 'waiting_approval' and self.env.user.has_group(
 						"fischerbell_custom.group_sales_order_approver"):
 					order.write({
-						'state': 'sale',
+						'state': 'approve',
 						'approval_state': 'approved',
 						'reviewed_by': self.env.user.id
 					})
@@ -325,7 +326,7 @@ class SaleOrder(models.Model):
 						partner.update({
 							'partner_seq': self.env['ir.sequence'].next_by_code('res.partner') or _('New')
 						})
-					order.with_context(vendor_wizard=True).action_confirm()
+					# order.with_context(vendor_wizard=True).action_confirm()
 					purchase_order_ids = self._get_purchase_orders()
 					if purchase_order_ids:
 						purchase_id = purchase_order_ids[0]
@@ -358,7 +359,7 @@ class SaleOrder(models.Model):
 				if order.state == 'waiting_approval' and order.approval_state == 'waiting_approval' and self.env.user.has_group(
 						"fischerbell_custom.group_sales_order_approver"):
 					order.write({
-						'state': 'sale',
+						'state': 'approve',
 						'approval_state': 'approved',
 						'reviewed_by': self.env.user.id
 					})
@@ -367,7 +368,7 @@ class SaleOrder(models.Model):
 						partner.update({
 							'partner_seq': self.env['ir.sequence'].next_by_code('res.partner') or _('New')
 						})
-					order.with_context(vendor_wizard=True).action_confirm()
+					# order.with_context(vendor_wizard=True).action_confirm()
 					purchase_order_ids = self._get_purchase_orders()
 					if purchase_order_ids:
 						purchase_id = purchase_order_ids[0]
@@ -405,13 +406,13 @@ class SaleOrder(models.Model):
 		for order in self:
 			if order.state == 'waiting_approval' and order.approval_state == 'waiting_approval' and self.env.user.has_group("fischerbell_custom.group_sales_order_approver"):
 				order.write({
-					'state': 'cancel',
+					'state': 'draft',
 					'approval_state': 'reject',
 					'reviewed_by': self.env.user.id
 				})
 			elif order.state == 'waiting_approval_user' and order.approval_state == 'waiting_approval' and self.env.user.has_group("fischerbell_custom.group_sales_order_approver"):
 				order.write({
-					'state': 'cancel',
+					'state': 'draft',
 					'approval_state': 'reject',
 					'reviewed_by': self.env.user.id
 				})
@@ -428,6 +429,22 @@ class SaleOrder(models.Model):
 				inv.len_note = len(inv.partner_note)
 			else:
 				inv.len_note = False
+
+	def action_submit_to_approval(self):
+		for order in self:
+			user_id = self.env['res.users'].sudo().search([('groups_id', 'in', self.env.ref('account.group_account_manager').id)], limit = 1)
+			self.env['mail.activity'].sudo().create({
+				'res_model_id': self.env.ref('sale.model_sale_order').id,
+				'res_id': order.id,
+				'user_id': user_id.id,
+				'activity_type_id': self.env.ref('mail.mail_activity_data_todo').id,
+				'summary': _('Approval of Quotation : %s'%order.name),
+				'note': _('<span>Hello, <b>%s</b>, just a quick reminder to review and approve the pending quotation <b>%s</b>.</br> Thanks!')%(user_id.name, order.name)
+			})
+			order.write({
+				'state': 'waiting_approval',
+				'approval_state': 'waiting_approval'
+			})    
 
 	def action_confirm(self):
 		# self.submited_date = date.today()
