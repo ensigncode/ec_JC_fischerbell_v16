@@ -72,11 +72,12 @@ class PurchaseOrder(models.Model):
 		for po in self:
 			po.is_default_terms = True
 
-
 	@api.model
 	def create(self, vals):
+		if 'name' not in vals or vals['name'] == 'New':
+			vals['name'] = self.env['ir.sequence'].next_by_code('purchase.order.rfq')
 		res = super(PurchaseOrder, self).create(vals)
-		default_terms = self.env['purchase.order'].search([('is_default_terms','=',True)], limit=1).notes
+		default_terms = self.env['purchase.order'].search([('is_default_terms', '=', True)], limit=1).notes
 		if default_terms:
 			vals['notes'] = default_terms
 		return res
@@ -163,9 +164,11 @@ class PurchaseOrder(models.Model):
 		if self.mail_sended:
 			res = super().button_confirm()
 			for order in self:
-				if order.picking_ids:
-					for pick in order.picking_ids:
-						pick.user = self.env.user.id
+				if order.state == 'purchase':
+					order.write({'name': self.env['ir.sequence'].next_by_code('purchase.order.po')})
+					if order.picking_ids:
+						for pick in order.picking_ids:
+							pick.user = self.env.user.id
 			return res
 		else:
 			if not self.mail_sended:
