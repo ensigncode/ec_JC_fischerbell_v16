@@ -890,16 +890,16 @@ class SaleOrder(models.Model):
 			if vals.get('state') == 'draft':
 				vals['approval_state'] = 'no'
 
-			if vals.get('state') == 'sent':
-				vals['email_to_customer'] = datetime.now()
-
-			if vals.get('order_line'):
-				order_line_vals = list(map(lambda y:list(y[-1].keys()),filter(lambda x:isinstance(x,list) and isinstance(x[-1],dict),vals.get('order_line'))))
-				if any(field in ORDER_LINE_FIELDS for field in list(itertools.chain(*order_line_vals))):
-					vals['revision_order_name'] = (order.name.split('-')[0] if not order.revision_order_name else order.revision_order_name.split('-')[0]) + '-R%s'%(int(order.revision_order_count + 1) if int(order.revision_order_count) == 0 else int(order.revision_order_count))
-					vals['name'] = (order.name.split('-')[0] if not order.revision_order_name else order.revision_order_name.split('-')[0]) + '-R%s'%(int(order.revision_order_count + 1) if int(order.revision_order_count) == 0 else int(order.revision_order_count))
-					vals['revision_order_count'] = order.revision_order_count + 1
-					vals['is_order_revise'] = True
+			# if vals.get('state') == 'sent':
+			# 	vals['email_to_customer'] = datetime.now()
+			#
+			# if vals.get('order_line'):
+			# 	order_line_vals = list(map(lambda y:list(y[-1].keys()),filter(lambda x:isinstance(x,list) and isinstance(x[-1],dict),vals.get('order_line'))))
+			# 	if any(field in ORDER_LINE_FIELDS for field in list(itertools.chain(*order_line_vals))):
+			# 		vals['revision_order_name'] = (order.name.split('-')[0] if not order.revision_order_name else order.revision_order_name.split('-')[0]) + '-R%s'%(int(order.revision_order_count + 1) if int(order.revision_order_count) == 0 else int(order.revision_order_count))
+			# 		vals['name'] = (order.name.split('-')[0] if not order.revision_order_name else order.revision_order_name.split('-')[0]) + '-R%s'%(int(order.revision_order_count + 1) if int(order.revision_order_count) == 0 else int(order.revision_order_count))
+			# 		vals['revision_order_count'] = order.revision_order_count + 1
+			# 		vals['is_order_revise'] = True
 
 		res = super().write(vals)
 		for order in self:
@@ -1039,10 +1039,11 @@ class SaleOrder(models.Model):
 
 	def get_order_template_subject(self):
 		self.ensure_one()
-		if self.is_order_revise and self.user_id.id == self.env.user.id:
-			return "This is a revised quotation %s."%(self.revision_order_name)
-		else:
-			return "%s %s (%s)"%(self.company_id.name,self.state in ('draft', 'sent') and (self._context.get('proforma') and 'Proforma' or 'Quotation') or 'Order',self.name or 'n/a')
+		pass
+		# if self.is_order_revise and self.user_id.id == self.env.user.id:
+		# 	return "This is a revised quotation %s."%(self.revision_order_name)
+		# else:
+		# 	return "%s %s (%s)"%(self.company_id.name,self.state in ('draft', 'sent') and (self._context.get('proforma') and 'Proforma' or 'Quotation') or 'Order',self.name or 'n/a')
 
 	# Set first followup date in order cron.
 	def cron_set_followup_date(self):
