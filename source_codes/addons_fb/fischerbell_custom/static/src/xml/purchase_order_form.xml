@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates xml:space="preserve">
+
+    <t t-name="fischerbell_custom.PurchaseOrderRequiredField" t-inherit="web.FormLabel" t-inherit-mode="extension" owl="1">
+        <xpath expr="//t[@t-esc='props.string']" position="before">
+            <t t-if="props.fieldInfo.modifiers.required and env.model.root.resModel == 'purchase.order'">
+                <sup class="text-danger p-1">*</sup>
+            </t>
+        </xpath>
+    </t>
+</templates>

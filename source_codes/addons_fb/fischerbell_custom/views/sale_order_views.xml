@@ -9,9 +9,9 @@
             <xpath expr="//group[@name='sale_shipping']" position="attributes">
                 <attribute name="invisible">1</attribute>
             </xpath>
-             <xpath expr="//header//button[@name='action_confirm'][2]" position="attributes">
+             <!-- <xpath expr="//header//button[@name='action_confirm'][2]" position="attributes">
                  <attribute name="string">Submit For Review</attribute>
-            </xpath>
+            </xpath> -->
              <xpath expr="//field[@name='date_order']" position="after">
                 <field name="submited_date" readonly="1"/>
             </xpath>
@@ -79,11 +79,22 @@
                 <field name="delivery_option"/>
                 <field name="len_note" invisible="1"/>
             </xpath>
+            <xpath expr="//header//button[@name='action_confirm'][1]" position="attributes">
+                 <attribute name="attrs">{'invisible': [('state', 'not in', ['sent', 'approve'])]}</attribute>
+            </xpath>
+            <xpath expr="//header//button[@name='action_cancel']" position="attributes">
+                 <attribute name="attrs">{'invisible': ['|', ('state', 'not in', ['draft', 'sent','sale', 'approve']), ('id', '=', False)]}</attribute>
+            </xpath>
+            <xpath expr="//header//button[@name='action_confirm'][2]" position="attributes">
+                 <attribute name="invisible">1</attribute>
+            </xpath>
             <xpath expr="//button[@name='action_quotation_send']" position="before">
 <!--                <button name="create_exchange_order" type="object" string="Create Exchange Order" attrs="{'invisible':['|',('state','in',['draft','done','waiting_approval']),('type','not in','sale')]}" />-->
                 <button name="create_loan_orders" type="object" string="Create Loan Order" attrs="{'invisible':['|',('state','in',['draft','done','waiting_approval']),('type','not in','sale')]}" />
 <!--                <button name="create_replacement_orders" type="object" string="Create Replacement Order" attrs="{'invisible':['|',('state','in',['draft','done','waiting_approval']),('type','not in','sale')]}" />-->
                 <field name="approval_state" invisible="1"/>
+                <button name="action_submit_to_approval" type="object" string="Submit For Review" attrs="{'invisible': [('state','!=','draft')]}" class="btn-primary" />
+                <button name="action_confirm" type="object" string="Confirm" attrs="{'invisible': ['|', ('state','!=','waiting_approval'), ('approval_state','!=','approved')]}" class="btn-primary" />
                 <button name="action_to_approve" type="object" string="Approve" attrs="{'invisible': [('approval_state','!=','waiting_approval')]}" class="btn-primary"/>
                 <button name="action_to_reject" type="object" string="Reject" attrs="{'invisible': [('approval_state','!=','waiting_approval')]}" class="btn-primary"/>
             </xpath>

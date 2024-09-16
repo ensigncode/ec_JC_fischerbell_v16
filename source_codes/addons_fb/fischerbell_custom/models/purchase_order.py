@@ -220,6 +220,29 @@ class PurchaseOrder(models.Model):
 			            'message': _('Sequence already created with Partner:  %s - %s'%(purchase.partner_id.name,purchase.partner_id.code)),
 			        })
 
+
+	@api.onchange('partner_id')
+	def _onchange_partner_id(self):
+		landed_cost_product = self.env['product.product'].search([('landed_cost_ok', '=', True)], limit=1)
+		if self.partner_id.currency_type == 'overseas':
+			if not landed_cost_product:
+				raise UserError("Please create a freight charge product.")
+			else:
+				self.order_line = [(0, 0, {
+					'product_id': landed_cost_product.id,
+					'product_qty': 1.0,
+					'price_unit': landed_cost_product.standard_price,
+					'name': landed_cost_product.name,
+					'date_planned': fields.Date.today(),
+					'product_uom': landed_cost_product.uom_id.id,
+				})]
+		else:
+			# Remove the landed cost product from the order lines if it's there
+			self.order_line = [(5, 0, 0)] + [
+				(1, line.id, {}) for line in self.order_line
+				if line.product_id != landed_cost_product
+			]
+
 class PurchaseOrderLine(models.Model):
 	_inherit = "purchase.order.line"
 
