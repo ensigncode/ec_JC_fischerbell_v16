@@ -9,9 +9,9 @@
             <xpath expr="//group[@name='sale_shipping']" position="attributes">
                 <attribute name="invisible">1</attribute>
             </xpath>
-             <xpath expr="//header//button[@name='action_confirm'][2]" position="attributes">
+             <!-- <xpath expr="//header//button[@name='action_confirm'][2]" position="attributes">
                  <attribute name="string">Submit For Review</attribute>
-            </xpath>
+            </xpath> -->
              <xpath expr="//field[@name='date_order']" position="after">
                 <field name="submited_date" readonly="1"/>
             </xpath>
@@ -79,11 +79,22 @@
                 <field name="delivery_option"/>
                 <field name="len_note" invisible="1"/>
             </xpath>
+            <xpath expr="//header//button[@name='action_confirm'][1]" position="attributes">
+                 <attribute name="attrs">{'invisible': [('state', 'not in', ['sent', 'approve'])]}</attribute>
+            </xpath>
+            <xpath expr="//header//button[@name='action_cancel']" position="attributes">
+                 <attribute name="attrs">{'invisible': ['|', ('state', 'not in', ['draft', 'sent','sale', 'approve']), ('id', '=', False)]}</attribute>
+            </xpath>
+            <xpath expr="//header//button[@name='action_confirm'][2]" position="attributes">
+                 <attribute name="invisible">1</attribute>
+            </xpath>
             <xpath expr="//button[@name='action_quotation_send']" position="before">
 <!--                <button name="create_exchange_order" type="object" string="Create Exchange Order" attrs="{'invisible':['|',('state','in',['draft','done','waiting_approval']),('type','not in','sale')]}" />-->
                 <button name="create_loan_orders" type="object" string="Create Loan Order" attrs="{'invisible':['|',('state','in',['draft','done','waiting_approval']),('type','not in','sale')]}" />
 <!--                <button name="create_replacement_orders" type="object" string="Create Replacement Order" attrs="{'invisible':['|',('state','in',['draft','done','waiting_approval']),('type','not in','sale')]}" />-->
                 <field name="approval_state" invisible="1"/>
+                <button name="action_submit_to_approval" type="object" string="Submit For Review" attrs="{'invisible': [('state','!=','draft')]}" class="btn-primary" />
+                <button name="action_confirm" type="object" string="Confirm" attrs="{'invisible': ['|', ('state','!=','waiting_approval'), ('approval_state','!=','approved')]}" class="btn-primary" />
                 <button name="action_to_approve" type="object" string="Approve" attrs="{'invisible': [('approval_state','!=','waiting_approval')]}" class="btn-primary"/>
                 <button name="action_to_reject" type="object" string="Reject" attrs="{'invisible': [('approval_state','!=','waiting_approval')]}" class="btn-primary"/>
             </xpath>
@@ -142,6 +153,19 @@
             <xpath expr="//field[@name='origin']" position="before">
                 <field name="scheduled_delivery_date" />
                 <field name="requested_delivery_date" />
+            </xpath>
+            <xpath expr="//button[@name='action_cancel']" position="before">
+                <button name="create_sequance_contact" string="Financial Approval" type="object" 
+                        class="btn-primary"/>
+            </xpath>
+            <xpath expr="//field[@name='order_line']//tree//field[@name='price_subtotal']" position="after">
+                <field name="approval_state" readonly="1"/>
+                <button name="%(fischerbell_custom.action_request_sale_line_price_wizard)d" 
+                type="action" class="oe_highlight" string="Update Price"
+                groups="sales_team.group_sale_manager" attrs="{'invisible':['|',('state','not in',('draft','sent')),('approval_state','in',('approved','pending'))]}"/>
+            </xpath>
+            <xpath expr="//field[@name='order_line']//tree//field[@name='price_unit']" position="attributes">
+                <attribute name="readonly">True</attribute>
             </xpath>
         </field>
     </record>
@@ -287,6 +311,16 @@
         <field name="name">sale.order.analysis.report.tree.view</field>
         <field name="model">sale.order.line</field>
         <field name="arch" type="xml">
+            <header>
+                <button name="update_request_price" type="object" 
+                            class="btn-primary" string="Approve Request"
+                            attrs="{'invisible':[('approval_state','!=','pending')]}"
+                            groups="account.group_account_manager"/>
+                <button name="reject_request" type="object" 
+                            class="btn-primary" string="Reject Request"
+                            attrs="{'invisible':[('approval_state','!=','pending')]}"
+                            groups="account.group_account_manager"/>
+            </header>
             <tree string="Sales Order Lines" create="false">
                 <field name="order_id"/>
                 <field name="product_id" string="Product"/>
@@ -299,6 +333,9 @@
                 <field name="product_uom" string="Unit of Measure" groups="uom.group_uom"/>
                 <field name="last_invoice_date" />
                 <field name="last_invoice_price" />
+                <field name="price_unit"/>
+                <field name="request_price" groups="account.group_account_manager"/>
+                <field name="approval_state"/>
                 <field name="price_subtotal" sum="Total" widget="monetary"/>
                 <field name="currency_id" invisible="1"/>
             </tree>
@@ -344,4 +381,56 @@
             <xpath expr="//div[hasclass('badge') and hasclass('rounded-pill') and hasclass('text-bg-success')  and hasclass('float-end') and hasclass('border-0')]" position="replace"/>
         </field>
     </record>
+    
+    <record id="sale_order_line_form_inherit_chater" model="ir.ui.view">
+        <field name="name">sale.order.line.form.inherit.chatter</field>
+        <field name="model">sale.order.line</field>
+        <field name="inherit_id" ref="sale.sale_order_line_view_form_readonly"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form/sheet" position="before">
+                <header>
+                    <field name="is_requested" invisible="1"/>
+                    <button name="update_request_price" type="object" class="btn-primary" string="Approve Request"
+                            groups="account.group_account_manager" attrs="{'invisible':['|',('approval_state','in',('approved','rejected')),('is_requested','=',False)]}"/>
+                    <button name="reject_request" type="object" 
+                            class="btn-primary" string="Reject Request"
+                            attrs="{'invisible':['|',('approval_state','in',('approved','rejected')),('is_requested','=',False)]}"
+                            groups="account.group_account_manager"/>
+                <field name="approval_state" widget="statusbar" statusbar_visible="pending,approved,rejected"/>
+                </header>
+            </xpath>
+            <xpath expr="//field[@name='price_unit']" position="after">
+                <field name="request_price" groups="account.group_account_manager"/>
+                <field name="approval_state"/>
+            </xpath>
+            <xpath expr="//form/sheet" position="after">
+                <div class="oe_chatter">
+	                <field name="message_follower_ids"/>
+	                <field name="activity_ids"/>
+	                <field name="message_ids"/>
+                </div>
+            </xpath>
+        </field>
+     </record>
+
+    <record id="fischerbell_action_order_update_request" model="ir.actions.act_window">
+        <field name="name">Update Request</field>
+        <field name="res_model">sale.order.line</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{'create':0,'edit':0}</field>
+        <field name="domain">[('is_requested','=',True),('is_request_updated','=',False)]</field>
+        <field name="target">current</field>
+    </record>
+    
+    <menuitem id="fischerbell_menu_sale_main_request"
+        name="Update Requests"
+        groups="account.group_account_manager"
+        parent="sale.sale_menu_root"
+        sequence="40"/>
+    
+    <menuitem id="fischerbell_menu_sale_price_update_request"
+        name="Price Update Requests"
+        action="fischerbell_custom.fischerbell_action_order_update_request"
+        parent="fischerbell_custom.fischerbell_menu_sale_main_request"
+        sequence="1"/>
 </odoo>

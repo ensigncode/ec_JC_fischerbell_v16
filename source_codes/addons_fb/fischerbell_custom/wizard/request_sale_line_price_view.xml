@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="request_sale_line_price_wizard_view_form" model="ir.ui.view">
+            <field name="name">request.sale.line.price.view.form</field>
+            <field name="model">request.sale.line.price</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <group>
+	                            <field name="old_price" readonly="1"/>
+                            </group>
+                            <group>
+                                <field name="requested_price"/>
+                            </group>
+                        </group>
+                    </sheet>
+                    <footer>
+                        <button name="action_request_price" type="object" class="btn-primary" string="Request Price"/>
+                        <button string="Cancel" class="btn-default" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_request_sale_line_price_wizard" model="ir.actions.act_window">
+            <field name="name">Request Sale Line Price</field>
+            <field name="res_model">request.sale.line.price</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="fischerbell_custom.request_sale_line_price_wizard_view_form"/>
+            <field name="target">new</field>
+        </record>
+
+    </data>
+</odoo>
