@@ -80,7 +80,7 @@
             </xpath>
             <xpath expr="//page[@name='purchase']" position="before">
                 <page string="Sale History">
-                    <field name="sales_line_ids">
+                    <field name="sale_lines_ids">
                         <tree string="Sale History">
                             <field name="create_date" string="Last Sales" />
                             <field name="order_partner_id" string="Customer" />
@@ -92,7 +92,7 @@
             </xpath>
             <xpath expr="//page[@name='purchase']" position="after">
                 <page string="Purchase History">
-                    <field name="purchase_line_ids">
+                    <field name="purchase_lines_ids">
                         <tree string="Purchase History">
                             <field name="date_order" string="Last Purchase" />
                             <field name="partner_id" string="Supplier" />
