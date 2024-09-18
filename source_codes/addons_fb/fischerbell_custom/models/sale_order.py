@@ -11,6 +11,7 @@ from odoo.fields import Command
 import re
 import itertools
 import pytz
+from collections import defaultdict  # Add this import
 
 READONLY_FIELD_STATES = {
 	state: [('readonly', True)]
@@ -276,6 +277,42 @@ class SaleOrder(models.Model):
 	def action_to_approve(self):
 		self.submited_date = date.today()
 		self.approval_order()
+		for record in self:
+			location_ids = []
+			# Find lines where the product's available quantity is less than or equal to 0
+			lines_not_invoiced = record.order_line.filtered(lambda line: line.product_id.qty_available <= 0.0)
+			# Group lines by their location (using a dictionary)
+			lines_by_location = defaultdict(list)
+			for lines in lines_not_invoiced:
+				quant_ids = self.env['stock.quant'].search(
+					[('product_id', '=', lines.product_id.id), ('reserved_quantity', '=', 0.0)], limit=1)
+				if quant_ids:
+					location = quant_ids.location_id
+					location_ids.append(location.name)
+					# Group lines by location
+					lines_by_location[location].append(lines)
+
+			# Iterate through the grouped lines by location and create pickings
+			for location, lines_group in lines_by_location.items():
+				picking_type = self.env['stock.picking.type'].search([('code', '=', 'internal')], limit=1)
+				picking = self.env['stock.picking'].create({
+					'picking_type_id': picking_type.id,
+					'partner_id': record.partner_id.id,
+					'origin': record.name,
+					'sale_id': record.id,
+					'location_id': location.id,
+					'location_dest_id': record.warehouse_id.wh_pack_stock_loc_id.id,
+					'move_ids_without_package': [(0, 0, {
+						'name': line.product_id.name,
+						'product_id': line.product_id.id,
+						'product_uom_qty': line.product_uom_qty,
+						'product_uom': line.product_uom.id,
+						'location_id': location.id,
+						'location_dest_id': record.warehouse_id.wh_pack_stock_loc_id.id
+					}) for line in lines_group]  # Grouped lines per location
+				})
+				# Confirm and validate the picking
+				picking.action_confirm()
 		# if not 'vendor_wizard' in self._context:
 		# 	line_ids = []
 		# 	for rec in self.order_line:
