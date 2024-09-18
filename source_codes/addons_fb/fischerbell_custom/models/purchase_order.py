@@ -72,11 +72,12 @@ class PurchaseOrder(models.Model):
 		for po in self:
 			po.is_default_terms = True
 
-
 	@api.model
 	def create(self, vals):
+		if 'name' not in vals or vals['name'] == 'New':
+			vals['name'] = self.env['ir.sequence'].next_by_code('purchase.order.rfq')
 		res = super(PurchaseOrder, self).create(vals)
-		default_terms = self.env['purchase.order'].search([('is_default_terms','=',True)], limit=1).notes
+		default_terms = self.env['purchase.order'].search([('is_default_terms', '=', True)], limit=1).notes
 		if default_terms:
 			vals['notes'] = default_terms
 		return res
@@ -158,18 +159,38 @@ class PurchaseOrder(models.Model):
 				order.partner_note = config_note.note
 
 
-	def button_confirm(self):
-		# if self.request_delivery_date and self.estimated_delivery_date and self.mail_sended:
+	# def button_confirm(self):
+	# 	# if self.request_delivery_date and self.estimated_delivery_date and self.mail_sended:
+	# 	if self.mail_sended:
+	# 		res = super().button_confirm()
+	# 		for order in self:
+	# 			if order.state == 'purchase':
+	# 				order.write({'name': self.env['ir.sequence'].next_by_code('purchase.order.po')})
+	# 				if order.picking_ids:
+	# 					for pick in order.picking_ids:
+	# 						pick.user = self.env.user.id
+	# 		return res
+	# 	else:
+	# 		if not self.mail_sended:
+	# 			raise ValidationError("Please Send Email First")
+
+	def button_confirm_wizard(self):
+	# if self.request_delivery_date and self.estimated_delivery_date and self.mail_sended:
 		if self.mail_sended:
-			res = super().button_confirm()
-			for order in self:
-				if order.picking_ids:
-					for pick in order.picking_ids:
-						pick.user = self.env.user.id
-			return res
+			self.ensure_one()
+			return {
+				'type': 'ir.actions.act_window',
+				'name': 'Invoice Policy',
+				'view_mode': 'form',
+				'res_model': 'invoice.policy.wizard',
+				'domain': [],
+				'context': {},
+				'target': 'new',
+			}
 		else:
 			if not self.mail_sended:
 				raise ValidationError("Please Send Email First")
+
 
 	def _prepare_picking(self):
 		res = super(PurchaseOrder, self)._prepare_picking()

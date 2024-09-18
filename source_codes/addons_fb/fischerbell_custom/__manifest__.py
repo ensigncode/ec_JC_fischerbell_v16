@@ -57,6 +57,7 @@
         'wizard/followup_manual_reminder_views.xml',
 	    'wizard/land_cost_wizard_view.xml',
         'wizard/request_sale_line_price_view.xml',
+        'wizard/invoice_policy_views.xml',
         'views/account_move_views.xml',
         'views/fischerbell_aging_report_views.xml',
         'views/fischerbell_configuration_note_views.xml',

@@ -23,25 +23,22 @@
         </function>
 
         <!-- Sequences for purchase.order -->
-        <function name = "write" model = "ir.model.data">
-            <function name = "search" model = "ir.model.data">
-                <value eval = "[('module', '=', 'purchase'),('name','=','seq_purchase_order')]"/>
-            </function>
-            <value eval =" {'noupdate': False} "/>
-        </function>
-        <record id="purchase.seq_purchase_order" model="ir.sequence">
-            <field name="name">Purchase Order</field>
-            <field name="code">purchase.order</field>
+         <record id="seq_purchase_rfq" model="ir.sequence">
+            <field name="name">RFQ Sequence</field>
+            <field name="code">purchase.order.rfq</field>
+            <field name="prefix">RFQ/%(year)s/</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <!-- Sequence for Purchase Order -->
+        <record id="seq_purchase_order" model="ir.sequence">
+            <field name="name">Purchase Order Sequence</field>
+            <field name="code">purchase.order.po</field>
             <field name="prefix">PO/%(year)s/</field>
             <field name="padding">5</field>
             <field name="company_id" eval="False"/>
         </record>
-        <function name = "write" model = "ir.model.data">
-            <function name = "search" model = "ir.model.data">
-                <value eval = "[('module', '=', 'purchase'),('name','=','seq_purchase_order')]"/>
-            </function>
-            <value eval =" {'noupdate': False} "/>
-        </function>
         <record id="credit_not_seq" model="ir.sequence">
               <field name="name">Customer Credit Seq</field>
               <field name="code">credit_note_seq</field>
