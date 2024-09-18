@@ -17,6 +17,10 @@ class ProductTemplate(models.Model):
 	min_price = fields.Float('Min Sales Price')
 	sales_line_ids = fields.One2many('sale.order.line', 'product_template_id', 'Sales Line')
 	purchase_line_ids = fields.One2many('purchase.order.line', 'product_template_id', 'Purchase Line Id')
+	rfq_line_ids = fields.One2many(
+		'purchase.order.line', 'product_template_id', string='RFQ Line Id',
+		domain=[('state', 'in', ['draft', 'sent'])]
+	)
 	product_brand_id = fields.Many2one('fischerbell.product.brand', 'Brand')
 	use_customer_sku = fields.Boolean('Use Customer SKU', default=True)
 	use_bp_code = fields.Boolean('Use BP code', default=True)
