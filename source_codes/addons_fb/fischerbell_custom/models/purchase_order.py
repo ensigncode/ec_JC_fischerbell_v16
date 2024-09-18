@@ -233,6 +233,7 @@ class PurchaseOrder(models.Model):
 			            'message': _('Contact create with this Sequence: %s'%(partner_id.code)),
 			            'type': 'success',
 			        })
+				self.env.user.notify_success(_('Contact create with this Sequence: %s'%(partner_id.code)))
 				purchase.write({'partner_id':partner_id.id})
 			else:
 				self.env['bus.bus']._sendone(channel, 'simple_notification', {
