@@ -16,7 +16,9 @@ class ProductTemplate(models.Model):
 	max_price = fields.Float('Max Sales Price')
 	min_price = fields.Float('Min Sales Price')
 	sales_line_ids = fields.One2many('sale.order.line', 'product_template_id', 'Sales Line')
+	sale_lines_ids = fields.Many2many('sale.order.line','Sale Lines', compute ='_compute_lines')
 	purchase_line_ids = fields.One2many('purchase.order.line', 'product_template_id', 'Purchase Line Id')
+	purchase_lines_ids = fields.Many2many('purchase.order.line','Purchase Lines', compute ='_compute_lines')
 	product_brand_id = fields.Many2one('fischerbell.product.brand', 'Brand')
 	use_customer_sku = fields.Boolean('Use Customer SKU', default=True)
 	use_bp_code = fields.Boolean('Use BP code', default=True)
@@ -66,6 +68,12 @@ class ProductTemplate(models.Model):
 					template.standard_price = template.product_variant_ids.standard_price
 				for template in (self - unique_variants):
 					template.standard_price = 0.0
+	
+	@api.depends('purchase_line_ids','purchase_line_ids.state','sales_line_ids','sales_line_ids.state')
+	def _compute_lines(self):
+		for product in self:
+			product.purchase_lines_ids = [(6,0,product.purchase_line_ids.filtered(lambda x:x.state == 'purchase').ids)]
+			product.sale_lines_ids = [(6,0,product.sales_line_ids.filtered(lambda x:x.state == 'sale').ids)]
 
 
 	def generate_qr_code(self, data):
