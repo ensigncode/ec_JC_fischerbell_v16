@@ -173,7 +173,10 @@ class PurchaseOrder(models.Model):
 
 	def _prepare_picking(self):
 		res = super(PurchaseOrder, self)._prepare_picking()
-		res.update({"artwork_attachment_ids": [(6, 0, self.artwork_attachment_ids.ids)]})
+		res.update({
+			"scheduled_date": self.estimated_delivery_date,
+			"artwork_attachment_ids": [(6, 0, self.artwork_attachment_ids.ids)]
+		})
 		return res
 
 	def check_planned_date(self, order_date_planned):

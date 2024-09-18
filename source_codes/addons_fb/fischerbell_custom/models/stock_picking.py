@@ -67,6 +67,20 @@ class Picking(models.Model):
 				picking.scheduled_date =  picking.sale_id.scheduled_delivery_date or fields.Datetime.now()
 			else:
 				moves_dates = picking.move_ids.filtered(lambda move: move.state not in ('done', 'cancel')).mapped('date')
+			if picking.purchase_id:
+				if picking.purchase_id and picking.purchase_id.estimated_delivery_date:
+					picking.scheduled_date = picking.purchase_id.estimated_delivery_date
+				else:
+					picking.scheduled_date = fields.Datetime.now()
+			elif picking.sale_id:
+				# picking.scheduled_date =  picking.sale_id.scheduled_delivery_date or fields.Datetime.now()
+				if picking.purchase_id and picking.purchase_id.estimated_delivery_date:
+					picking.scheduled_date = picking.purchase_id.estimated_delivery_date or fields.Datetime.now()
+				else:
+					picking.scheduled_date = min(moves_dates, default=picking.scheduled_date or fields.Datetime.now())
+			else:
+				moves_dates = picking.move_ids.filtered(lambda move: move.state not in ('done', 'cancel')).mapped(
+					'date')
 				if picking.move_type == 'direct':
 					picking.scheduled_date = min(moves_dates, default=picking.scheduled_date or fields.Datetime.now())
 				else:
