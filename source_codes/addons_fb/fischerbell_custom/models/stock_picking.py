@@ -63,18 +63,25 @@ class Picking(models.Model):
 	@api.depends('move_ids.state', 'move_ids.date', 'move_type')
 	def _compute_scheduled_date(self):
 		for picking in self:
-			moves_dates = picking.move_ids.filtered(lambda move: move.state not in ('done', 'cancel')).mapped('date')
-			if picking.sale_id:
-				# picking.scheduled_date =  picking.sale_id.scheduled_delivery_date or fields.Datetime.now()
+			if picking.purchase_id:
 				if picking.purchase_id and picking.purchase_id.estimated_delivery_date:
 					picking.scheduled_date = picking.purchase_id.estimated_delivery_date
 				else:
+					picking.scheduled_date = fields.Datetime.now()
+			elif picking.sale_id:
+				# picking.scheduled_date =  picking.sale_id.scheduled_delivery_date or fields.Datetime.now()
+				if picking.purchase_id and picking.purchase_id.estimated_delivery_date:
+					picking.scheduled_date = picking.purchase_id.estimated_delivery_date or fields.Datetime.now()
+				else:
 					picking.scheduled_date = min(moves_dates, default=picking.scheduled_date or fields.Datetime.now())
 			else:
+				moves_dates = picking.move_ids.filtered(lambda move: move.state not in ('done', 'cancel')).mapped(
+					'date')
 				if picking.move_type == 'direct':
 					picking.scheduled_date = min(moves_dates, default=picking.scheduled_date or fields.Datetime.now())
 				else:
 					picking.scheduled_date = max(moves_dates, default=picking.scheduled_date or fields.Datetime.now())
+
 
 	def action_is_default_terms(self):
 		picking = self.env['stock.picking'].search([('is_default_terms','=',True)], limit=1)
