@@ -117,6 +117,7 @@ class SaleOrder(models.Model):
 	requested_delivery_date = fields.Datetime(string="Requested Delivery Date")
 	no_enough_stock = fields.Boolean(compute='_compute_order_stock')
 	over_credit_limit = fields.Boolean(compute='_compute_credit_limit', store=True)
+	send_mail_credit_limit = fields.Boolean(string='Send Mail Credit Limit')
 	submited_date = fields.Date('Submited Date')
 	artwork_attachment_ids = fields.Many2many('ir.attachment',string="ArtWork")
 	delivery_instruction = fields.Html(string="Delivery Instruction")
