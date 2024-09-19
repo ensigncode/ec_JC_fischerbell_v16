@@ -16,6 +16,7 @@
 <!--                <field name="partner_seq"/>-->
                 <field name="e_invoice_email" widget="email"/>
                 <field name="soa_email" widget="email"/>
+                <field name="currency_id"/>
             </xpath>
             <xpath expr="//field[@name='vat']" position="after">
                 <field name="no_delivery_days_selection"/>
@@ -72,6 +73,10 @@
              <xpath expr="//field[@name='category_id']" position="after">
                 <field name="type_of_invoice"/>
             </xpath>
+            <xpath expr="//span[@name='address_name']" position="before">
+                <field name="is_contact_created" invisible="1"/>
+                <field name="code" readonly="1"/>
+            </xpath>
             <xpath expr="//field[@name='zip']" position="attributes">
                 <attribute name="placeholder">Postal Code</attribute>
             </xpath>
@@ -103,6 +108,12 @@
                 <attribute name="invisible">1</attribute>
             </xpath>
             <xpath expr="//field[@name='postal_ids']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+             <xpath expr="//field[@name='is_driver']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='is_forwarder']" position="attributes">
                 <attribute name="invisible">1</attribute>
             </xpath>
         </field>
