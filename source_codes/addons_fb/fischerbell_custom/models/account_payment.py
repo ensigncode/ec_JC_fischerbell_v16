@@ -25,3 +25,10 @@ class AccountPayment(models.Model):
 		return res
 
 
+
+
+class AccountPaymentTerm(models.Model):
+    _inherit = 'account.payment.term'
+
+    is_customer = fields.Boolean(string="For Customer")
+    is_vendor = fields.Boolean(string="For Vendor")

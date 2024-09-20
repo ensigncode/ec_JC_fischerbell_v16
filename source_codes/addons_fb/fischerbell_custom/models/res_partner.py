@@ -4,92 +4,111 @@
 from odoo import api,fields, models, _
 
 class Partner(models.Model):
-	_inherit = "res.partner"
+    _inherit = "res.partner"
 
-	attn_to = fields.Char('Attn To')
-	type = fields.Selection(selection_add=[('followup', 'Pickup Address'),('dept_staff','Department Staff')], copy=True)
-	batch_number = fields.Char('Batch Number')
-	customer_code = fields.Char('Customer Code', store=True)
-	fax = fields.Char('Fax')
-	# customer_sku = fields.Char('Customer SKU')
-	supplier_code = fields.Char('Supplier Code')
-	currency_type = fields.Selection([
-		('local', 'Local'),
-		('overseas', 'Overseas'),
-		('no', 'No')
-	], string='Currency Type')
-	dept_code = fields.Char('Dept Code')
-	product_tmpl_id = fields.Many2one('product.template', 'Product Template')
-	user_training_ids = fields.One2many('fischerbell.user.training', 'partner_id', string="User Training")
-	platform_name = fields.Char(string='Platform Name')
-	platform_login = fields.Char(string='Login')
-	platform_pwd = fields.Char(string='Password')
-	delivery_instruction = fields.Html(string="Delivery Instruction")
-	invoice_instruction = fields.Html(string="Invoice Instruction")
-	credit_limit = fields.Float(string='Credit Limit')
-	type_of_invoice = fields.Selection(selection=[('e_invoice', 'E-Invoice'), ('paper_invoice', 'Paper Invoice')],
-	    string='Type Of Invoice', required=True)
-	partner_seq = fields.Char('Customer Code', copy=False, default=lambda self: _('New'))
-	e_invoice_email = fields.Char("E-Invoice Email")
-	soa_email = fields.Char("Soa Email")
+    attn_to = fields.Char('Attn To')
+    type = fields.Selection(selection_add=[('followup', 'Pickup Address'),('dept_staff','Department Staff')], copy=True)
+    batch_number = fields.Char('Batch Number')
+    customer_code = fields.Char('Customer Code', store=True)
+    fax = fields.Char('Fax')
+    # customer_sku = fields.Char('Customer SKU')
+    supplier_code = fields.Char('Supplier Code')
+    currency_type = fields.Selection([
+        ('local', 'Local'),
+        ('overseas', 'Overseas'),
+        ('no', 'No')
+    ], string='Currency Type')
+    dept_code = fields.Char('Dept Code')
+    product_tmpl_id = fields.Many2one('product.template', 'Product Template')
+    user_training_ids = fields.One2many('fischerbell.user.training', 'partner_id', string="User Training")
+    platform_name = fields.Char(string='Platform Name')
+    platform_login = fields.Char(string='Login')
+    platform_pwd = fields.Char(string='Password')
+    delivery_instruction = fields.Html(string="Delivery Instruction")
+    invoice_instruction = fields.Html(string="Invoice Instruction")
+    credit_limit = fields.Float(string='Credit Limit')
+    type_of_invoice = fields.Selection(selection=[('e_invoice', 'E-Invoice'), ('paper_invoice', 'Paper Invoice')],
+        string='Type Of Invoice', required=True)
+    partner_seq = fields.Char('Customer Code', copy=False, default=lambda self: _('New'))
+    e_invoice_email = fields.Char("E-Invoice Email")
+    soa_email = fields.Char("Soa Email")
 
-	no_delivery_days_selection = fields.Selection([('days', 'Days'), ('date', 'By Date')], string="Delivery Restriction")
-	no_delivery_days = fields.Selection([
-		('0', 'Monday'),
-		('1', 'Tuesday'),
-		('2', 'Wednesday'),
-		('3', 'Thursday'),
-		('4', 'Friday'),
-		('5', 'Saturday'),
-		('6', 'Sunday')], string="Delivery Restriction")
-	delivery_restriction_start_date = fields.Date(string="Delivery Restriction Start")
-	delivery_restriction_end_date = fields.Date(string="Delivery Restriction End")
-	district_code = fields.Char(string='District Code', compute='_compute_distrct_code', store=True)
-	code = fields.Char(string = 'Sequence', readonly=True)
-	is_contact_created = fields.Boolean(string = 'Is Contact Created')
-
-
-
-	@api.onchange('property_purchase_currency_id')
-	def _onchange_currency_type(self):
-		self.currency_type = 'no'
-		company = self.env['res.company'].search([], limit=1)
-		if self.property_purchase_currency_id and company and self.property_purchase_currency_id == company.currency_id:
-			self.currency_type = 'local'
-		elif self.property_purchase_currency_id and company and self.property_purchase_currency_id != company.currency_id:
-			self.currency_type = 'overseas'
-		else:
-			self.currency_type = 'no'
-
-	@api.model
-	def create(self, vals):
-		if vals.get('parent_id'):
-			parent_id = self.browse(vals.get('parent_id'))
-			vals['customer_code'] = parent_id.customer_code
-		res = super(Partner, self).create(vals)
-		return res
+    no_delivery_days_selection = fields.Selection([('days', 'Days'), ('date', 'By Date')], string="Delivery Restriction")
+    no_delivery_days = fields.Selection([
+        ('0', 'Monday'),
+        ('1', 'Tuesday'),
+        ('2', 'Wednesday'),
+        ('3', 'Thursday'),
+        ('4', 'Friday'),
+        ('5', 'Saturday'),
+        ('6', 'Sunday')], string="Delivery Restriction")
+    delivery_restriction_start_date = fields.Date(string="Delivery Restriction Start")
+    delivery_restriction_end_date = fields.Date(string="Delivery Restriction End")
+    district_code = fields.Char(string='District Code', compute='_compute_distrct_code', store=True)
+    code = fields.Char(string = 'Sequence', readonly=True)
+    is_contact_created = fields.Boolean(string = 'Is Contact Created')
+    # property_payment_term_id = fields.Many2one('account.payment.term', company_dependent=True,
+    #     string='Customer Payment Terms',
+    #     domain="[('company_id', 'in', [current_company_id, False])]",
+    #     help="This payment term will be used instead of the default one for sales orders and customer invoices")
+    # property_supplier_payment_term_id = fields.Many2one('account.payment.term', company_dependent=True,
+    #     string='Vendor Payment Terms',
+    #     domain="[('company_id', 'in', [current_company_id, False])]",
+    #     help="This payment term will be used instead of the default one for purchase orders and vendor bills")
 
 
-	def write(self, vals):
-		if vals.get('customer_code'):
-			for customer in self.child_ids:
-				customer.customer_code = vals.get('customer_code')
-		res = super().write(vals)
-		return res
-	
-	@api.depends('zip')
-	def _compute_distrct_code(self):
-		for rec in self:
-			if rec.zip:
-				district_code = self.env['postal.postal'].search([('postal_code_ids.code','in',[rec.zip[:2]])])
-				rec.write({'district_code':district_code and district_code.postal_district or ''})
-	
-	def unlink(self):
-		for rec in self:
-			partner_id = rec.search([('name','=',rec.name),('email','=',rec.email),
-									('phone','=',rec.phone),('mobile','=',rec.mobile),
-									('is_contact_created','=',True)])
-			if partner_id:
-				partner_id.write({'is_contact_created':False})
-		return super().unlink()
 
+    @api.onchange('property_purchase_currency_id')
+    def _onchange_currency_type(self):
+        self.currency_type = 'no'
+        company = self.env['res.company'].search([], limit=1)
+        if self.property_purchase_currency_id and company and self.property_purchase_currency_id == company.currency_id:
+            self.currency_type = 'local'
+        elif self.property_purchase_currency_id and company and self.property_purchase_currency_id != company.currency_id:
+            self.currency_type = 'overseas'
+        else:
+            self.currency_type = 'no'
+
+    @api.model
+    def create(self, vals):
+        if vals.get('parent_id'):
+            parent_id = self.browse(vals.get('parent_id'))
+            vals['customer_code'] = parent_id.customer_code
+        res = super(Partner, self).create(vals)
+        return res
+
+    def write(self, vals):
+        if vals.get('customer_code'):
+            for customer in self.child_ids:
+                customer.customer_code = vals.get('customer_code')
+        res = super().write(vals)
+        return res
+
+    @api.depends('zip')
+    def _compute_distrct_code(self):
+        for rec in self:
+            if rec.zip:
+                district_code = self.env['postal.postal'].search([('postal_code_ids.code','in',[rec.zip[:2]])])
+                rec.write({'district_code':district_code and district_code.postal_district or ''})
+
+    def unlink(self):
+        for rec in self:
+            partner_id = rec.search([('name','=',rec.name),('email','=',rec.email),
+                                    ('phone','=',rec.phone),('mobile','=',rec.mobile),
+                                    ('is_contact_created','=',True)])
+            if partner_id:
+                partner_id.write({'is_contact_created':False})
+        return super().unlink()
+
+    @api.model
+    def default_get(self, fields):
+        res = super(Partner, self).default_get(fields)
+        # Get the payment terms based on the context
+        is_customer_payment_term_id = self.env['account.payment.term'].search([('is_customer', '=', True)], limit=1).id
+        is_vendor_payment_term_id = self.env['account.payment.term'].search([('is_vendor', '=', True)], limit=1).id
+        search_mode = self._context.get('res_partner_search_mode')
+        if search_mode == 'customer':
+            res['property_payment_term_id'] = is_customer_payment_term_id
+        if search_mode == 'supplier':
+            res['property_supplier_payment_term_id'] = is_vendor_payment_term_id
+        return res
