@@ -302,14 +302,14 @@ class SaleOrder(models.Model):
 					'origin': record.name,
 					'sale_id': record.id,
 					'location_id': location.id,
-					'location_dest_id': record.warehouse_id.wh_pack_stock_loc_id.id,
+					'location_dest_id': record.warehouse_id.lot_stock_id.id,
 					'move_ids_without_package': [(0, 0, {
 						'name': line.product_id.name,
 						'product_id': line.product_id.id,
 						'product_uom_qty': line.product_uom_qty,
 						'product_uom': line.product_uom.id,
 						'location_id': location.id,
-						'location_dest_id': record.warehouse_id.wh_pack_stock_loc_id.id
+						'location_dest_id': record.warehouse_id.lot_stock_id.id
 					}) for line in lines_group]  # Grouped lines per location
 				})
 				# Confirm and validate the picking
