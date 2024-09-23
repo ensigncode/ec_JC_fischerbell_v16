@@ -126,6 +126,7 @@ class SaleOrder(models.Model):
 		selection=[('partial_delivery', 'Partial Delivery'),
 			('full_delivery', 'Wait for the receival of all goods')],
 		string="Delivery Option", default='partial_delivery')
+	collection = fields.Selection(selection_add=[('tbc', 'TBC')], default="tbc")
 
 	product_vendor_conf_ids = fields.One2many('product.vendor.conf','sale_id',string="Product Vendor Conf")
 
@@ -486,6 +487,17 @@ class SaleOrder(models.Model):
 			})    
 
 	def action_confirm(self):
+		if not self._context.get('from_button',False) and self.approval_state == 'approved':
+			self.ensure_one()
+			return {
+				'type': 'ir.actions.act_window',
+				'name': 'Invoice Policy',
+				'view_mode': 'form',
+				'res_model': 'invoice.policy.wizard',
+				'domain': [],
+				'context': {'is_sale':True},
+				'target': 'new',
+			}
 		# self.submited_date = date.today()
 		# for rec in self.order_line:
 		# 	# line_ids = self.order_line.filtered(lambda line:not line.product_template_id.seller_ids)
@@ -1261,15 +1273,19 @@ class SaleOrderLine(models.Model):
 										('rejected','Rejected')
 										], string="Approval", 
 										tracking=True, copy=False)
+	last_order_date = fields.Datetime('Last Order Date', compute='_compute_last_order_price')
+	last_sale_id = fields.Many2one('sale.order', string='Last Order', readonly=True, compute='_compute_last_order_price')
 
 
 	@api.depends('customer_id','product_id','state')
 	def _compute_last_order_price(self):
 		for price in self:
-			last_price = self.search([('id','!=', price._origin.id),('customer_id','=', price.customer_id.id),
-									('product_id','=',price.product_id.id ),('state','=','sale')],
+			last_order = self.search([('id','!=', price._origin.id),('customer_id','=', price.customer_id.id),
+									('product_id','=',price.product_id.id ),('state','=','sale'),('id','<',price._origin.id)],
 									limit=1, order='id desc')
-			price.last_price = last_price.price_unit  * last_price.product_uom_qty if last_price else 0
+			price.write(dict(last_price = last_order.price_unit  * last_order.product_uom_qty if last_order else 0,
+							last_order_date = last_order and last_order.order_id.date_order or False,
+							last_sale_id = last_order and last_order.order_id.id or False))
 
 	def _compute_get_last_invoice_date(self):
 		move_line_obj = self.env['account.move.line']

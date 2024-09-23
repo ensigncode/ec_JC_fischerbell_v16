@@ -19,6 +19,7 @@ class RequestSaleLinePrice(models.TransientModel):
         line_id = self.env["sale.order.line"].search([("id",'=',context.get("active_id"))])
         line_id.write({'request_price':self.requested_price,
                        'is_requested':True,
+                       'is_request_updated':False,
                        'approval_state':'pending'})
         user_id = self.env['res.users'].sudo().search([('groups_id', 'in', self.env.ref('account.group_account_manager').id)], limit = 1)
         self.env['mail.activity'].sudo().create({
