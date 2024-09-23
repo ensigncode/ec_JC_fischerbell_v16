@@ -184,7 +184,7 @@ class PurchaseOrder(models.Model):
 				'view_mode': 'form',
 				'res_model': 'invoice.policy.wizard',
 				'domain': [],
-				'context': {},
+				'context': {'is_purchase':True},
 				'target': 'new',
 			}
 		else:

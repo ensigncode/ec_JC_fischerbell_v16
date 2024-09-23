@@ -486,6 +486,17 @@ class SaleOrder(models.Model):
 			})    
 
 	def action_confirm(self):
+		if not self._context.get('from_button',False) and self.approval_state == 'approved':
+			self.ensure_one()
+			return {
+				'type': 'ir.actions.act_window',
+				'name': 'Invoice Policy',
+				'view_mode': 'form',
+				'res_model': 'invoice.policy.wizard',
+				'domain': [],
+				'context': {'is_sale':True},
+				'target': 'new',
+			}
 		# self.submited_date = date.today()
 		# for rec in self.order_line:
 		# 	# line_ids = self.order_line.filtered(lambda line:not line.product_template_id.seller_ids)
