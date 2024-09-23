@@ -33,6 +33,49 @@ class AccountMove(models.Model):
 	delivery_instruction = fields.Html(string="Delivery Instruction")
 	invoice_instruction = fields.Html(string="Invoice Instruction")
 
+	def _build_credit_warning_message(self, record, updated_credit):
+		# Super call to execute the parent method first
+		msg = super(AccountMove, self)._build_credit_warning_message(record, updated_credit)
+		partner_id = record.partner_id
+
+		# Check if the record is of model 'sale.order'
+		if record._name == 'sale.order' and not record.send_mail_credit_limit:
+			# Check if there's already an email sent for the partner's credit limit warning
+			send_mail_credit_limit_of_partner_id = self.env['sale.order'].search([
+				('partner_id', '=', record.partner_id.id),
+				('send_mail_credit_limit', '=', True)
+			], limit=1)
+
+			if partner_id.credit_limit and record.send_mail_credit_limit == False and not send_mail_credit_limit_of_partner_id:
+				# Calculate the remaining credit (20% of the credit limit)
+				twenty_percent_limit = partner_id.credit_limit * 0.20
+				remaining_credit = partner_id.credit_limit - twenty_percent_limit
+
+				# Check if updated credit is greater than the remaining credit
+				if updated_credit > remaining_credit:
+					record.send_mail_credit_limit = True
+					# Prepare email content
+					subject = _("Credit Limit Alert")
+					body = _(
+						"Dear %s,\n\n"
+						"Your current credit usage is reaching the limit. "
+						"Only 20%% of your credit limit remains.\n\n"
+						"Please make a payment to ensure your orders are processed without any interruptions.\n\n"
+						"Best regards,\nYour Company"
+					) % (partner_id.name)
+
+					# Send the email from the current user's email
+					mail_values = {
+						'subject': subject,
+						'body_html': '<p>%s</p>' % body.replace('\n', '<br>'),
+						'email_to': partner_id.email,
+						'email_from': self.env.user.email,  # Set the current user's email as the sender
+					}
+					self.env['mail.mail'].create(mail_values).send()
+
+		# Return the original message as well (optional)
+		return msg
+
 	    
 
 	@api.depends('posted_before', 'state', 'journal_id', 'date')

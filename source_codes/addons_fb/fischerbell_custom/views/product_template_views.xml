@@ -90,6 +90,17 @@
                     </field>
                 </page>
             </xpath>
+            <xpath expr="//page[@name='purchase']/group[@name='purchase']" position="before">
+                <field name="rfq_line_ids">
+                    <tree string="RFQ History">
+                        <field name="order_id" string="RFQ Order"/>
+                        <field name="date_order" string="Last Purchase"/>
+                        <field name="partner_id" string="Supplier"/>
+                        <field name="price_unit"/>
+                        <field name="price_total" string="Amount"/>
+                    </tree>
+                </field>
+            </xpath>
             <xpath expr="//page[@name='purchase']" position="after">
                 <page string="Purchase History">
                     <field name="purchase_lines_ids">
