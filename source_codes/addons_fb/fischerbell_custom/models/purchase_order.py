@@ -57,6 +57,7 @@ class PurchaseOrder(models.Model):
 	remarks_two = fields.Char('Remarks 2')
 	status = fields.Char('Status')
 	next_delivery_date = fields.Datetime('Next(Earliest) Delivery Date')
+	collection = fields.Selection(selection_add=[('tbc', 'TBC')], default="tbc")
 
 	def sc_approved(self):
 		for rec in self:

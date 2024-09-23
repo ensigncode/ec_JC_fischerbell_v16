@@ -126,6 +126,7 @@ class SaleOrder(models.Model):
 		selection=[('partial_delivery', 'Partial Delivery'),
 			('full_delivery', 'Wait for the receival of all goods')],
 		string="Delivery Option", default='partial_delivery')
+	collection = fields.Selection(selection_add=[('tbc', 'TBC')], default="tbc")
 
 	product_vendor_conf_ids = fields.One2many('product.vendor.conf','sale_id',string="Product Vendor Conf")
 

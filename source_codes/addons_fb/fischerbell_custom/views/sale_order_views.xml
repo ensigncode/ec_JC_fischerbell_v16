@@ -384,6 +384,17 @@
             <xpath expr="//div[hasclass('badge') and hasclass('rounded-pill') and hasclass('text-bg-success')  and hasclass('float-end') and hasclass('border-0')]" position="replace"/>
         </field>
     </record>
+
+    <record id="inherit_rental_order_form_view_collection" model="ir.ui.view">
+        <field name="name">inherit.rental.order.form.view.collection</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="postal_management.driver_sale_order_view_form_inherit"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='collection']" position="replace">
+            	<field name="collection"/>
+            </xpath>
+        </field>
+    </record>
     
     <record id="sale_order_line_form_inherit_chater" model="ir.ui.view">
         <field name="name">sale.order.line.form.inherit.chatter</field>
