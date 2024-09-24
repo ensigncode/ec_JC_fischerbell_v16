@@ -20,7 +20,6 @@ class InvoicePolicyWizard(models.TransientModel):
         help='Ordered Quantity: Invoice quantities ordered by the customer.\n'
              'Delivered Quantity: Invoice quantities delivered to the customer.')
 
-
     def btn_confirm(self):
         product_list = []
         if self._context.get("active_model") == 'purchase.order' and self._context.get("is_purchase"):
@@ -31,4 +30,5 @@ class InvoicePolicyWizard(models.TransientModel):
             sale_id = self.env["sale.order"].search([("id", '=', self._context.get("active_id"))])
             line_ids = sale_id.order_line.filtered(lambda x:x.product_id.detailed_type != 'service').mapped('product_id').write({'invoice_policy':self.invoice_policy})
             sale_id.action_confirm()
+
         return True
