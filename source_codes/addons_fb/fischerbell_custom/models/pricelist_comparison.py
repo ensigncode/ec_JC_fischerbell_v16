@@ -5,7 +5,7 @@ from odoo import _, api, fields, models, modules
 from odoo.exceptions import ValidationError
 import base64
 import io
-import openpyxl
+import xlrd
 import difflib
 
 
@@ -38,31 +38,36 @@ class ProductPricelistComparison(models.Model):
                 return price
             else:
                 return 0
-        
-        
+
         file_data = base64.b64decode(self.comparison_file)
         excel_file = io.BytesIO(file_data)
-        book = openpyxl.load_workbook(excel_file)
-        sheet = book.active
-        product_tmpl_obj = self.env['product.template']
-        product_var_obj = self.env['product.product']
-        
-        data_dict = {}
-        price_list_lines = []
         
         try:
-            headers = [cell.value for cell in sheet[1]]
-
-            for col in range(1, sheet.max_column + 1):
-                key = headers[col - 1]
-                data_dict[key] = [sheet.cell(row=row, column=col).value for row in range(2, sheet.max_row + 1)]
+            book = xlrd.open_workbook(file_contents=excel_file.read())
+            sheet = book.sheet_by_index(0)
+            
+            product_tmpl_obj = self.env['product.template']
+            product_var_obj = self.env['product.product']
+            
+            data_dict = {}
+            price_list_lines = []
+            
+            # Read headers
+            headers = [sheet.cell_value(0, col) for col in range(sheet.ncols)]
+            
+            # Read data
+            for col in range(sheet.ncols):
+                key = headers[col]
+                data_dict[key] = [sheet.cell_value(row, col) for row in range(1, sheet.nrows)]
             
             keys = data_dict.keys()
             product_tmpl_matches = difflib.get_close_matches('Product', keys)
             product_variant_matches = difflib.get_close_matches('Product Variant', keys)
             price_matches = difflib.get_close_matches('Price', keys)
+            
             if not price_matches:
                 raise ValidationError(_("There is no column name match with 'Price' !!!"))
+            
             if product_tmpl_matches:
                 product_tmpl_match = product_tmpl_matches[0]
                 product_variant_match = product_variant_matches[0]
@@ -76,12 +81,11 @@ class ProductPricelistComparison(models.Model):
                     index = product_tmpl.index(product)
                     product_tmpl_id = product_tmpl_obj.search([('name', 'ilike', product)], limit=1)
                     pricelist_item = self.pricelist_id.item_ids.filtered(lambda line: line.product_tmpl_id == product_tmpl_id)
-                    # pricelist_products = pricelist_item.mapped('product_id')
-                    # if product_variant_matches:
-                    #     product_variant = product_var_obj.search([('display_name', 'ilike', product_var[index])], limit=1)
+                    
                     old_price = pricelist_item[0].fixed_price if pricelist_item else 0
                     new_price = _get_float_price(prices[index])
                     difference = old_price - new_price
+                    
                     if product_tmpl_id:
                         values = {
                             'product_tmpl_id': product_tmpl_id.id,
@@ -97,7 +101,6 @@ class ProductPricelistComparison(models.Model):
                 raise ValidationError(_("There is no column name match with 'Product Variant' or 'Product' !!!"))
         except Exception as e:
             raise ValidationError(_(f"Exception while reading data from XLSX file : {e}"))
-
 
 class ProductPricelistComparisonLine(models.Model):
     _name = 'product.pricelist.comparison.line'

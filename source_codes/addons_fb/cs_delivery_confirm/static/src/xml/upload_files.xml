@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+    <t t-inherit="stock_barcode.MainComponent" t-inherit-mode="extension" owl="1">
+        <xpath expr="//div[hasclass('o_barcode_lines')]" position="inside">
+            <t t-if="env.model.record.state == 'confirmed' and env.model.record.picking_type_code == 'outgoing' or env.model.record.state == 'assigned' and env.model.record.picking_type_code == 'outgoing'">
+                <div id="file-upload-div">
+                  <div>
+                    <p>
+                        <label for="files" class="form-label">Select files:</label>
+                        <input type="file" id="files" name="files" multiple="true"/>
+                    </p>
+                    <p>
+                        <input id="submit" type="submit" t-on-click="uploadFiles" class="btn btn-primary" value="Upload Document"/>
+                    </p>
+                </div>
+            </div>
+
+            </t>
+        </xpath>
+    </t>
+</templates>
