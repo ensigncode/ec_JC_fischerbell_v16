@@ -47,6 +47,8 @@ class Partner(models.Model):
 	district_code = fields.Char(string='District Code', compute='_compute_distrct_code', store=True)
 	code = fields.Char(string = 'Sequence', readonly=True)
 	is_contact_created = fields.Boolean(string = 'Is Contact Created')
+	currency_id = fields.Many2one('res.currency', readonly=False, store=True,
+        string="Currency")
 
 
 
