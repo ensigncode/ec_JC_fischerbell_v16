@@ -146,11 +146,14 @@
             </xpath>
             <xpath expr="//field[@name='order_line']//tree//field[@name='price_unit']" position="after">
                 <field name="last_price"/>
+                <field name="last_order_date" optional="hide"/>
+                <field name="last_sale_id" optional="hide"/>
             </xpath>
             <!-- <xpath expr="//field[@name='partner_id']" position="attributes">
                 <attribute name="domain">[('company_type','=','person'),('type','!=','private'),('company_id','in',[False,company_id])]</attribute>                
             </xpath> -->
             <xpath expr="//field[@name='origin']" position="before">
+                <field name="send_mail_credit_limit" invisible="1"/>
                 <field name="scheduled_delivery_date" />
                 <field name="requested_delivery_date" />
             </xpath>
@@ -379,6 +382,17 @@
             <xpath expr="//div[hasclass('badge') and hasclass('rounded-pill') and hasclass('text-bg-warning')  and hasclass('float-end') and hasclass('border-0')]" position="replace"/>
             <xpath expr="//div[hasclass('badge') and hasclass('rounded-pill') and hasclass('text-bg-danger')  and hasclass('float-end') and hasclass('border-0')]" position="replace"/>
             <xpath expr="//div[hasclass('badge') and hasclass('rounded-pill') and hasclass('text-bg-success')  and hasclass('float-end') and hasclass('border-0')]" position="replace"/>
+        </field>
+    </record>
+
+    <record id="inherit_rental_order_form_view_collection" model="ir.ui.view">
+        <field name="name">inherit.rental.order.form.view.collection</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="postal_management.driver_sale_order_view_form_inherit"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='collection']" position="replace">
+            	<field name="collection"/>
+            </xpath>
         </field>
     </record>
     

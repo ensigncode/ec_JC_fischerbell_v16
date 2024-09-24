@@ -208,4 +208,15 @@
 		</field>
 	</record>
 
+	<record id="fischerbell_purchase_order_view_form_inherit_collection" model="ir.ui.view">
+		<field name="name">fischerbell.purchase.order.form.inherit.collection</field>
+		<field name="model">purchase.order</field>
+		<field name="inherit_id" ref="postal_management.driver_purchase_order_view_form_inherit"/>
+		<field name="arch" type="xml">
+			<xpath expr="//field[@name='collection']" position="replace">
+				<field name="collection"/>
+			</xpath>
+		</field>
+	</record>
+
 </odoo>

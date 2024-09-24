@@ -18,6 +18,11 @@ class ProductTemplate(models.Model):
 	sales_line_ids = fields.One2many('sale.order.line', 'product_template_id', 'Sales Line')
 	sale_lines_ids = fields.Many2many('sale.order.line','Sale Lines', compute ='_compute_lines')
 	purchase_line_ids = fields.One2many('purchase.order.line', 'product_template_id', 'Purchase Line Id')
+
+	rfq_line_ids = fields.One2many(
+		'purchase.order.line', 'product_template_id', string='RFQ Line Id',
+		domain=[('state', 'in', ['draft', 'sent'])]
+	)
 	purchase_lines_ids = fields.Many2many('purchase.order.line','Purchase Lines', compute ='_compute_lines')
 	product_brand_id = fields.Many2one('fischerbell.product.brand', 'Brand')
 	use_customer_sku = fields.Boolean('Use Customer SKU', default=True)
