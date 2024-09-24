@@ -127,8 +127,10 @@ class SaleOrder(models.Model):
 			('full_delivery', 'Wait for the receival of all goods')],
 		string="Delivery Option", default='partial_delivery')
 	collection = fields.Selection(selection_add=[('tbc', 'TBC')], default="tbc")
-
 	product_vendor_conf_ids = fields.One2many('product.vendor.conf','sale_id',string="Product Vendor Conf")
+	partner_request_state = fields.Selection([('none','None'),('pending','Pending'),('approved','Approved'),
+											('rejected','Rejected')],default='none', string='Partner Request')
+	is_requested = fields.Boolean('Requested')
 
 	@api.depends('partner_id')
 	def _compute_partner_shipping_id(self):
@@ -1191,23 +1193,23 @@ class SaleOrder(models.Model):
 	
 	def create_sequance_contact(self):
 		for sale in self:
-			channel = (self._cr.dbname, 'res.partner', self.env.user.partner_id.id)
+				sale.write({'partner_request_state':'pending',
+							'is_requested':True})
+
+	def request_approved(self):
+		for sale in self:
 			if not sale.partner_id.is_contact_created:
 				partner_id = sale.partner_id.copy({'name':sale.partner_id.name,
 												'code':self.env['ir.sequence'].next_by_code('res.partner.customer') 
 													or	_('New'),
-													'is_contact_created':True})
-				self.env['bus.bus']._sendone(channel, 'simple_notification', {
-						'title': _("Record Created"),
-						'message': _('Contact create with this Sequence: %s'%(partner_id.code)),
-						'type': 'info',
-					})
-				sale.write({'partner_id':partner_id.id})
-			else:
-				self.env['bus.bus']._sendone(channel, 'simple_notification', {
-						'title': _("Warning"),
-						'message': _('Sequence already created with Partner:  %s - %s'%(sale.partner_id.name,sale.partner_id.code)),
-					})
+													'is_contact_created':True,
+													'property_product_pricelist':sale.partner_id.property_product_pricelist and sale.partner_id.property_product_pricelist.id or False})
+				sale.write({'partner_request_state':'approved',
+							'partner_id':partner_id.id})
+
+	def request_rejected(self):
+		for sale in self:
+			sale.write({'partner_request_state':'rejected'})
 	
 	@api.model
 	def merge_quotations(self):
