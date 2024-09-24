@@ -358,11 +358,11 @@ class SaleOrder(models.Model):
 						'approval_state': 'approved',
 						'reviewed_by': self.env.user.id
 					})
-     # if order.partner_id.partner_seq == _('New'):
-     # 	partner = self.env['res.partner'].browse(order.partner_id.id)
-     # 	partner.update({
-     # 		'partner_seq': self.env['ir.sequence'].next_by_code('res.partner') or _('New')
-     # 	})
+	 # if order.partner_id.partner_seq == _('New'):
+	 # 	partner = self.env['res.partner'].browse(order.partner_id.id)
+	 # 	partner.update({
+	 # 		'partner_seq': self.env['ir.sequence'].next_by_code('res.partner') or _('New')
+	 # 	})
 					order.with_context(vendor_wizard=True).action_confirm()
 
 					purchase_order_ids = self._get_purchase_orders()
@@ -401,12 +401,12 @@ class SaleOrder(models.Model):
 						'approval_state': 'approved',
 						'reviewed_by': self.env.user.id
 					})
-          
-     # if order.partner_id.partner_seq == _('New'):
-     # 	partner = self.env['res.partner'].browse(order.partner_id.id)
-     # 	partner.update({
-     # 		'partner_seq': self.env['ir.sequence'].next_by_code('res.partner') or _('New')
-     # 	})
+		  
+	 # if order.partner_id.partner_seq == _('New'):
+	 # 	partner = self.env['res.partner'].browse(order.partner_id.id)
+	 # 	partner.update({
+	 # 		'partner_seq': self.env['ir.sequence'].next_by_code('res.partner') or _('New')
+	 # 	})
 					order.with_context(vendor_wizard=True).action_confirm()
 
 					purchase_order_ids = self._get_purchase_orders()
@@ -1198,16 +1198,16 @@ class SaleOrder(models.Model):
 													or	_('New'),
 													'is_contact_created':True})
 				self.env['bus.bus']._sendone(channel, 'simple_notification', {
-			            'title': _("Record Created"),
-			            'message': _('Contact create with this Sequence: %s'%(partner_id.code)),
-			            'type': 'info',
-			        })
+						'title': _("Record Created"),
+						'message': _('Contact create with this Sequence: %s'%(partner_id.code)),
+						'type': 'info',
+					})
 				sale.write({'partner_id':partner_id.id})
 			else:
 				self.env['bus.bus']._sendone(channel, 'simple_notification', {
-			            'title': _("Warning"),
-			            'message': _('Sequence already created with Partner:  %s - %s'%(sale.partner_id.name,sale.partner_id.code)),
-			        })
+						'title': _("Warning"),
+						'message': _('Sequence already created with Partner:  %s - %s'%(sale.partner_id.name,sale.partner_id.code)),
+					})
 	
 	@api.model
 	def merge_quotations(self):
@@ -1234,13 +1234,13 @@ class SaleOrder(models.Model):
 					line._compute_amount()
 			order.action_cancel()
 		return {
-		          'type': 'ir.actions.act_window',
-		          'name': _('Quotation'),
-		          'res_model': 'sale.order',
-		          'view_mode': 'form',
-		          'view_type': 'form',
-		          'res_id':latest_order.id,
-		      }
+				  'type': 'ir.actions.act_window',
+				  'name': _('Quotation'),
+				  'res_model': 'sale.order',
+				  'view_mode': 'form',
+				  'view_type': 'form',
+				  'res_id':latest_order.id,
+			  }
 
 class SaleOrderLine(models.Model):
 	_name = 'sale.order.line'
@@ -1265,16 +1265,17 @@ class SaleOrderLine(models.Model):
 	is_requested = fields.Boolean('Is Update Requested',readonly=True)
 	is_request_updated = fields.Boolean('Is Request Updated',readonly=True)
 	price_unit = fields.Float(
-        string="Unit Price",
-        compute='_compute_price_unit',
-        digits='Product Price',
-        store=True, readonly=False, required=True, precompute=True, tracking=True)
+		string="Unit Price",
+		compute='_compute_price_unit',
+		digits='Product Price',
+		store=True, readonly=False, required=True, precompute=True, tracking=True)
 	approval_state = fields.Selection([('pending','Pending'),('approved','Approved'),
 										('rejected','Rejected')
 										], string="Approval", 
 										tracking=True, copy=False)
 	last_order_date = fields.Datetime('Last Order Date', compute='_compute_last_order_price')
 	last_sale_id = fields.Many2one('sale.order', string='Last Order', readonly=True, compute='_compute_last_order_price')
+	change_reason = fields.Text(string="Reason for Change", readonly=True)
 
 
 	@api.depends('customer_id','product_id','state')
