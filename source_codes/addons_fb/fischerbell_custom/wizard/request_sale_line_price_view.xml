@@ -9,11 +9,14 @@
                     <sheet>
                         <group>
                             <group>
-	                            <field name="old_price" readonly="1"/>
+                                <field name="old_price" readonly="1"/>
                             </group>
                             <group>
                                 <field name="requested_price"/>
                             </group>
+                        </group>
+                        <group>
+                            <field name="change_reason"/>
                         </group>
                     </sheet>
                     <footer>

@@ -424,6 +424,11 @@
 	                <field name="message_ids"/>
                 </div>
             </xpath>
+            <xpath expr="//form//sheet//group[1]" position="after">
+            	<group>
+                	<field name="change_reason" class="oe_inline"/>
+                 </group>
+            </xpath>
         </field>
      </record>
 
