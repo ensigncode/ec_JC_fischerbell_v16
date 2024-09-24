@@ -1,0 +1,89 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* cs_delivery_confirm
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 16.0+e\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-05-17 19:52+0000\n"
+"PO-Revision-Date: 2024-05-17 14:54-0500\n"
+"Last-Translator: Cloudia <apps@cloudia.systems>\n"
+"Language-Team: \n"
+"Language: es\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 3.4.4\n"
+
+#. module: cs_delivery_confirm
+#: model:ir.model,name:cs_delivery_confirm.model_res_company
+msgid "Companies"
+msgstr "Empresas"
+
+#. module: cs_delivery_confirm
+#: model:ir.model,name:cs_delivery_confirm.model_res_config_settings
+msgid "Config Settings"
+msgstr "Configuración"
+
+#. module: cs_delivery_confirm
+#: model:ir.model.fields.selection,name:cs_delivery_confirm.selection__stock_picking__delivery_confirmed__confirmed
+#: model_terms:ir.ui.view,arch_db:cs_delivery_confirm.view_picking_withcarrier_out_form
+msgid "Confirmed"
+msgstr "Confirmado"
+
+#. module: cs_delivery_confirm
+#: model:ir.model.fields,field_description:cs_delivery_confirm.field_stock_picking__delivery_confirmed
+msgid "Delivery Confirmed"
+msgstr "Entrega confirmada"
+
+#. module: cs_delivery_confirm
+#: model:res.groups,name:cs_delivery_confirm.group_inventory_stock_drivers
+msgid "Driver"
+msgstr "Conductor"
+
+#. module: cs_delivery_confirm
+#: model:ir.model.fields,field_description:cs_delivery_confirm.field_stock_picking__driver_dates
+msgid "Driver Dates"
+msgstr "Fechas del conductor"
+
+#. module: cs_delivery_confirm
+#: model:ir.model.fields,field_description:cs_delivery_confirm.field_res_company__driver_days_limit
+#: model:ir.model.fields,field_description:cs_delivery_confirm.field_res_config_settings__driver_days_limit
+#: model_terms:ir.ui.view,arch_db:cs_delivery_confirm.res_config_settings_view_form_ip
+msgid "Driver Days Limit"
+msgstr "Límite de días para conductor"
+
+#. module: cs_delivery_confirm
+#: model_terms:ir.ui.view,arch_db:cs_delivery_confirm.res_config_settings_view_form_ip
+msgid "Driver Days Limit."
+msgstr "Límite de días para conductor."
+
+#. module: cs_delivery_confirm
+#: model:ir.model,name:cs_delivery_confirm.model_ir_ui_menu
+msgid "Menu"
+msgstr "Menú"
+
+#. module: cs_delivery_confirm
+#: model:ir.model.fields.selection,name:cs_delivery_confirm.selection__stock_picking__delivery_confirmed__pending
+msgid "Pending"
+msgstr "Pendiente"
+
+#. module: cs_delivery_confirm
+#: model:ir.model,name:cs_delivery_confirm.model_stock_picking
+#: model_terms:ir.ui.view,arch_db:cs_delivery_confirm.view_picking_search_inherit_ip
+msgid "Transfer"
+msgstr "Transferencia"
+
+#. module: cs_delivery_confirm
+#: model:ir.actions.act_window,name:cs_delivery_confirm.action_picking_driver_tree_all
+#: model:ir.ui.menu,name:cs_delivery_confirm.driver_all_picking
+msgid "Transfers"
+msgstr "Transferencias"
+
+#. module: cs_delivery_confirm
+#: model:ir.model.fields,field_description:cs_delivery_confirm.field_stock_picking__upload_images
+#: model_terms:ir.ui.view,arch_db:cs_delivery_confirm.view_picking_withcarrier_out_form
+msgid "Upload Images"
+msgstr "Subir imágenes"
