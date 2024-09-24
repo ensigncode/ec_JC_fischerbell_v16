@@ -132,5 +132,10 @@ class ResUser(models.Model):
             else:
                 user.signature = Markup('<p>--&--<br />%s</p>') % user['name']
 
+    def _get_default_warehouse_id(self):
+        if self.company_id and self.company_id.warehouse_id:
+            return self.company_id.warehouse_id
+        return super(ResUser, self)._get_default_warehouse_id()
+
 
 

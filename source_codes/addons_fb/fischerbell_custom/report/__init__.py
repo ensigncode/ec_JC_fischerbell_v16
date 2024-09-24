@@ -7,3 +7,4 @@ from . import fischerbell_open_po_report
 from . import fischerbell_purchase_history_report
 from . import report_picking
 from . import instrument_rental_tc
+from . import fischerbell_statement_of_account_report
