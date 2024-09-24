@@ -6,6 +6,7 @@ class RequestSaleLinePrice(models.TransientModel):
 
     old_price = fields.Float('Old Price')
     requested_price = fields.Float('Request Price')
+    change_reason = fields.Text('Reason for Change', required=True)
 
     @api.model
     def default_get(self, fields):
@@ -20,7 +21,8 @@ class RequestSaleLinePrice(models.TransientModel):
         line_id.write({'request_price':self.requested_price,
                        'is_requested':True,
                        'is_request_updated':False,
-                       'approval_state':'pending'})
+                       'approval_state':'pending',
+                       'change_reason':self.change_reason})
         user_id = self.env['res.users'].sudo().search([('groups_id', 'in', self.env.ref('account.group_account_manager').id)], limit = 1)
         self.env['mail.activity'].sudo().create({
                 'res_model_id': self.env.ref('sale.model_sale_order_line').id,
