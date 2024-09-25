@@ -1,0 +1,80 @@
+from odoo import models, api
+import base64
+import logging
+
+_logger = logging.getLogger(__name__)
+
+
+class SOAReport(models.AbstractModel):
+    _name = 'report.fischerbell_custom.fischerbell_report_soa_document'
+    _description = 'SOA Report'
+
+
+    def get_partner_data(self, data):
+        partner_list = []
+        if data or data is not None:
+            partner_ids = self.env['res.partner'].browse(data.get('partner_ids'))
+            for partner in partner_ids:
+                till_date = data.get('till_date')
+                list_move = []
+                invoice_ids = self.env['account.move'].sudo().search([
+                    ('partner_id.parent_id', '=', partner.id) or ('partner_id', '=', partner.id),
+                    ('invoice_date', '<=', till_date),
+                    ('move_type', '=', 'out_invoice')
+                ])
+                for inv in invoice_ids:
+                    list_move.append(inv.id)
+                payment_ids = self.env['account.move'].sudo().search([
+                    ('partner_id', '=', partner.id),
+                    ('date', '<=', till_date),
+                    ('move_type', '=', 'entry')
+                ])
+                for payment in payment_ids:
+                    list_move.append(payment.id)
+                account_move_ids = self.env['account.move'].search([('id', 'in', list_move)])
+                if not account_move_ids.ids:
+                    partner_list.append({'partner_id':partner, 'account_move_ids':False})
+                    pass
+                positive_total_amount = 0
+                negative_total_amount = 0
+                for move in account_move_ids:
+                    if move.move_type == 'out_invoice':
+                        positive_total_amount += move.amount_total
+                    else:
+                        negative_total_amount += -move.amount_total
+                total = positive_total_amount + negative_total_amount
+                for move2 in account_move_ids:
+                    move2.write({'total_balance_due': total})
+                if account_move_ids.ids:
+                    try:
+                        pdf_data = self.env["ir.actions.report"].sudo().with_context(from_email=True)._render_qweb_pdf('fischerbell_custom.action_report_statement_of_account', account_move_ids.ids, data={'report_type': 'pdf'})[0]
+                    except Exception as e:
+                        _logger.error('Error generating PDF: %s', str(e))
+                        continue
+                    attachment_data = {
+                        'name': 'Statement Of Account.pdf',
+                        # 'datas': pdf_data[0] if pdf_data else False,
+                        'datas': base64.encodebytes(pdf_data),
+                    }
+                    mail = self.env['mail.mail'].create({
+                        'subject': 'Statement Of Account',
+                        'body_html': 'Statement Of Account',
+                        'email_to': partner.soa_email,
+                        'partner_ids': [(4, partner.id)],
+                        'attachment_ids': [(0, 0, attachment_data)],
+                    })
+                    mail.send()
+                partner_list.append({'partner_id':partner, 'account_move_ids':account_move_ids or False})
+        return partner_list
+
+    @api.model
+    def _get_report_values(self, docids, data=None):
+        docs = self.env['account.move'].browse(docids)
+        is_all_partner = True
+        if self.env.context.get('from_email'):
+            is_all_partner = False
+        return {
+            'doc_ids': docs,
+            'get_data': self.get_partner_data,
+            'is_all_partner':is_all_partner
+        }

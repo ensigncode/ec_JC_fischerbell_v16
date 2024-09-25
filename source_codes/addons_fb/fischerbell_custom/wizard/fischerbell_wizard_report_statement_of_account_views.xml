@@ -8,11 +8,12 @@
 				<sheet>
 					<group>
 						<group>
-							<field name="partner_id" required="1"/>
+							<field name="partner_ids" required="1" widget="many2many_tags"/>
 						</group>
 						<group>
-							<field name="start_date" required="1"/>
-							<field name="end_date" required="1"/>
+						    <field name="till_date" required="1"/>
+							<!-- <field name="start_date" required="1"/>
+							<field name="end_date" required="1"/> -->
 						</group>
 					</group>
 				</sheet>

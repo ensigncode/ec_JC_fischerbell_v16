@@ -83,6 +83,8 @@
         'views/purchase_portal_view.xml',
         'views/product_pricelist_comparison_views.xml',
         'views/account_payment_terms_views.xml',
+        'views/stock_inventory.xml',
+
         # 'wizard/fischerbell_wizard_report_delivery_with_training.xml',
     ],
     'demo': [],

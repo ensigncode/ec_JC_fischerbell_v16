@@ -10,3 +10,4 @@ class Company(models.Model):
     social_lazada = fields.Char('Lazada Account')
     social_store = fields.Char('Woocommerce Account')
     social_shopee = fields.Char('Shopee Account')
+    warehouse_id = fields.Many2one('stock.warehouse', string = 'Default Warehouse')

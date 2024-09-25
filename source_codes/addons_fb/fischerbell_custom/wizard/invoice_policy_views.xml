@@ -1,23 +1,28 @@
 <odoo>
-	<record id="invoice_policy_wizard_views" model="ir.ui.view">
-		<field name="name">invoice.policy.wizard.views</field>
-		<field name="model">invoice.policy.wizard</field>
-		<field name="arch" type="xml">
-			<form string="Select Invoice Policy">
-				<field name="purchase_method" widget="radio"/>
-				<footer>
-					<button name="btn_confirm" string="Confirm" type="object"
-					        class="btn-primary"/>
-					<button string="Cancel" class="btn-secondary" special="cancel"/>
-				</footer>
-			</form>
-		</field>
-	</record>
+    <record id="invoice_policy_wizard_views" model="ir.ui.view">
+        <field name="name">invoice.policy.wizard.views</field>
+        <field name="model">invoice.policy.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Select Invoice Policy">
+                <field name="purchase_method" widget="radio" 
+                                required="context.get('is_purchase',False)"
+                                invisible="context.get('is_sale',False)"/>
+                <field name="invoice_policy" widget="radio" 
+                            required="context.get('is_sale',False)"
+                            invisible="context.get('is_purchase',False)"/>
+                <footer>
+                    <button name="btn_confirm" string="Confirm" type="object"
+                            class="btn-primary" context="{'from_button':True}"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
 
-	<record id="action_invoice_policy_wizard" model="ir.actions.act_window">
-		<field name="name">Invoice Policy</field>
-		<field name="res_model">invoice.policy.wizard</field>
-		<field name="view_mode">form</field>
-		<field name="target">new</field>
-	</record>
+    <record id="action_invoice_policy_wizard" model="ir.actions.act_window">
+        <field name="name">Invoice Policy</field>
+        <field name="res_model">invoice.policy.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
 </odoo>

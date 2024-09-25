@@ -47,14 +47,6 @@ class Partner(models.Model):
     district_code = fields.Char(string='District Code', compute='_compute_distrct_code', store=True)
     code = fields.Char(string = 'Sequence', readonly=True)
     is_contact_created = fields.Boolean(string = 'Is Contact Created')
-    # property_payment_term_id = fields.Many2one('account.payment.term', company_dependent=True,
-    #     string='Customer Payment Terms',
-    #     domain="[('company_id', 'in', [current_company_id, False])]",
-    #     help="This payment term will be used instead of the default one for sales orders and customer invoices")
-    # property_supplier_payment_term_id = fields.Many2one('account.payment.term', company_dependent=True,
-    #     string='Vendor Payment Terms',
-    #     domain="[('company_id', 'in', [current_company_id, False])]",
-    #     help="This payment term will be used instead of the default one for purchase orders and vendor bills")
 
 
 

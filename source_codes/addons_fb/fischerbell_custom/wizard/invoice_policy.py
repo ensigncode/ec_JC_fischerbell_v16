@@ -9,23 +9,26 @@ class InvoicePolicyWizard(models.TransientModel):
 
 
     purchase_method = fields.Selection([
-        ('purchase', 'On ordered quantities'),
-        ('receive', 'On received quantities'),
+        ('purchase', 'On Ordered quantities'),
+        ('receive', 'On Received quantities'),
     ], string="Control Policy", help="On ordered quantities: Control bills based on ordered quantities.\n"
-        "On received quantities: Control bills based on received quantities.", required=True)
+        "On received quantities: Control bills based on received quantities.", required=False)
+
+    invoice_policy = fields.Selection(
+        [('order', 'Ordered quantities'),
+         ('delivery', 'Delivered quantities')], string='Invoicing Policy',
+        help='Ordered Quantity: Invoice quantities ordered by the customer.\n'
+             'Delivered Quantity: Invoice quantities delivered to the customer.')
 
 
     def btn_confirm(self):
         product_list = []
-        purchase_id = self.env["purchase.order"].search([("id", '=', self._context.get("active_id"))])
-        purchase_id.button_confirm()
-        for order in purchase_id:
-            if order.state == 'purchase':
-                order.write({'name': self.env['ir.sequence'].next_by_code('purchase.order.po')})
-                if order.picking_ids:
-                    for pick in order.picking_ids:
-                        pick.user = self.env.user.id
-        product_list = purchase_id.order_line.mapped('product_id')
-        for rec in product_list:
-            rec.purchase_method = self.purchase_method
+        if self._context.get("active_model") == 'purchase.order' and self._context.get("is_purchase"):
+            purchase_id = self.env["purchase.order"].search([("id", '=', self._context.get("active_id"))])
+            line_ids = purchase_id.order_line.filtered(lambda x:x.product_id.detailed_type != 'service').mapped('product_id').write({'purchase_method':self.purchase_method})
+            purchase_id.button_confirm()
+        if self._context.get("active_model") == 'sale.order' and self._context.get("is_sale"):
+            sale_id = self.env["sale.order"].search([("id", '=', self._context.get("active_id"))])
+            line_ids = sale_id.order_line.filtered(lambda x:x.product_id.detailed_type != 'service').mapped('product_id').write({'invoice_policy':self.invoice_policy})
+            sale_id.action_confirm()
         return True

@@ -126,8 +126,11 @@ class SaleOrder(models.Model):
 		selection=[('partial_delivery', 'Partial Delivery'),
 			('full_delivery', 'Wait for the receival of all goods')],
 		string="Delivery Option", default='partial_delivery')
-
+	collection = fields.Selection(selection_add=[('tbc', 'TBC')], default="tbc")
 	product_vendor_conf_ids = fields.One2many('product.vendor.conf','sale_id',string="Product Vendor Conf")
+	partner_request_state = fields.Selection([('none','None'),('pending','Pending'),('approved','Approved'),
+											('rejected','Rejected')],default='none', string='Partner Request')
+	is_requested = fields.Boolean('Requested')
 
 	@api.depends('partner_id')
 	def _compute_partner_shipping_id(self):
@@ -357,11 +360,11 @@ class SaleOrder(models.Model):
 						'approval_state': 'approved',
 						'reviewed_by': self.env.user.id
 					})
-     # if order.partner_id.partner_seq == _('New'):
-     # 	partner = self.env['res.partner'].browse(order.partner_id.id)
-     # 	partner.update({
-     # 		'partner_seq': self.env['ir.sequence'].next_by_code('res.partner') or _('New')
-     # 	})
+	 # if order.partner_id.partner_seq == _('New'):
+	 # 	partner = self.env['res.partner'].browse(order.partner_id.id)
+	 # 	partner.update({
+	 # 		'partner_seq': self.env['ir.sequence'].next_by_code('res.partner') or _('New')
+	 # 	})
 					order.with_context(vendor_wizard=True).action_confirm()
 
 					purchase_order_ids = self._get_purchase_orders()
@@ -400,12 +403,12 @@ class SaleOrder(models.Model):
 						'approval_state': 'approved',
 						'reviewed_by': self.env.user.id
 					})
-          
-     # if order.partner_id.partner_seq == _('New'):
-     # 	partner = self.env['res.partner'].browse(order.partner_id.id)
-     # 	partner.update({
-     # 		'partner_seq': self.env['ir.sequence'].next_by_code('res.partner') or _('New')
-     # 	})
+		  
+	 # if order.partner_id.partner_seq == _('New'):
+	 # 	partner = self.env['res.partner'].browse(order.partner_id.id)
+	 # 	partner.update({
+	 # 		'partner_seq': self.env['ir.sequence'].next_by_code('res.partner') or _('New')
+	 # 	})
 					order.with_context(vendor_wizard=True).action_confirm()
 
 					purchase_order_ids = self._get_purchase_orders()
@@ -486,6 +489,17 @@ class SaleOrder(models.Model):
 			})    
 
 	def action_confirm(self):
+		if not self._context.get('from_button',False) and self.approval_state == 'approved':
+			self.ensure_one()
+			return {
+				'type': 'ir.actions.act_window',
+				'name': 'Invoice Policy',
+				'view_mode': 'form',
+				'res_model': 'invoice.policy.wizard',
+				'domain': [],
+				'context': {'is_sale':True},
+				'target': 'new',
+			}
 		# self.submited_date = date.today()
 		# for rec in self.order_line:
 		# 	# line_ids = self.order_line.filtered(lambda line:not line.product_template_id.seller_ids)
@@ -1179,23 +1193,23 @@ class SaleOrder(models.Model):
 	
 	def create_sequance_contact(self):
 		for sale in self:
-			channel = (self._cr.dbname, 'res.partner', self.env.user.partner_id.id)
+				sale.write({'partner_request_state':'pending',
+							'is_requested':True})
+
+	def request_approved(self):
+		for sale in self:
 			if not sale.partner_id.is_contact_created:
 				partner_id = sale.partner_id.copy({'name':sale.partner_id.name,
 												'code':self.env['ir.sequence'].next_by_code('res.partner.customer') 
 													or	_('New'),
-													'is_contact_created':True})
-				self.env['bus.bus']._sendone(channel, 'simple_notification', {
-			            'title': _("Record Created"),
-			            'message': _('Contact create with this Sequence: %s'%(partner_id.code)),
-			            'type': 'info',
-			        })
-				sale.write({'partner_id':partner_id.id})
-			else:
-				self.env['bus.bus']._sendone(channel, 'simple_notification', {
-			            'title': _("Warning"),
-			            'message': _('Sequence already created with Partner:  %s - %s'%(sale.partner_id.name,sale.partner_id.code)),
-			        })
+													'is_contact_created':True,
+													'property_product_pricelist':sale.partner_id.property_product_pricelist and sale.partner_id.property_product_pricelist.id or False})
+				sale.write({'partner_request_state':'approved',
+							'partner_id':partner_id.id})
+
+	def request_rejected(self):
+		for sale in self:
+			sale.write({'partner_request_state':'rejected'})
 	
 	@api.model
 	def merge_quotations(self):
@@ -1222,13 +1236,13 @@ class SaleOrder(models.Model):
 					line._compute_amount()
 			order.action_cancel()
 		return {
-		          'type': 'ir.actions.act_window',
-		          'name': _('Quotation'),
-		          'res_model': 'sale.order',
-		          'view_mode': 'form',
-		          'view_type': 'form',
-		          'res_id':latest_order.id,
-		      }
+				  'type': 'ir.actions.act_window',
+				  'name': _('Quotation'),
+				  'res_model': 'sale.order',
+				  'view_mode': 'form',
+				  'view_type': 'form',
+				  'res_id':latest_order.id,
+			  }
 
 class SaleOrderLine(models.Model):
 	_name = 'sale.order.line'
@@ -1253,23 +1267,28 @@ class SaleOrderLine(models.Model):
 	is_requested = fields.Boolean('Is Update Requested',readonly=True)
 	is_request_updated = fields.Boolean('Is Request Updated',readonly=True)
 	price_unit = fields.Float(
-        string="Unit Price",
-        compute='_compute_price_unit',
-        digits='Product Price',
-        store=True, readonly=False, required=True, precompute=True, tracking=True)
+		string="Unit Price",
+		compute='_compute_price_unit',
+		digits='Product Price',
+		store=True, readonly=False, required=True, precompute=True, tracking=True)
 	approval_state = fields.Selection([('pending','Pending'),('approved','Approved'),
 										('rejected','Rejected')
 										], string="Approval", 
 										tracking=True, copy=False)
+	last_order_date = fields.Datetime('Last Order Date', compute='_compute_last_order_price')
+	last_sale_id = fields.Many2one('sale.order', string='Last Order', readonly=True, compute='_compute_last_order_price')
+	change_reason = fields.Text(string="Reason for Change", readonly=True)
 
 
 	@api.depends('customer_id','product_id','state')
 	def _compute_last_order_price(self):
 		for price in self:
-			last_price = self.search([('id','!=', price._origin.id),('customer_id','=', price.customer_id.id),
-									('product_id','=',price.product_id.id ),('state','=','sale')],
+			last_order = self.search([('id','!=', price._origin.id),('customer_id','=', price.customer_id.id),
+									('product_id','=',price.product_id.id ),('state','=','sale'),('id','<',price._origin.id)],
 									limit=1, order='id desc')
-			price.last_price = last_price.price_unit  * last_price.product_uom_qty if last_price else 0
+			price.write(dict(last_price = last_order.price_unit  * last_order.product_uom_qty if last_order else 0,
+							last_order_date = last_order and last_order.order_id.date_order or False,
+							last_sale_id = last_order and last_order.order_id.id or False))
 
 	def _compute_get_last_invoice_date(self):
 		move_line_obj = self.env['account.move.line']
