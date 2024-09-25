@@ -58,6 +58,9 @@ class PurchaseOrder(models.Model):
     status = fields.Char('Status')
     next_delivery_date = fields.Datetime('Next(Earliest) Delivery Date')
     collection = fields.Selection(selection_add=[('tbc', 'TBC')], default="tbc")
+    partner_request_state = fields.Selection([('none','None'),('pending','Pending'),('approved','Approved'),
+                                            ('rejected','Rejected')],default='none', string='Partner Request')
+    is_requested = fields.Boolean('Requested')
 
     def sc_approved(self):
         for rec in self:
@@ -225,23 +228,23 @@ class PurchaseOrder(models.Model):
     
     def create_sequance_contact(self):
         for purchase in self:
-            channel = (self._cr.dbname, 'res.partner', self.env.user.partner_id.id)
+                purchase.write({'partner_request_state':'pending',
+                            'is_requested':True})
+
+    def request_approved(self):
+        for purchase in self:
             if not purchase.partner_id.is_contact_created:
                 partner_id = purchase.partner_id.copy({'name':purchase.partner_id.name,
-                                                    'code':self.env['ir.sequence'].next_by_code('res.partner.vendor') 
+                                                'code':self.env['ir.sequence'].next_by_code('res.partner.vendor') 
                                                     or  _('New'),
-                                                    'is_contact_created':True})
-                self.env['bus.bus']._sendone(channel, 'simple_notification', {
-                        'title': _("Create"),
-                        'message': _('Contact create with this Sequence: %s'%(partner_id.code)),
-                        'type': 'success',
-                    })
-                purchase.write({'partner_id':partner_id.id})
-            else:
-                self.env['bus.bus']._sendone(channel, 'simple_notification', {
-                        'title': _("Warning"),
-                        'message': _('Sequence already created with Partner:  %s - %s'%(purchase.partner_id.name,purchase.partner_id.code)),
-                    })
+                                                'is_contact_created':True,
+                                                'property_product_pricelist':purchase.partner_id.property_product_pricelist and purchase.partner_id.property_product_pricelist.id or False})
+                purchase.write({'partner_request_state':'approved',
+                            'partner_id':partner_id.id})
+
+    def request_rejected(self):
+        for purchase in self:
+            purchase.write({'partner_request_state':'rejected'})
 
 
     @api.onchange('partner_id')

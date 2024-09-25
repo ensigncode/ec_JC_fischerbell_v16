@@ -488,13 +488,13 @@
         <field name="name">Update Request</field>
         <field name="res_model">sale.order.line</field>
         <field name="view_mode">tree,form</field>
-        <field name="context">{'create':0,'edit':0}</field>
+        <field name="context">{'create':0}</field>
         <field name="domain">[('is_requested','=',True),('is_request_updated','=',False)]</field>
         <field name="target">current</field>
     </record>
 
     <record id="fischerbell_sale_partner_update_request" model="ir.actions.act_window">
-        <field name="name">Partner Request</field>
+        <field name="name">Customer Approval Request</field>
         <field name="res_model">sale.order</field>
         <field name="view_mode">tree</field>
         <field name="view_id" ref="update_sale_order_partner_request"/>
@@ -504,7 +504,7 @@
     </record>
     
     <menuitem id="fischerbell_menu_sale_main_request"
-        name="Update Requests"
+        name="Customer Approval Requests"
         groups="account.group_account_manager"
         parent="sale.sale_menu_root"
         sequence="40"/>
