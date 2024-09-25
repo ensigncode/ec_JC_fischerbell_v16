@@ -102,6 +102,22 @@
 				<attribute name="invisible">True</attribute>
 				<attribute name="states"></attribute>
 			</xpath>
+			<xpath expr="//form//sheet" position="before">
+            	<div class="alert alert-info text-center o_form_header" role="alert" attrs="{'invisible':[('partner_request_state','!=','pending')]}">
+                  <a class="close" data-bs-dismiss="alert" href="#">x</a>
+                  <div>
+                    <strong>Vendor is in Apporval Process. </strong>
+                  </div>
+                </div>
+            </xpath>
+            <xpath expr="//form//sheet" position="before">
+            	<div class="alert alert-danger text-center o_form_header" role="alert" attrs="{'invisible':[('partner_request_state','!=','rejected')]}">
+                  <a class="close" data-bs-dismiss="alert" href="#">x</a>
+                  <div>
+                    <strong>Vendor is Rejected. </strong>
+                  </div>
+                </div>
+            </xpath>
 		</field>
 	</record>
 	<record id="fischerbell_purchase_order_view_form_inherit" model="ir.ui.view">
