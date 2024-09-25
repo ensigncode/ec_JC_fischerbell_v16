@@ -32,7 +32,7 @@ class PurchaseOrder(models.Model):
     today = fields.Datetime('Date and Time', default=datetime.now())
     purchase_team_id = fields.Many2one('res.users', default=lambda self: self.env.user)
     len_note = fields.Char('Length Internal Notee', compute="_compute_purchase_internal_note", store=True)
-    partner_note = fields.Text('Note')
+    partner_note = fields.Char('Note', size=20)
     is_default_terms = fields.Boolean('Is Default Terms')
     po_comments = fields.Char(string="Comments")
     request_delivery_date = fields.Datetime("Request Delivery Date")
