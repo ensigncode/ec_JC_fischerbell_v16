@@ -120,6 +120,7 @@
             </xpath>
 		</field>
 	</record>
+
 	<record id="fischerbell_purchase_order_view_form_inherit" model="ir.ui.view">
 		<field name="name">fischerbell.purchase.order.form.inherit</field>
 		<field name="model">purchase.order</field>
@@ -128,6 +129,9 @@
 			<xpath expr="//field[@name='picking_type_id']" position="after">
 				<field name="mail_sended" readonly="1"/>
 				<field name="partner_note"/>
+			</xpath>
+			<xpath expr="//field[@name='incoterm_location']" position="attributes">
+				<attribute name="invisible">True</attribute>
 			</xpath>
 		</field>
 	</record>
@@ -247,6 +251,22 @@
 			<xpath expr="//field[@name='collection']" position="replace">
 				<field name="collection"/>
 			</xpath>
+		</field>
+	</record>
+
+	<record id="fischerbell_purchase_order_view_form_inherit_incoterm" model="ir.ui.view">
+		<field name="name">fischerbell.purchase.order.form.inherit.incoterm</field>
+		<field name="model">purchase.order</field>
+		<field name="inherit_id" ref="fcb_service.fischerbell_purchase_order_view_form_inherit"/>
+		<field name="arch" type="xml">
+				<xpath expr="//field[@name='incoterm_id']" position="attributes">
+                <attribute name="attrs">{}</attribute>
+                <attribute name="invisible">True</attribute>
+            </xpath>
+            <xpath expr="//field[@name='incoterm_location']" position="attributes">
+                <attribute name="invisible">True</attribute>
+                <attribute name="attrs">{}</attribute>
+            </xpath>
 		</field>
 	</record>
 
