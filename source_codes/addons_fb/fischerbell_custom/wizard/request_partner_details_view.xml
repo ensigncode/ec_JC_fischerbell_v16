@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="request_sale_line_price_wizard_view_form" model="ir.ui.view">
+            <field name="name">request.partner.details.view.form</field>
+            <field name="model">request.partner.details</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                    	<field name="is_person" invisible="1"/>
+                        <group>
+                                <field name="change_fields" widget="radio" options="{'horizontal': true}"/>
+                            <group>
+                            	<field name="pricelist_id" attrs="{'invisible':['|',('change_fields','not in',('price_list','all')),('is_person','=',True)]}"/>
+                            	<field name="payment_term_id" attrs="{'invisible':[('change_fields','not in',('payment_term','all'))]}"/>
+                            	<field name="credit_limit" attrs="{'invisible':[('change_fields','not in',('credit_limit','all'))]}"/>
+                            </group>
+                            <group>
+                                <field name="update_pricelist_id" attrs="{'invisible':['|',('change_fields','not in',('price_list','all')),('is_person','=',True)]}"/>
+                            	<field name="update_payment_term_id" attrs="{'invisible':[('change_fields','not in',('payment_term','all'))]}"/>
+                            	<field name="update_credit_limit" attrs="{'invisible':[('change_fields','not in',('credit_limit','all'))]}"/>
+                            </group>
+                            <div attrs="{'invisible':['|',('change_fields','!=','price_list'),('is_person','=',False)]}">
+                            	<h5 class="font-weight-bold">PriceList are managed on the Parent Company</h5>
+                        	</div>
+                        </group>
+                    </sheet>
+                    <footer>
+                        <button name="action_update_request" type="object" class="btn-primary" string="Request Details"/>
+                        <button string="Cancel" class="btn-default" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_request_partner_details_wizard" model="ir.actions.act_window">
+            <field name="name">Partner Update Details</field>
+            <field name="res_model">request.partner.details</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="fischerbell_custom.request_sale_line_price_wizard_view_form"/>
+            <field name="target">new</field>
+        </record>
+
+    </data>
+</odoo>
