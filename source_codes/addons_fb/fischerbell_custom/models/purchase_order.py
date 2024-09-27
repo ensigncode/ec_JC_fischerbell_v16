@@ -84,6 +84,8 @@ class PurchaseOrder(models.Model):
         default_terms = self.env['purchase.order'].search([('is_default_terms', '=', True)], limit=1).notes
         if default_terms:
             vals['notes'] = default_terms
+        if res.partner_id.code:
+            res.write({'partner_request_state':'approved'})
         return res
     
     def write(self,vals):
@@ -228,15 +230,19 @@ class PurchaseOrder(models.Model):
     
     def create_sequance_contact(self):
         for purchase in self:
+            if not purchase.partner_id.code:
                 purchase.write({'partner_request_state':'pending',
                             'is_requested':True})
+            else:
+                raise ValidationError(_('Sequence Already created for this vendor!'))
 
     def request_approved(self):
         for purchase in self:
-            if not purchase.partner_id.is_contact_created:
+            if not purchase.partner_id.code:
                 partner_id = purchase.partner_id.copy({'name':purchase.partner_id.name,
                                                 'code':self.env['ir.sequence'].next_by_code('res.partner.vendor') 
                                                     or  _('New'),
+                                                'supplier_rank':purchase.partner_id.supplier_rank,
                                                 'is_contact_created':True,
                                                 'property_product_pricelist':purchase.partner_id.property_product_pricelist and purchase.partner_id.property_product_pricelist.id or False})
                 purchase.write({'partner_request_state':'approved',
