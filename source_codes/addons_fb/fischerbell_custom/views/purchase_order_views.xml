@@ -44,9 +44,11 @@
 				<button colspan="2" name="action_is_default_terms_purchase" string="Set Defaults" type="object"/>
 			</xpath>
 			<xpath expr="//header//button[@name='button_cancel']" position="before">
-				<button name="sc_approved" string="Approved" type="object" attrs="{'invisible': [('state','=','approved')]}" class="btn-primary"/>
+				<button name="sc_approved" string="Approved" type="object" attrs="{'invisible':[('state','in',('draft', 'sent','approved'))]}"  class="btn-primary"/>
 				<button name="create_sequance_contact" string="Financial Approval" type="object" 
-                        class="btn-primary"/>
+                        class="btn-primary" attrs="{'invisible':[('state','in',('draft', 'sent','approved'))]}"/>
+				<button name="create_manager_approval" string="Manager Approval" type="object"
+                        class="btn-primary" attrs="{'invisible': [('state','not in','sent')]}"/>
 			</xpath>
 			<xpath expr="//header//button[@name='button_cancel']" position="attributes">
 				 <attribute name="states">draft,to approve,sent,purchase,approved</attribute>
@@ -81,12 +83,27 @@
 				<attribute name="invisible">1</attribute>
 			</xpath>
 			<xpath expr="//header//button[@name='print_quotation'][1]" position="after">
-			   <button name="button_confirm_wizard" type="object" states="sent" string="Confirm Order" context="{'validate_analytic': True}" class="oe_highlight" id="bid_confirm" data-hotkey="v"/>
+			   <button name="button_confirm_wizard" type="object"
+			           string="Confirm Order" context="{'validate_analytic': True}"
+			           class="oe_highlight" id="bid_confirm" data-hotkey="v"
+			           attrs="{'invisible':[('state','in',('draft', 'sent','approved'))]}"/>
 			</xpath>
 			<xpath expr="//header//button[@name='print_quotation'][2]" position="after">
-			    <button name="button_confirm_wizard" type="object" states="draft" context="{'validate_analytic': True}" string="Confirm Order" id="draft_confirm"/>
+			    <button name="button_confirm_wizard" type="object" attrs="{'invisible':[('state','in',('draft', 'sent','approved'))]}"
+			                context="{'validate_analytic': True}" string="Confirm Order" id="draft_confirm"/>
 
 			</xpath>
+<!--			<xpath expr="//header//button[@name='print_quotation'][1]" position="after">-->
+<!--			   <button name="button_confirm_wizard" type="object"-->
+<!--			           string="Confirm Order" context="{'validate_analytic': True}"-->
+<!--			           class="oe_highlight" id="bid_confirm" data-hotkey="v"-->
+<!--			           attrs="{'invisible':[('state','in',('draft', 'sent','approved'))]}"/>-->
+<!--			</xpath>-->
+			<xpath expr="//header//button[@name='button_cancel']" position="replace">
+				<button name="button_cancel" attrs="{'invisible':[('state','in',('draft', 'sent'))]}" string="Cancel" type="object"
+				         class="oe_highlight" data-hotkey="g"/>
+			</xpath>
+
 		</field>
 	</record>
 	<record id="fischerbell_purchase_order_view_form_inherit" model="ir.ui.view">
