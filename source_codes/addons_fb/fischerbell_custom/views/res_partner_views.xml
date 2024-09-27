@@ -105,7 +105,7 @@
                         </group>
 
                         <field name="is_request_pricelist" invisible="1"/>
-                        <group string="Requested Pricelist" name="price_list" attrs="{'invisible':[('is_request_pricelist','=',False)]}">
+                        <group string="Requested Pricelist" name="price_list" attrs="{'invisible':['|',('company_type','=','person'),('is_request_pricelist','=',False)]}">
                             <group>
                                 <field name="property_product_pricelist" readonly="1"/>
                             </group>

@@ -203,6 +203,10 @@ class MailComposerMessage(models.TransientModel):
         purchase_order = self.env['purchase.order'].browse(self._context.get("active_id"))
         if self._context.get("active_model") == 'purchase.order':
             purchase_order.mail_sended = True
+        if self._context.get("active_model") == 'sale.order':
+        	sale_id = self.env['sale.order'].browse(self._context.get("active_id"))
+        	if sale_id and sale_id.state in ('draft','reject'):
+        		sale_id.action_submit_to_approval() 
         return super(MailComposerMessage, self).action_send_mail()
     
     def get_mail_values(self, res_ids):
