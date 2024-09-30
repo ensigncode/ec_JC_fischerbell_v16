@@ -524,6 +524,9 @@ class SaleOrder(models.Model):
 		# 		        }
 		super_call = super(SaleOrder, self).action_confirm()
 		for order in self:
+			product_ids = order.order_line.filtered(lambda x:x.product_id.approval_request in ('draft','rejected'))
+			if product_ids:
+				raise ValidationError(_('Product must be Approved for the Order Confirmation. \n This Products is not Approved: %s')%('\n'.join(product_ids.mapped('product_id').mapped('name'))))
 			# Sent email to customer based on the state
 			order.send_mail_triggers_based_on_state()
 		return super_call
@@ -1214,6 +1217,7 @@ class SaleOrder(models.Model):
 												'code':self.env['ir.sequence'].next_by_code('res.partner.customer') 
 													or	_('New'),
 													'is_contact_created':True,
+													'customer_rank':sale.partner_id.customer_rank,
 													'property_product_pricelist':sale.partner_id.property_product_pricelist and sale.partner_id.property_product_pricelist.id or False})
 				sale.write({'partner_request_state':'approved',
 							'partner_id':partner_id.id})

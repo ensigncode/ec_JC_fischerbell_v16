@@ -239,4 +239,73 @@
             <field name="target">new</field>
      </record>
     <menuitem action="action_open_weekly_product_report_wizard" id="menu_weekly_product_report" name="Inventory Status" parent="stock.menu_warehouse_report"/>
+
+    <record id="product_product_view_tree_approval" model="ir.ui.view">
+        <field name="name">product.product.view.form.approval</field>
+        <field name="model">product.product</field>
+        <field name="arch" type="xml">
+            <tree edit="0" create="0">
+                <field name="default_code"/>
+                <field name="name"/>
+                <field name="lst_price"/>
+                <field name="approval_request"/>
+                <button name="request_approved" string="Approve" type="object" class="oe_highlight" attrs="{'invisible':[('approval_request','!=','draft')]}" />
+                <button name="request_rejected" string="Reject" type="object" class="oe_highlight" attrs="{'invisible':[('approval_request','!=','draft')]}" /> 
+                <button name="request_reset" string="Reset To Draft" type="object" class="oe_highlight" attrs="{'invisible':[('approval_request','!=','rejected')]}"/> 
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_product_product_approval_search" model="ir.ui.view">
+        <field name="name">product.product.approval.search</field>
+        <field name="model">product.product</field>
+        <field name="arch" type="xml">
+            <search string="Product Variant">
+                <field name="default_code"/>
+                <field name="name"/>
+                <field name="lst_price"/>
+                <filter string="Approved" name="approved" 
+                        domain="[('approval_request','=','approved')]"/>
+                <filter string="Rejected" name="rejected" 
+                    domain="[('approval_request','=','Rejected')]"/>
+                <separator/>
+                <group expand="1" string="Group By">
+                    <filter string="Approval Requests" name='user' context="{'group_by':'approval_request'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+     <record id="product_product_view_tree_approval_action" model="ir.actions.act_window">
+        <field name="name">Product Request</field>
+        <field name="res_model">product.product</field>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="fischerbell_custom.product_product_view_tree_approval"/>
+        <field name="context">{'create':0,'edit':0}</field>
+        <field name="target">current</field>
+        <field name="search_view_id" ref="fischerbell_custom.view_product_product_approval_search"/>
+    </record>
+
+     <menuitem id="fischerbell_menu_product_product_request"
+        name="Product Requests"
+        action="fischerbell_custom.product_product_view_tree_approval_action"
+        parent="fischerbell_custom.fischerbell_menu_sale_main_request"
+        sequence="3"/>
+
+    <record id="view_product_product_inherit_approval" model="ir.ui.view">
+        <field name="name">product.product.approval.inherit.tree</field>
+        <field name="model">product.product</field>
+        <field name="inherit_id" ref="stock.stock_product_search_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//filter[@name='inactive']" position="after">
+                <separator/>
+                <filter string="Approved" name="approved" 
+                        domain="[('approval_request','=','approved')]"/>
+                <filter string="Rejected" name="rejected" 
+                    domain="[('approval_request','=','Rejected')]"/>
+                <separator/>
+            </xpath>
+        </field>
+    </record>
+
 </odoo>

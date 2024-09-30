@@ -295,6 +295,13 @@ class PurchaseOrder(models.Model):
         res['location_dest_id'] = location_id
         return res
 
+    def button_confirm(self):
+        for order in self:
+            product_ids = order.order_line.filtered(lambda x:x.product_id.approval_request in ('draft','rejected'))
+            if product_ids:
+                raise ValidationError(_('Product must be Approved for the Order Confirmation. \nThis Products is not Approved: %s')%(',\n '.join(product_ids.mapped('product_id').mapped('name'))))
+        return super(PurchaseOrder,self).button_confirm()
+
 class PurchaseOrderLine(models.Model):
     _inherit = "purchase.order.line"
 

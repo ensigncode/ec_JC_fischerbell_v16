@@ -509,7 +509,7 @@
     </record>
     
     <menuitem id="fischerbell_menu_sale_main_request"
-        name="Customer Approval Requests"
+        name="Approval Requests"
         groups="account.group_account_manager"
         parent="sale.sale_menu_root"
         sequence="40"/>
