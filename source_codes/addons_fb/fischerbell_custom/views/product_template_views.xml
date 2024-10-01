@@ -246,12 +246,13 @@
         <field name="arch" type="xml">
             <tree edit="0" create="0">
                 <field name="default_code"/>
-                <field name="name"/>
+                <field name="product_variant_id" widget="many2one"/>
+                <!-- <field name="name"/> -->
                 <field name="lst_price"/>
                 <field name="approval_request"/>
                 <button name="request_approved" string="Approve" type="object" class="oe_highlight" attrs="{'invisible':[('approval_request','!=','draft')]}" />
-                <button name="request_rejected" string="Reject" type="object" class="oe_highlight" attrs="{'invisible':[('approval_request','!=','draft')]}" /> 
-                <button name="request_reset" string="Reset To Draft" type="object" class="oe_highlight" attrs="{'invisible':[('approval_request','!=','rejected')]}"/> 
+                <button name="request_rejected" string="Reject" type="object" class="oe_highlight" attrs="{'invisible':[('approval_request','!=','draft')]}" />
+                <button name="request_reset" string="Reset To Draft" type="object" class="oe_highlight" attrs="{'invisible':[('approval_request','!=','rejected')]}"/>
             </tree>
         </field>
     </record>

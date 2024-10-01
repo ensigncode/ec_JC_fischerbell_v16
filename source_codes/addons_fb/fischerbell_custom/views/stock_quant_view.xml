@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<record id="view_stock_quant_tree_expiry" model="ir.ui.view">
+		<field name="name">stock.quant.inherit.form</field>
+		<field name="model">stock.quant</field>
+		<field name="inherit_id" ref="stock.view_stock_quant_tree_editable"/>
+		<field name="arch" type="xml">
+			<xpath expr="//field[@name='lot_id']" position="after">
+				<field name="expiration_date"/>
+				<field name="new_expiration_date" invisible="1"/>
+			</xpath>
+		</field>
+	</record>
+
+	<record id="view_quant_search_inherit_expiration" model="ir.ui.view">
+		<field name="name">quants.search.inherit.expiration</field>
+		<field name="model">stock.quant</field>
+		<field name="inherit_id" ref="stock.quant_search_view"/>
+		<field name="arch" type="xml">
+			<!-- Use xpath to target the correct location -->
+			<xpath expr="//group" position="inside">
+				<filter string="Expiring in 1 Month" name="expiration_1_month"
+				        domain="[('expiration_date', '&lt;', (context_today() + datetime.timedelta(days=30)).strftime('%Y-%m-%d')),
+                ('expiration_date', '&gt;', context_today().strftime('%Y-%m-%d'))]"/>
+
+				<filter string="Expiring in 3 Months" name="expiration_3_months"
+				        domain="[('expiration_date', '&lt;', (context_today() + datetime.timedelta(days=90)).strftime('%Y-%m-%d')),
+                ('expiration_date', '&gt;', context_today().strftime('%Y-%m-%d'))]"/>
+
+				<filter string="Expiring in 6 Months" name="expiration_6_months"
+				        domain="[('expiration_date', '&lt;', (context_today() + datetime.timedelta(days=180)).strftime('%Y-%m-%d')),
+                ('expiration_date', '&gt;', context_today().strftime('%Y-%m-%d'))]"/>
+
+				<filter string="Expiring in 12 Months" name="expiration_12_months"
+				        domain="[('expiration_date', '&lt;', (context_today() + datetime.timedelta(days=365)).strftime('%Y-%m-%d')),
+                ('expiration_date', '&gt;', context_today().strftime('%Y-%m-%d'))]"/>
+			</xpath>
+		</field>
+	</record>
+</odoo>
