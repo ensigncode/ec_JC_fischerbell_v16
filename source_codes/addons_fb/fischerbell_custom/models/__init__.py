@@ -27,3 +27,4 @@ from . import res_users
 from . import res_company
 from . import pricelist_comparison
 from . import stock_inventory
+from . import stock_quant
