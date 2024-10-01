@@ -133,6 +133,14 @@ class SaleOrder(models.Model):
 											('rejected','Rejected')],default='none', string='Partner Request')
 	is_requested = fields.Boolean('Requested')
 
+	order_id = fields.Many2one('sale.order', compute="_get_order_id")
+
+	def _get_order_id(self):
+		for rec in self:
+			rec.order_id = False
+			if rec.name:
+				rec.order_id = self.search([('name', '=', rec.name)], limit=1).id
+
 	@api.depends('partner_id')
 	def _compute_partner_shipping_id(self):
 		for order in self:
