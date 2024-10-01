@@ -186,6 +186,8 @@ class ProductProduct(models.Model):
 	qr_code_image = fields.Binary(string='QR Code', attachment=True, readonly=True)
 	product_detail_sheet = fields.Many2one('ir.attachment')
 	product_detail_sheet_url = fields.Char('Sheet Url',compute="_compute_sheet_url")
+	approval_request = fields.Selection([('draft','Draft'),('approved','Approved'),
+										('rejected','Rejected')], string='Approval Request', default='draft')
 	# requires_traceability = fields.Boolean('Requires Traceability')
 
 
@@ -273,5 +275,18 @@ class ProductProduct(models.Model):
 			vals['qr_code_image'] = False
 		rec =  super().create(vals)
 		rec.requires_traceability = True
+		rec['approval_request'] = 'draft'
 		return rec
+
+	def request_approved(self):
+		for product in self:
+			product.write({'approval_request':'approved'})
+
+	def request_rejected(self):
+		for product in self:
+			product.write({'approval_request':'rejected'})
+
+	def request_reset(self):
+		for product in self:
+			product.write({'approval_request':'draft'})
 

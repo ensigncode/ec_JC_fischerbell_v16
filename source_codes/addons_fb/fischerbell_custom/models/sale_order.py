@@ -81,21 +81,22 @@ class SaleOrder(models.Model):
 	approval_state = fields.Selection(
 		selection=[
 			('no', 'Nothing To Approve'),
-			('approved', 'Approved'),
+			('approved', 'Quotation Approved'),
 			('waiting_approval', 'Waiting Approval'),
-			('reject', 'Rejected')
+			('reject', 'Quotation Rejected')
 		],
-		string="Approval Status", default='no', tracking=True)
+		string="Quotation Approval Status", default='no', tracking=True)
 	is_approved = fields.Boolean('Is Approved')
 	state = fields.Selection(
 		selection=[
 			('draft', "Quotation"),
 			('sent', "Quotation Sent"),
-			('approve', "Approved"),
+			# ('waiting_approval', 'Waiting Approval'),
+			('approve', "Quotation Approved"),
+			('reject', "Quotation Rejected"),
 			('sale', "Sales Order"),
 			('done', "Locked"),
 			('cancel', "Cancelled"),
-			('waiting_approval', 'Waiting Approval'),
 		],
 		string="Status",
 		readonly=True, copy=True, index=True,
@@ -446,21 +447,31 @@ class SaleOrder(models.Model):
 
 	def action_to_reject(self):
 		for order in self:
-			if order.state == 'waiting_approval' and order.approval_state == 'waiting_approval' and self.env.user.has_group("fischerbell_custom.group_sales_order_approver"):
+			if order.state == 'sent' and order.approval_state == 'waiting_approval' and self.env.user.has_group("fischerbell_custom.group_sales_order_approver"):
 				order.write({
-					'state': 'draft',
-					'approval_state': 'reject',
-					'reviewed_by': self.env.user.id
-				})
-			elif order.state == 'waiting_approval_user' and order.approval_state == 'waiting_approval' and self.env.user.has_group("fischerbell_custom.group_sales_order_approver"):
-				order.write({
-					'state': 'draft',
+					'state': 'reject',
 					'approval_state': 'reject',
 					'reviewed_by': self.env.user.id
 				})
 			else:
 				raise ValidationError("Sorry, you are not allowed to reject this order.")
 
+		return True
+
+	def action_approve(self):
+		for order in self:
+			if order.state == 'sent' and order.approval_state == 'waiting_approval' and self.env.user.has_group("fischerbell_custom.group_sales_order_approver"):
+				request_state = 'none'
+				if order.partner_id.code:
+					request_state = 'approved'
+				order.write({
+					'state': 'approve',
+					'partner_request_state':request_state,
+					'approval_state': 'approved',
+					'reviewed_by': self.env.user.id
+				})
+			else:
+				raise ValidationError("Sorry, you are not allowed to reject this order.")
 		return True
 
 	@api.depends('partner_note')
@@ -484,7 +495,7 @@ class SaleOrder(models.Model):
 				'note': _('<span>Hello, <b>%s</b>, just a quick reminder to review and approve the pending quotation <b>%s</b>.</br> Thanks!')%(user_id.name, order.name)
 			})
 			order.write({
-				'state': 'waiting_approval',
+				'state': 'sent',
 				'approval_state': 'waiting_approval'
 			})    
 
@@ -513,6 +524,9 @@ class SaleOrder(models.Model):
 		# 		        }
 		super_call = super(SaleOrder, self).action_confirm()
 		for order in self:
+			product_ids = order.order_line.filtered(lambda x:x.product_id.approval_request in ('draft','rejected'))
+			if product_ids:
+				raise ValidationError(_('Product must be Approved for the Order Confirmation. \n This Products is not Approved: %s')%('\n'.join(product_ids.mapped('product_id').mapped('name'))))
 			# Sent email to customer based on the state
 			order.send_mail_triggers_based_on_state()
 		return super_call
@@ -1203,6 +1217,7 @@ class SaleOrder(models.Model):
 												'code':self.env['ir.sequence'].next_by_code('res.partner.customer') 
 													or	_('New'),
 													'is_contact_created':True,
+													'customer_rank':sale.partner_id.customer_rank,
 													'property_product_pricelist':sale.partner_id.property_product_pricelist and sale.partner_id.property_product_pricelist.id or False})
 				sale.write({'partner_request_state':'approved',
 							'partner_id':partner_id.id})

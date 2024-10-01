@@ -44,14 +44,14 @@
 				<button colspan="2" name="action_is_default_terms_purchase" string="Set Defaults" type="object"/>
 			</xpath>
 			<xpath expr="//header//button[@name='button_cancel']" position="before">
-				<button name="sc_approved" string="Approved" type="object" attrs="{'invisible':[('state','in',('draft', 'sent','approved'))]}"  class="btn-primary"/>
+				<field name="partner_request_state" invisible="1"/>
+				<button name="sc_approved" string="Approved" type="object" attrs="{'invisible': ['|',('partner_request_state','!=','approved'),('state','=','approved')]}" class="btn-primary"/>
 				<button name="create_sequance_contact" string="Financial Approval" type="object" 
-                        class="btn-primary" attrs="{'invisible':[('state','in',('draft', 'sent','approved'))]}"/>
-				<button name="create_manager_approval" string="Manager Approval" type="object"
-                        class="btn-primary" attrs="{'invisible': [('state','not in','sent')]}"/>
+                        class="btn-primary" attrs="{'invisible':[('partner_request_state','in',('approved','pending'))]}"/>
 			</xpath>
 			<xpath expr="//header//button[@name='button_cancel']" position="attributes">
-				 <attribute name="states">draft,to approve,sent,purchase,approved</attribute>
+				 <attribute name="states"></attribute>
+				 <attribute name="attrs">{'invisible': ['|',('partner_request_state','!=','approved'),('state','not in',('draft','to approve','sent','purchase','approved'))]}</attribute>
 			</xpath>
 			<xpath expr="//notebook//page[@name='special_remark']" position="after">
 				<page string="Shipment Tracking">
@@ -79,33 +79,48 @@
 			<xpath expr="//field[@name='date_order']" position="attributes">
 				<attribute name="invisible">1</attribute>
 			</xpath>
-			<xpath expr="//button[@name='button_confirm']" position="attributes">
-				<attribute name="invisible">1</attribute>
-			</xpath>
 			<xpath expr="//header//button[@name='print_quotation'][1]" position="after">
-			   <button name="button_confirm_wizard" type="object"
-			           string="Confirm Order" context="{'validate_analytic': True}"
-			           class="oe_highlight" id="bid_confirm" data-hotkey="v"
-			           attrs="{'invisible':[('state','in',('draft', 'sent','approved'))]}"/>
+			   <button name="button_confirm_wizard" type="object" string="Confirm Order" context="{'validate_analytic': True}" class="oe_highlight" id="bid_confirm" data-hotkey="v" attrs="{'invisible':['|',('partner_request_state','!=','approved'),('state','!=','sent')]}"/>
 			</xpath>
 			<xpath expr="//header//button[@name='print_quotation'][2]" position="after">
-			    <button name="button_confirm_wizard" type="object" attrs="{'invisible':[('state','in',('draft', 'sent','approved'))]}"
-			                context="{'validate_analytic': True}" string="Confirm Order" id="draft_confirm"/>
+			    <button name="button_confirm_wizard" type="object" context="{'validate_analytic': True}" attrs="{'invisible':['|',('partner_request_state','!=','approved'),('state','!=','draft')]}" string="Confirm Order" id="draft_confirm"/>
 
 			</xpath>
-<!--			<xpath expr="//header//button[@name='print_quotation'][1]" position="after">-->
-<!--			   <button name="button_confirm_wizard" type="object"-->
-<!--			           string="Confirm Order" context="{'validate_analytic': True}"-->
-<!--			           class="oe_highlight" id="bid_confirm" data-hotkey="v"-->
-<!--			           attrs="{'invisible':[('state','in',('draft', 'sent','approved'))]}"/>-->
-<!--			</xpath>-->
-			<xpath expr="//header//button[@name='button_cancel']" position="replace">
-				<button name="button_cancel" attrs="{'invisible':[('state','in',('draft', 'sent'))]}" string="Cancel" type="object"
-				         class="oe_highlight" data-hotkey="g"/>
+			<xpath expr="//button[@name='action_rfq_send'][1]" position="attributes">
+				<attribute name="attrs">{'invisible':['|',('partner_request_state','!=','approved'),('state','!=','draft')]}</attribute>
+				<attribute name="states"></attribute>
 			</xpath>
-
+			<xpath expr="//header//button[@name='print_quotation'][1]" position="attributes">
+				<attribute name="attrs">{'invisible':['|',('partner_request_state','!=','approved'),('state','!=','draft')]}</attribute>
+				<attribute name="states"></attribute>
+			</xpath>
+			<xpath expr="//button[@name='button_confirm'][1]" position="attributes">
+				<attribute name="invisible">True</attribute>
+				<attribute name="states"></attribute>
+			</xpath>
+			<xpath expr="//button[@name='button_confirm'][2]" position="attributes">
+				<attribute name="invisible">True</attribute>
+				<attribute name="states"></attribute>
+			</xpath>
+			<xpath expr="//form//sheet" position="before">
+            	<div class="alert alert-info text-center o_form_header" role="alert" attrs="{'invisible':[('partner_request_state','!=','pending')]}">
+                  <a class="close" data-bs-dismiss="alert" href="#">x</a>
+                  <div>
+                    <strong>Vendor is in Apporval Process. </strong>
+                  </div>
+                </div>
+            </xpath>
+            <xpath expr="//form//sheet" position="before">
+            	<div class="alert alert-danger text-center o_form_header" role="alert" attrs="{'invisible':[('partner_request_state','!=','rejected')]}">
+                  <a class="close" data-bs-dismiss="alert" href="#">x</a>
+                  <div>
+                    <strong>Vendor is Rejected. </strong>
+                  </div>
+                </div>
+            </xpath>
 		</field>
 	</record>
+
 	<record id="fischerbell_purchase_order_view_form_inherit" model="ir.ui.view">
 		<field name="name">fischerbell.purchase.order.form.inherit</field>
 		<field name="model">purchase.order</field>
@@ -114,6 +129,9 @@
 			<xpath expr="//field[@name='picking_type_id']" position="after">
 				<field name="mail_sended" readonly="1"/>
 				<field name="partner_note"/>
+			</xpath>
+			<xpath expr="//field[@name='incoterm_location']" position="attributes">
+				<attribute name="invisible">True</attribute>
 			</xpath>
 		</field>
 	</record>
@@ -235,5 +253,61 @@
 			</xpath>
 		</field>
 	</record>
+
+	<record id="fischerbell_purchase_order_view_form_inherit_incoterm" model="ir.ui.view">
+		<field name="name">fischerbell.purchase.order.form.inherit.incoterm</field>
+		<field name="model">purchase.order</field>
+		<field name="inherit_id" ref="fcb_service.fischerbell_purchase_order_view_form_inherit"/>
+		<field name="arch" type="xml">
+				<xpath expr="//field[@name='incoterm_id']" position="attributes">
+                <attribute name="attrs">{}</attribute>
+                <attribute name="invisible">True</attribute>
+            </xpath>
+            <xpath expr="//field[@name='incoterm_location']" position="attributes">
+                <attribute name="invisible">True</attribute>
+                <attribute name="attrs">{}</attribute>
+            </xpath>
+		</field>
+	</record>
+
+	<record id="update_purchase_order_vendor_request" model="ir.ui.view">
+		<field name="name">fischerbell.purchase.order.form.inherit.approval</field>
+		<field name="model">purchase.order</field>
+		<field name="arch" type="xml">
+			<tree create="0" editable="bottom">
+				<field name="name" readonly="1"/>
+            	<field name="partner_id" string="Requested Customer" readonly="1"/>
+            	<field name="user_id" readonly="1"/>
+            	<field name="partner_request_state" readonly="1"/>
+            	<field name="company_id" readonly="1"/>
+            	<button name="request_approved" type="object" string="Approve"
+            		class="oe_highlight"/>
+        		<button name="request_rejected" type="object" string="Reject"
+            		class="oe_highlight"/>
+			</tree>
+		</field>
+	</record>
+
+
+	<record id="fischerbell_purchase_venodr_update_request" model="ir.actions.act_window">
+        <field name="name">Vendor Approval Request</field>
+        <field name="res_model">purchase.order</field>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="update_purchase_order_vendor_request"/>
+        <field name="context">{'create':0}</field>
+        <field name="domain">[('is_requested','=',True),('partner_request_state','=','pending')]</field>
+        <field name="target">current</field>
+    </record>
+    
+    <menuitem id="fischerbell_menu_purchase_main_request"
+        name="Update Requests"
+        groups="account.group_account_manager"
+        parent="purchase.menu_purchase_root"
+        sequence="40"/>
+
+     <menuitem id="fischerbell_menu_purchase_update_vendor"
+        name="Vendor Approval Requests"
+        parent="fischerbell_menu_purchase_main_request"
+        action="fischerbell_purchase_venodr_update_request"/>
 
 </odoo>
