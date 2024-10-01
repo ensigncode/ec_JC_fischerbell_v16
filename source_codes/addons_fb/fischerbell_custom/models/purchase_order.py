@@ -45,6 +45,7 @@ class PurchaseOrder(models.Model):
     state = fields.Selection(
         selection_add=[
             ("approved", "Approved"),
+            ("manager_approvel", "Manager Approved")
         ]
     )
     shipment_tracking_date = fields.Datetime("Date")
@@ -58,6 +59,13 @@ class PurchaseOrder(models.Model):
     status = fields.Char('Status')
     next_delivery_date = fields.Datetime('Next(Earliest) Delivery Date')
     collection = fields.Selection(selection_add=[('tbc', 'TBC')], default="tbc")
+    partner_request_state = fields.Selection([('none','None'),('pending','Pending'),('approved','Approved'),
+                                            ('rejected','Rejected')],default='none', string='Partner Request')
+    is_requested = fields.Boolean('Requested')
+
+    def create_manager_approval(self):
+        for record in self:
+            record.state = "manager_approvel"
 
     def sc_approved(self):
         for rec in self:
@@ -81,6 +89,8 @@ class PurchaseOrder(models.Model):
         default_terms = self.env['purchase.order'].search([('is_default_terms', '=', True)], limit=1).notes
         if default_terms:
             vals['notes'] = default_terms
+        if res.partner_id.code:
+            res.write({'partner_request_state':'approved'})
         return res
     
     def write(self,vals):
@@ -225,23 +235,27 @@ class PurchaseOrder(models.Model):
     
     def create_sequance_contact(self):
         for purchase in self:
-            channel = (self._cr.dbname, 'res.partner', self.env.user.partner_id.id)
-            if not purchase.partner_id.is_contact_created:
-                partner_id = purchase.partner_id.copy({'name':purchase.partner_id.name,
-                                                    'code':self.env['ir.sequence'].next_by_code('res.partner.vendor') 
-                                                    or  _('New'),
-                                                    'is_contact_created':True})
-                self.env['bus.bus']._sendone(channel, 'simple_notification', {
-                        'title': _("Create"),
-                        'message': _('Contact create with this Sequence: %s'%(partner_id.code)),
-                        'type': 'success',
-                    })
-                purchase.write({'partner_id':partner_id.id})
+            if not purchase.partner_id.code:
+                purchase.write({'partner_request_state':'pending',
+                            'is_requested':True})
             else:
-                self.env['bus.bus']._sendone(channel, 'simple_notification', {
-                        'title': _("Warning"),
-                        'message': _('Sequence already created with Partner:  %s - %s'%(purchase.partner_id.name,purchase.partner_id.code)),
-                    })
+                raise ValidationError(_('Sequence Already created for this vendor!'))
+
+    def request_approved(self):
+        for purchase in self:
+            if not purchase.partner_id.code:
+                partner_id = purchase.partner_id.copy({'name':purchase.partner_id.name,
+                                                'code':self.env['ir.sequence'].next_by_code('res.partner.vendor') 
+                                                    or  _('New'),
+                                                'supplier_rank':purchase.partner_id.supplier_rank,
+                                                'is_contact_created':True,
+                                                'property_product_pricelist':purchase.partner_id.property_product_pricelist and purchase.partner_id.property_product_pricelist.id or False})
+                purchase.write({'partner_request_state':'approved',
+                            'partner_id':partner_id.id})
+
+    def request_rejected(self):
+        for purchase in self:
+            purchase.write({'partner_request_state':'rejected'})
 
 
     @api.onchange('partner_id')
@@ -285,6 +299,13 @@ class PurchaseOrder(models.Model):
             location_id = self.picking_type_id.default_location_dest_id.id
         res['location_dest_id'] = location_id
         return res
+
+    def button_confirm(self):
+        for order in self:
+            product_ids = order.order_line.filtered(lambda x:x.product_id.approval_request in ('draft','rejected'))
+            if product_ids:
+                raise ValidationError(_('Product must be Approved for the Order Confirmation. \nThis Products is not Approved: %s')%(',\n '.join(product_ids.mapped('product_id').mapped('name'))))
+        return super(PurchaseOrder,self).button_confirm()
 
 class PurchaseOrderLine(models.Model):
     _inherit = "purchase.order.line"

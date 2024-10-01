@@ -80,11 +80,11 @@
                 <field name="len_note" invisible="1"/>
             </xpath>
             <xpath expr="//header//button[@name='action_confirm'][1]" position="attributes">
-                 <attribute name="attrs">{'invisible': [('state', 'not in', ['sent', 'approve'])]}</attribute>
+                 <attribute name="attrs">{'invisible': ['|',('state', 'not in', ['sent', 'approve']),('partner_request_state','!=','approved')]}</attribute>
             </xpath>
-            <xpath expr="//header//button[@name='action_cancel']" position="attributes">
+            <!-- <xpath expr="//header//button[@name='action_cancel']" position="attributes">
                  <attribute name="attrs">{'invisible': ['|', ('state', 'not in', ['draft', 'sent','sale', 'approve']), ('id', '=', False)]}</attribute>
-            </xpath>
+            </xpath> -->
             <xpath expr="//header//button[@name='action_confirm'][2]" position="attributes">
                  <attribute name="invisible">1</attribute>
             </xpath>
@@ -93,10 +93,11 @@
                 <button name="create_loan_orders" type="object" string="Create Loan Order" attrs="{'invisible':['|','|',('state','in',['draft','done','waiting_approval']),('type','not in','sale'),('partner_request_state','!=','approved')]}" />
 <!--                <button name="create_replacement_orders" type="object" string="Create Replacement Order" attrs="{'invisible':['|',('state','in',['draft','done','waiting_approval']),('type','not in','sale')]}" />-->
                 <field name="approval_state" invisible="1"/>
-                <button name="action_submit_to_approval" type="object" string="Submit For Review" attrs="{'invisible': ['|',('state','!=','draft'),('partner_request_state','!=','approved')]}" class="btn-primary" />
+               <!-- <button name="action_submit_to_approval" type="object" string="Submit to Approval" attrs="{'invisible': [('state','!=','waiting_approval'),('approval_state','!=','waiting_approval')]}" class="btn-primary" /> -->
+                <button name="action_approve" type="object" string="Approve" attrs="{'invisible': [('state','!=','sent'),('approval_state','!=','waiting_approval')]}" class="btn-primary" />
                 <button name="action_confirm" type="object" string="Confirm" attrs="{'invisible': ['|','|', ('state','!=','waiting_approval'), ('approval_state','!=','approved'),('partner_request_state','!=','approved')]}" class="btn-primary" />
-                <button name="action_to_approve" type="object" string="Approve" attrs="{'invisible': ['|',('approval_state','!=','waiting_approval'),('partner_request_state','!=','approved')]}" class="btn-primary"/>
-                <button name="action_to_reject" type="object" string="Reject" attrs="{'invisible': ['|',('approval_state','!=','waiting_approval'),('partner_request_state','!=','approved')]}" class="btn-primary"/>
+                <!-- <button name="action_to_approve" type="object" string="Approve" attrs="{'invisible': ['|',('approval_state','!=','waiting_approval'),('partner_request_state','!=','approved')]}" class="btn-primary"/> -->
+                <button name="action_to_reject" type="object" string="Reject" attrs="{'invisible': [('state','!=','sent'),('approval_state','!=','waiting_approval')]}" class="btn-primary"/>
             </xpath>
             <xpath expr="//field[@name='validity_date']" position="after">
                 <field name="sale_id" attrs="{'invisible': [('type','not in',['exchange','loan','replacement'])]}" string="Sale Order"/>
@@ -137,8 +138,10 @@
                     <field name="lead_time_stock" string="Lead Time"/>
                 </div>
             </xpath>
-            <xpath expr="//page[@name='other_information']//group//group//field[@name='client_order_ref']" position="after">
+            <xpath expr="//field[@name='validity_date']" position="before">
                 <field name="approval_state" widget="badge" decoration-danger="approval_state == 'reject'" decoration-warning="approval_state == 'waiting_approval'" decoration-success="approval_state == 'approved'" decoration-info="approval_state == 'no'" readonly="1"/>
+            </xpath>
+            <xpath expr="//page[@name='other_information']//group//group//field[@name='client_order_ref']" position="after">
                 <field name="artwork_attachment_ids" widget="many2many_binary"/>
             </xpath>
             <xpath expr="//field[@name='order_line']//tree//field[@name='name']" position="after">
@@ -160,7 +163,8 @@
             <xpath expr="//button[@name='action_cancel']" position="before">
             	<field name="partner_request_state" invisible="1"/>
                 <button name="create_sequance_contact" string="Financial Approval" type="object" 
-                        class="btn-primary" attrs="{'invisible':[('partner_request_state','in',('approved','pending'))]}"/>
+                        class="btn-primary" 
+                        attrs="{'invisible': ['|', '|',('partner_request_state', 'in', ('approved', 'pending')),('state', '!=', 'approve'),('approval_state', '!=', 'approved')]}"/>
             </xpath>
             <xpath expr="//field[@name='order_line']//tree//field[@name='price_subtotal']" position="after">
                 <field name="approval_state" readonly="1"/>
@@ -172,7 +176,7 @@
                 <attribute name="readonly">True</attribute>
             </xpath>
             <xpath expr="//button[@name='action_quotation_send'][1]" position="attributes">
-            	<attribute name="attrs">{'invisible':['|', ('state', '!=', 'draft'),('partner_request_state','!=','approved')]}</attribute>
+            	<attribute name="attrs">{'invisible':[('state', 'not in',('draft','reject')),('partner_request_state','!=','approved')]}</attribute>
             	<attribute name="states"></attribute>
             </xpath>
             <xpath expr="//button[@name='action_quotation_send'][2]" position="attributes">
@@ -182,10 +186,11 @@
             	<attribute name="attrs">{'invisible':['|','|', ('state', '!=', 'draft'), ('invoice_count','&gt;=',1),('partner_request_state','!=','approved')]}</attribute>
             </xpath>
             <xpath expr="//button[@name='action_quotation_send'][4]" position="attributes">
-            	<attribute name="attrs">{'invisible':[('partner_request_state','!=','approved')]}</attribute>
+            	<attribute name="attrs">{'invisible':[('state','!=','approve'),('partner_request_state','!=','approved')]}</attribute>
+            	<attribute name="states">approve,sale</attribute>
             </xpath>
             <xpath expr="//button[@name='action_cancel']" position="attributes">
-            	<attribute name="attrs">{'invisible': ['|','|', ('state', 'not in', ['draft', 'sent','sale']), ('id', '=', False),('partner_request_state','!=','approved')]}
+            	<attribute name="attrs">{'invisible': [('state', 'not in', ['draft','approve' 'sent','sale']),('id','=',False)]}
             	</attribute>
             </xpath>
             <xpath expr="//form//sheet" position="before">
@@ -488,13 +493,13 @@
         <field name="name">Update Request</field>
         <field name="res_model">sale.order.line</field>
         <field name="view_mode">tree,form</field>
-        <field name="context">{'create':0,'edit':0}</field>
+        <field name="context">{'create':0}</field>
         <field name="domain">[('is_requested','=',True),('is_request_updated','=',False)]</field>
         <field name="target">current</field>
     </record>
 
     <record id="fischerbell_sale_partner_update_request" model="ir.actions.act_window">
-        <field name="name">Partner Request</field>
+        <field name="name">Customer Approval Request</field>
         <field name="res_model">sale.order</field>
         <field name="view_mode">tree</field>
         <field name="view_id" ref="update_sale_order_partner_request"/>
@@ -504,7 +509,7 @@
     </record>
     
     <menuitem id="fischerbell_menu_sale_main_request"
-        name="Update Requests"
+        name="Approval Requests"
         groups="account.group_account_manager"
         parent="sale.sale_menu_root"
         sequence="40"/>

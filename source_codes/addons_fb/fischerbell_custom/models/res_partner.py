@@ -28,7 +28,7 @@ class Partner(models.Model):
 	invoice_instruction = fields.Html(string="Invoice Instruction")
 	credit_limit = fields.Float(string='Credit Limit')
 	type_of_invoice = fields.Selection(selection=[('e_invoice', 'E-Invoice'), ('paper_invoice', 'Paper Invoice')],
-	    string='Type Of Invoice', required=True)
+		string='Type Of Invoice', required=True)
 	partner_seq = fields.Char('Customer Code', copy=False, default=lambda self: _('New'))
 	e_invoice_email = fields.Char("E-Invoice Email")
 	soa_email = fields.Char("Soa Email")
@@ -48,7 +48,29 @@ class Partner(models.Model):
 	code = fields.Char(string = 'Sequence', readonly=True)
 	is_contact_created = fields.Boolean(string = 'Is Contact Created')
 	currency_id = fields.Many2one('res.currency', readonly=False, store=True,
-        string="Currency")
+		string="Currency")
+	pricelist_approval_state = fields.Selection([('pending','Pending'),('approved','Approved'),
+										('rejected','Rejected')
+										], string="Pricelist Approval", 
+										tracking=True, copy=False)
+	is_request_pricelist = fields.Boolean('Is Requested Pricelist')
+	requested_pricelist_id = fields.Many2one('product.pricelist',string="Request PriceList")
+
+	paymentterm_approval_state = fields.Selection([('pending','Pending'),('approved','Approved'),
+										('rejected','Rejected')
+										], string="Payment Term Approval", 
+										tracking=True, copy=False)
+	is_request_paymentterm = fields.Boolean('Is Requested Payment-Term')
+	requested_payment_term_id = fields.Many2one('account.payment.term',string="Request Payment Term")
+
+
+	creditlimit_approval_state = fields.Selection([('pending','Pending'),('approved','Approved'),
+										('rejected','Rejected')
+										], string="Credit Limit Approval", 
+										tracking=True, copy=False)
+	is_request_creditlimit = fields.Boolean('Is Requested Credit Limit')
+	requested_credit_limit = fields.Float(string="Request Credit Limt")
+
 
 
 
@@ -94,4 +116,37 @@ class Partner(models.Model):
 			if partner_id:
 				partner_id.write({'is_contact_created':False})
 		return super().unlink()
+
+	def approve_creditlimt(self):
+		for partner in self:
+			partner.write({'credit_limit':partner.requested_credit_limit,
+				'creditlimit_approval_state':'approved',
+				'is_request_creditlimit':False,})
+
+	def reject_creditlimt(self):
+		for partner in self:
+			partner.write({'is_request_creditlimit':False,
+				'creditlimit_approval_state':'rejected'})
+
+	def approve_pricelist(self):
+		for partner in self:
+			partner.write({'property_product_pricelist':partner.requested_pricelist_id,
+				'pricelist_approval_state':'approved',
+				'is_request_pricelist':False})
+
+	def reject_pricelist(self):
+		for partner in self:
+			partner.write({'is_request_pricelist':False,
+				'pricelist_approval_state':'rejected'})
+
+	def approve_paymnetterm(self):
+		for partner in self:
+			partner.write({'property_payment_term_id':partner.requested_payment_term_id,
+				'paymentterm_approval_state':'approved',
+				'is_request_paymentterm':False,})
+
+	def reject_paymnetterm(self):
+		for partner in self:
+			partner.write({'is_request_paymentterm':False,
+				'paymentterm_approval_state':'rejected'})
 
