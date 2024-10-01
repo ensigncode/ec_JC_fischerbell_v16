@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <odoo>
-	<record id="fischerbell_view_partner_form" model="ir.ui.view">
+    <record id="fischerbell_view_partner_form" model="ir.ui.view">
         <field name="name">fischerbell.res.partner.form</field>
         <field name="model">res.partner</field>
         <field name="inherit_id" ref="base.view_partner_form"/>
@@ -30,7 +30,7 @@
                 </div>
             </xpath>
             <xpath expr="//group[@name='sale']" position="inside">
-        		<field name="attn_to"/>
+                <field name="attn_to"/>
                 <field name="customer_code" attrs="{'readonly': [('parent_id','!=', False)]}"/>
                 <field name="partner_seq"/>
             </xpath>
@@ -84,6 +84,56 @@
                 <field name="district_code" placeholder='District Code' 
                         readonly="1"/>
             </xpath>
+            <xpath expr="//notebook[last()]" position="inside">
+                <page string="Request Approval" name="request_approval" groups="account.group_account_manager">
+                    <h5 class="font-weight-bold" attrs="{'invisible':[
+                        '|',('is_request_creditlimit','=',True),'|',('is_request_pricelist','=',True),('is_request_paymentterm','=',True)]}">Currently there is no Update Request.</h5>
+                    <field name="is_request_creditlimit" invisible="1"/>
+                    <group name="approval_requests">
+                        <group string="Requested Credit Limit" name="credit_limit" attrs="{'invisible':[('is_request_creditlimit','=',False)]}">
+                            <group>
+                                <field name="credit_limit" readonly="1"/>
+                                <filed name="creditlimit_approval_state" readonly="1"/>
+                            </group>
+                            <group>
+                                <field name="requested_credit_limit" readonly="1"/>
+                            </group>
+                            <group>
+                                    <button name="approve_creditlimt" type="object" string="Approve" class="oe_highlight"/>
+                                    <button name="reject_creditlimt" type="object" string="Reject" class="oe_highlight"/>
+                            </group>
+                        </group>
+
+                        <field name="is_request_pricelist" invisible="1"/>
+                        <group string="Requested Pricelist" name="price_list" attrs="{'invisible':['|',('company_type','=','person'),('is_request_pricelist','=',False)]}">
+                            <group>
+                                <field name="property_product_pricelist" readonly="1"/>
+                            </group>
+                            <group>
+                                <field name="requested_pricelist_id" readonly="1"/>
+                            </group>
+                            <group>
+                                    <button name="approve_pricelist" type="object" string="Approve" class="oe_highlight"/>
+                                    <button name="reject_pricelist" type="object" string="Reject" class="oe_highlight"/>
+                            </group>
+                        </group>
+
+                        <field name="is_request_paymentterm" invisible="1"/>
+                        <group string="Requested Payment Term" name="price_list" attrs="{'invisible':[('is_request_paymentterm','=',False)]}">
+                            <group>
+                                <field name="property_payment_term_id" readonly="1"/>
+                            </group>
+                            <group>
+                                <field name="requested_payment_term_id" readonly="1"/>
+                            </group>
+                            <group>
+                                    <button name="approve_paymnetterm" type="object" string="Approve" class="oe_highlight"/>
+                                    <button name="reject_paymnetterm" type="object" string="Reject" class="oe_highlight"/>
+                            </group>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
         </field>
     </record>
 
@@ -95,6 +145,34 @@
         <field name="arch" type="xml">
             <xpath expr="//group[@name='purchase']//field[@name='property_purchase_currency_id']" position="after">
                 <field name="currency_type" readonly="1" force_save="1"/>
+            </xpath>
+            <xpath expr="//field[@name='property_payment_term_id']" position="attributes">
+                <attribute name="readonly">True</attribute>
+            </xpath>
+            <xpath expr="//field[@name='property_payment_term_id']" position="after">
+                <field name="is_request_paymentterm" invisible="1"/>
+                <field name="paymentterm_approval_state" readonly="1" attrs="{'invisible':[('paymentterm_approval_state','not in',('approved','rejected','pending'))]}"/>
+            </xpath>
+            <xpath expr="//field[@name='credit_limit']" position="attributes">
+                <attribute name="readonly">True</attribute>
+            </xpath>
+            <xpath expr="//field[@name='credit_limit']" position="after">
+                <field name="is_request_creditlimit" invisible="1"/>
+                <field name="creditlimit_approval_state" readonly="1" attrs="{'invisible':[('creditlimit_approval_state','not in',('approved','rejected','pending'))]}"/>
+            </xpath>
+            <xpath expr="//field[@name='property_product_pricelist']" position="attributes">
+                <attribute name="readonly">True</attribute>
+            </xpath>
+            <xpath expr="//field[@name='property_product_pricelist']" position="after">
+                <field name="is_request_pricelist" invisible="1"/>
+                <field name="pricelist_approval_state" readonly="1" attrs="{'invisible': [('pricelist_approval_state','not in',('approved','rejected','pending'))]}"/>
+
+            </xpath>
+            <xpath expr="//group[@name='container_row_2']" position="before">
+                    <div class="col-6">
+                        <button name="%(fischerbell_custom.action_request_partner_details_wizard)d" type="action" string="Update Details" class="btn_primariy oe_highlight"
+                            attrs="{'invisible':['|',('is_request_creditlimit','=',True),'|',('is_request_pricelist','=',True),('is_request_paymentterm','=',True)]}"/>
+                    </div>
             </xpath>
         </field>
     </record>
