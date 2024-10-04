@@ -20,7 +20,6 @@ class InvoicePolicyWizard(models.TransientModel):
         help='Ordered Quantity: Invoice quantities ordered by the customer.\n'
              'Delivered Quantity: Invoice quantities delivered to the customer.')
 
-
     def btn_confirm(self):
         product_list = []
         if self._context.get("active_model") == 'purchase.order' and self._context.get("is_purchase"):
