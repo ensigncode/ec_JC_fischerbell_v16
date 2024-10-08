@@ -42,11 +42,21 @@ class PurchaseOrder(models.Model):
     is_purchase_revise = fields.Boolean(default=False)
     artwork_attachment_ids = fields.Many2many('ir.attachment', string="ArtWork")
     mail_sended = fields.Boolean(default=False)
-    state = fields.Selection(
-        selection_add=[
-            ("approved", "Approved"),
-        ]
-    )
+    # state = fields.Selection(
+    #     selection_add=[
+    #         ('approve', "RFQ Approved"),
+    #         ('reject', "RFQ Rejected"),
+    #     ]
+    # )
+    state = fields.Selection([
+        ('draft', 'RFQ'),
+        ('sent', 'RFQ Sent'),
+        ('approve', "RFQ Approved"),
+        ('reject', "RFQ Rejected"),
+        ('purchase', 'Purchase Order'),
+        ('done', 'Locked'),
+        ('cancel', 'Cancelled')
+    ], string='Status', readonly=True, index=True, copy=False, default='draft', tracking=True)
     shipment_tracking_date = fields.Datetime("Date")
     cargo_clearance_permit_no = fields.Char(string="Cargo Clearance Permit No.")
     logistics = fields.Char(string="Logistics")
@@ -61,6 +71,17 @@ class PurchaseOrder(models.Model):
     partner_request_state = fields.Selection([('none','None'),('pending','Pending'),('approved','Approved'),
                                             ('rejected','Rejected')],default='none', string='Partner Request')
     is_requested = fields.Boolean('Requested')
+    approval_state = fields.Selection(
+        selection=[
+            ('no', 'Nothing To Approve'),
+            ('approved', 'RFQ Approved'),
+            ('waiting_approval', 'Waiting Approval'),
+            ('reject', 'RFQ Rejected')
+        ],
+        string="RFQ Approval Status", default='no', readonly=True, index=True, 
+        tracking=True, copy=False)
+    is_contact_created = fields.Boolean(related='partner_id.is_contact_created')
+    reviewed_by = fields.Many2one("res.users",string="Reviewed By")
 
     def sc_approved(self):
         for rec in self:
@@ -230,11 +251,8 @@ class PurchaseOrder(models.Model):
     
     def create_sequance_contact(self):
         for purchase in self:
-            if not purchase.partner_id.code:
-                purchase.write({'partner_request_state':'pending',
-                            'is_requested':True})
-            else:
-                raise ValidationError(_('Sequence Already created for this vendor!'))
+            purchase.write({'partner_request_state':'pending',
+                        'is_requested':True})
 
     def request_approved(self):
         for purchase in self:
@@ -300,7 +318,54 @@ class PurchaseOrder(models.Model):
             product_ids = order.order_line.filtered(lambda x:x.product_id.approval_request in ('draft','rejected'))
             if product_ids:
                 raise ValidationError(_('Product must be Approved for the Order Confirmation. \nThis Products is not Approved: %s')%(',\n '.join(product_ids.mapped('product_id').mapped('name'))))
-        return super(PurchaseOrder,self).button_confirm()
+            if order.state not in ['draft', 'approve']:
+                continue
+            order.order_line._validate_analytic_distribution()
+            order._add_supplier_to_product()
+            order.button_approve()
+            if order.partner_id not in order.message_partner_ids:
+                order.message_subscribe([order.partner_id.id])
+        return True
+
+    def action_to_approve(self):
+        for order in self:
+            if order.state == 'sent' and order.approval_state == 'waiting_approval' and self.env.user.has_group("fischerbell_custom.group_purchase_order_approver"):
+                order.write({
+                    'state': 'approve',
+                    'approval_state': 'approved',
+                    'reviewed_by': self.env.user.id
+                })
+            else:
+                raise ValidationError("Sorry, you are not allowed to reject this order.")
+
+    def action_to_reject(self):
+        for order in self:
+            if order.state == 'sent' and order.approval_state == 'waiting_approval' and self.env.user.has_group("fischerbell_custom.group_purchase_order_approver"):
+                order.write({
+                    'state': 'reject',
+                    'approval_state': 'reject',
+                    'reviewed_by': self.env.user.id
+                })
+            else:
+                raise ValidationError("Sorry, you are not allowed to reject this order.")
+
+    def action_submit_to_approval(self):
+        for order in self:
+            user_id = self.env['res.users'].sudo().search([('groups_id', 'in', self.env.ref('fischerbell_custom.group_purchase_order_approver').id)], limit = 1)
+            if not user_id:
+                user_id = self.env['res.users'].sudo().search([('groups_id', 'in', self.env.ref('account.group_account_manager').id)], limit = 1)
+            self.env['mail.activity'].sudo().create({
+                'res_model_id': self.env.ref('purchase.model_purchase_order').id,
+                'res_id': order.id,
+                'user_id': user_id.id,
+                'activity_type_id': self.env.ref('mail.mail_activity_data_todo').id,
+                'summary': _('Approval of RFQ : %s'%order.name),
+                'note': _('<span>Hello, <b>%s</b>, just a quick reminder to review and approve the pending RFQ <b>%s</b>.</br> Thanks!')%(user_id.name, order.name)
+            })
+            order.write({
+                'state': 'sent',
+                'approval_state': 'waiting_approval'
+            })
 
 class PurchaseOrderLine(models.Model):
     _inherit = "purchase.order.line"
