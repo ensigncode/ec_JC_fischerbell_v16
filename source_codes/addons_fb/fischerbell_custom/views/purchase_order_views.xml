@@ -24,10 +24,10 @@
 				<field name="estimated_delivery_date"  optional="hide"/>
 				<field name="sale_line_id" invisible="1"/>
 				<button name="action_approve_line" type="object" string="Approve" 
-                    attrs="{'invisible': [('state', '!=', 'draft')]}" class="btn-primary"/>
+                    attrs="{'invisible': [('approval_state', '!=', 'draft')]}" class="btn-primary"/>
             	<button name="action_reject_line" type="object" string="Reject" 
-                    attrs="{'invisible': [('state', '!=', 'draft')]}" class="btn-secondary"/>
-			</xpath>
+                    attrs="{'invisible': [('approval_state', '!=', 'draft')]}" class="btn-secondary"/>
+			</xpath>	
 			<xpath expr="//field[@name='order_line']//field[@name='date_planned']" position="attributes">
 				<attribute name="invisible">1</attribute>
 			</xpath>
