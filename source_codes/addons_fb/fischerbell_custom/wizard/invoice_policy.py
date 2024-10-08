@@ -25,7 +25,9 @@ class InvoicePolicyWizard(models.TransientModel):
         if self._context.get("active_model") == 'purchase.order' and self._context.get("is_purchase"):
             purchase_id = self.env["purchase.order"].search([("id", '=', self._context.get("active_id"))])
             line_ids = purchase_id.order_line.filtered(lambda x:x.product_id.detailed_type != 'service').mapped('product_id').write({'purchase_method':self.purchase_method})
+            purchase_id.write({'name': self.env['ir.sequence'].next_by_code('purchase.order.po')})
             purchase_id.button_confirm()
+
         if self._context.get("active_model") == 'sale.order' and self._context.get("is_sale"):
             sale_id = self.env["sale.order"].search([("id", '=', self._context.get("active_id"))])
             line_ids = sale_id.order_line.filtered(lambda x:x.product_id.detailed_type != 'service').mapped('product_id').write({'invoice_policy':self.invoice_policy})
