@@ -45,13 +45,16 @@
 			</xpath>
 			<xpath expr="//header//button[@name='button_cancel']" position="before">
 				<field name="partner_request_state" invisible="1"/>
-				<button name="sc_approved" string="Approved" type="object" attrs="{'invisible': ['|',('partner_request_state','!=','approved'),('state','=','approved')]}" class="btn-primary"/>
+				<field name="is_contact_created" invisible="1"/>
+				<!-- <button name="sc_approved" string="Approved" type="object" attrs="{'invisible': ['|',('partner_request_state','!=','approved'),('state','=','approved')]}" class="btn-primary"/> -->
 				<button name="create_sequance_contact" string="Financial Approval" type="object" 
-                        class="btn-primary" attrs="{'invisible':[('partner_request_state','in',('approved','pending'))]}"/>
+                        class="btn-primary" attrs="{'invisible': ['|',('is_contact_created','=',True),'|', '|',('partner_request_state', 'in', ('approved', 'pending')),('state', '!=', 'approve'),('approval_state', '!=', 'approved')]}"/>
+                 <button name="action_to_approve" type="object" string="Approve" attrs="{'invisible': [('state','!=','sent'),('approval_state','!=','waiting_approval')]}" class="btn-primary" />
+                <button name="action_to_reject" type="object" string="Reject" attrs="{'invisible': [('state','!=','sent'),('approval_state','!=','waiting_approval')]}" class="btn-primary"/>
 			</xpath>
 			<xpath expr="//header//button[@name='button_cancel']" position="attributes">
 				 <attribute name="states"></attribute>
-				 <attribute name="attrs">{'invisible': ['|',('partner_request_state','!=','approved'),('state','not in',('draft','to approve','sent','purchase','approved'))]}</attribute>
+				 <attribute name="attrs">{'invisible': [('state','in',('draft','done','cancel','purchase'))]}</attribute>
 			</xpath>
 			<xpath expr="//notebook//page[@name='special_remark']" position="after">
 				<page string="Shipment Tracking">
@@ -80,18 +83,26 @@
 				<attribute name="invisible">1</attribute>
 			</xpath>
 			<xpath expr="//header//button[@name='print_quotation'][1]" position="after">
-			   <button name="button_confirm_wizard" type="object" string="Confirm Order" context="{'validate_analytic': True}" class="oe_highlight" id="bid_confirm" data-hotkey="v" attrs="{'invisible':['|',('partner_request_state','!=','approved'),('state','!=','sent')]}"/>
+			   <button name="button_confirm_wizard" type="object" string="Confirm Order" context="{'validate_analytic': True}" class="oe_highlight" id="bid_confirm" data-hotkey="v" attrs="{'invisible':['|',('partner_request_state','!=','approved'),('state','!=','approve')]}"/>
 			</xpath>
-			<xpath expr="//header//button[@name='print_quotation'][2]" position="after">
-			    <button name="button_confirm_wizard" type="object" context="{'validate_analytic': True}" attrs="{'invisible':['|',('partner_request_state','!=','approved'),('state','!=','draft')]}" string="Confirm Order" id="draft_confirm"/>
+			<!-- <xpath expr="//header//button[@name='print_quotation'][2]" position="after">
+			    <button name="button_confirm_wizard" type="object" context="{'validate_analytic': True}" attrs="{'invisible':['|',('partner_request_state','!=','approved'),('state','!=','approve')]}" string="Confirm Order" id="draft_confirm"/>
 
-			</xpath>
+			</xpath> -->
 			<xpath expr="//button[@name='action_rfq_send'][1]" position="attributes">
-				<attribute name="attrs">{'invisible':['|',('partner_request_state','!=','approved'),('state','!=','draft')]}</attribute>
+				<attribute name="attrs">{'invisible':[('state','!=','draft')]}</attribute>
+				<attribute name="states"></attribute>
+			</xpath>
+			<xpath expr="//button[@name='action_rfq_send'][2]" position="attributes">
+				<attribute name="attrs">{'invisible':['|',('partner_request_state','!=','approved'),('state','in',('draft','sent','purchase','done'))]}</attribute>
 				<attribute name="states"></attribute>
 			</xpath>
 			<xpath expr="//header//button[@name='print_quotation'][1]" position="attributes">
-				<attribute name="attrs">{'invisible':['|',('partner_request_state','!=','approved'),('state','!=','draft')]}</attribute>
+				<attribute name="attrs">{'invisible':['|',('partner_request_state','!=','approved'),('state','not in',('draft','reject')),('approval_state','not in',('no','approve'))]}</attribute>
+				<attribute name="states"></attribute>
+			</xpath>
+			<xpath expr="//header//button[@name='print_quotation'][2]" position="attributes">
+				<attribute name="attrs">{'invisible':['|',('partner_request_state','!=','approved'),('state','in',('sent','draft'))]}</attribute>
 				<attribute name="states"></attribute>
 			</xpath>
 			<xpath expr="//button[@name='button_confirm'][1]" position="attributes">
@@ -117,6 +128,9 @@
                     <strong>Vendor is Rejected. </strong>
                   </div>
                 </div>
+            </xpath>
+            <xpath expr="//field[@name='date_order']" position="before">
+            	<field name="approval_state" widget="badge" decoration-danger="approval_state == 'reject'" decoration-warning="approval_state == 'waiting_approval'" decoration-success="approval_state == 'approved'" decoration-info="approval_state == 'no'" />
             </xpath>
 		</field>
 	</record>
@@ -144,10 +158,12 @@
             <field name="invoice_status" position="after">
 				<field name="next_delivery_date"/>
                 <field name="estimated_delivery_date"/>
+                <field name="approval_state" widget="badge" decoration-danger="approval_state == 'reject'" decoration-warning="approval_state == 'waiting_approval'" decoration-success="approval_state == 'approved'" decoration-info="approval_state == 'no'" />
             </field>
 	        <xpath expr="//field[@name='date_planned']" position="attributes">
 				<attribute name="invisible">1</attribute>
 			</xpath>
+
         </field>
     </record>
 
