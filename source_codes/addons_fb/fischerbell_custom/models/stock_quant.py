@@ -17,3 +17,4 @@ class StockQuant(models.Model):
 
             # Update the expiration_date field with the new_expiration_date value
             record.expiration_date = record.new_expiration_date
+ 
