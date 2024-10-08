@@ -45,7 +45,7 @@ class Partner(models.Model):
 	delivery_restriction_start_date = fields.Date(string="Delivery Restriction Start")
 	delivery_restriction_end_date = fields.Date(string="Delivery Restriction End")
 	district_code = fields.Char(string='District Code', compute='_compute_distrct_code', store=True)
-	code = fields.Char(string = 'Sequence', readonly=True)
+	code = fields.Char(string = 'Sequence', readonly=True, tracking=True)
 	is_contact_created = fields.Boolean(string = 'Is Contact Created')
 	currency_id = fields.Many2one('res.currency', readonly=False, store=True,
 		string="Currency")

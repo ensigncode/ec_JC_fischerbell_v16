@@ -3,13 +3,12 @@
 
 from odoo import fields, models, _
 
-# from source_codes.odoo.tools.populate import compute
-
 
 class StockQuant(models.Model):
     _inherit = 'stock.quant'
 
     expiration_date = fields.Datetime(string='Expiration Date')
+    new_expiration_date = fields.Datetime(string='Expiration Date',compute='compute_expiration_date')
 
     def compute_expiration_date(self):
         for record in self:
@@ -18,7 +17,4 @@ class StockQuant(models.Model):
 
             # Update the expiration_date field with the new_expiration_date value
             record.expiration_date = record.new_expiration_date
-          
-    new_expiration_date = fields.Datetime(string='Expiration Date',compute='compute_expiration_date')
-
-    
+ 
