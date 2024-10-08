@@ -77,6 +77,24 @@ class PurchaseOrder(models.Model):
     is_contact_created = fields.Boolean(related='partner_id.is_contact_created')
     reviewed_by = fields.Many2one("res.users",string="Reviewed By")
 
+    def action_rfq_send(self):
+        res = super(PurchaseOrder, self).action_rfq_send()
+        if res.get('context') and res['context'].get('default_use_template') and res['context'].get(
+                'default_template_id'):
+            email_template = self.env['mail.template'].browse(res['context']['default_template_id'])
+            if email_template and self.partner_id:
+                partner_name = self.partner_id.name
+                if self.state in ['draft', 'sent']:
+                    modified_subject = email_template.subject.replace('Order', '').strip()
+                    if partner_name not in modified_subject:
+                        modified_subject = f"{modified_subject} - {partner_name}"
+                    email_template.subject = modified_subject
+                else:
+                    if partner_name not in email_template.subject:
+                        email_template.subject = f"{email_template.subject} - {partner_name}"
+        return res
+
+
     def create_manager_approval(self):
         for record in self:
             record.state = "manager_approvel"
