@@ -134,6 +134,9 @@ class SaleOrder(models.Model):
     is_requested = fields.Boolean('Requested')
     is_contact_created = fields.Boolean(related='partner_id.is_contact_created')
     order_id = fields.Many2one('sale.order', compute="_get_order_id")
+    is_rx_eywear = fields.Boolean(string = 'Is RX - Eywear')
+    sub_order_ids = fields.Many2many('sale.order','rel_sale_order_sale','sale_id','sub_order_id', string="Sub Order")
+    sub_order_count = fields.Integer('Sub Order Count', compute='action_view_saleorder')
 
     def _get_order_id(self):
         for rec in self:
@@ -1268,6 +1271,29 @@ class SaleOrder(models.Model):
                   'view_type': 'form',
                   'res_id':latest_order.id,
               }
+    def create_sub_order(self):
+        self.ensure_one()
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'Sale Order Lines',
+            'view_mode': 'tree',
+            'res_model': 'sale.order.line',
+            'domain': [('order_id', '=', self.id),('state','=','draft')],
+            'context':{'create':False,'edit':False,'is_suborder':True},
+            'target':'new'
+        }
+
+    def action_view_saleorder(self):
+        self.sub_order_count = len(self.sub_order_ids.ids)
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'Sub Order',
+            'view_mode': 'tree,form',
+            'res_model': 'sale.order',
+            'domain': [('id', 'in', self.sub_order_ids.ids)],
+            'context':{'create':False,'edit':False},
+            'target':'current'
+        }
 
 class SaleOrderLine(models.Model):
     _name = 'sale.order.line'
@@ -1377,3 +1403,11 @@ class SaleOrderLine(models.Model):
     def reject_request(self):
         for line in self:
             line.write({'approval_state':'rejected','is_request_updated':True})
+
+    def create_order(self):
+        context = dict(self._context)
+        sale_id = self.env['sale.order.line'].browse(context.get('active_ids')).mapped('order_id')[0]
+        sub_order_id = sale_id.copy({'order_line':False})
+        sale_id.mapped('order_line').filtered(lambda x:x.id in context.get('active_ids')).write({'order_id':sub_order_id and sub_order_id.id})
+        sale_id.write({'sub_order_ids':[(4,sub_order_id.id)]})
+        return True
