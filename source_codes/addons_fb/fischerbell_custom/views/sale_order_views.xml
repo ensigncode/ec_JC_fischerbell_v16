@@ -477,15 +477,16 @@
         <field name="model">sale.order</field>
         <field name="arch" type="xml">
             <tree create="0" editable="bottom">
-            	<field name="name" readonly="1"/>
-            	<field name="partner_id" string="Requested Customer" readonly="1"/>
-            	<field name="user_id" readonly="1"/>
-            	<field name="partner_request_state" readonly="1"/>
-            	<field name="company_id" readonly="1"/>
-            	<button name="request_approved" type="object" string="Approve"
-            		class="oe_highlight"/>
-        		<button name="request_rejected" type="object" string="Reject"
-            		class="oe_highlight"/>
+                <!-- <field name="name" readonly="1"/> -->
+                <field name="order_id" readonly="1" widget="many2one"/>
+                <field name="partner_id" string="Requested Customer" readonly="1" widget="many2one"/>
+                <field name="user_id" readonly="1"/>
+                <field name="partner_request_state" readonly="1"/>
+                <field name="company_id" readonly="1"/>
+                <button name="request_approved" type="object" string="Approve"
+                    class="oe_highlight"/>
+                <button name="request_rejected" type="object" string="Reject"
+                    class="oe_highlight"/>
             </tree>
         </field>
     </record>

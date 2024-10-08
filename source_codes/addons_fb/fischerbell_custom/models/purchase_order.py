@@ -42,12 +42,6 @@ class PurchaseOrder(models.Model):
     is_purchase_revise = fields.Boolean(default=False)
     artwork_attachment_ids = fields.Many2many('ir.attachment', string="ArtWork")
     mail_sended = fields.Boolean(default=False)
-    # state = fields.Selection(
-    #     selection_add=[
-    #         ('approve', "RFQ Approved"),
-    #         ('reject', "RFQ Rejected"),
-    #     ]
-    # )
     state = fields.Selection([
         ('draft', 'RFQ'),
         ('sent', 'RFQ Sent'),
@@ -82,6 +76,10 @@ class PurchaseOrder(models.Model):
         tracking=True, copy=False)
     is_contact_created = fields.Boolean(related='partner_id.is_contact_created')
     reviewed_by = fields.Many2one("res.users",string="Reviewed By")
+
+    def create_manager_approval(self):
+        for record in self:
+            record.state = "manager_approvel"
 
     def sc_approved(self):
         for rec in self:

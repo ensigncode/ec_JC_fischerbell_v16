@@ -20,7 +20,6 @@ class InvoicePolicyWizard(models.TransientModel):
         help='Ordered Quantity: Invoice quantities ordered by the customer.\n'
              'Delivered Quantity: Invoice quantities delivered to the customer.')
 
-
     def btn_confirm(self):
         product_list = []
         if self._context.get("active_model") == 'purchase.order' and self._context.get("is_purchase"):
@@ -31,4 +30,61 @@ class InvoicePolicyWizard(models.TransientModel):
             sale_id = self.env["sale.order"].search([("id", '=', self._context.get("active_id"))])
             line_ids = sale_id.order_line.filtered(lambda x:x.product_id.detailed_type != 'service').mapped('product_id').write({'invoice_policy':self.invoice_policy})
             sale_id.action_confirm()
+            location_ids = []
+
+            lines_not_invoiced = sale_id.order_line.filtered(lambda line: line.product_id.qty_available <= 0.0)
+            lines_by_location = defaultdict(list)
+
+            for line in lines_not_invoiced:
+                remaining_qty = line.product_uom_qty
+                quant_ids = self.env['stock.quant'].search(
+                    [('product_id', '=', line.product_id.id), ('reserved_quantity', '=', 0.0)]
+                )
+
+                if not quant_ids:
+                    continue
+
+                for quant in quant_ids:
+                    if remaining_qty <= 0:
+                        break
+
+                    location = quant.location_id
+                    available_qty = quant.quantity - quant.reserved_quantity
+
+                    qty_to_add = min(remaining_qty, available_qty)
+                    if qty_to_add > 0:
+                        remaining_qty -= qty_to_add
+                        location_ids.append(location.name)
+                        lines_by_location[location].append({
+                            'line': line,
+                            'qty': qty_to_add
+                        })
+
+            for location, lines_group in lines_by_location.items():
+                picking_type = self.env['stock.picking.type'].search([('code', '=', 'outgoing')], limit=1)
+                picking_lines = []
+                for line_info in lines_group:
+                    line = line_info['line']
+                    qty_to_add = line_info['qty']
+                    picking_lines.append((0, 0, {
+                        'name': line.product_id.name,
+                        'product_id': line.product_id.id,
+                        'product_uom_qty': qty_to_add,
+                        'product_uom': line.product_uom.id,
+                        'location_id': location.id,
+                        'location_dest_id': sale_id.warehouse_id.lot_stock_id.id
+                    }))
+
+                if picking_lines:
+                    picking = self.env['stock.picking'].create({
+                        'picking_type_id': picking_type.id,
+                        'partner_id': sale_id.partner_id.id,
+                        'origin': sale_id.name,
+                        'sale_id': sale_id.id,
+                        'location_id': location.id,
+                        'location_dest_id': sale_id.warehouse_id.lot_stock_id.id,
+                        'move_ids_without_package': picking_lines
+                    })
+
+                    picking.action_confirm()
         return True
