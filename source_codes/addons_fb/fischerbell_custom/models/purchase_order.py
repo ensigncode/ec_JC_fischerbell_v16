@@ -398,6 +398,15 @@ class PurchaseOrderLine(models.Model):
     comments = fields.Char()
     request_delivery_date = fields.Datetime("Request Delivery Date")
     estimated_delivery_date = fields.Datetime("Estimated Delivery Date")
+    approval_state = fields.Selection([('draft', 'Draft'), ('approved', 'Approved')], string='State', default='draft')
+
+    def action_approve_line(self):
+        for line in self:
+            line.approval_state = 'approved'
+
+    def action_reject_line(self):
+        for line in self:
+            line.unlink()
 
     @api.onchange('product_id')
     def onchange_sake_product_image(self):
