@@ -150,3 +150,12 @@ class Partner(models.Model):
 			partner.write({'is_request_paymentterm':False,
 				'paymentterm_approval_state':'rejected'})
 
+	@api.model
+	def create(self, vals):
+		res = super(Partner, self).create(vals)
+		if res.supplier_rank > 0:
+			print('suppert_Rank')
+			res['property_payment_term_id'] = self.env.ref('account.account_payment_term_30days').id
+		if res.customer_rank > 0:
+			res['property_payment_term_id'] = self.env.ref('account.account_payment_term_immediate').id
+		return res
