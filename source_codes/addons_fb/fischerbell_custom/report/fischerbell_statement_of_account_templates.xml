@@ -375,7 +375,6 @@
                 </t>
             </t>
             <t t-if="not is_all_partner">
-                <t t-esc="is_all_partner"/>TEST:::::2222
                  <t t-foreach="doc_ids.mapped('partner_id')[0]" t-as="rec">
                         <t t-set="moves" t-value="doc_ids"/>
                         <t t-if="doc_ids.mapped('partner_id')[0].parent_id"> 
