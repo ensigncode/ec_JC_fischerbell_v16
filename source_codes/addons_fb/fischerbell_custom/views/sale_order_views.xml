@@ -6,6 +6,12 @@
         <field name="inherit_id" ref="sale.view_order_form"/>
         <field name="priority">17</field>
         <field name="arch" type="xml">
+        	<xpath expr="//div[@class='alert alert-danger mb-0' and @role='alert']" position="replace">
+                <div class="alert alert-danger mb-0" role="alert"
+                     attrs="{'invisible': [('partner_credit_warning', '=', '')]}">
+                    <b class="text-danger"><field name="partner_credit_warning"/></b>
+                </div>
+            </xpath>
             <xpath expr="//group[@name='sale_shipping']" position="attributes">
                 <attribute name="invisible">1</attribute>
             </xpath>
@@ -210,6 +216,9 @@
                   </div>
                 </div>
             </xpath>
+            <!-- <xpath expr="//field[@name='start_date']" position="after">
+            	<field name="is_rx_eywear"/>
+            </xpath> -->
         </field>
     </record>
     <record id="inherit_view_sales_order_filter" model="ir.ui.view">
