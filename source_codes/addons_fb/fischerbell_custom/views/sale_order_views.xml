@@ -104,6 +104,7 @@
                 <button name="action_confirm" type="object" string="Confirm" attrs="{'invisible': ['|','|', ('state','!=','waiting_approval'), ('approval_state','!=','approved'),('partner_request_state','!=','approved')]}" class="btn-primary" />
                 <!-- <button name="action_to_approve" type="object" string="Approve" attrs="{'invisible': ['|',('approval_state','!=','waiting_approval'),('partner_request_state','!=','approved')]}" class="btn-primary"/> -->
                 <button name="action_to_reject" type="object" string="Reject" attrs="{'invisible': [('state','!=','sent'),('approval_state','!=','waiting_approval')]}" class="btn-primary"/>
+                <button name="create_sub_order" type="object" string="Create Sub-Order" attrs="{'invisible': ['|',('is_rx_eywear','=',False),('state','!=','draft'),]}" class="btn-primary"/>
             </xpath>
             <xpath expr="//field[@name='validity_date']" position="after">
                 <field name="sale_id" attrs="{'invisible': [('type','not in',['exchange','loan','replacement'])]}" string="Sale Order"/>
@@ -117,6 +118,12 @@
                     <field name="loan_ids" invisible="1" />
                     <field name="loan_order_count" widget="statinfo" string="Loan Order" />
                 </button>
+                <button type="object" name="action_view_saleorder" class="oe_stat_button"
+                		icon="fa-pencil-square-o"
+                		attrs="{'invisible':[('sub_order_count','=',0)]}">
+	            	<field name="sub_order_ids" invisible="1" />
+	                <field name="sub_order_count" widget="statinfo" string="Sub Order" />
+                	</button>
 <!--                <button type="object" name="action_view_replacement_order" class="oe_stat_button" icon="fa-retweet" attrs="{'invisible':['|',('replacement_order_count', '=', 0),('type','not in','sale')]}">-->
 <!--                    <field name="replacement_order_ids" invisible="1" />-->
 <!--                    <field name="replacement_order_count" widget="statinfo" string="Replacement Order" />-->
@@ -149,6 +156,7 @@
             </xpath>
             <xpath expr="//page[@name='other_information']//group//group//field[@name='client_order_ref']" position="after">
                 <field name="artwork_attachment_ids" widget="many2many_binary"/>
+                <field name="is_rx_eywear"/>
             </xpath>
             <xpath expr="//field[@name='order_line']//tree//field[@name='name']" position="after">
                 <field name="terms_and_condition_ids" widget="many2many_tags" />
@@ -216,9 +224,6 @@
                   </div>
                 </div>
             </xpath>
-            <!-- <xpath expr="//field[@name='start_date']" position="after">
-            	<field name="is_rx_eywear"/>
-            </xpath> -->
         </field>
     </record>
     <record id="inherit_view_sales_order_filter" model="ir.ui.view">
@@ -364,11 +369,15 @@
         <field name="model">sale.order.line</field>
         <field name="arch" type="xml">
             <header>
-                <button name="update_request_price" type="object" 
+            	<button name="create_order" type="object" string="Create Order"
+                    class="btn-primary"/>
+                <button name="update_request_price" type="object"
+                			invisible="context.get('is_suborder')" 
                             class="btn-primary" string="Approve Request"
                             attrs="{'invisible':[('approval_state','!=','pending')]}"
                             groups="account.group_account_manager"/>
                 <button name="reject_request" type="object" 
+                            invisible="context.get('is_suborder')"
                             class="btn-primary" string="Reject Request"
                             attrs="{'invisible':[('approval_state','!=','pending')]}"
                             groups="account.group_account_manager"/>
