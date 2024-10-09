@@ -20,9 +20,14 @@
 				<field name="batch_number" invisible="1"/>
 				<field name="lot_id" optional="hide"/>
 				<field name="request_delivery_date"  optional="hide"/>
+				<field name="approval_state"  optional="hide"/>
 				<field name="estimated_delivery_date"  optional="hide"/>
 				<field name="sale_line_id" invisible="1"/>
-			</xpath>
+				<button name="action_approve_line" type="object" string="Approve" 
+                    attrs="{'invisible': [('approval_state', '!=', 'draft')]}" class="btn-primary"/>
+            	<button name="action_reject_line" type="object" string="Reject" 
+                    attrs="{'invisible': [('approval_state', '!=', 'draft')]}" class="btn-secondary"/>
+			</xpath>	
 			<xpath expr="//field[@name='order_line']//field[@name='date_planned']" position="attributes">
 				<attribute name="invisible">1</attribute>
 			</xpath>
