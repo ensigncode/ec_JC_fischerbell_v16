@@ -1407,7 +1407,7 @@ class SaleOrderLine(models.Model):
     def create_order(self):
         context = dict(self._context)
         sale_id = self.env['sale.order.line'].browse(context.get('active_ids')).mapped('order_id')[0]
-        sub_order_id = sale_id.copy({'order_line':False})
+        sub_order_id = sale_id.copy({'order_line':False,'sub_order_ids':False})
         sale_id.mapped('order_line').filtered(lambda x:x.id in context.get('active_ids')).write({'order_id':sub_order_id and sub_order_id.id})
         sale_id.write({'sub_order_ids':[(4,sub_order_id.id)]})
         return True
