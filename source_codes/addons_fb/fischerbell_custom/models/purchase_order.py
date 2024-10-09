@@ -32,7 +32,7 @@ class PurchaseOrder(models.Model):
     today = fields.Datetime('Date and Time', default=datetime.now())
     purchase_team_id = fields.Many2one('res.users', default=lambda self: self.env.user)
     len_note = fields.Char('Length Internal Notee', compute="_compute_purchase_internal_note", store=True)
-    partner_note = fields.Char('Note', size=200)
+    partner_note = fields.Text('Note')
     is_default_terms = fields.Boolean('Is Default Terms')
     po_comments = fields.Char(string="Comments")
     request_delivery_date = fields.Datetime("Request Delivery Date")
@@ -76,6 +76,12 @@ class PurchaseOrder(models.Model):
         tracking=True, copy=False)
     is_contact_created = fields.Boolean(related='partner_id.is_contact_created')
     reviewed_by = fields.Many2one("res.users",string="Reviewed By")
+
+    @api.constrains('partner_note')
+    def _check_partner_note_length(self):
+        for record in self:
+            if record.partner_note and len(record.partner_note) > 200:
+                raise ValidationError("The note cannot exceed 200 characters.")
 
     def action_rfq_send(self):
         res = super(PurchaseOrder, self).action_rfq_send()
