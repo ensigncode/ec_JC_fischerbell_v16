@@ -1,4 +1,4 @@
-from odoo import models, api
+from odoo import models, api, fields
 import base64
 import logging
 
@@ -67,6 +67,21 @@ class SOAReport(models.AbstractModel):
                 partner_list.append({'partner_id':partner, 'account_move_ids':account_move_ids or False})
         return partner_list
 
+    def convert_to_partner_currency(self, amount, to_currency):
+    	date = fields.date.today()
+    	company = self.env.user.company_id
+    	company_currency_id = company.currency_id
+    	to_currency = to_currency.filtered(lambda x: x.id != company_currency_id.id)
+    	value = company_currency_id._convert(amount,to_currency,company,date)
+    	return value,to_currency.name, to_currency.id
+
+    def convert_to_company_currency(self, amount, to_currency):
+    	date = fields.date.today()
+    	company = self.env.user.company_id
+    	company_currency_id = company.currency_id
+    	value = company_currency_id._convert(amount,to_currency,company,date)
+    	return value
+
     @api.model
     def _get_report_values(self, docids, data=None):
         docs = self.env['account.move'].browse(docids)
@@ -76,5 +91,7 @@ class SOAReport(models.AbstractModel):
         return {
             'doc_ids': docs,
             'get_data': self.get_partner_data,
-            'is_all_partner':is_all_partner
+            'is_all_partner':is_all_partner,
+            'partner_currency':self.convert_to_partner_currency,
+            'company_currency':self.convert_to_company_currency,
         }

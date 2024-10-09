@@ -227,6 +227,8 @@
                                     </tr>
                                 </table>
                                 <t t-if="moves">
+                                	<t t-esc="moves"/>
+                                <t t-set="partner_currency_id" t-value="moves.mapped('currency_id')"/>
                                 <table width="100%" style="table-layout:fixed">
                                     <thead style="font-size: 15px; font-weight: bold; padding-top: 10px; padding-bottom: 10px; border-left: 2px solid white; border-bottom: 3px solid black; border-top: 3px solid black; border-right: 2px solid white; margin-bottom: 10px;">
                                         <tr>
@@ -299,22 +301,33 @@
                                     </tbody>
                                 </table>
                             <hr class="border border-color-dark"/>
-                <div style="border-top: 2px solid white; padding-top: 7px; line-height: 1em;">
-                    <table width="40%" style="float: right; vertical-align: center; border: 1px solid white;">
-                        <tbody>
-                            <tr>
-                                <td width="15%" style="font-size: 15px; font-family: 'Arial'; text-align: left;"><strong>Total :</strong></td>
-                                <td width="5%" style="font-size: 15px; font-family: 'Arial'; text-align: center;">
-                                    <span t-esc="line.currency_id.name"/>
-                                </td>
-                                <td width="20%" style="font-size: 15px; font-family: 'Arial'; text-align: right;">
-                                    <span t-esc="round(sum(moves.mapped('total_balance_due')),2)"/>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-
+			                <div style="border-top: 2px solid white; padding-top: 7px; line-height: 1em;">
+						    <table width="50%" style="float: right; vertical-align: center; border: 1px solid white;">
+						        <tbody>
+						        	<t t-set="partner_currency_vals" t-value="partner_currency(round(sum(moves.mapped('total_balance_due')),2),partner_currency_id)"/>
+						            <tr>
+						                <td width="15%" style="font-size: 15px; font-family: 'Arial'; text-align: left;"><strong>Total in Company Currency:</strong></td>
+						                <td width="5%" style="font-size: 15px; font-family: 'Arial'; text-align: center;">
+						                    <span t-esc="user.company_id.currency_id.name"/>
+						                </td>
+						                <td width="20%" style="font-size: 15px; font-family: 'Arial'; text-align: right;">
+						                    <span t-esc="company_currency(round(sum(moves.mapped('total_balance_due')),2),user.company_id.currency_id)"/>
+						                </td>
+						            </tr>
+						            <t t-if="partner_currency_vals[2] != user.company_id.currency_id.id">
+						            <tr>
+						                    <td width="15%" style="font-size: 15px; font-family: 'Arial'; text-align: left;"><strong>Total in Partner Currency:</strong></td>
+						                    <td width="5%" style="font-size: 15px; font-family: 'Arial'; text-align: center;">
+						                        <span t-esc="partner_currency_vals[1]"/>
+						                    </td>
+						                    <td width="20%" style="font-size: 15px; font-family: 'Arial'; text-align: right;">
+						                        <span t-esc="partner_currency_vals[0]"/>
+						                    </td>
+						                </tr>
+						            </t>
+						        </tbody>
+						    </table>
+						</div>
                 <span>
                     <br/><br/><br/>
                     DOLLARS ZERO AND CENTS ZERO ONLY
@@ -334,22 +347,22 @@
                         <tr style="height: 40px;">
                             <td width="13%" style="text-align: center; padding-top: 10px; font-weight: bold;">Total in SGD</td>
                             <td width="13%" style="text-align: right; padding-top: 10px; font-weight: bold; padding-right: 3px;">
-                                <span t-esc="round(sum(moves.mapped('total_balance_due')),2)"/>
+                                <span t-esc="company_currency(round(sum(moves.mapped('total_balance_due')),2), user.company_id.currency_id)"/>
                             </td>
                             <td width="14%" style="text-align: right; padding-top: 10px; font-weight: bold; padding-right: 3px;">
-                                <span t-esc="sum(moves.mapped('current_month'))"/>
+                                <span t-esc="company_currency(sum(moves.mapped('current_month')), user.company_id.currency_id)"/>
                             </td>
                             <td width="15%" style="text-align: right; padding-top: 10px; font-weight: bold; padding-right: 3px;">
-                                <span t-esc="sum(moves.mapped('over_1month'))"/>
+                                <span t-esc="company_currency(sum(moves.mapped('over_1month')), user.company_id.currency_id)"/>
                             </td>
                             <td width="15%" style="text-align: right; padding-top: 10px; font-weight: bold; padding-right: 3px;">
-                                <span t-esc="sum(moves.mapped('over_2month'))"/>
+                                <span t-esc="company_currency(sum(moves.mapped('over_2month')), user.company_id.currency_id)"/>
                             </td>
                             <td width="15%" style="text-align: right; padding-top: 10px; font-weight: bold; padding-right: 3px;">
-                                <span t-esc="sum(moves.mapped('over_3month'))"/>
+                                <span t-esc="company_currency(sum(moves.mapped('over_3month')), user.company_id.currency_id)"/>
                             </td>
                             <td width="15%" style="text-align: right; padding-top: 10px; font-weight: bold; padding-right: 3px;">
-                                <span t-esc="sum(moves.mapped('over_4month'))"/>
+                                <span t-esc="company_currency(sum(moves.mapped('over_4month')), user.company_id.currency_id)"/>
                             </td>
                         </tr>
                     </tbody>
@@ -479,6 +492,7 @@
                                     </tr>
                                 </table>
                                 <t t-if="moves">
+                                <t t-set="partner_currency_id" t-value="moves.mapped('currency_id')"/>
                                 <table width="100%" style="table-layout:fixed">
                                     <thead style="font-size: 15px; font-weight: bold; padding-top: 10px; padding-bottom: 10px; border-left: 2px solid white; border-bottom: 3px solid black; border-top: 3px solid black; border-right: 2px solid white; margin-bottom: 10px;">
                                         <tr>
@@ -552,19 +566,31 @@
                                 </table>
                             <hr class="border border-color-dark"/>
                             <div style="border-top: 2px solid white; padding-top: 7px; line-height: 1em;">
-                                <table width="40%" style="float: right; vertical-align: center; border: 1px solid white;">
-                                    <tbody>
-                                        <tr>
-                                            <td width="15%" style="font-size: 15px; font-family: 'Arial'; text-align: left;"><strong>Total :</strong></td>
-                                            <td width="5%" style="font-size: 15px; font-family: 'Arial'; text-align: center;">
-                                                <span t-esc="line.currency_id.name"/>
-                                            </td>
-                                            <td width="20%" style="font-size: 15px; font-family: 'Arial'; text-align: right;">
-                                                <span t-esc="round(sum(moves.mapped('total_balance_due')),2)"/>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                                <table width="50%" style="float: right; vertical-align: center; border: 1px solid white;">
+						        <tbody>
+						        	<t t-set="partner_currency_vals" t-value="partner_currency(round(sum(moves.mapped('total_balance_due')),2),partner_currency_id)"/>
+						            <tr>
+						                <td width="15%" style="font-size: 15px; font-family: 'Arial'; text-align: left;"><strong>Total in Company Currency:</strong></td>
+						                <td width="5%" style="font-size: 15px; font-family: 'Arial'; text-align: center;">
+						                    <span t-esc="user.company_id.currency_id.name"/>
+						                </td>
+						                <td width="20%" style="font-size: 15px; font-family: 'Arial'; text-align: right;">
+						                    <span t-esc="company_currency(round(sum(moves.mapped('total_balance_due')),2),user.company_id.currency_id)"/>
+						                </td>
+						            </tr>
+						            <t t-if="partner_currency_vals[2] != user.company_id.currency_id.id">
+						            <tr>
+						                    <td width="15%" style="font-size: 15px; font-family: 'Arial'; text-align: left;"><strong>Total in Partner Currency:</strong></td>
+						                    <td width="5%" style="font-size: 15px; font-family: 'Arial'; text-align: center;">
+						                        <span t-esc="partner_currency_vals[1]"/>
+						                    </td>
+						                    <td width="20%" style="font-size: 15px; font-family: 'Arial'; text-align: right;">
+						                        <span t-esc="partner_currency_vals[0]"/>
+						                    </td>
+						                </tr>
+						            </t>
+						        </tbody>
+						    </table>
                             </div>
                             <span>
                                 <br/><br/><br/>
@@ -584,22 +610,22 @@
                                     <tr style="height: 40px;">
                                         <td width="13%" style="text-align: center; padding-top: 10px; font-weight: bold;">Total in SGD</td>
                                         <td width="13%" style="text-align: right; padding-top: 10px; font-weight: bold; padding-right: 3px;">
-                                            <span t-esc="round(sum(moves.mapped('total_balance_due')),2)"/>
+                                            <span t-esc="company_currency(round(sum(moves.mapped('total_balance_due')),2), user.company_id.currency_id)"/>
                                         </td>
                                         <td width="14%" style="text-align: right; padding-top: 10px; font-weight: bold; padding-right: 3px;">
-                                            <span t-esc="sum(moves.mapped('current_month'))"/>
+                                            <span t-esc="company_currency(sum(moves.mapped('current_month')), user.company_id.currency_id)"/>
                                         </td>
                                         <td width="15%" style="text-align: right; padding-top: 10px; font-weight: bold; padding-right: 3px;">
-                                            <span t-esc="sum(moves.mapped('over_1month'))"/>
+                                            <span t-esc="company_currency(sum(moves.mapped('over_1month')), user.company_id.currency_id)"/>
                                         </td>
                                         <td width="15%" style="text-align: right; padding-top: 10px; font-weight: bold; padding-right: 3px;">
-                                            <span t-esc="sum(moves.mapped('over_2month'))"/>
+                                            <span t-esc="company_currency(sum(moves.mapped('over_2month')), user.company_id.currency_id)"/>
                                         </td>
                                         <td width="15%" style="text-align: right; padding-top: 10px; font-weight: bold; padding-right: 3px;">
-                                            <span t-esc="sum(moves.mapped('over_3month'))"/>
+                                            <span t-esc="company_currency(sum(moves.mapped('over_3month')), user.company_id.currency_id)"/>
                                         </td>
                                         <td width="15%" style="text-align: right; padding-top: 10px; font-weight: bold; padding-right: 3px;">
-                                            <span t-esc="sum(moves.mapped('over_4month'))"/>
+                                            <span t-esc="company_currency(sum(moves.mapped('over_4month')), user.company_id.currency_id)"/>
                                         </td>
                                     </tr>
                                 </tbody>
