@@ -412,7 +412,13 @@ class PurchaseOrderLine(models.Model):
 
     def action_reject_line(self):
         for line in self:
-            line.unlink()
+            return {'name': 'Reject Reason',
+                    'type': 'ir.actions.act_window',
+                    'res_model': 'reject.reason.wizard',
+                    'view_mode': 'form',
+                    'view_type': 'form',
+                    'target': 'new',
+                    'context': {'default_reason': '', 'active_id': self.id},}
 
     @api.onchange('product_id')
     def onchange_sake_product_image(self):
