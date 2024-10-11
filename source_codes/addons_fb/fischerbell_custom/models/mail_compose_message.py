@@ -199,12 +199,9 @@ class MailComposerMessage(models.TransientModel):
             super(MailComposerMessage, self)._onchange_template_id_wrapper()
 
     def action_send_mail(self):
-        print(f"\n\n-----{self}------\n\n")
         if self._context.get("active_model") == 'purchase.order':
             purchase_order = self.env['purchase.order'].browse(self._context.get("active_id"))
-            purchase_order.mail_sended = True
-            if purchase_order and purchase_order.state in ('draft','reject'):
-                purchase_order.action_submit_to_approval() 
+            purchase_order.mail_sended = True 
 
         if self._context.get("active_model") == 'sale.order':
             sale_id = self.env['sale.order'].browse(self._context.get("active_id"))

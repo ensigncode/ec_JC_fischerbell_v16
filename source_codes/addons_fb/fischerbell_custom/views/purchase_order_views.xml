@@ -51,11 +51,12 @@
 			<xpath expr="//header//button[@name='button_cancel']" position="before">
 				<field name="partner_request_state" invisible="1"/>
 				<field name="is_contact_created" invisible="1"/>
+				<button name="action_submit_approval" type="object" string="Send for Approval" attrs="{'invisible': [('state','!=','sent')]}" class="btn-primary" />
 				<!-- <button name="sc_approved" string="Approved" type="object" attrs="{'invisible': ['|',('partner_request_state','!=','approved'),('state','=','approved')]}" class="btn-primary"/> -->
 				<button name="create_sequance_contact" string="Financial Approval" type="object" 
                         class="btn-primary" attrs="{'invisible': ['|',('is_contact_created','=',True),'|', '|',('partner_request_state', 'in', ('approved', 'pending')),('state', '!=', 'approve'),('approval_state', '!=', 'approved')]}"/>
-                 <button name="action_to_approve" type="object" string="Approve" attrs="{'invisible': [('state','!=','sent'),('approval_state','!=','waiting_approval')]}" class="btn-primary" />
-                <button name="action_to_reject" type="object" string="Reject" attrs="{'invisible': [('state','!=','sent'),('approval_state','!=','waiting_approval')]}" class="btn-primary"/>
+                 <button name="action_to_approve" type="object" string="Approve" attrs="{'invisible': [('state','!=','submitted')]}" class="btn-primary" />
+                <button name="action_to_reject" type="object" string="Reject" attrs="{'invisible': [('state','!=','submitted')]}" class="btn-primary"/>
 			</xpath>
 			<xpath expr="//header//button[@name='button_cancel']" position="attributes">
 				 <attribute name="states"></attribute>
