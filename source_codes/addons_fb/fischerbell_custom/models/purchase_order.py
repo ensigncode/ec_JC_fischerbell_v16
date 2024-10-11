@@ -45,6 +45,7 @@ class PurchaseOrder(models.Model):
     state = fields.Selection([
         ('draft', 'RFQ'),
         ('sent', 'RFQ Sent'),
+        ('submitted', 'Submitted for Approaval'),
         ('approve', "RFQ Approved"),
         ('reject', "RFQ Rejected"),
         ('purchase', 'Purchase Order'),
@@ -351,7 +352,7 @@ class PurchaseOrder(models.Model):
 
     def action_to_approve(self):
         for order in self:
-            if order.state == 'sent' and order.approval_state == 'waiting_approval' and self.env.user.has_group("fischerbell_custom.group_purchase_order_approver"):
+            if order.state == 'submitted' and order.approval_state == 'waiting_approval' and self.env.user.has_group("fischerbell_custom.group_purchase_order_approver"):
                 order.write({
                     'state': 'approve',
                     'approval_state': 'approved',
@@ -362,7 +363,7 @@ class PurchaseOrder(models.Model):
 
     def action_to_reject(self):
         for order in self:
-            if order.state == 'sent' and order.approval_state == 'waiting_approval' and self.env.user.has_group("fischerbell_custom.group_purchase_order_approver"):
+            if order.state == 'submitted' and order.approval_state == 'waiting_approval' and self.env.user.has_group("fischerbell_custom.group_purchase_order_approver"):
                 order.write({
                     'state': 'reject',
                     'approval_state': 'reject',
@@ -370,24 +371,29 @@ class PurchaseOrder(models.Model):
                 })
             else:
                 raise ValidationError("Sorry, you are not allowed to reject this order.")
-
-    def action_submit_to_approval(self):
-        for order in self:
+    
+    def action_submit_approval(self):
+        for rec in self:
+            item_zero = []
+            for line in self.order_line:
+                if line.price_subtotal == 0:
+                    item_zero.append("- " + line.product_id.name)
+            if item_zero:
+                message = "Purchase Order Line found with 0 Subtotal: \n{}".format("\n".join(item_zero))
+                raise UserError(message)
             user_id = self.env['res.users'].sudo().search([('groups_id', 'in', self.env.ref('fischerbell_custom.group_purchase_order_approver').id)], limit = 1)
             if not user_id:
                 user_id = self.env['res.users'].sudo().search([('groups_id', 'in', self.env.ref('account.group_account_manager').id)], limit = 1)
             self.env['mail.activity'].sudo().create({
                 'res_model_id': self.env.ref('purchase.model_purchase_order').id,
-                'res_id': order.id,
+                'res_id': rec.id,
                 'user_id': user_id.id,
                 'activity_type_id': self.env.ref('mail.mail_activity_data_todo').id,
-                'summary': _('Approval of RFQ : %s'%order.name),
-                'note': _('<span>Hello, <b>%s</b>, just a quick reminder to review and approve the pending RFQ <b>%s</b>.</br> Thanks!')%(user_id.name, order.name)
+                'summary': _('Approval of RFQ : %s'%rec.name),
+                'note': _('<span>Hello, <b>%s</b>, just a quick reminder to review and approve the pending RFQ <b>%s</b>.</br> Thanks!')%(user_id.name, rec.name)
             })
-            order.write({
-                'state': 'sent',
-                'approval_state': 'waiting_approval'
-            })
+            rec.write({'state': 'submitted', 'approval_state': 'waiting_approval'})
+
 
 class PurchaseOrderLine(models.Model):
     _inherit = "purchase.order.line"
@@ -404,6 +410,21 @@ class PurchaseOrderLine(models.Model):
     comments = fields.Char()
     request_delivery_date = fields.Datetime("Request Delivery Date")
     estimated_delivery_date = fields.Datetime("Estimated Delivery Date")
+    approval_state = fields.Selection([('draft', 'Draft'), ('approved', 'Approved')], string='State', default='draft')
+
+    def action_approve_line(self):
+        for line in self:
+            line.approval_state = 'approved'
+
+    def action_reject_line(self):
+        for line in self:
+            return {'name': 'Reject Reason',
+                    'type': 'ir.actions.act_window',
+                    'res_model': 'reject.reason.wizard',
+                    'view_mode': 'form',
+                    'view_type': 'form',
+                    'target': 'new',
+                    'context': {'default_reason': '', 'active_id': self.id},}
 
     @api.onchange('product_id')
     def onchange_sake_product_image(self):
