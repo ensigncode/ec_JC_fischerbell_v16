@@ -1,4 +1,4 @@
-from odoo import models, fields,api, Command, registry, SUPERUSER_ID
+from odoo import models, fields,api, Command, registry, SUPERUSER_ID, _
 import base64
 import logging
 from odoo.tools.misc import clean_context, split_every
@@ -11,6 +11,50 @@ class Message(models.Model):
     _inherit = 'mail.message'
     
     email_cc = fields.Char('Email Cc')
+
+    @api.model
+    def open_unread_messages(self):
+        """Get unread message IDs for the current user."""
+        # Find all mail channel members for the current user
+        members = self.env['mail.channel.member'].search([
+            ('partner_id', '=', self.env.user.partner_id.id)
+        ])
+
+        if not members:
+            return {
+                'type': 'ir.actions.act_window',
+                'res_model': 'mail.message',
+                'view_mode': 'tree,form',
+                'domain': [],
+            }
+
+        member_ids = tuple(members.ids)
+
+        # Fetch unread messages based on the member IDs
+        self.env.cr.execute("""
+               SELECT mail_message.id
+               FROM mail_message
+               INNER JOIN mail_channel_member
+                   ON mail_channel_member.channel_id = mail_message.res_id
+               WHERE mail_message.model = 'mail.channel'
+                 AND mail_message.message_type NOT IN ('notification', 'user_notification')
+                 AND (
+                     mail_message.id > mail_channel_member.seen_message_id
+                     OR mail_channel_member.seen_message_id IS NULL
+                 )
+                 AND mail_channel_member.id IN %s
+           """, (member_ids,))
+
+        unread_message_ids = [item[0] for item in self.env.cr.fetchall()]
+
+        # Return action with the domain for unread messages
+        return {
+            'name': _('Unread Message'),
+            'type': 'ir.actions.act_window',
+            'res_model': 'mail.message',
+            'view_mode': 'tree,form',
+            'domain': [('id', 'in', unread_message_ids)],
+        }
     
     
 class MailThread(models.AbstractModel):
