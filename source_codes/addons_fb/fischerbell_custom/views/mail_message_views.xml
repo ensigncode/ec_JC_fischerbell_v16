@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<odoo>
+    <record id="unread_messages_python_action" model="ir.actions.server">
+        <field name="name">Unread Messages</field>
+        <field name="model_id" ref="mail.model_mail_message"/>
+        <field name="state">code</field>
+        <field name="code">
+            action = model.open_unread_messages()
+        </field>
+    </record>
+    <menuitem id="menu_view_unread_messages" action="unread_messages_python_action" name="Unread Messages" parent="contacts.menu_contacts" sequence="1"/>
+</odoo>

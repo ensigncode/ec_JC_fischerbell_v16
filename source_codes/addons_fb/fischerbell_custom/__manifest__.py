@@ -69,7 +69,6 @@
         'views/fischerbell_product_terms_and_conditions_views.xml',
         'views/mail_channel_views.xml',
         'views/mrp_production_views.xml',
-        'views/product_template_views.xml',
         'views/purchase_order_views.xml',
         'views/report_tempates.xml',
         'views/res_config_settings_views.xml',
@@ -77,6 +76,7 @@
         'views/res_partner_views.xml',
         'views/res_company_views.xml',
         'views/sale_order_views.xml',
+        'views/product_template_views.xml',
         'views/stock_lot_views.xml',
         'views/stock_picking_views.xml',
         'views/crm_lead_view.xml',
@@ -85,6 +85,7 @@
         'views/stock_inventory.xml',
         'views/product_pricelist_comparison_views.xml',
         'views/stock_quant_view.xml',
+        'views/mail_message_views.xml',
 
         # 'wizard/fischerbell_wizard_report_delivery_with_training.xml',
     ],
