@@ -1,6 +1,7 @@
 from odoo import models, api, fields
 import base64
 import logging
+import pdb
 
 _logger = logging.getLogger(__name__)
 
@@ -65,22 +66,44 @@ class SOAReport(models.AbstractModel):
                     })
                     mail.send()
                 partner_list.append({'partner_id':partner, 'account_move_ids':account_move_ids or False})
+        for rec in partner_list:
+            total_partner_currency = 0
+            total_company_currency = 0
+            for moves in rec['account_move_ids']:
+                print("1---",moves.currency_id.name)
+                print("2---",moves.company_id.currency_id.name)
+                print("3---",rec['partner_id'].currency_id.name)
+                company_total = moves.currency_id.compute(moves.amount_total_in_currency_signed, moves.company_id.currency_id)
+                partner_total = moves.currency_id.compute(moves.amount_total_in_currency_signed, rec['partner_id'].currency_id)
+                total_partner_currency += partner_total
+                total_company_currency += company_total
+                # if moves.company_id.currency_id ==  rec['partner_id'].currency_id.name:
+                #     total_company_currency += moves.amount_total_in_currency_signed
+                #     total_partner_currency += moves.amount_total_in_currency_signed
+                # else:
+                #     company_total = moves.currency_id._convert(moves.amount_total_in_currency_signed, moves.company_id.currency_id)                
+                #     partner_total = moves.currency_id._convert(moves.amount_total_in_currency_signed, moves.company_id.currency_id)
+                #     total_partner_currency += moves.amount_total_in_currency_signed
+                #     print('----', partner_total)
+                #     total_company_currency += partner_total
+            rec['total_partner_currency'] = total_partner_currency
+            rec['total_company_currency'] = total_company_currency
         return partner_list
 
     def convert_to_partner_currency(self, amount, to_currency):
-    	date = fields.date.today()
-    	company = self.env.user.company_id
-    	company_currency_id = company.currency_id
-    	to_currency = to_currency.filtered(lambda x: x.id != company_currency_id.id)
-    	value = company_currency_id._convert(amount,to_currency,company,date)
-    	return value,to_currency.name, to_currency.id
+        date = fields.date.today()
+        company = self.env.user.company_id
+        company_currency_id = company.currency_id
+        to_currency = to_currency.filtered(lambda x: x.id != company_currency_id.id)
+        value = company_currency_id._convert(amount,to_currency,company,date)
+        return value,to_currency.name, to_currency.id
 
     def convert_to_company_currency(self, amount, to_currency):
-    	date = fields.date.today()
-    	company = self.env.user.company_id
-    	company_currency_id = company.currency_id
-    	value = company_currency_id._convert(amount,to_currency,company,date)
-    	return value
+        date = fields.date.today()
+        company = self.env.user.company_id
+        company_currency_id = company.currency_id
+        value = company_currency_id._convert(amount,to_currency,company,date)
+        return value
 
     @api.model
     def _get_report_values(self, docids, data=None):
