@@ -54,7 +54,9 @@ class HelpdeskTicket(models.Model):
     done_service = fields.Integer(compute="compute_done_service")
     attachment_ids = fields.Many2many(
         'ir.attachment','attachment_id', string='Attachments')
-
+    hide_transfer = fields.Boolean(string="Hide Transfer")
+    hide_in_transfer = fields.Boolean(string="Hide In Transfer")
+    hide_return_transfer = fields.Boolean(string="Hide Return Transfer")
 
 
     def compute_done_service(self):
@@ -148,6 +150,7 @@ class HelpdeskTicket(models.Model):
         }
     def action_select_loc_int(self):
         line_vals_list = []
+        self.hide_in_transfer = True
         for sl in self.service_line:
             line_vals_list.append((0, 0, {
                 'name': 'Driver Pickup',
