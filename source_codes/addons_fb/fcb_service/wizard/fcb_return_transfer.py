@@ -36,7 +36,6 @@ class FcbLocation(models.TransientModel):
     def action_create_return_transfer(self):
         line_vals_list = []
         for sl in self.ticket_id.service_line:
-            self.ticket_id.hide_return_transfer = True
             line_vals_list.append((0, 0, {
             'name': 'Driver Pickup',
             'product_id': sl.product_id.id,
