@@ -69,6 +69,10 @@
                             <group>
                                 <field name="create_uid"/>
                                 <field name="submitted_id"/>
+                                <field name="hide_transfer" invisible="1"/>
+                                <field name="hide_in_transfer" invisible="1"/>
+                                <field name="hide_return_transfer" invisible="1"/>
+
                             </group>
                             <group>
                                 <field name="certificate_name"/>
@@ -134,14 +138,16 @@
             <field name="arch" type="xml">
                 <xpath expr="//header" position="inside">
                     <button class="btn btn-secondary" name="action_select_loc" type="object" string="Create Transfer"
-                            attrs="{'invisible': [('service_type', '!=', 'inhouse_service')]}"
+                            attrs="{'invisible': [ '|', ('service_type', '!=', 'inhouse_service'), ('hide_transfer', '=', True)]}"
                     />
                      <button class="btn btn-secondary" name="action_select_loc_int" type="object" string="Create Intransit Transfer"
-                            attrs="{'invisible': [('service_type', '!=', 'inhouse_service')]}"
-                    />
+                            attrs="{'invisible': [ '|', '|',('service_type', '!=', 'inhouse_service'), ('hide_transfer', '=', False),('hide_in_transfer', '=', True)]}"
+                     />
+
                     <button class="btn btn-secondary" name="action_select_loc_to_return" type="object"
                             string="Create Return Transfer"
-                            attrs="{'invisible': [('service_type', '!=', 'inhouse_service')]}"
+                            attrs="{'invisible': [ '|', '|','|',('service_type', '!=', 'inhouse_service'), ('hide_transfer', '=', False),('hide_in_transfer', '=', False),
+                            ('hide_return_transfer', '=', True)]}"
                     />
                     <button class="btn btn-secondary" name="action_select_loc_outsource" type="object"
                             string="Create Outsource Transfer"
