@@ -147,14 +147,48 @@ class HelpdeskTicket(models.Model):
             'target': 'new',
         }
     def action_select_loc_int(self):
-        self.ensure_one()
-        return {
-            'type': 'ir.actions.act_window',
-            'name': _('Create Intransit Transfer'),
-            'res_model': 'fcb.int.location',
-            'view_mode': 'form',
-            'target': 'new',
-        }
+        line_vals_list = []
+        for sl in self.service_line:
+            line_vals_list.append((0, 0, {
+                'name': 'Driver Pickup',
+                'product_id': sl.product_id.id,
+                'product_uom_qty': sl.product_uom_qty,
+                'quantity_done': sl.product_uom_qty,
+                'product_uom': self.env.ref('uom.product_uom_unit').id,
+                'location_id': self.env.ref('fcb_service.location_repair').id,
+                'location_dest_id': self.env.ref('fcb_service.location_inspection').id,
+            }))
+        pick_in = self.env['stock.picking'].create({
+            # 'name': 'Driver Pickup',
+            'partner_id': self.partner_id.id,
+            'picking_type_id': self.env.ref('stock.picking_type_in').id,
+            'location_id': self.env.ref('fcb_service.location_repair').id,
+            'location_dest_id': self.env.ref('fcb_service.location_inspection').id,
+            'ticket_id': self.id,
+            'move_ids': line_vals_list})
+
+        line_valsout_list = []
+        for sl in self.service_line:
+            line_valsout_list.append((0, 0, {
+                'name': ' Unload to Warehouse ',
+                'product_id': sl.product_id.id,
+                'product_uom_qty': sl.product_uom_qty,
+                'product_uom': self.env.ref('uom.product_uom_unit').id,
+                'location_id': self.env.ref('fcb_service.location_inspection').id,
+                'location_dest_id': self.env.ref('stock.stock_location_output').id,
+            }))
+
+        pick_output = self.env['stock.picking'].create({
+            # 'name': 'Unload to Warehouse',
+            'partner_id': self.partner_id.id,
+            'picking_type_id': self.env.ref('stock.picking_type_out').id,
+            'location_id': self.env.ref('fcb_service.location_inspection').id,
+            'location_dest_id': self.env.ref('stock.stock_location_output').id,
+            'ticket_id': self.id,
+            'move_ids': line_valsout_list
+        })
+        pick_in.action_confirm()
+        pick_output.action_confirm()
 
     def action_select_loc_to_return(self):
         self.ensure_one()
