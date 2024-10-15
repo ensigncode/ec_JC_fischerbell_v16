@@ -995,6 +995,57 @@ class SaleOrder(models.Model):
             'target':'current'
         }
 
+    @api.model
+    def check_delivery_lead_time(self):
+        # Get the number of days from settings
+        days_to_check = int(self.env['ir.config_parameter'].sudo().get_param(
+            'sale_order_lead_time_notification.delivery_lead_time_days', default=5))
+        
+        # Get today's date and the date 'days_to_check' days from now
+        today = datetime.today().date()
+        delivery_date_threshold = today + timedelta(days=days_to_check)
+        
+        # Search for sale orders with delivery date within the configured number of days
+        sale_orders = self.search([
+            ('state', '=', 'sale'),  # Sale order should be confirmed
+            ('scheduled_delivery_date', '<=', delivery_date_threshold)
+        ])
+
+        # Check stock availability and send email if not enough stock
+        for order in sale_orders:
+            not_enough_stock = False
+            products_info = ""
+            
+            for line in order.order_line:
+                product = line.product_id
+                qty_available = product.qty_available
+                qty_required = line.product_uom_qty
+                
+                if qty_available < qty_required:
+                    not_enough_stock = True
+                    products_info += f"{product.display_name}: Required {qty_required}, Available {qty_available}\n"
+
+            if not_enough_stock:
+                # Send email to the "Delivery Lead Time Notification Group"
+                notification_group = self.env.ref('fischerbell_custom.group_delivery_lead_time_notification')
+                if notification_group:
+                    email_to = ','.join(user.email for user in notification_group.users if user.email)
+                    if email_to:
+                        # Send email
+                        mail_content = f"""
+                            <p>Dear Team,</p>
+                            <p>The following sale order has a delivery within {days_to_check} days, but there isn't enough stock available:</p>
+                            <p>Sale Order: <strong>{order.name}</strong></p>
+                            <pre>{products_info}</pre>
+                            <p>Please review and take the necessary action.</p>
+                        """
+                        mail_values = {
+                            'subject': f"Delivery Alert for Sale Order {order.name}",
+                            'body_html': mail_content,
+                            'email_to': email_to,
+                        }
+                        self.env['mail.mail'].create(mail_values).send()
+
 class SaleOrderLine(models.Model):
     _name = 'sale.order.line'
     _inherit = ['sale.order.line','mail.thread', 
