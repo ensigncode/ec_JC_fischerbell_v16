@@ -40,5 +40,28 @@
                 </xpath>
             </field>
         </record>
+        <record id="view_res_config_settings_inherit" model="ir.ui.view">
+            <field name="name">res.config.settings.inherit.view.form</field>
+            <field name="model">res.config.settings</field>
+            <field name="inherit_id" ref="sale.res_config_settings_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div[hasclass('settings')]" position="inside">
+                    <div class="app_settings_block" data-string="Sales">
+                        <h2>Delivery Lead Time Notification</h2>
+                        <div class="row mt16 o_settings_container">
+                            <div class="col-12 col-lg-6">
+                                <div class="o_setting_left_pane">
+                                    <field name="delivery_lead_time_days"/>
+                                </div>
+                                <div class="o_setting_right_pane">
+                                    <label for="delivery_lead_time_days"/>
+                                    <p>Specify the number of days for checking delivery lead time and sending notifications.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </xpath>
+            </field>
+        </record>
     </data>
 </odoo>
