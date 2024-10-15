@@ -34,7 +34,7 @@ class SOAReport(models.AbstractModel):
                     list_move.append(payment.id)
                 account_move_ids = self.env['account.move'].search([('id', 'in', list_move)])
                 if not account_move_ids.ids:
-                    partner_list.append({'partner_id':partner, 'account_move_ids':False})
+                    partner_list.append({'partner_id':partner, 'account_move_ids':False, 'total_partner_currency': 0, 'total_company_currency': 0})
                     pass
                 positive_total_amount = 0
                 negative_total_amount = 0
@@ -69,25 +69,14 @@ class SOAReport(models.AbstractModel):
         for rec in partner_list:
             total_partner_currency = 0
             total_company_currency = 0
-            for moves in rec['account_move_ids']:
-                print("1---",moves.currency_id.name)
-                print("2---",moves.company_id.currency_id.name)
-                print("3---",rec['partner_id'].currency_id.name)
-                company_total = moves.currency_id.compute(moves.amount_total_in_currency_signed, moves.company_id.currency_id)
-                partner_total = moves.currency_id.compute(moves.amount_total_in_currency_signed, rec['partner_id'].currency_id)
-                total_partner_currency += partner_total
-                total_company_currency += company_total
-                # if moves.company_id.currency_id ==  rec['partner_id'].currency_id.name:
-                #     total_company_currency += moves.amount_total_in_currency_signed
-                #     total_partner_currency += moves.amount_total_in_currency_signed
-                # else:
-                #     company_total = moves.currency_id._convert(moves.amount_total_in_currency_signed, moves.company_id.currency_id)                
-                #     partner_total = moves.currency_id._convert(moves.amount_total_in_currency_signed, moves.company_id.currency_id)
-                #     total_partner_currency += moves.amount_total_in_currency_signed
-                #     print('----', partner_total)
-                #     total_company_currency += partner_total
-            rec['total_partner_currency'] = total_partner_currency
-            rec['total_company_currency'] = total_company_currency
+            if rec.get('account_move_ids'):
+                for moves in rec['account_move_ids']:
+                    company_total = moves.currency_id.compute(moves.amount_total_in_currency_signed, moves.company_id.currency_id)
+                    partner_total = moves.currency_id.compute(moves.amount_total_in_currency_signed, rec['partner_id'].currency_id)
+                    total_partner_currency += partner_total
+                    total_company_currency += company_total
+                rec['total_partner_currency'] = total_partner_currency
+                rec['total_company_currency'] = total_company_currency
         return partner_list
 
     def convert_to_partner_currency(self, amount, to_currency):
