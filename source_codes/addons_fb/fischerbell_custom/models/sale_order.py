@@ -181,28 +181,7 @@ class SaleOrder(models.Model):
             raise ValidationError("Customer is not available during this date")
         if partner.no_delivery_days_selection == 'date' and partner.delivery_restriction_start_date <= self.scheduled_delivery_date.date() <= partner.delivery_restriction_end_date:
             raise ValidationError(f"Customer is not available from {partner.delivery_restriction_start_date.strftime('%d-%m-%Y')} to {partner.delivery_restriction_end_date.strftime('%d-%m-%Y')}")
-        # if self.partner_id.parent_id:
-        #   if self.partner_id.parent_id.no_delivery_days_selection == 'days':
-        #       if int(self.partner_id.parent_id.no_delivery_days) == self.scheduled_delivery_date.weekday():
-        #           raise ValidationError("Customer is not avaliable during this date")
-        #   if self.partner_id.parent_id.no_delivery_days_selection == 'date':
-        #       if self.partner_id.parent_id.delivery_restriction_start_date <= self.scheduled_delivery_date.date() <= self.partner_id.parent_id.delivery_restriction_end_date:
-        #           raise ValidationError(f"Customer is not avaliable from {self.partner_id.parent_id.delivery_restriction_start_date} to {self.partner_id.parent_id.delivery_restriction_end_date}")
-        # else:
-        #   if self.partner_id.no_delivery_days_selection == 'days':
-        #       if int(self.partner_id.no_delivery_days) == self.scheduled_delivery_date.weekday():
-        #           raise ValidationError("Customer is not avaliable during this date")
-        #   if self.partner_id.no_delivery_days_selection == 'date':
-        #       if self.partner_id.delivery_restriction_start_date <= self.scheduled_delivery_date.date() <= self.partner_id.delivery_restriction_end_date:
-        #           raise ValidationError(f"Customer is not avaliable from {self.partner_id.delivery_restriction_start_date} to {self.partner_id.delivery_restriction_end_date}")
-
-
-    # @api.onchange('contact_person_id')
-    # def _onchange_set_customer(self):
-    #   for rec in self:
-    #       # if not rec.partner_id:
-    #       rec.partner_id = rec.contact_person_id.id
-
+        
     def _get_contact_person_company(self):
         for rec in self:
             if rec.contact_person_id:
@@ -221,74 +200,6 @@ class SaleOrder(models.Model):
             if order.state == 'cancel':
                 order.approval_state = 'reject'
 
-
-
-    # def action_to_approve(self):
-    #   for order in self:
-    #       if any(line.product_uom_qty > line.product_id.qty_available for line in order.order_line):
-    #           # if order.state == 'waiting_approval' and order.approval_state == 'waiting_approval' and self.env.user.has_group("fischerbell_custom.group_sales_order_approver"):
-    #           #   order.write({
-    #           #       'state': 'sale',
-    #           #       'approval_state': 'approved'
-    #           #   })
-    #           return {
-    #               'name': "Product Avaliable",
-    #               'type': 'ir.actions.act_window',
-    #               'view_type': 'form',
-    #               'view_mode': 'form',
-    #               'res_model': 'avaliable.product.qty',
-    #               'view_id': self.env.ref('fischerbell_custom.avaliable_product_qty_form_view').id,
-    #               'target': 'new'
-    #           }
-    #           # order.action_confirm()
-    #           # else:
-    #           #   raise ValidationError("Sorry, you are not allowed to approve this order.")
-    #       else:
-    #           if order.state == 'waiting_approval' and order.approval_state == 'waiting_approval' and self.env.user.has_group("fischerbell_custom.group_sales_order_approver"):
-    #               order.write({
-    #                   'state': 'sale',
-    #                   'approval_state': 'approved',
-    #                   'reviewed_by': self.env.user.id
-    #               })
-    #               order.action_confirm()
-    #           else:
-    #               raise ValidationError("Sorry, you are not allowed to approve this order.")
-    #   return True
-
-
-    # @api.model_create_multi
-    # def create(self, vals_list):
-    #   for vals in vals_list:
-    #       if 'partner_seq' not in vals or vals['partner_seq'] == _('New'):
-    #           vals['partner_seq'] = self.env['ir.sequence'].next_by_code('quality.point') or _('New')
-    #   return super().create(vals_list)
-    # def action_to_approve(self):
-    #   self.submited_date = date.today()
-    #   if not 'vendor_wizard' in self._context:
-    #       line_ids = []
-    #       for rec in self.order_line:
-    #           line = rec
-    #           mrp_route_id = self.env.ref('purchase_stock.route_warehouse0_buy')
-    #           mto_route_id = self.env.ref('stock.route_warehouse0_mto')
-    #           if mrp_route_id and line.product_id.bom_ids and mto_route_id and (mrp_route_id in line.product_id.route_ids) or (mto_route_id in line.product_id.route_ids) and line.product_id.bom_ids:
-    #               boms = line.product_id.bom_ids._bom_find(line.product_id, company_id=line.company_id.id, bom_type='phantom')[line.product_id]
-    #               if boms:
-    #                   for bom_line in boms[0].bom_line_ids:
-    #                       line_ids.append((0,0,{'product_id':bom_line.product_id.id,'demand_qty':rec.product_uom_qty,'sale_line_id':line.id,'bom_line_id':bom_line.id}))
-    #           elif not rec.product_id.product_tmpl_id.seller_ids:
-    #               line_ids.append((0,0,{'product_id':line.product_id.id,'demand_qty':rec.product_uom_qty,'sale_line_id':line.id}))
-    #       if line_ids:
-    #           return {'type': 'ir.actions.act_window',
-    #                   'name': _('Product wizard'),
-    #                   'res_model': 'update.product.vendor',
-    #                   'view_mode': 'form',
-    #                   'context': {'order_id': self.id,'line_ids':line_ids},
-    #                   'target': 'new',
-    #                   }
-    #       else:
-    #           self.approval_order()
-    #
-    #   return True
 
     def action_to_approve(self):
         self.submited_date = date.today()
@@ -329,36 +240,6 @@ class SaleOrder(models.Model):
                 })
                 # Confirm and validate the picking
                 picking.action_confirm()
-        # if not 'vendor_wizard' in self._context:
-        #   line_ids = []
-        #   for rec in self.order_line:
-        #       line = rec
-        #       mrp_route_id = self.env.ref('purchase_stock.route_warehouse0_buy')
-        #       mto_route_id = self.env.ref('stock.route_warehouse0_mto')
-        #       if mrp_route_id and line.product_id.bom_ids and mto_route_id and (
-        #               mrp_route_id in line.product_id.route_ids) or (
-        #               mto_route_id in line.product_id.route_ids) and line.product_id.bom_ids:
-        #           boms = line.product_id.bom_ids._bom_find(line.product_id, company_id=line.company_id.id,
-        #                                                    bom_type='phantom')[line.product_id]
-        #           if boms:
-        #               for bom_line in boms[0].bom_line_ids:
-        #                   line_ids.append((0, 0,
-        #                                    {'product_id': bom_line.product_id.id, 'demand_qty': rec.product_uom_qty,
-        #                                     'sale_line_id': line.id, 'bom_line_id': bom_line.id}))
-        #       elif not rec.product_id.product_tmpl_id.seller_ids:
-        #           line_ids.append((0, 0, {'product_id': line.product_id.id, 'demand_qty': rec.product_uom_qty,
-        #                                   'sale_line_id': line.id}))
-        #   if line_ids:
-        #       return {'type': 'ir.actions.act_window',
-        #               'name': _('Product wizard'),
-        #               'res_model': 'update.product.vendor',
-        #               'view_mode': 'form',
-        #               'context': {'order_id': self.id, 'line_ids': line_ids},
-        #               'target': 'new',
-        #               }
-        #   else:
-
-
         return True
 
     def approval_order(self):
@@ -372,11 +253,6 @@ class SaleOrder(models.Model):
                         'approval_state': 'approved',
                         'reviewed_by': self.env.user.id
                     })
-     # if order.partner_id.partner_seq == _('New'):
-     #  partner = self.env['res.partner'].browse(order.partner_id.id)
-     #  partner.update({
-     #      'partner_seq': self.env['ir.sequence'].next_by_code('res.partner') or _('New')
-     #  })
                     order.with_context(vendor_wizard=True).action_confirm()
 
                     purchase_order_ids = self._get_purchase_orders()
@@ -524,17 +400,6 @@ class SaleOrder(models.Model):
                 'context': {'is_sale':True},
                 'target': 'new',
             }
-        # self.submited_date = date.today()
-        # for rec in self.order_line:
-        #   # line_ids = self.order_line.filtered(lambda line:not line.product_template_id.seller_ids)
-        #   if not rec.product_template_id.seller_ids and not self._context.get('vendor_wizard'):
-        #       return {'type': 'ir.actions.act_window',
-        #               'name': _('Product wizard'),
-        #               'res_model': 'update.product.vendor',
-        #               'view_mode': 'form',
-        #               # 'context': {'order_id': self.id,'line_ids':line_ids},
-        #               'target': 'new',
-        #               }
         super_call = super(SaleOrder, self).action_confirm()
         for order in self:
             product_ids = order.order_line.filtered(lambda x:x.product_id.approval_request in ('draft','rejected'))
@@ -544,89 +409,6 @@ class SaleOrder(models.Model):
             order.send_mail_triggers_based_on_state()
         return super_call
 
-
-    # def action_confirm(self):
-    #   self.submited_date = date.today()
-    #   if not 'vendor_wizard' in self._context:
-    #       line_ids = []
-    #       for rec in self.order_line:
-    #           line = rec
-    #           mrp_route_id = self.env.ref('purchase_stock.route_warehouse0_buy')
-    #           mto_route_id = self.env.ref('stock.route_warehouse0_mto')
-    #           if mrp_route_id and mto_route_id and (mrp_route_id in line.product_id.route_ids) or (mto_route_id in line.product_id.route_ids) and line.product_id.bom_ids:
-    #               boms = line.product_id.bom_ids._bom_find(line.product_id, company_id=line.company_id.id, bom_type='phantom')[line.product_id]
-    #               if boms:
-    #                   for bom_line in boms[0].bom_line_ids:
-    #                       line_ids.append((0,0,{'product_id':bom_line.product_id.id,'demand_qty':rec.product_uom_qty,'sale_line_id':line.id,'bom_line_id':bom_line.id}))
-    #           elif not rec.product_id.product_tmpl_id.seller_ids:
-    #               line_ids.append((0,0,{'product_id':line.product_id.id,'demand_qty':rec.product_uom_qty,'sale_line_id':line.id}))
-    #       if line_ids:
-    #           return {'type': 'ir.actions.act_window',
-    #                   'name': _('Product wizard'),
-    #                   'res_model': 'update.product.vendor',
-    #                   'view_mode': 'form',
-    #                   'context': {'order_id': self.id,'line_ids':line_ids},
-    #                   'target': 'new',
-    #                   }
-    #       else:
-    #           return super(SaleOrder, self).action_confirm()
-                
-    #   super_call = super(SaleOrder, self).action_confirm()
-    #   for order in self:
-    #       order.send_mail_triggers_based_on_state()
-    #   return super_call
-
-
-
-    # def action_confirm(self):
-    #   res = super().action_confirm()
-    #   mrp_list = []
-    #   for order in self:
-    #       if order.state == 'sale' and order.approval_state == 'approved':
-    #           manufacture_obj = self.env['mrp.production']
-    #           for line in order.order_line:
-    #               if line.product_template_id.bom_ids:
-    #                   for bom in line.product_template_id.bom_ids:
-    #                       if bom.type == 'phantom':
-    #                           procurement = self.env['procurement.group'].search([('name','=',order.name)], limit=1)
-    #                           if not procurement:
-    #                               procurement = self.env['procurement.group'].create({'name': order.name, 'move_type': 'direct'})
-    #                           mrp = self.env['mrp.production'].create({
-    #                               'product_id': line.product_id.id,
-    #                               'sale_id': order.id,
-    #                               'procurement_group_id': procurement.id,
-    #                               'product_qty': line.product_uom_qty,
-    #                               'bom_id': bom.id,
-    #                           })
-    #                           mrp_list.append(mrp.id)
-    #                               # for bom_line in bom.bom_line_ids:
-    #                               #   mrp_line = self.env['stock.move'].create({
-    #                               #           'product_id': bom_line.product_id.id,
-    #                               #           'raw_material_production_id': mrp.id,
-    #                               #           'product_uom_qty': bom_line.product_qty * line.product_uom_qty,
-    #                               #           'warehouse_id': order.warehouse_id.id,
-    #                               #           # 'bom_line_id': bom_line.id
-    #                               #       })
-
-    #                       else:
-    #                           pass
-    #               else:
-    #                   pass
-
-    #       if order.picking_ids:
-    #           for pick in order.picking_ids:
-    #               pick.user = self.env.user.id
-
-    #   mrp_production_ids = self.env['mrp.production'].search([('id','in',mrp_list)])
-    #   if mrp_production_ids:
-    #       self.mrp_production_ids = mrp_production_ids
-
-    #   for order in self:
-    #       productions = self.env['mrp.production'].search([('origin','=',order.name),('sale_id','=',False)])
-    #       for production in productions:
-    #           production.write({'sale_id': order.id})
-
-    #   return res
 
     @api.onchange('partner_id','type')
     def _onchange_trainer_desc(self):
@@ -987,17 +769,6 @@ class SaleOrder(models.Model):
             if vals.get('state') == 'draft':
                 vals['approval_state'] = 'no'
 
-            # if vals.get('state') == 'sent':
-            #   vals['email_to_customer'] = datetime.now()
-            #
-            # if vals.get('order_line'):
-            #   order_line_vals = list(map(lambda y:list(y[-1].keys()),filter(lambda x:isinstance(x,list) and isinstance(x[-1],dict),vals.get('order_line'))))
-            #   if any(field in ORDER_LINE_FIELDS for field in list(itertools.chain(*order_line_vals))):
-            #       vals['revision_order_name'] = (order.name.split('-')[0] if not order.revision_order_name else order.revision_order_name.split('-')[0]) + '-R%s'%(int(order.revision_order_count + 1) if int(order.revision_order_count) == 0 else int(order.revision_order_count))
-            #       vals['name'] = (order.name.split('-')[0] if not order.revision_order_name else order.revision_order_name.split('-')[0]) + '-R%s'%(int(order.revision_order_count + 1) if int(order.revision_order_count) == 0 else int(order.revision_order_count))
-            #       vals['revision_order_count'] = order.revision_order_count + 1
-            #       vals['is_order_revise'] = True
-
         res = super().write(vals)
         for order in self:
             if vals.get('tag_ids'):
@@ -1062,74 +833,6 @@ class SaleOrder(models.Model):
             'tag': 'reload'
         }
 
-    # def create_exchange_order(self):
-    #   for sale in self:
-    #       sale_id = sale.create({
-    #           'sale_id': sale.id,
-    #           'partner_id': sale.partner_id.id,
-    #           'partner_invoice_id': sale.partner_invoice_id.id,
-    #           'partner_shipping_id': sale.partner_shipping_id.id,
-    #           'pricelist_id': sale.pricelist_id.id,
-    #           'type': 'exchange',
-    #           'state': 'draft',
-    #       })
-    #
-    #   return
-
-    # @api.depends('exchange_order_ids')
-    # def _compute_exchange_order_ids(self):
-    #   for order in self:
-    #       exchange = list(filter(lambda x: (x.type == 'exchange'), order.exchange_order_ids))
-    #       order.exchange_order_count = len(exchange)
-
-
-    # def action_view_exchange_order(self, order=False):
-    #   self.ensure_one()
-    #
-    #   return {
-    #       'type': 'ir.actions.act_window',
-    #       'name': 'Exchange Order',
-    #       'view_mode': 'tree,form',
-    #       'res_model': 'sale.order',
-    #       'domain': [('sale_id', '=', self.id),('type','=','exchange')],
-    #       'context': {'default_sale_id':self.id, 'default_type': 'exchange', 'form_view_ref': 'sale.view_order_form', 'tree_view_ref':'sale.view_order_tree'}
-    #   }
-
-
-    # def create_replacement_orders(self):
-    #   for sale in self:
-    #       sale_id = sale.create({
-    #           'sale_id': sale.id,
-    #           'partner_id': sale.partner_id.id,
-    #           'partner_invoice_id': sale.partner_invoice_id.id,
-    #           'partner_shipping_id': sale.partner_shipping_id.id,
-    #           'pricelist_id': sale.pricelist_id.id,
-    #           'type': 'replacement',
-    #           'state': 'draft',
-    #       })
-    #
-    #   return
-
-
-    # @api.depends('replacement_order_ids')
-    # def _compute_replacement_order_ids(self):
-    #   for order in self:
-    #       replacement = list(filter(lambda x: (x.type == 'replacement'), order.replacement_order_ids))
-    #       order.replacement_order_count = len(replacement)
-
-
-    # def action_view_replacement_order(self, order=False):
-    #   self.ensure_one()
-    #
-    #   return {
-    #       'type': 'ir.actions.act_window',
-    #       'name': 'Replacement Order',
-    #       'view_mode': 'tree,form',
-    #       'res_model': 'sale.order',
-    #       'domain': [('sale_id', '=', self.id),('type','=','replacement')],
-    #       'context': {'default_sale_id':self.id, 'default_type': 'replacement', 'form_view_ref': 'sale.view_order_form', 'tree_view_ref':'sale.view_order_tree'}
-    #   }
-
     def get_report_name(self):
         self.ensure_one()
         return '%s - %s %s'%(datetime.now().year,self.name or '',self.partner_id.parent_id.name or self.partner_id.name)
@@ -1137,11 +840,7 @@ class SaleOrder(models.Model):
     def get_order_template_subject(self):
         self.ensure_one()
         pass
-        # if self.is_order_revise and self.user_id.id == self.env.user.id:
-        #   return "This is a revised quotation %s."%(self.revision_order_name)
-        # else:
-        #   return "%s %s (%s)"%(self.company_id.name,self.state in ('draft', 'sent') and (self._context.get('proforma') and 'Proforma' or 'Quotation') or 'Order',self.name or 'n/a')
-
+        
     # Set first followup date in order cron.
     def cron_set_followup_date(self):
         for rec in self.search([
@@ -1186,6 +885,7 @@ class SaleOrder(models.Model):
                 }
                 mail = self.env['mail.mail'].create(mails)
                 mail.send()
+                
     def cron_reminder_processing_team_to_followup(self):
         user_tz = pytz.timezone(self.env.context.get('tz') or self.env.user.tz or 'UTC')
         today = user_tz.localize(fields.Datetime.from_string(fields.Date.context_today(self))) - timedelta(days=14)
