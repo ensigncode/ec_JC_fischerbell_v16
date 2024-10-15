@@ -6,6 +6,12 @@ class ResConfigSettings(models.TransientModel):
 
     freight_charge_id = fields.Many2one('product.product', 'Freight Charge')
     return_time = fields.Integer('Return Time')
+    delivery_lead_time_days = fields.Integer(
+        string='Delivery Lead Time (Days)',
+        config_parameter='sale_order_lead_time_notification.delivery_lead_time_days',
+        default=5,
+        help="Number of days to check for delivery lead time and notify managers if stock is insufficient."
+    )
 
 
     def set_values(self):
