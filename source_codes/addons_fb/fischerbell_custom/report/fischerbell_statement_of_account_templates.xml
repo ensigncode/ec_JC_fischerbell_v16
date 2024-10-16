@@ -351,7 +351,8 @@
                         <tr style="height: 40px;">
                             <td width="13%" style="text-align: center; padding-top: 10px; font-weight: bold;">Total in SGD</td>
                             <td width="13%" style="text-align: right; padding-top: 10px; font-weight: bold; padding-right: 3px;">
-                                <span t-esc="company_currency(round(sum(moves.mapped('total_balance_due')),2), user.company_id.currency_id)"/>
+<!--                                 <span t-esc="company_currency(round(sum(moves.mapped('total_balance_due')),2), user.company_id.currency_id)"/> -->
+				    <span t-esc="c_total"/>
                             </td>
                             <td width="14%" style="text-align: right; padding-top: 10px; font-weight: bold; padding-right: 3px;">
                                 <span t-esc="company_currency(sum(moves.mapped('current_month')), user.company_id.currency_id)"/>
