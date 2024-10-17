@@ -87,6 +87,7 @@
         'views/product_pricelist_comparison_views.xml',
         'views/stock_quant_view.xml',
         'views/mail_message_views.xml',
+        'views/stock_landed_cost_views.xml',
 
         # 'wizard/fischerbell_wizard_report_delivery_with_training.xml',
     ],
