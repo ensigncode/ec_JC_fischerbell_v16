@@ -26,14 +26,14 @@ class SendInvoice(models.TransientModel):
 	_name = 'send.invoice'
 	_description = 'Send Invoice Lines'
 
-	move_type = fields.Selection([('out_invoice','Invoice'),('out_refund','Credit Note')],string="Move Type")
+	move_type = fields.Selection([('out_invoice','Invoice'),('out_refund','Credit Note'), ('in_invoice', 'In Invoice')],string="Move Type")
 	send_invoice_ids = fields.One2many('send.invoice.lines','send_invoice_id',string="Send Invoice")
 
 	@api.model
 	def default_get(self,vals):
 		res = super(SendInvoice,self).default_get(vals)
 		ctx = self.env.context
-		if 'default_move_type' in ctx and ctx['default_move_type'] and ctx['default_move_type'] in ('out_invoice','out_refund'):
+		if 'default_move_type' in ctx and ctx['default_move_type'] and ctx['default_move_type'] in ('out_invoice','out_refund', 'in_invoice'):
 			res['move_type'] =  ctx['default_move_type']
 		else:
 			raise UserError(_('Send Invoice to peppol datapost is allowed to customer invoice and credeit note.'))
@@ -81,7 +81,7 @@ class SendInvoice(models.TransientModel):
 		config_id =  self.env['invoice.now.configuration'].search([],limit=1) 
 		if not config_id:
 			raise UserError(_('Please configure for the Invoice Now Configuration for Document Type Invoice.'))
-		
+	
 		if self.move_type == 'out_invoice':
 			document_type = config_id.inv_document_type
 			document_format = config_id.inv_document_format
