@@ -446,6 +446,7 @@ class AccountMove(models.Model):
 		return report_action
 
 
+	@api.model
 	def create(self, vals):
 		res = super(AccountMove, self).create(vals)
 		if res.move_type == 'in_invoice' and res.partner_id and res.partner_id.l10n_in_gst_treatment == 'overseas':
