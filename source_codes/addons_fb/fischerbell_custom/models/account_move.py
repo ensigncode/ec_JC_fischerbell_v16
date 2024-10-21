@@ -3,9 +3,9 @@
 
 from odoo import api,fields, models, _
 from odoo.exceptions import UserError, ValidationError
-from datetime import datetime, date
-from dateutil.relativedelta import relativedelta
-import calendar
+from datetime import datetime, timedelta
+from collections import defaultdict
+
 
 class AccountMove(models.Model):
 	_inherit = "account.move"
@@ -16,11 +16,11 @@ class AccountMove(models.Model):
 	move_count = fields.Integer('Move Count', compute="_compute_move_ids")
 	is_freight_charge = fields.Boolean('Is Freight Charge Bill', default=False)
 	sale_id = fields.Many2one('sale.order', 'Sale Order')
-	current_month = fields.Monetary('Current Month', compute="_compute_outstanding_amount", store=True)
-	over_1month = fields.Monetary('Current Month', store=True, compute="_compute_outstanding_amount")
-	over_2month = fields.Monetary('Current Month', store=True, compute="_compute_outstanding_amount")
-	over_3month = fields.Monetary('Current Month', store=True, compute="_compute_outstanding_amount")
-	over_4month = fields.Monetary('Current Month', store=True, compute="_compute_outstanding_amount")
+	current_month = fields.Monetary('Current Month', compute="_compute_current_month", store=True)
+	over_1month = fields.Monetary('Current Month1', store=True, compute="_compute_before_month")
+	over_2month = fields.Monetary('Current Month2', store=True, compute="_compute_over_2month")
+	over_3month = fields.Monetary('Current Month3', store=True, compute="_compute_over_3month")
+	over_4month = fields.Monetary('Current Month4', store=True, compute="_compute_over_4month")
 	total_balance_due = fields.Monetary('Balance Due')
 	user = fields.Many2one('res.users', default=lambda self: self.env.user)
 	today = fields.Datetime('Date and Time', default=datetime.now())
@@ -157,104 +157,201 @@ class AccountMove(models.Model):
 				total += (line.price_subtotal * 100)/(100-line.discount) if line.discount != 100 else (line.price_unit * line.quantity)
 			order.amount_undiscounted = total
 
+	@api.depends('state', 'payment_state')
+	def _compute_current_month(self):
+		for record in self:
+			record.current_month = 0
+			today = datetime.today().date()
+			first_day_current_month = today.replace(day=1)
 
-	@api.depends('state','payment_state')
-	def _compute_outstanding_amount(self):
-		self.current_month = False
-		self.over_1month = False
-		self.over_2month = False
-		self.over_3month = False
-		self.over_4month = False
-		month = False
-		over_1month = False
-		over_2month = False
-		over_3month = False
-		over_4month = False
-		outstanding_amount = 0
-		outstanding_amount1 = 0
-		outstanding_amount2 = 0
-		outstanding_amount3 = 0
-		outstanding_amount4 = 0
-		invoices = False
-		for inv in self:
-			if inv.state == 'posted' and inv.payment_state not in ['in_payment','paid']:
-				date_current = inv.invoice_date_due
-				month_current = datetime.strftime(date_current,'%m')
-				year_current = datetime.strftime(date_current,'%Y')
-				data = calendar.monthrange(int(year_current),int(month_current))
-				datestart = datetime.strptime(year_current+'-'+month_current+'-01','%Y-%m-%d')
-				enddate = datetime.strptime(year_current+'-'+month_current+'-'+"%02d" % (data[1]),'%Y-%m-%d')
+			# Fetch invoices for the current month
+			invoice_ids = self.env['account.move'].sudo().search([
+				('partner_id', '=', record.partner_id.id),
+				('payment_state', 'not in', ['in_payment', 'paid']),
+				('state', '=', 'posted'),
+				('move_type', '=', 'out_invoice'),
+				('invoice_date', '>=', first_day_current_month),
+				('invoice_date', '<=', today)
+			])
 
-				domain = [
-						('account_id', '=', self.env.ref('l10n_generic_coa.1_receivable').id),
-						('move_id.state', '=', 'posted'),
-						('partner_id', '=', inv.partner_id.id),
-						('reconciled', '=', False),
-						('balance', '<', 0.0),
-						'|', ('amount_residual', '!=', 0.0), ('amount_residual_currency', '!=', 0.0),
-					]
-				for line in self.env['account.move.line'].search(domain):
-					date = line.move_id.date.strftime('%m')
+			for invoice in invoice_ids:
+				record.current_month += invoice.amount_total
 
-					#Current Month
-					inv_month = month_current
+	@api.depends('state', 'payment_state')
+	def _compute_before_month(self):
+		for record in self:
+			record.over_1month = 0
+			today = datetime.today().date()
+			first_day_current_month = today.replace(day=1)
+			first_day_previous_month = (first_day_current_month - timedelta(days=1)).replace(day=1)
 
-					# Current 1 Month
-					current_1month = int(month_current) - 1
-					if len(str(current_1month)) == 1:
-						over_1month = str(current_1month).zfill(2)
-					else:
-						over_1month = current_1month
+			# Fetch invoices for the previous month
+			invoice_ids = self.env['account.move'].sudo().search([
+				('partner_id', '=', record.partner_id.id),
+				('payment_state', 'not in', ['in_payment', 'paid']),
+				('state', '=', 'posted'),
+				('move_type', '=', 'out_invoice'),
+				('invoice_date', '>=', first_day_previous_month),
+				('invoice_date', '<', first_day_current_month)
+			])
+
+			for invoice in invoice_ids:
+				record.over_1month += invoice.amount_total
+
+	@api.depends('state', 'payment_state')
+	def _compute_over_2month(self):
+		for record in self:
+			record.over_2month = 0
+			today = datetime.today().date()
+			date_60_days_ago = today - timedelta(days=60)
+
+			# Fetch invoices older than 2 months (60 days)
+			invoice_ids = self.env['account.move'].sudo().search([
+				('partner_id', '=', record.partner_id.id),
+				('payment_state', 'not in', ['in_payment', 'paid']),
+				('state', '=', 'posted'),
+				('move_type', '=', 'out_invoice'),
+				('invoice_date', '<=', date_60_days_ago),
+				('invoice_date', '>', date_60_days_ago - timedelta(days=30))  # Between 60-90 days
+			])
+
+			for invoice in invoice_ids:
+				record.over_2month += invoice.amount_total
+
+	@api.depends('state', 'payment_state')
+	def _compute_over_3month(self):
+		for record in self:
+			record.over_3month = 0
+			today = datetime.today().date()
+			date_90_days_ago = today - timedelta(days=90)
+
+			# Fetch invoices older than 3 months (90 days)
+			invoice_ids = self.env['account.move'].sudo().search([
+				('partner_id', '=', record.partner_id.id),
+				('payment_state', 'not in', ['in_payment', 'paid']),
+				('state', '=', 'posted'),
+				('move_type', '=', 'out_invoice'),
+				('invoice_date', '<=', date_90_days_ago),
+				('invoice_date', '>', date_90_days_ago - timedelta(days=30))  # Between 90-120 days
+			])
+
+			for invoice in invoice_ids:
+				record.over_3month += invoice.amount_total
+
+	@api.depends('state', 'payment_state')
+	def _compute_over_4month(self):
+		for record in self:
+			record.over_4month = 0
+			today = datetime.today().date()
+			date_120_days_ago = today - timedelta(days=120)
+			date_150_days_ago = today - timedelta(days=150)
+
+			# Fetch invoices older than 4 months (120 to 150 days)
+			invoice_ids = self.env['account.move'].sudo().search([
+				('partner_id', '=', record.partner_id.id),
+				('payment_state', 'not in', ['in_payment', 'paid']),
+				('state', '=', 'posted'),
+				('move_type', '=', 'out_invoice'),
+				('invoice_date', '<=', date_120_days_ago),
+				('invoice_date', '>', date_150_days_ago)  # Between 120-150 days
+			])
+
+			for invoice in invoice_ids:
+				record.over_4month += invoice.amount_total
 
 
-					# Current 2 Month
-					current_2month = int(month_current) - 2
-					if len(str(current_2month)) == 1:
-						over_2month = str(current_2month).zfill(2)
-					else:
-						over_2month = current_2month
-
-
-					# Current 3 Month
-					current_3month = int(month_current) - 3
-					if len(str(current_3month)) == 1:
-						over_3month = str(current_3month).zfill(2)
-					else:
-						over_3month = current_3month
-
-
-					# Current 4 Month
-					current_4month = int(month_current) - 4
-					if len(str(current_4month)) == 1:
-						over_4month = str(current_4month).zfill(2)
-					else:
-						over_4month = current_4month
-
-					if line.date and line.date.strftime('%m') == inv_month:
-						outstanding_amount += line.amount_residual_currency
-
-					if line.date and line.date.strftime('%m') == over_1month:
-						outstanding_amount1 += line.amount_residual_currency
-
-					if line.date and line.date.strftime('%m') == over_2month:
-						outstanding_amount2 += line.amount_residual_currency
-
-					if line.date and line.date.strftime('%m') == over_3month:
-						outstanding_amount3 += line.amount_residual_currency
-
-					if line.date and line.date.strftime('%m') == over_4month:
-						outstanding_amount4 += line.amount_residual_currency
-
-			invoices = self.env['account.move'].search([('partner_id','=',inv.partner_id.id)])
-
-		if invoices:
-			for invoice in invoices:
-				invoice.current_month = abs(outstanding_amount)
-				invoice.over_1month = abs(outstanding_amount + outstanding_amount1)
-				invoice.over_2month = abs(outstanding_amount + outstanding_amount1 + outstanding_amount2)
-				invoice.over_3month = abs(outstanding_amount + outstanding_amount1 + outstanding_amount2 + outstanding_amount3)
-				invoice.over_4month = abs(outstanding_amount + outstanding_amount1 + outstanding_amount2 + outstanding_amount3 + outstanding_amount4)
-
+	# @api.depends('state','payment_state')
+	# def _compute_outstanding_amount(self):
+	# 	self.current_month = False
+	# 	self.over_1month = False
+	# 	self.over_2month = False
+	# 	self.over_3month = False
+	# 	self.over_4month = False
+	# 	outstanding_amount = 0
+	# 	outstanding_amount1 = 0
+	# 	outstanding_amount2 = 0
+	# 	outstanding_amount3 = 0
+	# 	outstanding_amount4 = 0
+	# 	invoices = False
+	# 	for inv in self:
+	# 		if inv.state == 'posted' and inv.payment_state not in ['in_payment','paid']:
+	# 			date_current = inv.invoice_date_due
+	# 			month_current = datetime.strftime(date_current,'%m')
+	# 			year_current = datetime.strftime(date_current,'%Y')
+	# 			data = calendar.monthrange(int(year_current),int(month_current))
+	# 			datestart = datetime.strptime(year_current+'-'+month_current+'-01','%Y-%m-%d')
+	# 			enddate = datetime.strptime(year_current+'-'+month_current+'-'+"%02d" % (data[1]),'%Y-%m-%d')
+	#
+	# 			domain = [
+	# 					('account_id', '=', self.env.ref('l10n_generic_coa.1_receivable').id),
+	# 					('move_id.state', '=', 'posted'),
+	# 					('partner_id', '=', inv.partner_id.id),
+	# 					('reconciled', '=', False),
+	# 					('balance', '<', 0.0),
+	# 					'|', ('amount_residual', '!=', 0.0), ('amount_residual_currency', '!=', 0.0),
+	# 				]
+	# 			for line in self.env['account.move.line'].search(domain):
+	# 				date = line.move_id.date.strftime('%m')
+	#
+	# 				#Current Month
+	# 				inv_month = month_current
+	#
+	# 				# Current 1 Month
+	# 				current_1month = int(month_current) - 1
+	# 				if len(str(current_1month)) == 1:
+	# 					over_1month = str(current_1month).zfill(2)
+	# 				else:
+	# 					over_1month = current_1month
+	#
+	#
+	# 				# Current 2 Month
+	# 				current_2month = int(month_current) - 2
+	# 				if len(str(current_2month)) == 1:
+	# 					over_2month = str(current_2month).zfill(2)
+	# 				else:
+	# 					over_2month = current_2month
+	#
+	#
+	# 				# Current 3 Month
+	# 				current_3month = int(month_current) - 3
+	# 				if len(str(current_3month)) == 1:
+	# 					over_3month = str(current_3month).zfill(2)
+	# 				else:
+	# 					over_3month = current_3month
+	#
+	#
+	# 				# Current 4 Month
+	# 				current_4month = int(month_current) - 4
+	# 				if len(str(current_4month)) == 1:
+	# 					over_4month = str(current_4month).zfill(2)
+	# 				else:
+	# 					over_4month = current_4month
+	#
+	# 				if line.date and line.date.strftime('%m') == inv_month:
+	# 					outstanding_amount += line.amount_residual_currency
+	#
+	# 				if line.date and line.date.strftime('%m') == over_1month:
+	# 					outstanding_amount1 += line.amount_residual_currency
+	#
+	# 				if line.date and line.date.strftime('%m') == over_2month:
+	# 					outstanding_amount2 += line.amount_residual_currency
+	#
+	# 				if line.date and line.date.strftime('%m') == over_3month:
+	# 					outstanding_amount3 += line.amount_residual_currency
+	#
+	# 				if line.date and line.date.strftime('%m') == over_4month:
+	# 					outstanding_amount4 += line.amount_residual_currency
+	#
+	# 		invoices = self.env['account.move'].search([('partner_id','=',inv.partner_id.id)])
+	#
+	# 	if invoices:
+	# 		for invoice in invoices:
+	# 			invoice.current_month = abs(outstanding_amount)
+	# 			invoice.over_1month = abs(outstanding_amount + outstanding_amount1)
+	# 			invoice.over_2month = abs(outstanding_amount + outstanding_amount1 + outstanding_amount2)
+	# 			invoice.over_3month = abs(outstanding_amount + outstanding_amount1 + outstanding_amount2 + outstanding_amount3)
+	# 			invoice.over_4month = abs(outstanding_amount + outstanding_amount1 + outstanding_amount2 + outstanding_amount3 + outstanding_amount4)
+	#
 
 
 	def create_freight_charge(self):
@@ -359,5 +456,6 @@ class AccountMove(models.Model):
 					'move_id':res.id,
 					'quantity':1})
 		return res
+
 
 
