@@ -4,7 +4,9 @@ import re
 from odoo import models
 
 def _refactor_name(name):
-    return re.sub(r'[^a-zA-Z0-9\s]', ' ', name)
+    new_name = re.sub(r'[^a-zA-Z0-9\s]', ' ', name)
+    return ' '.join(new_name.split())
+     
     
 
 class AccountEdiXmlUBL20(models.AbstractModel):
