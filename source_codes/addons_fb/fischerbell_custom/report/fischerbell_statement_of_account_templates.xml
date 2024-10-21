@@ -229,7 +229,6 @@
                                     </tr>
                                 </table>
                                 <t t-if="moves">
-                                	<t t-esc="moves"/>
                                 <t t-set="partner_currency_id" t-value="moves.mapped('currency_id')"/>
                                 <table width="100%" style="table-layout:fixed">
                                     <thead style="font-size: 15px; font-weight: bold; padding-top: 10px; padding-bottom: 10px; border-left: 2px solid white; border-bottom: 3px solid black; border-top: 3px solid black; border-right: 2px solid white; margin-bottom: 10px;">
@@ -351,23 +350,29 @@
                         <tr style="height: 40px;">
                             <td width="13%" style="text-align: center; padding-top: 10px; font-weight: bold;">Total in SGD</td>
                             <td width="13%" style="text-align: right; padding-top: 10px; font-weight: bold; padding-right: 3px;">
-<!--                                 <span t-esc="company_currency(round(sum(moves.mapped('total_balance_due')),2), user.company_id.currency_id)"/> -->
-				    <span t-esc="c_total"/>
+                                <span t-esc="c_total"/>
+
+<!--                                <span t-esc="company_currency(round(sum(moves.mapped('total_balance_due')),2), user.company_id.currency_id)"/>-->
                             </td>
                             <td width="14%" style="text-align: right; padding-top: 10px; font-weight: bold; padding-right: 3px;">
-                                <span t-esc="company_currency(sum(moves.mapped('current_month')), user.company_id.currency_id)"/>
+                                <span t-esc="company_currency((moves[0].current_month), user.company_id.currency_id)"/>
+<!--                                <span t-esc="company_currency((moves[0].current_month), user.company_id.currency_id)"/>-->
                             </td>
                             <td width="15%" style="text-align: right; padding-top: 10px; font-weight: bold; padding-right: 3px;">
-                                <span t-esc="company_currency(sum(moves.mapped('over_1month')), user.company_id.currency_id)"/>
+                                <span t-esc="company_currency((moves[0].over_1month), user.company_id.currency_id)"/>
+<!--                                <span t-esc="company_currency(sum(moves.mapped('over_1month')), user.company_id.currency_id)"/>-->
                             </td>
                             <td width="15%" style="text-align: right; padding-top: 10px; font-weight: bold; padding-right: 3px;">
-                                <span t-esc="company_currency(sum(moves.mapped('over_2month')), user.company_id.currency_id)"/>
+                                <span t-esc="company_currency((moves[0].over_2month), user.company_id.currency_id)"/>
+<!--                                <span t-esc="company_currency(sum(moves.mapped('over_2month')), user.company_id.currency_id)"/>-->
                             </td>
                             <td width="15%" style="text-align: right; padding-top: 10px; font-weight: bold; padding-right: 3px;">
-                                <span t-esc="company_currency(sum(moves.mapped('over_3month')), user.company_id.currency_id)"/>
+                                <span t-esc="company_currency((moves[0].over_3month), user.company_id.currency_id)"/>
+<!--                                <span t-esc="company_currency(sum(moves.mapped('over_3month')), user.company_id.currency_id)"/>-->
                             </td>
                             <td width="15%" style="text-align: right; padding-top: 10px; font-weight: bold; padding-right: 3px;">
-                                <span t-esc="company_currency(sum(moves.mapped('over_4month')), user.company_id.currency_id)"/>
+                                <span t-esc="company_currency((moves[0].over_4month), user.company_id.currency_id)"/>
+<!--                                <span t-esc="company_currency(sum(moves.mapped('over_4month')), user.company_id.currency_id)"/>-->
                             </td>
                         </tr>
                     </tbody>
