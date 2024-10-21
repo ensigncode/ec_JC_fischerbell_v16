@@ -19,18 +19,19 @@ class SOAReport(models.AbstractModel):
                 till_date = data.get('till_date')
                 list_move = []
                 invoice_ids = self.env['account.move'].sudo().search([
-                    ('partner_id.parent_id', '=', partner.id) or ('partner_id', '=', partner.id),
+                    ('partner_id', '=', partner.id),
                     ('invoice_date', '<=', till_date),
+                    ('payment_state', 'not in', ['in_payment', 'paid']),
                     ('move_type', '=', 'out_invoice')
                 ])
                 for inv in invoice_ids:
                     list_move.append(inv.id)
-                payment_ids = self.env['account.move'].sudo().search([
-                    ('partner_id', '=', partner.id),
-                    ('date', '<=', till_date),
-                    ('move_type', '=', 'entry')
-                ])
-                for payment in payment_ids:
+                # payment_ids = self.env['account.move'].sudo().search([
+                #     ('partner_id', '=', partner.id),
+                #     ('date', '<=', till_date),
+                #     ('move_type', '=', 'entry')
+                # ])
+                for payment in invoice_ids:
                     list_move.append(payment.id)
                 account_move_ids = self.env['account.move'].search([('id', 'in', list_move)])
                 if not account_move_ids.ids:
