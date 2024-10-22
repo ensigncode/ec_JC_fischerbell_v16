@@ -355,23 +355,23 @@
 <!--                                <span t-esc="company_currency(round(sum(moves.mapped('total_balance_due')),2), user.company_id.currency_id)"/>-->
                             </td>
                             <td width="14%" style="text-align: right; padding-top: 10px; font-weight: bold; padding-right: 3px;">
-                                <span t-esc="company_currency((moves[0].current_month), user.company_id.currency_id)"/>
+                                <span t-esc="company_currency((moves[-1].current_month), user.company_id.currency_id)"/>
 <!--                                <span t-esc="company_currency((moves[0].current_month), user.company_id.currency_id)"/>-->
                             </td>
                             <td width="15%" style="text-align: right; padding-top: 10px; font-weight: bold; padding-right: 3px;">
-                                <span t-esc="company_currency((moves[0].over_1month), user.company_id.currency_id)"/>
+                                <span t-esc="company_currency((moves[-1].over_1month), user.company_id.currency_id)"/>
 <!--                                <span t-esc="company_currency(sum(moves.mapped('over_1month')), user.company_id.currency_id)"/>-->
                             </td>
                             <td width="15%" style="text-align: right; padding-top: 10px; font-weight: bold; padding-right: 3px;">
-                                <span t-esc="company_currency((moves[0].over_2month), user.company_id.currency_id)"/>
+                                <span t-esc="company_currency((moves[-1].over_2month), user.company_id.currency_id)"/>
 <!--                                <span t-esc="company_currency(sum(moves.mapped('over_2month')), user.company_id.currency_id)"/>-->
                             </td>
                             <td width="15%" style="text-align: right; padding-top: 10px; font-weight: bold; padding-right: 3px;">
-                                <span t-esc="company_currency((moves[0].over_3month), user.company_id.currency_id)"/>
+                                <span t-esc="company_currency((moves[-1].over_3month), user.company_id.currency_id)"/>
 <!--                                <span t-esc="company_currency(sum(moves.mapped('over_3month')), user.company_id.currency_id)"/>-->
                             </td>
                             <td width="15%" style="text-align: right; padding-top: 10px; font-weight: bold; padding-right: 3px;">
-                                <span t-esc="company_currency((moves[0].over_4month), user.company_id.currency_id)"/>
+                                <span t-esc="company_currency((moves[-1].over_4month), user.company_id.currency_id)"/>
 <!--                                <span t-esc="company_currency(sum(moves.mapped('over_4month')), user.company_id.currency_id)"/>-->
                             </td>
                         </tr>
