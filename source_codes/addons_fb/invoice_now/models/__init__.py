@@ -6,3 +6,4 @@ from . import account_move
 from . import invoice_now_configuration
 from . import res_partner
 from . import account_edit_format
+from . import account_edi_xml_ubl_20
