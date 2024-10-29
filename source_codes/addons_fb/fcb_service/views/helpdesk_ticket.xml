@@ -25,6 +25,7 @@
                     </button>
                 </xpath>
                 <xpath expr='//field[@name="tag_ids"]' position="after">
+                    <field name="location_id"/>
                     <field name="is_servicing" force_save="1" invisible="1"/>
                     <field name="service_priority" widget="radio" attrs="{'invisible': [('is_servicing','=',False)]}"/>
                     <field name="date_of_request" attrs="{'invisible': [('is_servicing','=',False)]}"/>
