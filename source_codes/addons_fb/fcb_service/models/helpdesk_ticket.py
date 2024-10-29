@@ -57,6 +57,7 @@ class HelpdeskTicket(models.Model):
     hide_transfer = fields.Boolean(string="Hide Transfer")
     hide_in_transfer = fields.Boolean(string="Hide In Transfer")
     hide_return_transfer = fields.Boolean(string="Hide Return Transfer")
+    
 
 
     def compute_done_service(self):

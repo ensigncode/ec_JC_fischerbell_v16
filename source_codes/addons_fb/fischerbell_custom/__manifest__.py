@@ -88,6 +88,7 @@
         'views/stock_quant_view.xml',
         'views/mail_message_views.xml',
         'views/stock_landed_cost_views.xml',
+        'views/stock_barcode_cancel_operation_view.xml',
 
         # 'wizard/fischerbell_wizard_report_delivery_with_training.xml',
     ],
