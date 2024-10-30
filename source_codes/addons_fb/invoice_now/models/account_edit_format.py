@@ -19,8 +19,7 @@ class AccountEdiXmlUBLSG(models.AbstractModel):
         # EXTENDS account_edi
         self.ensure_one()
         if self.code not in FORMAT_CODES:
-            return super()._get_move_applicability(move)
-
+            return super()._get_move_applicability(move)     
         if self._is_ubl_cii_available(move.company_id) and move.move_type in ('out_invoice', 'out_refund', 'in_invoice'):
             return {'post': self._ubl_cii_post_invoice}
 

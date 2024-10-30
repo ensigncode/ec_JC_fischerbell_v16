@@ -57,6 +57,7 @@ class HelpdeskTicket(models.Model):
     hide_transfer = fields.Boolean(string="Hide Transfer")
     hide_in_transfer = fields.Boolean(string="Hide In Transfer")
     hide_return_transfer = fields.Boolean(string="Hide Return Transfer")
+
     location_id = fields.Many2one('stock.location', 'Location',compute='compute_location_id')
 
     def compute_location_id(self):
@@ -70,7 +71,6 @@ class HelpdeskTicket(models.Model):
                 record.location_id = lowest_id_done_picking.location_id.id
             else:
                 record.location_id = False
-
 
     def compute_done_service(self):
         done_stage = self.env.ref('industry_fsm.planning_project_stage_3').id

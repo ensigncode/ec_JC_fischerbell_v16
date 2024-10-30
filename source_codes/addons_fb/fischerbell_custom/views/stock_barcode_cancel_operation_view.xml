@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="stock_barcode_cancel_operation_view_custom" model="ir.ui.view">
+        <field name="name">stock_barcode_cancel_operation_custom</field>
+        <field name="model">stock_barcode.cancel.operation</field>
+        <field name="inherit_id" ref="stock_barcode.stock_barcode_cancel_operation_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='picking_id']" position="before">
+                <p>Cancelation reason</p>
+                <field name="reason_id" options="{'no_open': True}"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>
