@@ -448,15 +448,17 @@ class AccountMove(models.Model):
 
 	@api.model
 	def create(self, vals):
-		res = super(AccountMove, self).create(vals)
-		if res.move_type == 'in_invoice' and res.partner_id and res.partner_id.l10n_in_gst_treatment == 'overseas':
-			product_id = self.env['product.product'].search([('landed_cost_ok','=',True)], limit = 1)
-			if product_id:
-				line_id = self.env['account.move.line'].create({'product_id':product_id.id,
-					'product_uom_id':product_id.uom_id.id,
-					'move_id':res.id,
-					'quantity':1})
-		return res
+		records = super(AccountMove, self).create(vals)
+		for res in records:
+			if res.move_type == 'in_invoice' and res.partner_id and res.partner_id.l10n_in_gst_treatment == 'overseas':
+				product_id = self.env['product.product'].search([('landed_cost_ok', '=', True)], limit=1)
+				if product_id:
+					line_id = self.env['account.move.line'].create({'product_id': product_id.id,
+					                                                'product_uom_id': product_id.uom_id.id,
+					                                                'move_id': res.id,
+					                                                'quantity': 1})
+		return records
+
 
 
 
