@@ -60,6 +60,32 @@ class Picking(models.Model):
 	delivery_instruction = fields.Html(string="Delivery Instruction")
 	invoice_instruction = fields.Html(string="Invoice Instruction")
 
+	@api.returns('self', lambda value: value.id)
+	def copy(self, default=None):
+		self.ensure_one()
+		default = default or {}
+
+		if self.state == 'cancel' and self.picking_type_id.code == 'outgoing':
+			base_name = self.name.split('-R')[0]
+			existing_revisions = self.env['stock.picking'].search([
+				('name', 'like', base_name + '-R'),
+				('picking_type_id.code', '=', 'outgoing'),
+				('state', '=', 'cancel'),
+			]).mapped('name')
+			max_revision = 0
+			for name in existing_revisions:
+				if '-R' in name:
+					try:
+						revision = int(name.split('-R')[-1])
+						max_revision = max(max_revision, revision)
+					except ValueError:
+						continue
+
+			next_revision = max_revision + 1
+			default['name'] = f"{base_name}-R{next_revision}"
+
+		return super(Picking, self).copy(default)
+
 	@api.depends('move_ids.state', 'move_ids.date', 'move_type')
 	def _compute_scheduled_date(self):
 		for picking in self:
