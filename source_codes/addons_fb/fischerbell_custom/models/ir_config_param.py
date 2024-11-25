@@ -7,7 +7,7 @@ class YourModel(models.Model):
 
     def update_system_param(self):
         date_32_days_later = datetime.today() + timedelta(days=32)
-        date_32_days_str = fields.Date.to_string(date_32_days_later)
+        date_32_days_str = fields.Datetime.to_string(date_32_days_later)
         config_param = self.env['ir.config_parameter'].sudo()
         param_key = 'database.expiration_date'
         if config_param.get_param(param_key):
