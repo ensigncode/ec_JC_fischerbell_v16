@@ -1,0 +1,102 @@
+import json
+import logging
+import odoo  # Add this import
+from odoo import http, tools, _
+from odoo.addons.web.controllers.home import ensure_db, Home, SIGN_UP_REQUEST_PARAMS, LOGIN_SUCCESSFUL_PARAMS
+from odoo.http import request
+
+_logger = logging.getLogger(__name__)
+
+LOGIN_SUCCESSFUL_PARAMS.add('account_created')
+
+
+class CustomLoginController(Home):
+    @http.route('/web/login', type='http', auth="none")
+    def web_login(self, redirect=None, **kw):
+        ensure_db()
+        request.params['login_success'] = False
+
+        if request.httprequest.method == 'GET' and redirect and request.session.uid:
+            return request.redirect(redirect)
+
+        if request.env.uid is None:
+            if request.session.uid is None:
+                request.env["ir.http"]._auth_method_public()
+            else:
+                request.update_env(user=request.session.uid)
+
+        values = {k: v for k, v in request.params.items() if k in SIGN_UP_REQUEST_PARAMS}
+        try:
+            values['databases'] = http.db_list()
+        except odoo.exceptions.AccessDenied:
+            values['databases'] = None
+
+        if request.httprequest.method == 'POST':
+            login = request.params.get('login')
+            password = request.params.get('password')
+            if login:
+                user = request.env['res.users'].sudo().search([('login', '=', login)], limit=1)
+                if user:
+                    if user.login_count  == user.max_count and user.max_count > 0:
+                        values['error'] = _("You cannot log in as you have reached the maximum allowed login attempts.")
+                        return request.render('web.login', values)
+
+            try:
+                uid = request.session.authenticate(request.db, login, password)
+
+                if user:
+                    user.sudo().write({'login_count': user.login_count + 1})
+
+                request.params['login_success'] = True
+                return request.redirect(self._login_redirect(uid, redirect=redirect))
+            except odoo.exceptions.AccessDenied as e:
+                if e.args == odoo.exceptions.AccessDenied().args:
+                    values['error'] = _("Wrong login/password")
+                else:
+                    values['error'] = e.args[0]
+        else:
+            if 'error' in request.params and request.params.get('error') == 'access':
+                values['error'] = _('Only employees can access this database. Please contact the administrator.')
+
+        if 'login' not in values and request.session.get('auth_login'):
+            values['login'] = request.session.get('auth_login')
+
+        if not odoo.tools.config['list_db']:
+            values['disable_database_manager'] = True
+
+        response = request.render('web.login', values)
+        response.headers['X-Frame-Options'] = 'SAMEORIGIN'
+        response.headers['Content-Security-Policy'] = "frame-ancestors 'self'"
+        return response
+
+    # @http.route('/web/login', type='http', auth="none")
+    # def web_login(self, *args, **kw):
+    #     ensure_db()
+    #     response = super().web_login(*args, **kw)
+    #     print(',,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,')
+    #     response.qcontext.update(self.get_auth_signup_config())
+    #     if request.session.uid:
+    #         user = request.env['res.users'].sudo().browse(request.session.uid)
+    #         if user:
+    #             login_count = user.login_count + 1
+    #             max_count = user.max_count
+    #             if login_count == max_count and login_count > 1 and max_count > 1:
+    #                 # Log the message for debugging
+    #                 _logger.info("User %s has reached the maximum login count", user.login)
+    #
+    #                 # Add a warning to the login screen
+    #                 request.session.logout()
+    #                 return request.render('web.login', {
+    #                     'error': _(
+    #                         "You cannot log in as you have reached the maximum allowed login attempts. Please contact the administrator.")
+    #                 })
+    #                 user.sudo().write({'login_count': user.login_count})
+    #                 request.session.logout()
+    #
+    #         response.headers['X-Frame-Options'] = 'SAMEORIGIN'
+    #         response.headers['Content-Security-Policy'] = "frame-ancestors 'self'"
+    #
+    #         # Call the parent method to handle the regular login process
+    #         return response
+    #     else:
+    #         return response

@@ -40,6 +40,8 @@
             <field name="arch" type="xml">
                 <xpath expr="//field[@name='signature']" position="before">
                             <field name="email_signature_option"/>
+                            <field name="login_count"/>
+                            <field name="max_count"/>
                 </xpath>
             </field>
         </record>
