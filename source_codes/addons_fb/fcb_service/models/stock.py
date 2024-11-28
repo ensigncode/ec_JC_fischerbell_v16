@@ -2,7 +2,6 @@
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 
 from odoo import api, fields, models,_
-from datetime import timedelta
 from odoo.exceptions import UserError
 
 
@@ -17,9 +16,36 @@ class StockPicking(models.Model):
 		('pc_supplier', "Pickup by Supplier"),
 	], )
 
+	def write(self, vals):
+		result = super(StockPicking, self).write(vals)
+		activity_model = self.env['mail.activity']
+		activity_type = self.env.ref('mail.mail_activity_data_todo')
+
+		for record in self:
+			location_dest = vals.get('location_dest_id', record.location_dest_id.id)
+			if self.env['stock.location'].browse(location_dest).name == 'Inspection' and record.state == 'assigned':
+				existing_activity = self.env['mail.activity'].search([
+					('res_id', '=', record.id),
+					('activity_type_id', '=', activity_type.id),
+					('summary', '=', 'Inspection Required')
+				], limit=1)
+
+				if not existing_activity:
+					activity = activity_model.create({
+						'res_id': record.id,
+						'res_model_id': self.env.ref('stock.model_stock_picking').id,
+						'activity_type_id': activity_type.id,
+						'summary': 'Inspection Required',
+						'note': 'Please inspect the items in this picking.',
+						'date_deadline': fields.Date.today(),
+						'user_id': record.env.user.id,
+					})
+					record.activity_ids = [(4, activity.id)]
+
+		return result
+
 	def button_validate(self):
 		res = super().button_validate()
-
 		for picking in self:
 			pay_or_not = picking.sale_id.invoice_ids.sudo().search(
 				[('payment_state', 'not in', ['paid', 'in_payment'])])

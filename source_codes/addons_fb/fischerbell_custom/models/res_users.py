@@ -1,6 +1,8 @@
 from odoo import _, api, fields, models, registry, tools
-from odoo.tools import is_html_empty
 from markupsafe import Markup
+import logging
+_logger = logging.getLogger(__name__)
+
 
 
 class ResUser(models.Model):
@@ -11,6 +13,24 @@ class ResUser(models.Model):
                                                ('custom_without_brand', 'Customize Without Brand')],
                                               string="Email Signature Option", default='base')
     # {', ' + user['company_id']['zip'] if user['company_id']['zip'] else ''}
+    login_count = fields.Integer(string="Login Count", readonly=True,default=0)
+    max_count = fields.Integer(string="Max Count")
+
+    # @classmethod
+    # def authenticate(cls, db, login, password, user_agent_env):
+    #     uid = super(ResUser, cls).authenticate(db, login, password, user_agent_env)
+    #
+    #     if uid:
+    #         with cls.pool.cursor() as cr:
+    #             try:
+    #                 env = api.Environment(cr, uid, {})
+    #                 user = env['res.users'].browse(uid)
+    #                 user.sudo().write({'login_count': user.login_count + 1})
+    #             except KeyError as e:
+    #                 _logger.error(f"KeyError: {e} - Database may be missing the model.")
+    #                 raise
+    #
+    #     return uid
 
     @api.depends('name', 'email_signature_option', 'mobile_phone', 'work_phone', 'work_email')
     def _compute_signature(self):
