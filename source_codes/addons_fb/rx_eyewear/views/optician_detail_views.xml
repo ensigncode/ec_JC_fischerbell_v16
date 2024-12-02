@@ -2,13 +2,13 @@
 <odoo>
 	<data>
 		<report
-				id="fischerbell_optician_detail_report_action"
-				model="optician.detail"
-				string="Optician detail report"
-				report_type="xlsx"
-				name="rx_eyewear.optician_detail_report"
-				file="Optician detail Report"
-				attachment_use="False"
+			id="fischerbell_optician_detail_report_action"
+			model="optician.detail"
+			string="Optician detail report"
+			report_type="xlsx"
+			name="rx_eyewear.optician_detail_report"
+			file="Optician detail Report"
+			attachment_use="False"
 		/>
 	</data>
 	<record id="optician_detail_view_tree" model="ir.ui.view">
@@ -16,21 +16,24 @@
 		<field name="model">optician.detail</field>
 		<field name="arch" type="xml">
 			<tree string="Optician Detail">
-				<field name="user_id"/>
-				<field name="partner_id"/>
-				<field name="name"/>
-				<field name="mobile"/>
-				<field name="product_id"/>
-				<field name="company_id"/>
-				<field name="sphere_left"/>
-				<field name="cyl_left"/>
-				<field name="axis_left"/>
-				<field name="sphere_right"/>
-				<field name="cyl_right"/>
-				<field name="axis_right"/>
-				<field name="add"/>
-				<field name="pd"/>
-				<field name="requirements"/>
+				<field name="user_id" />
+				<field name="partner_id" />
+				<field name="name" />
+				<field name="mobile" />
+				<field name="product_id" />
+				<field name="company_id" />
+				<field name="sphere_left" />
+				<field name="cyl_left" />
+				<field name="axis_left" />
+				<field name="sphere_right" />
+				<field name="cyl_right" />
+				<field name="axis_right" />
+				<field name="add" />
+				<field name="pd" />
+				<field name="requirements" />
+				<field name="sg_ht" />
+				<field name="add_right" />
+				<field name="pescription" />
 			</tree>
 		</field>
 	</record>
@@ -46,41 +49,46 @@
 				<sheet>
 					<div class="oe_button_box" name="button_box">
 						<button type="object"
-						        name="action_show_sale_order"
-						        class="oe_stat_button"
-						        icon="fa-pencil-square-o" attrs="{'invisible':[('sale_order_count','=', 0)]}">
-							<field name="sale_order_count" widget="statinfo" string="Sale Order"/>
+							name="action_show_sale_order"
+							class="oe_stat_button"
+							icon="fa-pencil-square-o"
+							attrs="{'invisible':[('sale_order_count','=', 0)]}">
+							<field name="sale_order_count" widget="statinfo" string="Sale Order" />
 						</button>
 					</div>
 					<group>
 						<group>
-							<field name="user_id"/>
-							<field name="partner_id"/>
-							<field name="name"/>
-							<field name="mobile"/>
-							<field name="email"/>
-							<field name="emp_no"/>
-							<field name="dept_code"/>
-							<field name="lens_type"/>
-							<field name="presc_type"/>
-							<field name="add_on_type"/>
-							<field name="product_id"/>
-							<field name="company_id"/>
+							<field name="user_id" />
+							<field name="partner_id" />
+							<field name="name" />
+							<field name="mobile" />
+							<field name="email" />
+							<field name="emp_no" />
+							<field name="dept_code" />
+							<field name="lens_type" />
+							<field name="presc_type" />
+							<field name="add_on_type" />
+							<field name="product_id" />
+							<field name="company_id" />
 						</group>
 						<group>
-							<field name="form_no"/>
-							<field name="sphere_left"/>
-							<field name="cyl_left"/>
-							<field name="axis_left"/>
-							<field name="sphere_right"/>
-							<field name="cyl_right"/>
-							<field name="axis_right"/>
-							<field name="add"/>
-							<field name="pd"/>
-							<field name="requirements"/>
+							<field name="form_no" />
+							<field name="sphere_left" />
+							<field name="cyl_left" />
+							<field name="axis_left" />
+							<field name="sphere_right" />
+							<field name="cyl_right" />
+							<field name="axis_right" />
+							<field name="add" />
+							<field name="pd" />
+							<field name="requirements" />
+							<field name="sg_ht" />
+							<field name="add_right" />
+							<field name="pescription" />
+							<field name="outlet_id"/>
 						</group>
 					</group>
-					<field name="sale_order_ids" invisible="1"/>
+					<field name="sale_order_ids" invisible="1" />
 				</sheet>
 			</form>
 		</field>
@@ -91,15 +99,18 @@
 		<field name="arch" type="xml">
 			<search string="Search optician Detail">
 				<!-- <field name="name"
-				   filter_domain="['|', '|', '|', '|', ('display_name', 'ilike', self), ('ref', '=', self), ('email', 'ilike', self), ('vat', 'ilike', self), ('company_registry', 'ilike', self)]"/> -->
-				<field name="name" filter_domain="[('name', 'ilike', self)]"/>
-				<field name="company_id" filter_domain="[('company_id', 'ilike', self)]"/>
+				   filter_domain="['|', '|', '|', '|', ('display_name', 'ilike', self), ('ref', '=', self), ('email',
+				'ilike', self), ('vat', 'ilike', self), ('company_registry', 'ilike', self)]"/> -->
+				<field name="name" filter_domain="[('name', 'ilike', self)]" />
+				<field name="company_id" filter_domain="[('company_id', 'ilike', self)]" />
 
-				<separator/>
+				<separator />
 
 				<group expand="0" name="group_by" string="Group By">
-					<filter name="company" string="Company" domain="[]" context="{'group_by' : 'company_id'}"/>
-					<!-- <filter name="group_company" string="Company" context="{'group_by': 'parent_id'}"/>
+					<filter name="company" string="Company" domain="[]"
+						context="{'group_by' : 'company_id'}" />
+					<!-- <filter name="group_company" string="Company" context="{'group_by':
+					'parent_id'}"/>
 					<filter name="group_country" string="Country" context="{'group_by': 'country_id'}"/> -->
 				</group>
 			</search>
@@ -110,7 +121,7 @@
 		<field name="name">Optician Detail</field>
 		<field name="res_model">optician.detail</field>
 		<field name="view_mode">tree,form</field>
-		<field name="search_view_id" ref="rx_eyewear.view_optician_detail_filter"/>
+		<field name="search_view_id" ref="rx_eyewear.view_optician_detail_filter" />
 		<field name="domain">[]</field>
 		<field name="help" type="html">
 			<p class="o_view_nocontent_smiling_face">
@@ -121,8 +132,8 @@
 	<record id="action_create_quotation_from_rx_eyewear" model="ir.actions.server">
 		<field name="name">Create Quotation</field>
 		<!-- <field name="groups_id" eval="[(4, ref('account.group_account_invoice'))]"/> -->
-		<field name="model_id" ref="rx_eyewear.model_optician_detail"/>
-		<field name="binding_model_id" ref="rx_eyewear.model_optician_detail"/>
+		<field name="model_id" ref="rx_eyewear.model_optician_detail" />
+		<field name="binding_model_id" ref="rx_eyewear.model_optician_detail" />
 		<field name="binding_view_types">list,form</field>
 		<field name="state">code</field>
 		<field name="code">
