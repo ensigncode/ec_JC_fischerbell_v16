@@ -11,11 +11,8 @@ class ResUser(models.Model):
                                                ('custom_without_brand', 'Customize Without Brand')],
                                               string="Email Signature Option", default='base')
     # {', ' + user['company_id']['zip'] if user['company_id']['zip'] else ''}
-<<<<<<< Updated upstream
-=======
     allow_submission = fields.Integer(string="Allow Submission", default=0)
     submission_count = fields.Integer(string="Submission Count",default =0, readonly=True)
->>>>>>> Stashed changes
 
     @api.depends('name', 'email_signature_option', 'mobile_phone', 'work_phone', 'work_email')
     def _compute_signature(self):
