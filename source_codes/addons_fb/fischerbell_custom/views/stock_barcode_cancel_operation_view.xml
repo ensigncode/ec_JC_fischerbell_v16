@@ -7,8 +7,29 @@
         <field name="arch" type="xml">
             <xpath expr="//field[@name='picking_id']" position="before">
                 <p>Cancelation reason</p>
-                <field name="reason_id" options="{'no_open': True}"/>
+                <field name="reason_id" options="{'no_open': True, 'no_create': True}"/>
+                <p>Other reason</p>
+                <field name="enable_reason" invisible="1"/>
+                <field name="reason" attrs="{'invisible': [('enable_reason', '!=', True)], 'required': [('enable_reason', '!=', True)]}"/>
             </xpath>
         </field>
     </record>
+    
+    <record id="view_cancel_barcode_cancel_reason_tree" model="ir.ui.view">
+        <field name="name">stock.barcode.cancel.reason.tree</field>
+        <field name="model">stock.barcode.cancel.reason</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+    <record id="action_stock_barcode_cancel_reason" model="ir.actions.act_window">
+        <field name="name">stock.barcode.cancel.reason.action</field>
+        <field name="res_model">stock.barcode.cancel.reason</field>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="view_cancel_barcode_cancel_reason_tree"/>
+    </record>
+    <menuitem id="action_stock_barcode_cancel_menu" name="Cancel Reasons" action="action_stock_barcode_cancel_reason" parent="stock.menu_stock_config_settings"/>
+    
 </odoo>

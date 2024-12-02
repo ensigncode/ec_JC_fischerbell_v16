@@ -1,6 +1,8 @@
 from odoo import _, api, fields, models, registry, tools
-from odoo.tools import is_html_empty
 from markupsafe import Markup
+import logging
+_logger = logging.getLogger(__name__)
+
 
 
 class ResUser(models.Model):
@@ -11,6 +13,7 @@ class ResUser(models.Model):
                                                ('custom_without_brand', 'Customize Without Brand')],
                                               string="Email Signature Option", default='base')
     # {', ' + user['company_id']['zip'] if user['company_id']['zip'] else ''}
+
     allow_submission = fields.Integer(string="Allow Submission", default=0)
     submission_count = fields.Integer(string="Submission Count",default =0, readonly=True)
 
