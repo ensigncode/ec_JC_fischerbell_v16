@@ -14,9 +14,26 @@
                             </div>
                         </section>
 
-                        <section class="s_optician_detail_form">
+                        <section class="s_optician_detail_form" style="padding-top:15px">
                             <div class="container form-section">
-                                <form method="post" enctype="multipart/form-data" action="/optician-detail">
+                                <t t-if="disable_form" >
+                                    <div class="container s_allow_columns">
+                                        <div class="popup-message alert-danger"
+                                            style="text-align: center; color: red;">
+                                            <h1 style="font-size: 24px; font-weight: bold;">Warning:
+                                                Submission Attempt Limit Reached</h1>
+                                            <p style="font-size: 16px; color: red;">You have reached
+                                                the maximum number of attempts to submit this form.
+                                                If you
+                                                need further
+                                                attempts, please contact the administrator for
+                                                assistance.</p>
+                                        </div>
+                                    </div>
+
+                                </t>
+                                <form method="post" enctype="multipart/form-data"
+                                    action="/optician-detail">
                                     <input type="hidden" name="leave_hours" id="leave_hours" />
                                     <input type="hidden" name="csrf_token"
                                         t-att-value="request.csrf_token()" />
@@ -25,21 +42,24 @@
                                         <div class="col-6">
                                             <div class="input-group">
                                                 <label for="name">Name:</label>
-                                                <input type="text" placeholder="Your Name" name="name" required="true"
+                                                <input type="text" placeholder="Your Name"
+                                                    name="name" required="true"
                                                     id="name"></input>
                                             </div>
                                         </div>
                                         <div class="col-6">
                                             <div class="input-group">
                                                 <label for="mobile">Mobile:</label>
-                                                <input type="text" placeholder="Your Mobile" name="mobile" required="true"
+                                                <input type="text" placeholder="Your Mobile"
+                                                    name="mobile" required="true"
                                                     id="mobile"></input>
                                             </div>
                                         </div>
                                         <div class="col-6">
                                             <div class="input-group">
                                                 <label for="email">Email:</label>
-                                                <input type="text" placeholder="Your Email" name="email" required="true"
+                                                <input type="text" placeholder="Your Email"
+                                                    name="email" required="true"
                                                     id="email"></input>
                                             </div>
                                         </div>
@@ -47,7 +67,9 @@
                                             <div class="input-group">
                                                 <label for="emp_no">
                                                     NRIC / FIN No. / Employee No.:</label>
-                                                <input type="text" placeholder="NRIC / FIN No. / Employee No." name="emp_no" required="true"
+                                                <input type="text"
+                                                    placeholder="NRIC / FIN No. / Employee No."
+                                                    name="emp_no" required="true"
                                                     id="emp_no"></input>
                                             </div>
                                         </div>
@@ -55,16 +77,20 @@
                                             <div class="input-group">
                                                 <label for="dept_code">
                                                     DEPARTMENT CODE:</label>
-                                                <input type="text" placeholder="DEPARTMENT CODE" name="dept_code"
+                                                <input type="text" placeholder="DEPARTMENT CODE"
+                                                    name="dept_code"
                                                     id="dept_code"></input>
                                             </div>
                                         </div>
                                         <div class="col-6">
                                             <div class="input-group">
                                                 <label for="product_id">Frame:</label>
-                                                <select id="product_id" name="product_id" required="true">
-                                                    <t t-foreach="optic_product_ids" t-as="optic_product">
-                                                        <option t-att-value="optic_product.id" t-att-id="optic_product.id">
+                                                <select id="product_id" name="product_id"
+                                                    required="true">
+                                                    <t t-foreach="optic_product_ids"
+                                                        t-as="optic_product">
+                                                        <option t-att-value="optic_product.id"
+                                                            t-att-id="optic_product.id">
                                                             <span t-esc="optic_product.name"></span>
                                                         </option>
                                                     </t>
@@ -74,9 +100,11 @@
                                         <div class="col-6">
                                             <div class="input-group">
                                                 <label for="lens_type">Type of Lens:</label>
-                                                <select id="lens_type" name="lens_type" required="true">
+                                                <select id="lens_type" name="lens_type"
+                                                    required="true">
                                                     <option value=""></option>
-                                                    <option value="poly_carbonate_lens">POLYCARBONATE LENS​</option>
+                                                    <option value="poly_carbonate_lens">POLYCARBONATE
+                                                        LENS​</option>
                                                     <option value="mr_lens">MR LENS​</option>
                                                 </select>
                                             </div>
@@ -84,7 +112,8 @@
                                         <div class="col-6">
                                             <div class="input-group">
                                                 <label for="presc_type">Type of Prescription:</label>
-                                                <select id="presc_type" name="presc_type" required="true">
+                                                <select id="presc_type" name="presc_type"
+                                                    required="true">
                                                     <option value=""></option>
                                                     <option value="distance">DISTANCE</option>
                                                     <option value="bifocal">BIFOCAL​</option>
@@ -100,14 +129,17 @@
                                                     <option value=""></option>
                                                     <option value="blue_ray">BLUE RAY​</option>
                                                     <option value="photo_chromic">PHOTOCHROMIC</option>
-                                                    <option value="anti_fog"> ANTI-FOG &amp; BLUE RAY​</option>
+                                                    <option value="anti_fog"> ANTI-FOG &amp;
+                                                        BLUE
+                                                        RAY​</option>
                                                 </select>
                                             </div>
                                         </div>
                                         <div class="col-6">
                                             <div class="input-group">
                                                 <label for="group">Group:</label>
-                                                <input type="text" name="company_id" id="company_id"></input>
+                                                <input type="text" name="company_id"
+                                                    id="company_id"></input>
                                                 <!-- <select id="company_id" name="company_id">
                                                     <option value=""></option>
                                                 </select> -->
@@ -116,42 +148,48 @@
                                         <div class="col-6">
                                             <div class="input-group">
                                                 <label for="sphere_left">SPHERE Left:</label>
-                                                <input type="text" placeholder="SPHERE left" name="sphere_left"
+                                                <input type="text" placeholder="SPHERE left"
+                                                    name="sphere_left"
                                                     id="sphere_left"></input>
                                             </div>
                                         </div>
                                         <div class="col-6">
                                             <div class="input-group">
                                                 <label for="cyl_left">CYL Left:</label>
-                                                <input type="text" placeholder="CYL left" name="cyl_left"
+                                                <input type="text" placeholder="CYL left"
+                                                    name="cyl_left"
                                                     id="cyl_left"></input>
                                             </div>
                                         </div>
                                         <div class="col-6">
                                             <div class="input-group">
                                                 <label for="axis_left">AXIS Left:</label>
-                                                <input type="text" placeholder="AXIS left" name="axis_left"
+                                                <input type="text" placeholder="AXIS left"
+                                                    name="axis_left"
                                                     id="axis_left"></input>
                                             </div>
                                         </div>
                                         <div class="col-6">
                                             <div class="input-group">
                                                 <label for="sphere_right">SPHERE Right:</label>
-                                                <input type="text" placeholder="SPHERE right" name="sphere_right"
+                                                <input type="text" placeholder="SPHERE right"
+                                                    name="sphere_right"
                                                     id="sphere_right"></input>
                                             </div>
                                         </div>
                                         <div class="col-6">
                                             <div class="input-group">
                                                 <label for="cyl_right">CYL Right:</label>
-                                                <input type="text" placeholder="CYL right" name="cyl_right"
+                                                <input type="text" placeholder="CYL right"
+                                                    name="cyl_right"
                                                     id="cyl_right"></input>
                                             </div>
                                         </div>
                                         <div class="col-6">
                                             <div class="input-group">
                                                 <label for="axis_right">AXIS Right:</label>
-                                                <input type="text" placeholder="AXIS right" name="axis_right"
+                                                <input type="text" placeholder="AXIS right"
+                                                    name="axis_right"
                                                     id="axis_right"></input>
                                             </div>
                                         </div>
@@ -171,24 +209,77 @@
                                         </div>
                                         <div class="col-6">
                                             <div class="input-group">
+                                                <label for="group">Sg Ht:</label>
+                                                <input type="number" name="sg_ht"
+                                                    id="sg_ht"
+                                                    required="true"></input>
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="input-group">
+                                                <label for="group">Add Right:</label>
+                                                <input type="number" name="add_right"
+                                                    id="add_right"
+                                                    required="true"></input>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-6">
+                                            <div class="input-group">
                                                 <label for="requirements">REQUIRMENTS:</label>
-                                                <textarea placeholder="Your Requirements" name="requirements" rows="4" cols="50" id="Requirements"></textarea>
-                                               
+                                                <textarea placeholder="Your Requirements"
+                                                    name="requirements" rows="4" cols="50"
+                                                    id="Requirements"></textarea>
+
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="input-group">
+                                                <label for="group">Pescription:</label>
+                                                <textarea placeholder="Your Pescription"
+                                                    name="pescription" rows="4" cols="50"
+                                                    id="pescription"></textarea>
                                             </div>
                                         </div>
                                         <div class="col-6">
                                             <div class="input-group">
                                                 <label for="group">Form No:</label>
-                                                <input type="number" name="form_no" id="form_number" required="true"></input>
+                                                <input type="number" name="form_no"
+                                                    id="form_number"
+                                                    required="true"></input>
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="input-group">
+                                                <label for="outlet_id">Outlet:</label>
+                                                <select id="outlet_id" name="outlet_id"
+                                                    required="true">
+                                                    <option value=""></option>
+                                                    <t t-foreach="outlet_ids"
+                                                        t-as="outlet_name">
+                                                        <option t-att-value="outlet_name.id"
+                                                            t-att-id="outlet_name.id">
+                                                            <span t-esc="outlet_name.name"></span>
+                                                        </option>
+                                                    </t>
+                                                </select>
                                             </div>
                                         </div>
                                     </div>
+                                    <t t-if="disable_form">
+                                        <input class="submit_btn" type="submit" id="leave_submit"
+                                            value="Submit"
+                                            t-att-disabled="disable_form"
+                                            style="color: gray; background: white; border: gray 1px solid;" />
+                                    </t>
 
-                                    <input class="submit_btn" type="submit" id="leave_submit"
-                                        value="Submit" />
+                                    <t t-elif="not disable_form">
+                                        <input class="submit_btn" type="submit" id="leave_submit"
+                                            value="Submit"
+                                        />
+                                    </t>
+
                                 </form>
-
-
                             </div>
                         </section>
                     </div>
