@@ -11,10 +11,16 @@ class OpticianPortalController(http.Controller):
 
 	@http.route('/optician-detail', auth='user', type='http', website=True, csrf=False)
 	def optician_detail(self, **kw):
+     
 		optic_product_ids = request.env['product.template'].sudo().search([('is_optic','=',True)])
 		company_ids = request.env['res.partner'].sudo().search([('is_company','=',True)])
-		
-		
+		outlet_ids = request.env['outlet.detail'].sudo().search([])
+  		
+		submission_count = request.env.user.submission_count
+		allow_submission = request.env.user.allow_submission
+		disable_form = submission_count >= allow_submission
+
+
 		if kw and request.httprequest.method == 'POST': 
 			if request.env.user._is_public():
 				return request.redirect("/web/login")
@@ -24,9 +30,9 @@ class OpticianPortalController(http.Controller):
 				name = kw.get('name')
 				mobile = kw.get('mobile')
 				company = kw.get('company_id')
-				company_id = request.env['res.partner'].sudo().search([('name','ilike',company),('is_company','=',True)],limit=1)
+				company_id = request.env['res.partner'].sudo().search([('name','=',company),('is_company','=',True)],limit=1)
 				
-				partner_id = request.env['res.partner'].sudo().search(['|',('mobile','=',mobile),('phone','=',mobile),('name','ilike',name)])
+				partner_id = request.env['res.partner'].sudo().search(['|',('mobile','=',mobile),('phone','=',mobile),('name','=',name)])
 				if not partner_id : 
 					partner_id = request.env['res.partner'].sudo().create({
 						'name' : name,
@@ -61,9 +67,18 @@ class OpticianPortalController(http.Controller):
 				'requirements' : kw.get('requirements') if kw.get('requirements') else '',
 				"user_id" : request.env.uid,
 				"partner_id" : partner_id.id,
+				'outlet_id': kw.get('outlet_id', ''),
+				'sg_ht' : kw.get('sg_ht') if kw.get('sg_ht') else '',
+				'add_right' : kw.get('add_right') if kw.get('sg_ht') else '',
+				'pescription' : kw.get('pescription') if kw.get('sg_ht') else '',
+
 
 			})
+			if optician_detail_id:
+				request.env.user.sudo().write({'submission_count': request.env.user.submission_count + 1})
+			return request.redirect('/optician-detail')
 
-		return request.render('rx_eyewear.opptician_detail_page_template', {'optic_product_ids': optic_product_ids})
+		return request.render('rx_eyewear.opptician_detail_page_template', {'optic_product_ids': optic_product_ids,'outlet_ids':outlet_ids,'disable_form': disable_form})
+
 
 

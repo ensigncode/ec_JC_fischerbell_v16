@@ -15,6 +15,7 @@
         "views/optician_detail_portal_template.xml",
         "views/sale_order_views.xml",
         "views/purchase_order_views.xml",
+        "views/outlet_detail_view.xml",
         "views/menus.xml",
     ],
     'demo': [

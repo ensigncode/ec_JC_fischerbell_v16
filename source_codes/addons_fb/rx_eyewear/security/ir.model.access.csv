@@ -1,2 +1,4 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_optician_detail,optician.detail,model_optician_detail,,1,1,1,1
+rx_eyewear.access_outlet_detail,access_outlet_detail,rx_eyewear.model_outlet_detail,,1,1,1,1
+access_optician_detail_manager,optician_detail_manager,model_optician_detail,,1,1,1,1
