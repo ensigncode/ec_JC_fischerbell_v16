@@ -17,6 +17,8 @@
         "views/purchase_order_views.xml",
         "views/outlet_detail_view.xml",
         "views/menus.xml",
+        'data/rx_eyewear_group.xml',
+        "data/optician_submission_email_template.xml",
     ],
     'demo': [
     ],

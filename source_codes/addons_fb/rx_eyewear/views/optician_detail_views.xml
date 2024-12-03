@@ -72,7 +72,6 @@
 							<field name="company_id" />
 						</group>
 						<group>
-							<field name="form_no" />
 							<field name="sphere_left" />
 							<field name="cyl_left" />
 							<field name="axis_left" />

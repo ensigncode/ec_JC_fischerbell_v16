@@ -34,7 +34,6 @@ class OpticianDetail(models.Model):
     sale_order_id = fields.Many2one("sale.order",string="Sale Order")
     sale_order_ids = fields.Many2many("sale.order","optician_detail_id",string="Sale Order")
     sale_order_count = fields.Integer(string="Sale Order",compute="_compute_sale_order_count")
-    form_no = fields.Integer(string="Form No")
     sg_ht = fields.Float(string="SG HT")
     add_right = fields.Float(string='ADD RIGHT')
     pescription =fields.Char(string="Pescription")
@@ -123,6 +122,12 @@ class FischerbellOpticianDetailReport(models.AbstractModel):
         sheet.set_column('Q:Q', 20)
         sheet.set_column('R:R', 20)
         sheet.set_column('S:S', 20)
+        sheet.set_column('T:T', 20)
+        sheet.set_column('U:U', 20)
+        sheet.set_column('V:V', 20)
+        sheet.set_column('W:W', 20)
+        
+
 
         sheet.write(0, 0, 'Name', content1)
         sheet.write(0, 1, 'Group', content1)
@@ -143,6 +148,11 @@ class FischerbellOpticianDetailReport(models.AbstractModel):
         sheet.write(0, 16, 'Type of Lens',content1)
         sheet.write(0, 17, 'Type of Prescription',content1)
         sheet.write(0, 18, 'Add on',content1)
+        sheet.write(0, 19, 'SG HT',content1)
+        sheet.write(0, 20, 'ADD RIGHT',content1)
+        sheet.write(0, 21, 'Pescription',content1)
+        sheet.write(0, 22, 'Outlet',content1)
+
 
 
         x = 0
@@ -186,6 +196,19 @@ class FischerbellOpticianDetailReport(models.AbstractModel):
             sheet.write(y, x, optician_detail.presc_type or '', content2)
             x += 1
             sheet.write(y, x, optician_detail.add_on_type or '', content2)
+            x += 1
+            sheet.write(y, x, optician_detail.sg_ht or '', content2)
+            x += 1
+            sheet.write(y, x, optician_detail.add_right or '', content2)
+            x += 1
+            sheet.write(y, x, optician_detail.pescription or '', content2)
+            x += 1
+            sheet.write(y, x, optician_detail.outlet_id.name or '', content2)
+
+
+
+
+
 
 
             x = 0

@@ -243,14 +243,6 @@
                                         </div>
                                         <div class="col-6">
                                             <div class="input-group">
-                                                <label for="group">Form No:</label>
-                                                <input type="number" name="form_no"
-                                                    id="form_number"
-                                                    required="true"></input>
-                                            </div>
-                                        </div>
-                                        <div class="col-6">
-                                            <div class="input-group">
                                                 <label for="outlet_id">Outlet:</label>
                                                 <select id="outlet_id" name="outlet_id"
                                                     required="true">
