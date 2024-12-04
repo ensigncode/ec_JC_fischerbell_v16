@@ -50,7 +50,7 @@
                                         <div class="col-6">
                                             <div class="input-group">
                                                 <label for="mobile">Mobile:</label>
-                                                <input type="text" placeholder="Your Mobile"
+                                                <input type="tel" placeholder="Your Mobile"
                                                     name="mobile" required="true"
                                                     id="mobile"></input>
                                             </div>
@@ -148,7 +148,7 @@
                                         <div class="col-6">
                                             <div class="input-group">
                                                 <label for="sphere_left">SPHERE Left:</label>
-                                                <input type="text" placeholder="SPHERE left"
+                                                <input type="number"  step="0.000001" placeholder="SPHERE left"
                                                     name="sphere_left"
                                                     id="sphere_left"></input>
                                             </div>
@@ -156,7 +156,7 @@
                                         <div class="col-6">
                                             <div class="input-group">
                                                 <label for="cyl_left">CYL Left:</label>
-                                                <input type="text" placeholder="CYL left"
+                                                <input type="number" step="0.000001" placeholder="CYL left"
                                                     name="cyl_left"
                                                     id="cyl_left"></input>
                                             </div>
@@ -164,7 +164,7 @@
                                         <div class="col-6">
                                             <div class="input-group">
                                                 <label for="axis_left">AXIS Left:</label>
-                                                <input type="text" placeholder="AXIS left"
+                                                <input type="number" step="0.000001" placeholder="AXIS left"
                                                     name="axis_left"
                                                     id="axis_left"></input>
                                             </div>
@@ -172,7 +172,7 @@
                                         <div class="col-6">
                                             <div class="input-group">
                                                 <label for="sphere_right">SPHERE Right:</label>
-                                                <input type="text" placeholder="SPHERE right"
+                                                <input type="number" step="0.000001" placeholder="SPHERE right"
                                                     name="sphere_right"
                                                     id="sphere_right"></input>
                                             </div>
@@ -180,7 +180,7 @@
                                         <div class="col-6">
                                             <div class="input-group">
                                                 <label for="cyl_right">CYL Right:</label>
-                                                <input type="text" placeholder="CYL right"
+                                                <input type="number" step="0.000001" placeholder="CYL right"
                                                     name="cyl_right"
                                                     id="cyl_right"></input>
                                             </div>
@@ -188,7 +188,7 @@
                                         <div class="col-6">
                                             <div class="input-group">
                                                 <label for="axis_right">AXIS Right:</label>
-                                                <input type="text" placeholder="AXIS right"
+                                                <input type="number" step="0.000001" placeholder="AXIS right"
                                                     name="axis_right"
                                                     id="axis_right"></input>
                                             </div>
@@ -196,7 +196,7 @@
                                         <div class="col-6">
                                             <div class="input-group">
                                                 <label for="add">ADD:</label>
-                                                <input type="text" placeholder="ADD" name="add"
+                                                <input type="number" step="0.000001" placeholder="ADD" name="add"
                                                     id="add"></input>
                                             </div>
                                         </div>
@@ -210,7 +210,7 @@
                                         <div class="col-6">
                                             <div class="input-group">
                                                 <label for="group">Sg Ht:</label>
-                                                <input type="number" name="sg_ht"
+                                                <input type="number" step="0.000001" name="sg_ht"
                                                     id="sg_ht"
                                                     required="true"></input>
                                             </div>
@@ -218,7 +218,7 @@
                                         <div class="col-6">
                                             <div class="input-group">
                                                 <label for="group">Add Right:</label>
-                                                <input type="number" name="add_right"
+                                                <input type="number" step="0.000001" name="add_right"
                                                     id="add_right"
                                                     required="true"></input>
                                             </div>
