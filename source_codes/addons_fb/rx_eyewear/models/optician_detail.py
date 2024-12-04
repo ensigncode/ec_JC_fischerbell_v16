@@ -34,8 +34,8 @@ class OpticianDetail(models.Model):
     sale_order_id = fields.Many2one("sale.order",string="Sale Order")
     sale_order_ids = fields.Many2many("sale.order","optician_detail_id",string="Sale Order")
     sale_order_count = fields.Integer(string="Sale Order",compute="_compute_sale_order_count")
-    sg_ht = fields.Float(string="SG HT")
-    add_right = fields.Float(string='ADD RIGHT')
+    sg_ht = fields.Char(string="SG HT")
+    add_right = fields.Char(string='ADD RIGHT')
     pescription =fields.Char(string="Pescription")
     outlet_id = fields.Many2one('outlet.detail', 'Outlet')
 

@@ -51,8 +51,7 @@ class OpticianPortalController(http.Controller):
 						'is_company' : True,
 					})
 			
-			# import pdb
-			# pdb.set_trace()
+
 			optician_detail_id = request.env['optician.detail'].sudo().create({
 				'name' : kw.get('name') if kw.get('name') else '',
 				'mobile' : kw.get('mobile') if kw.get('mobile') else '',
