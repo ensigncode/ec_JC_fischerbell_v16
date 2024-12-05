@@ -1,0 +1,195 @@
+<odoo>
+    <data>
+        <record id="optician_submission_email" model="mail.template">
+            <field name="name">Optician Submission Notification</field>
+            <field name="model">optician.detail</field>
+            <field name="model_id" ref="rx_eyewear.model_optician_detail" />
+            <field name="email_from">${(user.email or 'noreply@yourcompany.com')|safe}</field>
+            <field name="subject">New Optician Detail Submission</field>
+            <field name="auto_delete" eval="False" />
+            <field name="body_html" type="html">
+                <p>Hello,</p>
+                <p>A new optician detail has been submitted. Below are the details:</p>
+                <table border="1" cellpadding="5" cellspacing="0">
+                    <tr>
+                        <td>
+                            <strong>Name:</strong>
+                        </td>
+                        <td>
+                            <t t-out="object.name" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <strong>Mobile:</strong>
+                        </td>
+                        <td>
+                            <t t-out="object.mobile" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <strong>Email:</strong>
+                        </td>
+                        <td>
+                            <t t-out="object.email" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <strong>Employee Number:</strong>
+                        </td>
+                        <td>
+                            <t t-out="object.emp_no" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <strong>Department Code:</strong>
+                        </td>
+                        <td>
+                            <t t-out="object.dept_code" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <strong>Prescription Type:</strong>
+                        </td>
+                        <td>
+                            <t t-out="object.presc_type" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <strong>Add-On Type:</strong>
+                        </td>
+                        <td>
+                            <t t-out="object.add_on_type" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <strong>Frame:</strong>
+                        </td>
+                        <td>
+                            <t t-esc="object.product_id.name" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <strong>Company:</strong>
+                        </td>
+                        <td>
+                            <t t-out="object.company_id.name" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <strong>Sphere Left:</strong>
+                        </td>
+                        <td>
+                            <t t-out="object.sphere_left" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <strong>Cyl Left:</strong>
+                        </td>
+                        <td>
+                            <t t-out="object.cyl_left" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <strong>Axis Left:</strong>
+                        </td>
+                        <td>
+                            <t t-out="object.axis_left" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <strong>Sphere Right:</strong>
+                        </td>
+                        <td>
+                            <t t-out="object.sphere_right" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <strong>Cyl Right:</strong>
+                        </td>
+                        <td>
+                            <t t-out="object.cyl_right" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <strong>Axis Right:</strong>
+                        </td>
+                        <td>
+                            <t t-out="object.axis_right" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <strong>ADD:</strong>
+                        </td>
+                        <td>
+                            <t t-out="object.add" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <strong>PD:</strong>
+                        </td>
+                        <td>
+                            <t t-out="object.pd" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <strong>Requirements:</strong>
+                        </td>
+                        <td>
+                            <t t-out="object.requirements" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <strong>SG HT:</strong>
+                        </td>
+                        <td>
+                            <t t-out="object.sg_ht" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <strong>ADD Right:</strong>
+                        </td>
+                        <td>
+                            <t t-out="object.add_right" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <strong>Prescription:</strong>
+                        </td>
+                        <td>
+                            <t t-out="object.pescription" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <strong>Outlet:</strong>
+                        </td>
+                        <td>
+                            <t t-out="object.outlet_id.name" />
+                        </td>
+                    </tr>
+                </table>
+                <p>Thank you!</p>
+            </field>
+        </record>
+    </data>
+</odoo>

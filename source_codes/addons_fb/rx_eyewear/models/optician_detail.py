@@ -20,13 +20,13 @@ class OpticianDetail(models.Model):
     add_on_type = fields.Char(string="Add on type")
     product_id = fields.Many2one('product.template',string="Frame", domain = "[('is_optic', '=', True)]")
     company_id = fields.Many2one('res.partner',string="Company", domain = "[('is_company', '=', True)]")
-    sphere_left = fields.Char(string="SPHERE LEFT")
-    cyl_left = fields.Char(string="CYL LEFT")
-    axis_left = fields.Char(string="AXIS LEFT")
-    sphere_right = fields.Char(string="SPHERE RIGHT")
-    cyl_right = fields.Char(string="CYL RIGHT")
-    axis_right = fields.Char(string="AXIS RIGHT")
-    add = fields.Char(string="ADD")
+    sphere_left = fields.Float(string="SPHERE LEFT" ,digits=(16,1))
+    cyl_left = fields.Float(string="CYL LEFT" , digits=(16,1))
+    axis_left = fields.Float(string="AXIS LEFT" ,digits=(16,1))
+    sphere_right = fields.Float(string="SPHERE RIGHT" ,digits=(16,1))
+    cyl_right = fields.Float(string="CYL RIGHT" , digits=(16,1)) 
+    axis_right = fields.Float(string="AXIS RIGHT" , digits=(16,1))
+    add = fields.Float(string="ADD" ,digits=(16,1))
     pd = fields.Char(string="PD")
     requirements = fields.Text(string="REQUIRMENTS")
     user_id = fields.Many2one('res.users',string="User")
@@ -34,9 +34,8 @@ class OpticianDetail(models.Model):
     sale_order_id = fields.Many2one("sale.order",string="Sale Order")
     sale_order_ids = fields.Many2many("sale.order","optician_detail_id",string="Sale Order")
     sale_order_count = fields.Integer(string="Sale Order",compute="_compute_sale_order_count")
-    form_no = fields.Integer(string="Form No")
-    sg_ht = fields.Float(string="SG HT")
-    add_right = fields.Float(string='ADD RIGHT')
+    sg_ht = fields.Float(string="SG HT" ,digits=(16,1))
+    add_right = fields.Float(string='ADD RIGHT' ,digits=(16,1))
     pescription =fields.Char(string="Pescription")
     outlet_id = fields.Many2one('outlet.detail', 'Outlet')
 
@@ -123,6 +122,12 @@ class FischerbellOpticianDetailReport(models.AbstractModel):
         sheet.set_column('Q:Q', 20)
         sheet.set_column('R:R', 20)
         sheet.set_column('S:S', 20)
+        sheet.set_column('T:T', 20)
+        sheet.set_column('U:U', 20)
+        sheet.set_column('V:V', 20)
+        sheet.set_column('W:W', 20)
+        
+
 
         sheet.write(0, 0, 'Name', content1)
         sheet.write(0, 1, 'Group', content1)
@@ -143,6 +148,11 @@ class FischerbellOpticianDetailReport(models.AbstractModel):
         sheet.write(0, 16, 'Type of Lens',content1)
         sheet.write(0, 17, 'Type of Prescription',content1)
         sheet.write(0, 18, 'Add on',content1)
+        sheet.write(0, 19, 'SG HT',content1)
+        sheet.write(0, 20, 'ADD RIGHT',content1)
+        sheet.write(0, 21, 'Pescription',content1)
+        sheet.write(0, 22, 'Outlet',content1)
+
 
 
         x = 0
@@ -186,6 +196,19 @@ class FischerbellOpticianDetailReport(models.AbstractModel):
             sheet.write(y, x, optician_detail.presc_type or '', content2)
             x += 1
             sheet.write(y, x, optician_detail.add_on_type or '', content2)
+            x += 1
+            sheet.write(y, x, optician_detail.sg_ht or '', content2)
+            x += 1
+            sheet.write(y, x, optician_detail.add_right or '', content2)
+            x += 1
+            sheet.write(y, x, optician_detail.pescription or '', content2)
+            x += 1
+            sheet.write(y, x, optician_detail.outlet_id.name or '', content2)
+
+
+
+
+
 
 
             x = 0
