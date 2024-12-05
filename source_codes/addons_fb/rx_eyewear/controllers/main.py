@@ -6,6 +6,13 @@ from datetime import datetime, date, timedelta, time
 from pytz import timezone, UTC
 from odoo.tools import float_compare, format_date
 
+
+lens_type = {
+	'blue_ray':'BLUE RAY​',
+	'photo_chromic':'PHOTOCHROMIC',
+	'anti_fog': 'ANTI-FOG & BLUE RAY​'
+}
+
 class OpticianPortalController(http.Controller):
 
 
@@ -44,6 +51,7 @@ class OpticianPortalController(http.Controller):
 						'is_company' : True,
 					})
 			
+
 			optician_detail_id = request.env['optician.detail'].sudo().create({
 				'name' : kw.get('name') if kw.get('name') else '',
 				'mobile' : kw.get('mobile') if kw.get('mobile') else '',
@@ -52,9 +60,9 @@ class OpticianPortalController(http.Controller):
 				'dept_code' : kw.get('dept_code') if kw.get('dept_code') else '',
 				'lens_type' : kw.get('lens_type') if kw.get('lens_type') else '',
 				'presc_type' : kw.get('presc_type') if kw.get('presc_type') else '',
-				'add_on_type' : kw.get('add_on_type') if kw.get('add_on_type') else '',
-				'product_id' : kw.get('product_id') if kw.get('product_id') else '',
-				'company_id' : company_id.id if company_id else False,
+				'add_on_type' : lens_type.get(kw.get('add_on_type'),'') if kw.get('add_on_type') else '',
+				'product_id' : eval(kw.get('product_id', '')),
+    			'company_id' : company_id.id if company_id else False,
 				'sphere_left' : kw.get('sphere_left') if kw.get('sphere_left') else '',
 				'cyl_left' : kw.get('cyl_left') if kw.get('cyl_left') else '',
 				'axis_left' : kw.get('axis_left') if kw.get('axis_left') else '',
@@ -63,20 +71,26 @@ class OpticianPortalController(http.Controller):
 				'axis_right' : kw.get('axis_right') if kw.get('axis_right') else '',
 				'add' : kw.get('add') if kw.get('add') else '',
 				'pd' : kw.get('pd') if kw.get('pd') else '',
-				'form_no': kw.get('form_no') if kw.get('form_no') else 0,
 				'requirements' : kw.get('requirements') if kw.get('requirements') else '',
 				"user_id" : request.env.uid,
 				"partner_id" : partner_id.id,
-				'outlet_id': kw.get('outlet_id', ''),
+				'outlet_id': eval(kw.get('outlet_id', '')),
 				'sg_ht' : kw.get('sg_ht') if kw.get('sg_ht') else '',
 				'add_right' : kw.get('add_right') if kw.get('sg_ht') else '',
 				'pescription' : kw.get('pescription') if kw.get('sg_ht') else '',
-
-
 			})
 			if optician_detail_id:
 				request.env.user.sudo().write({'submission_count': request.env.user.submission_count + 1})
-			return request.redirect('/optician-detail')
+    
+				rx_eyewear_group=request.env.ref('rx_eyewear.rx_eyewear_group')
+				group_users = rx_eyewear_group.users
+				mail_template=request.env.ref('rx_eyewear.optician_submission_email')
+				if mail_template:
+					for user in group_users:
+						mail_template.email_to = user.email
+						mail_template.send_mail(optician_detail_id.id, force_send=True)
+                
+				return request.redirect('/optician-detail')
 
 		return request.render('rx_eyewear.opptician_detail_page_template', {'optic_product_ids': optic_product_ids,'outlet_ids':outlet_ids,'disable_form': disable_form})
 
