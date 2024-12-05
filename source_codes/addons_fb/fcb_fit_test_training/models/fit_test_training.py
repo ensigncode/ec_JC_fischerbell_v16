@@ -25,6 +25,16 @@ class FitTestTraining(models.Model):
 	reference_no = fields.Char(string='Training Reference', required=True,
 							   readonly=True, default=lambda self: _('New'))
 
+	def action_fitness_form(self):
+		base_url = self.env['ir.config_parameter'].sudo().get_param('web.base.url')
+		fitness_url = f"/fittest_training"
+		return {
+			'type': 'ir.actions.act_url',
+			'url': fitness_url + f'?fitting_id={self.id}',
+			'target': 'self',
+			# 'context': {'company': self.company.id}
+		}
+    
 	def action_send_email(self):
 		self.ensure_one()
 		lang = self.env.context.get('lang')
@@ -52,7 +62,8 @@ class FitTestTraining(models.Model):
 			'target': 'new',
 			'context': ctx,
 		}
-
+  
+	  
 	@api.model
 	def create(self, vals):
 		if vals.get('reference_no', _('New')) == _('New'):

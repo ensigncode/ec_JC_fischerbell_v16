@@ -7,9 +7,16 @@ import json
 
 class FitTestTrainingController(http.Controller):
 	@http.route(['/fittest_training'], type='http', auth='public', website=True)
-	def fittest_training_page_method(self, **kw):
-		return request.render('fcb_fit_test_training.tmp_fittest_training_page_form', {})
 
+	def fittest_training_page_method(self, **kw):
+  
+		fitting_id =kw.get('fitting_id')
+		fitting_data =request.env['fit.test.training'].sudo().browse(int(fitting_id)) if fitting_id else request.env['fit.test.training']
+
+		return request.render(
+			'fcb_fit_test_training.tmp_fittest_training_page_form', 
+			{'fitting_id': fitting_data}
+		)
 
 	@http.route(['/fittest_training/submit'], type='http', auth="public", website=True)
 	def fittest_training_form_submit(self, **kw):
