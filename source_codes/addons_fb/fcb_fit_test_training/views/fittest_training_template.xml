@@ -233,7 +233,7 @@
                                                             name="training_type" required="True" t-att-value="fitting_id.training_type or ''" />
                                                     </div>
 
-                                                    <!-- <div class="col-sm">
+                                                    <div class="col-sm">
                                                         <select id="training_types"
                                                             name="training_types"
                                                             t-attf-class="form-control s_website_form_input"
@@ -246,7 +246,7 @@
                                                             <option  t-att-selected="fitting_id.training_types" value="spill_traning">Fit Test -
                                                                 Spill Training</option>
                                                         </select>
-                                                    </div> -->
+                                                    </div>
                                                 </div>
                                             </div>
                                             <!--                                            <div class="mb-0 py-2 col-12 s_website_form_field
@@ -367,12 +367,12 @@
                                                                     <tr>
                                                                         <td>
                                                                             <strong>
-                                                                                Tranee *
+                                                                                Trainee *
                                                                             </strong>
                                                                         </td>
                                                                         <td>
                                                                             <strong>
-                                                                                Tranee Email *
+                                                                                Trainee Email *
                                                                             </strong>
                                                                         </td>
                                                                         <td>

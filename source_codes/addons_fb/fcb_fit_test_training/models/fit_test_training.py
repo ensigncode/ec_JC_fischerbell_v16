@@ -12,13 +12,13 @@ class FitTestTraining(models.Model):
 	date = fields.Date('Date of Training')
 	phone = fields.Char('Contact No.')
 	company = fields.Many2one('res.partner','Name Of Company')
-	training_type = fields.Char('Type of Training')
+	# training_type = fields.Char('Type of Training')
 	number_of_person = fields.Integer(string='Number Of Person', default=1)
 	location = fields.Char(string='Locations')
 	fit_ids = fields.One2many('fit.trainee', 'fit_id', string="Fit Lines")
-	training_types = fields.Selection([('aed','Fit Test - AED'),
-	                               ('scba','Fit Test - SCBA'),
-	                               ('spill_traning','Fit Test - Spill Training'),
+	training_types = fields.Selection([('aed','AED'),
+	                               ('scba','SCBA'),
+	                               ('spill_traning','Spill Training'),
 	                               ('fit_test','Fit Test')],default="fit_test")
 	trainer_sign = fields.Binary(string="Trainer signature")
 	partner_id = fields.Many2one('res.partner','Partner')
@@ -78,10 +78,9 @@ class FitTestTrainingTrainee(models.Model):
 	trainee = fields.Char(string="Trainee")
 	passport_no = fields.Char(string="NRIC / FIN NO./ Employee No.")
 	size = fields.Char(string="Size")
-	is_pass_fail = fields.Boolean(string="Pass / Fail")
+	is_pass_fail = fields.Boolean(string="Pass / Fail", default=True)
+	fail_reason = fields.Char(string="Fail Reason")
 	tested_on = fields.Date(string="Tested On")
 	fit_id = fields.Many2one('fit.test.training', string="Fit")
 	trainee_email = fields.Char(string="Trainee Email")
-
-
-
+	product_id = fields.Many2one('product.product', string="Product", domain=[('is_fit_test_training', '=', True)])

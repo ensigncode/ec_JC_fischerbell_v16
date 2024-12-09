@@ -22,7 +22,7 @@
            <field name="report_type">qweb-pdf</field>
            <field name="report_name">fcb_fit_test_training.report_certificate</field>
            <field name="report_file">fcb_fit_test_training.report_certificate</field>
-            <field name="paperformat_id" ref="fcb_fit_test_training.paperformat_label_sheet_certificate"/>
+           <field name="paperformat_id" ref="fcb_fit_test_training.paperformat_label_sheet_certificate"/>
            <field name="binding_model_id" ref="fcb_fit_test_training.model_fit_test_training" />
            <field name="binding_type">report</field>
         </record>
