@@ -24,6 +24,37 @@ class FitTestTraining(models.Model):
 	partner_id = fields.Many2one('res.partner','Partner')
 	reference_no = fields.Char(string='Training Reference', required=True,
 							   readonly=True, default=lambda self: _('New'))
+	url = fields.Char("URL", readonly=True)
+
+	def action_send_invitation(self):
+		self.ensure_one()
+		lang = self.env.context.get('lang')
+		template_id = self.env.ref('fcb_fit_test_training.email_template_send_invitation', raise_if_not_found=False)
+		base_url = self.env['ir.config_parameter'].sudo().get_param('web.base.url')
+		self.url = f"{base_url}/fittest_training?fitting_id={self.id}"
+		if template_id and template_id.lang:
+			lang = template_id._render_lang(self.ids)[self.id]
+		ctx = {
+			'default_model': 'fit.test.training',
+			'default_res_id': self.id,
+			'default_use_template': bool(template_id),
+			'default_template_id': template_id.id if template_id else None,
+			'default_composition_mode': 'comment',
+			'mark_so_as_sent': True,
+			'default_email_layout_xmlid': 'mail.mail_notification_layout_with_responsible_signature',
+			'proforma': self.env.context.get('proforma', False),
+			'force_email': True,
+			'model_description': self.with_context(lang=lang).name,
+		}
+		return {
+			'type': 'ir.actions.act_window',
+			'view_mode': 'form',
+			'res_model': 'mail.compose.message',
+			'views': [(False, 'form')],
+			'view_id': False,
+			'target': 'new',
+			'context': ctx,
+		}
 
 	def action_send_email(self):
 		self.ensure_one()

@@ -23,6 +23,7 @@
             <form string="fit test training Detail">
                 <header>
                     <button name="action_send_email" type="object" string="Send By Email" class="oe_highlight" />
+                    <button name="action_send_invitation" type="object" string="Send Invitation" class="oe_highlight"/>
                 </header>
                 <sheet>
                     <div class="oe_title">
@@ -48,6 +49,7 @@
                         <group>
                             <field name="date"/>
                             <field name="phone"/>
+                            <field name="url"/>
 <!--                            <field name="number_of_person"/>-->
                             <field name="location"/>
                             <field name="partner_id"/>
