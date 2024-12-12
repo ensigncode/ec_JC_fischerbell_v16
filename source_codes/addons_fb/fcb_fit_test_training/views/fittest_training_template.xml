@@ -220,7 +220,7 @@
 																	<tr>
 																		<td>
 																			<strong>
-																				Tranee *
+																				Trainee *
 																			</strong>
 																		</td>
 																		<td>
@@ -230,11 +230,6 @@
 																		</td>
 																		<td>
 																			<strong>NRIC / FIN NO./ Employee No. *
-																			</strong>
-																		</td>
-																		<td>
-																			<strong>
-																				Size *
 																			</strong>
 																		</td>
 																		<td width="5%"></td>
@@ -266,16 +261,10 @@
 																				       type="text"
 																				       class="form-control"
 																				       name="passport_no"
+																				       maxlength="5"
 																				       id="passport_no"/>
 																			</td>
-																			<td>
-																				<input required="True"
-																				       type="text"
-																				       class="form-control"
-																				       name="size"
-																				       placeholder="Enter Size"
-																				       id="size"/>
-																			</td>
+																			
 																			<td>
 																				<button class="btn fa fa-trash-o remove_line"
 																				        style="color: red; padding: 0px; margin-left: -6px; margin-top: 6px;margin-bottom:15px;"
@@ -306,16 +295,10 @@
 																				       type="text"
 																				       class="form-control"
 																				       name="passport_no"
+																					maxlength="5"
 																				       id="passport_no"/>
 																			</td>
-																			<td>
-																				<input
-																						type="text"
-																						class="form-control"
-																						name="size"
-																						placeholder="Enter Size"
-																						id="size"/>
-																			</td>
+																			
 																			<td>
 																				<button class="btn fa fa-trash-o remove_line"
 																				        style="color: red; padding: 0px; margin-left: -6px; margin-top: 6px;margin-bottom:15px;"
