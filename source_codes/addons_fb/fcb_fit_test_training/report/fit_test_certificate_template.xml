@@ -19,7 +19,7 @@
 												<p style="font-size: 40px;color:grey;">AED Training Certificate</p>
 											</t>
 											<t t-if="doc.training_types == 'scba'">
-												<p style="font-size: 40px;color:grey;">Fit Test Certificate</p>
+												<p style="font-size: 40px;color:grey;">SCBA Training Certificate</p>
 											</t>
 											<t t-if="doc.training_types == 'spill_traning'">
 												<p style="font-size: 40px;color:grey;">Spill Training Certificate</p>
