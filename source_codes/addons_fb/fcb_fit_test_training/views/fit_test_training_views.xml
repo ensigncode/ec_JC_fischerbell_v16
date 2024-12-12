@@ -49,6 +49,7 @@
                         <group>
                             <field name="date"/>
                             <field name="phone"/>
+                            <field name="url" invisible="1"/>
 <!--                            <field name="number_of_person"/>-->
                             <field name="location"/>
                             <field name="partner_id"/>
