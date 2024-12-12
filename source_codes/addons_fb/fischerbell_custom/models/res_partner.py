@@ -71,7 +71,14 @@ class Partner(models.Model):
 	is_request_creditlimit = fields.Boolean('Is Requested Credit Limit')
 	requested_credit_limit = fields.Float(string="Request Credit Limt")
 
-
+	def name_get(self):
+		result = []
+		for partner in self:
+			display_name = partner.name
+			if partner.code:
+				display_name = f"{partner.code} - {partner.name}"
+			result.append((partner.id, display_name))
+		return result
 
 
 	@api.onchange('property_purchase_currency_id')
