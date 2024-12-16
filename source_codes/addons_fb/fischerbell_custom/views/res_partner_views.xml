@@ -71,7 +71,7 @@
                 </group>
             </xpath>
              <xpath expr="//field[@name='category_id']" position="after">
-                <field name="type_of_invoice"/>
+                <field name="type_of_invoice" attrs="{'required': [('is_contact_created','=', True)]}"/>
             </xpath>
             <xpath expr="//span[@name='address_name']" position="before">
                 <field name="is_contact_created" invisible="1"/>
