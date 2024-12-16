@@ -57,7 +57,6 @@
 	    'wizard/purchase_order_line_wizard.xml',
         'wizard/followup_manual_reminder_views.xml',
 	    'wizard/land_cost_wizard_view.xml',
-        'wizard/request_sale_line_price_view.xml',
         'wizard/invoice_policy_views.xml',
         'wizard/request_partner_details_view.xml',
         'views/account_move_views.xml',
