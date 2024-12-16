@@ -138,6 +138,23 @@ class SaleOrder(models.Model):
     sub_order_ids = fields.Many2many('sale.order','rel_sale_order_sale','sale_id','sub_order_id', string="Sub Order")
     sub_order_count = fields.Integer('Sub Order Count', compute='action_view_saleorder')
 
+    def action_quotation_send(self):
+        res = super(SaleOrder, self).action_quotation_send()
+        active_id = self.id
+        if active_id:
+            sale_order = self.env['sale.order'].browse(active_id)
+            if sale_order:
+                template_id = res.get('context', {}).get('default_template_id')
+                if template_id:
+                    email_template = self.env['mail.template'].browse(template_id)
+                    if email_template:
+                        company_name = sale_order.company_id.name or ''
+                        reference = sale_order.name or ''
+                        partner_name = sale_order.partner_id.name or ''
+                        modified_subject = f"{company_name} ({reference}) - {partner_name}"
+                        email_template.subject = modified_subject
+        return res
+
     def _get_order_id(self):
         for rec in self:
             rec.order_id = False
