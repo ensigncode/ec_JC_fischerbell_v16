@@ -137,7 +137,9 @@ class SaleOrder(models.Model):
     is_rx_eywear = fields.Boolean(string = 'Is RX - Eywear')
     sub_order_ids = fields.Many2many('sale.order','rel_sale_order_sale','sale_id','sub_order_id', string="Sub Order")
     sub_order_count = fields.Integer('Sub Order Count', compute='action_view_saleorder')
-
+    is_approved_sale = fields.Boolean()
+    sale_reason = fields.Text()
+            
     def _get_order_id(self):
         for rec in self:
             rec.order_id = False
@@ -714,6 +716,22 @@ class SaleOrder(models.Model):
             sale_sale_state_trigger_templ.send_mail(res_id=self.id)
         return True
 
+    def product_price(self):
+        current_date = datetime.now()
+        date_45_days_ago = current_date - timedelta(days=45)
+        partner_invoice = self.env['account.move'].search([('partner_id', '=', self.partner_id.id), ('move_type', '=', 'out_invoice'), ('invoice_date', '<=', date_45_days_ago), ('payment_state', '!=', 'paid'), ('state', '!=', 'cancelled')])
+        self.sale_reason = ''
+        if any(line.price_unit <  line.product_id.list_price for line in self.order_line):
+            self.is_approved_sale = True
+            self.sale_reason = 'Sale price is below the product list price!'
+        if len(partner_invoice) > 0:
+            self.is_approved_sale = True
+            self.sale_reason  += 'Partner has overdue invoices! '
+        if self.partner_id.is_contact_created:
+            self.is_approved_sale = True
+            self.sale_reason  += 'Customer is already existing!'
+
+
     @api.model
     def create(self, vals):
         name = ''
@@ -726,6 +744,7 @@ class SaleOrder(models.Model):
                 vals['partner_invoice_address'] = name
 
         res = super().create(vals)
+        res.product_price()
         # Send email to customer
         res.send_mail_triggers_based_on_state()
         return res
@@ -769,7 +788,16 @@ class SaleOrder(models.Model):
             if vals.get('state') == 'draft':
                 vals['approval_state'] = 'no'
 
+            if vals.get('state') == 'sent' and self.is_approved_sale:
+                vals['state'] = 'approve'
+                vals['partner_request_state'] = 'approved'
+                vals['approval_state'] = 'approved'
+                vals['reviewed_by'] = self.env.user.id
+
+
         res = super().write(vals)
+        if vals.get('order_line'):
+            self.product_price()
         for order in self:
             if vals.get('tag_ids'):
                 for pick in order.picking_ids:
