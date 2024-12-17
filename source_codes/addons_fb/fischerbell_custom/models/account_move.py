@@ -32,6 +32,7 @@ class AccountMove(models.Model):
 	partner_note = fields.Text('Note')
 	delivery_instruction = fields.Html(string="Delivery Instruction")
 	invoice_instruction = fields.Html(string="Invoice Instruction")
+	invoice_attchmnets = fields.Char()
 
 	def _build_credit_warning_message(self, record, updated_credit):
 		# Super call to execute the parent method first
@@ -76,7 +77,6 @@ class AccountMove(models.Model):
 		# Return the original message as well (optional)
 		return msg
 
-	    
 
 	@api.depends('posted_before', 'state', 'journal_id', 'date')
 	def _compute_name(self):
@@ -399,8 +399,8 @@ class AccountMove(models.Model):
 
 	def action_invoice_sent(self):
 		""" Open a window to compose an email, with the edi invoice template
-            message loaded by default
-        """
+			message loaded by default
+		"""
 		self.ensure_one()
 		template = self.env.ref(self._get_mail_template(), raise_if_not_found=False)
 		lang = False
@@ -457,6 +457,48 @@ class AccountMove(models.Model):
 					'move_id':res.id,
 					'quantity':1})
 		return res
+
+	def create_attachment(self, data, name):
+		attachment = self.env['ir.attachment'].create({
+					   'name': name,
+					   'raw': data,
+					   'res_id': self.id,
+					   'res_model': 'account.move',
+					   'type': 'binary',
+					   'mimetype': 'application/pdf',
+			   })
+		if self.invoice_attchmnets:
+			self.invoice_attchmnets = self.invoice_attchmnets + str(attachment.id) + ','
+		else:
+			self.invoice_attchmnets = str(attachment.id) + ','
+
+	def action_post(self):
+		res = super().action_post()
+		picking_ids = []
+		if self.sale_id:
+			action = self.env.ref('sale.action_report_saleorder')
+			sale_order_data = action._render_qweb_pdf('sale.action_report_saleorder', res_ids=self.sale_id.id)[0]
+			self.create_attachment(sale_order_data, 'INV-%s.pdf' % self.sale_id.name)
+			picking_ids =  self.sale_id.picking_ids.filtered(lambda x: x.state == 'done' and x.picking_type_code == 'outgoing')
+		if self.purchase_order_id:
+			action = self.env.ref('purchase.action_report_purchase_order')
+			purchase_data = action._render_qweb_pdf('fischerbell_custom.fischerbell_report_purchaseorder', res_ids=self.purchase_order_id.id)[0]
+			self.create_attachment(purchase_data, 'INV-%s.pdf' % self.purchase_order_id.name)
+			picking_ids = self.purchase_order_id.picking_ids.filtered(lambda x: x.state == 'done')
+		for picking_id in picking_ids:
+			pick_action = self.env.ref('stock.action_report_delivery')
+			picking_data = action._render_qweb_pdf('stock.report_deliveryslip', res_ids=picking_id.id)[0]
+			self.create_attachment(sale_order_data, 'INV-%s.pdf' % picking_id.name)
+		return res
+
+	def button_draft(self):
+		super().button_draft()
+		attachments_ids = self.invoice_attchmnets.split(',')
+		attachments_list = [int(attachments_id) for attachments_id in attachments_ids if attachments_id]
+		if attachments_list:
+			attachments = self.env['ir.attachment'].search([('id', 'in', attachments_list)])
+			attachments.unlink()
+			self.invoice_attchmnets = ''
 
 
 
