@@ -1,29 +1,30 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <odoo>
-    <record id="sale_order_view_form_service_inherited" model="ir.ui.view">
-        <field name="name">sale.subscription.order.form</field>
-        <field name="model">sale.order</field>
-        <field name="inherit_id" ref="sale.view_order_form"/>
-        <field name="arch" type="xml">
-            <field name="partner_invoice_id" position="after">
-                <field name="have_special_permission"/>
-                <field name="have_special_permission_note" placeholder="Log Note ..."/>
-            </field>
-            <page name="customer_signature" position="after">
-                <page string="Service" name="service">
-                    <group string="Service Products">
-                        <field name="service_product_ids" colspan="2" nolabel="1">
-                            <tree editable="bottom" string="Service Products">
-                                <field name="extra_product_ids" widget="many2many_tags" invisible="1"/>
-                                <field name="product_variant_id"/>
-                                <field name="service_product_id"/>
-                                <field name="service_date"/>
-                                <field name="reminder_date"/>
-                            </tree>
-                        </field>
-                    </group>
-                </page>
-            </page>
-        </field>
-    </record>
+	<record id="sale_order_view_form_service_inherited" model="ir.ui.view">
+		<field name="name">sale.subscription.order.form</field>
+		<field name="model">sale.order</field>
+		<field name="inherit_id" ref="sale.view_order_form"/>
+		<field name="arch" type="xml">
+			<field name="partner_invoice_id" position="after">
+				<field name="have_special_permission"/>
+				<field name="have_special_permission_note" placeholder="Log Note ..."/>
+				<field name="equipment_service_id"/>
+			</field>
+			<page name="customer_signature" position="after">
+				<page string="Service" name="service">
+					<group string="Service Products">
+						<field name="service_product_ids" colspan="2" nolabel="1">
+							<tree editable="bottom" string="Service Products">
+								<field name="extra_product_ids" widget="many2many_tags" invisible="1"/>
+								<field name="product_variant_id"/>
+								<field name="service_product_id"/>
+								<field name="service_date"/>
+								<field name="reminder_date"/>
+							</tree>
+						</field>
+					</group>
+				</page>
+			</page>
+		</field>
+	</record>
 </odoo>

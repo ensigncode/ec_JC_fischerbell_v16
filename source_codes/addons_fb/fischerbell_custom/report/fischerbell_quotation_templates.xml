@@ -551,6 +551,9 @@
                                                                     /
                                                                     <span style="font-size: 12px; font-family: 'Arial'; margin-left: 5px;"
                                                                           t-esc="doc.user_id.partner_id.phone"/>
+                                                                    <br/>
+                                                                    <span style="font-size: 12px; font-family: 'Arial'; margin-left: 5px;"
+                                                                          t-esc="doc.user_id.partner_id.email"/>
                                                                 </td>
                                                             </tr>
                                                             <tr>

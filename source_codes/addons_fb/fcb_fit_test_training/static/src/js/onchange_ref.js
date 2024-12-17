@@ -64,15 +64,17 @@ var CustomForm = publicWidget.Widget.extend({
             	let tranee_name = $(row).find('input[name="tranee_name"]').val();
             	let trainee_email = $(row).find('input[name="trainee_email"]').val();
             	let passport_no = $(row).find('input[name="passport_no"]').val();
-            	let size = $(row).find('input[name="size"]').val();
+            	// let size = $(row).find('input[name="size"]').val();
             	fit_test_data.push({
                 	'trainee': tranee_name,
                 	'trainee_email': trainee_email,
                 	'passport_no': passport_no,
-                	'size':size,
+                	// 'size':size,
             	});
         	});
         	$('textarea[name="fit_ids"]').val(JSON.stringify(fit_test_data));
+            var $form = $('#fitestraining_form');
+            $form.submit(); 
    	},
 
    _onClickRemove_line: function(ev){

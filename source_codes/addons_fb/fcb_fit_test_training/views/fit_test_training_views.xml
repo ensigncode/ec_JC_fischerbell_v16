@@ -11,7 +11,7 @@
                 <field name="charge_name"/>
                 <field name="phone"/>
                 <field name="company"/>
-                <field name="training_type"/>
+                <!-- <field name="training_type"/> -->
             </tree>
         </field>
     </record>
@@ -22,7 +22,8 @@
         <field name="arch" type="xml">
             <form string="fit test training Detail">
                 <header>
-                    <button name="action_send_email" type="object" string="Send By Email" class="oe_highlight" />
+                    <!-- <button name="action_send_email" type="object" string="Send By Email" class="oe_highlight" /> -->
+                    <!-- <button name="action_fitness_form" type="object" string="Fitness Form" class="oe_highlight"/> -->
                     <button name="action_send_invitation" type="object" string="Send Invitation" class="oe_highlight"/>
                 </header>
                 <sheet>
@@ -40,7 +41,7 @@
                         <group>
                             <field name="name_of_trainer"/>
                             <field name="charge_name"/>
-                            <field name="training_type"/>
+                            <!-- <field name="training_type"/> -->
                             <field name="company"/>
                             <field name="training_types"/>
                             <field name="trainer_sign" widget="signature"/>
@@ -68,7 +69,9 @@
                                      <field name="trainee_email"/>
                                      <field name="passport_no"/>
                                      <field name="size"/>
+                                     <field name="product_id"/>
                                      <field name="is_pass_fail"/>
+                                     <field name="fail_reason" attrs="{'invisible': [('is_pass_fail', '=', True)]}"/>
                                      <field name="tested_on"/>
                                 </tree>
                             </field>
@@ -91,6 +94,5 @@
               action="action_fit_test_training"
               parent="sale.report_sales_team"
     />
-
 
 </odoo>

@@ -17,11 +17,10 @@
 		<field name="arch" type="xml">
 			<tree string="Optician Detail">
 				<field name="user_id"/>
-				<field name="partner_id"/>
+				<field name="partner_id" string="Company"/>
 				<field name="name"/>
 				<field name="mobile"/>
 				<field name="product_id"/>
-				<field name="company_id"/>
 				<field name="sphere_left"/>
 				<field name="cyl_left"/>
 				<field name="axis_left"/>
@@ -55,7 +54,7 @@
 					<group>
 						<group>
 							<field name="user_id"/>
-							<field name="partner_id"/>
+							<field name="partner_id" string="Company"/>
 							<field name="name"/>
 							<field name="mobile"/>
 							<field name="email"/>
@@ -65,7 +64,6 @@
 							<field name="presc_type"/>
 							<field name="add_on_type"/>
 							<field name="product_id"/>
-							<field name="company_id"/>
 						</group>
 						<group>
 							<field name="form_no"/>
@@ -93,15 +91,6 @@
 				<!-- <field name="name"
 				   filter_domain="['|', '|', '|', '|', ('display_name', 'ilike', self), ('ref', '=', self), ('email', 'ilike', self), ('vat', 'ilike', self), ('company_registry', 'ilike', self)]"/> -->
 				<field name="name" filter_domain="[('name', 'ilike', self)]"/>
-				<field name="company_id" filter_domain="[('company_id', 'ilike', self)]"/>
-
-				<separator/>
-
-				<group expand="0" name="group_by" string="Group By">
-					<filter name="company" string="Company" domain="[]" context="{'group_by' : 'company_id'}"/>
-					<!-- <filter name="group_company" string="Company" context="{'group_by': 'parent_id'}"/>
-					<filter name="group_country" string="Country" context="{'group_by': 'country_id'}"/> -->
-				</group>
 			</search>
 		</field>
 	</record>

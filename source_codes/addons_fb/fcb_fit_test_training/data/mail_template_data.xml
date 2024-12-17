@@ -7,6 +7,7 @@
             <field name="subject">{{ object.name }}</field>
             <field name="email_from">{{ (object.company.email_formatted or object.company.email_formatted or user.email_formatted) }}</field>
             <field name="partner_to">{{ object.company.id }}</field>
+            <field name="auto_delete" eval="False" />
             <field name="description">Used by salespeople when they send quotations or proforma to prospects</field>
             <field name="body_html" type="html">
                 <div style="margin: 0px; padding: 0px;">
@@ -16,30 +17,6 @@
                             The training has been completed on {{object.date.day}}, November 14, 2023 at 10.00 am. Attached is the Training Certificate for your reference.
 
                             Please do not hesitate to contact us if you have any questions, or require any amendments of the certificate.
-<!--                        <t t-set="doc_name" t-value="'quotation' if object.state in ('draft', 'sent') else 'order'"/>-->
-<!--                        Hello,-->
-<!--                        <br/><br/>-->
-<!--                        Your-->
-<!--                        <t t-if="ctx.get('proforma')">-->
-<!--                            Pro forma invoice for <t t-out="doc_name or ''">quotation</t> <span style="font-weight: bold;"  t-out="object.name or ''">S00052</span>-->
-<!--                            <t t-if="object.origin">-->
-<!--                                (with reference: <t t-out="object.origin or ''"></t> )-->
-<!--                            </t>-->
-<!--                            amounting in <span style="font-weight: bold;"  t-out="format_amount(object.amount_total, object.pricelist_id.currency_id) or ''">$ 10.00</span> is available.-->
-<!--                        </t>-->
-<!--                        <t t-else="">-->
-<!--                            <t t-out="doc_name or ''">quotation</t> <span style="font-weight: bold;" t-out="object.name or ''"></span>-->
-<!--                            <t t-if="object.origin">-->
-<!--                                (with reference: <t t-out="object.origin or ''">S00052</t> )-->
-<!--                            </t>-->
-<!--                            amounting in <span style="font-weight: bold;" t-out="format_amount(object.amount_total, object.pricelist_id.currency_id) or ''">$ 10.00</span> is ready for review.-->
-<!--                        </t>-->
-<!--                        <br/><br/>-->
-<!--                        Do not hesitate to contact us if you have any questions.-->
-<!--                        <t t-if="not is_html_empty(object.user_id.signature)">-->
-<!--                            <br/><br/>-->
-<!--                            <t t-out="object.user_id.signature or ''">&#45;&#45;<br/>Mitchell Admin</t>-->
-<!--                        </t>-->
                         <br/><br/>
                     </p>
                 </div>
@@ -47,7 +24,6 @@
             <field name="report_template" ref="action_report_certificate_0"/>
             <field name="report_name">{{ (object.name or '').replace('/','_') }}</field>
             <field name="lang">{{ object.partner_id.lang }}</field>
-            <field name="auto_delete" eval="True"/>
         </record>
     </data>
 </odoo>

@@ -24,7 +24,7 @@
                                     <div class="row">
                                         <div class="col-6">
                                             <div class="input-group">
-                                                <label for="name">Name:</label>
+                                                <label for="name">Company:</label>
                                                 <input type="text" placeholder="Your Name" name="name" required="true"
                                                     id="name"></input>
                                             </div>
@@ -106,13 +106,19 @@
                                         </div>
                                         <div class="col-6">
                                             <div class="input-group">
-                                                <label for="group">Group:</label>
-                                                <input type="text" name="company_id" id="company_id"></input>
-                                                <!-- <select id="company_id" name="company_id">
-                                                    <option value=""></option>
-                                                </select> -->
+                                                <label for="group">Form No:</label>
+                                                <input type="number" name="form_no" id="form_number" required="true"></input>
                                             </div>
                                         </div>
+<!--                                        <div class="col-6">-->
+<!--                                            <div class="input-group">-->
+<!--                                                <label for="group">Group:</label>-->
+<!--                                                <input type="text" name="company_id" id="company_id"></input>-->
+<!--                                                &lt;!&ndash; <select id="company_id" name="company_id">-->
+<!--                                                    <option value=""></option>-->
+<!--                                                </select> &ndash;&gt;-->
+<!--                                            </div>-->
+<!--                                        </div>-->
                                         <div class="col-6">
                                             <div class="input-group">
                                                 <label for="sphere_left">SPHERE Left:</label>
@@ -176,12 +182,12 @@
                                                
                                             </div>
                                         </div>
-                                        <div class="col-6">
-                                            <div class="input-group">
-                                                <label for="group">Form No:</label>
-                                                <input type="number" name="form_no" id="form_number" required="true"></input>
-                                            </div>
-                                        </div>
+<!--                                        <div class="col-6">-->
+<!--                                            <div class="input-group">-->
+<!--                                                <label for="group">Form No:</label>-->
+<!--                                                <input type="number" name="form_no" id="form_number" required="true"></input>-->
+<!--                                            </div>-->
+<!--                                        </div>-->
                                     </div>
 
                                     <input class="submit_btn" type="submit" id="leave_submit"

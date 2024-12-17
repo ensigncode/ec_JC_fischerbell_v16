@@ -18,7 +18,17 @@
 		<field name="model">equipment.service</field>
 		<field name="arch" type="xml">
 			<form string="Equipment Service">
+				<header>
+					<button name="action_create_quotation" string="Create Quotation" type="object"
+					        class="oe_highlight"  attrs="{'invisible': [('quotation_count', '>=', 1)]}"/>
+				</header>
 				<sheet>
+					<div class="oe_button_box" name="button_box">
+						<button name="action_view_quotation" type="object" class="oe_stat_button"
+						        icon="fa-pencil-square-o" attrs="{'invisible': [('quotation_count', '=', 0)]}">
+							<field name="quotation_count" widget="statinfo" string="Quotation"/>
+						</button>
+					</div>
 					<group>
 						<group>
 							<field name="partner_id"/>

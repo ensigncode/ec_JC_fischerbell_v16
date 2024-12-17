@@ -22,8 +22,8 @@
         'data/training_seq.xml',
         'views/fittest_training_template.xml',
         'views/fit_test_training_views.xml',
+        'views/product_template_views.xml',
         'views/send_invitation_view.xml',
-
     ],
     'assets': {
             'web.assets_frontend': [
