@@ -788,7 +788,7 @@ class SaleOrder(models.Model):
             if vals.get('state') == 'draft':
                 vals['approval_state'] = 'no'
 
-            if vals.get('state') == 'sent' and self.is_approved_sale:
+            if vals.get('state') == 'sent' and not self.is_approved_sale:
                 vals['state'] = 'approve'
                 vals['partner_request_state'] = 'approved'
                 vals['approval_state'] = 'approved'
