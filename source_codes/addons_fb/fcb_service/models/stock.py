@@ -21,27 +21,20 @@ class StockPicking(models.Model):
 		res = super().button_validate()
 
 		for picking in self:
-			pay_or_not = picking.sale_id.invoice_ids.sudo().search(
-				[('payment_state', 'not in', ['paid', 'in_payment'])])
-			if (picking.partner_id.l10n_in_gst_treatment == 'overseas' and
-					pay_or_not.filtered(lambda x: x.sale_id == picking.sale_id) and
-					not picking.sale_id.have_special_permission):
-				raise UserError(_(
-					" Before going to validate transfer, accounts must register payment for the %s."
-				) % picking.sale_id.name)
-				line_ids = picking.move_line_ids.filtered(lambda x: x.product_id.is_serviceable)
-				for line in line_ids:
-					if line.product_id.service_product_ids:
-						eq_sale_id = line.picking_id.sale_id
-						equipment_ids = self.env['equipment.service'].search(
-							[('so_ref', '=', eq_sale_id.name), ('product_id', '=', line.product_id.id)])
-						for eq_service in equipment_ids:
-							eq_service.update({
-								'serial_number': line.lot_id.name,
-								'manufacturing_date': line.lot_id.manufacturing_date or False,
-								'expire_date': line.lot_id.expiration_date or False
-							})
-
+			line_ids = picking.move_line_ids.filtered(lambda x: x.product_id.is_serviceable)
+			for line in line_ids:
+				if line.product_id.service_product_ids:
+					eq_sale_id = line.picking_id.sale_id
+					for service in line.service_product_ids:
+						equipment_ids = self.env['equipment.service'].crete({'so_ref': eq_sale_id.name,
+														  					'product_id': line.product_id.id,
+																			'partner_id': eq_sale_id.partner_id.id,
+																			'delivery_date': picking.date_done,
+																			'service_product_id': service.product_varient_id.id,
+																			'serial_number': line.lot_id.name,
+																			'manufacturing_date': line.lot_id.manufacturing_date or False,
+																			'expire_date': line.lot_id.expiration_date or False,
+																			'eq_service_date': picking.date_done + timedelta(days=service.service_time),
+																			'eq_reminder_date': picking.date_done + timedelta(days=(service.service_time-service.reminder_time))
+																			})
 		return res
-
-
