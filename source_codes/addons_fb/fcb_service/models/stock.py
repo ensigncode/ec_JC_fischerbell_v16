@@ -25,7 +25,7 @@ class StockPicking(models.Model):
 			for line in line_ids:
 				if line.product_id.service_product_ids:
 					eq_sale_id = line.picking_id.sale_id
-					for service in line.service_product_ids:
+					for service in line.product_id.service_product_ids:
 						equipment_ids = self.env['equipment.service'].crete({'so_ref': eq_sale_id.name,
 														  					'product_id': line.product_id.id,
 																			'partner_id': eq_sale_id.partner_id.id,
