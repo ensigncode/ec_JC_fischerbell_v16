@@ -26,7 +26,7 @@ class StockPicking(models.Model):
 				if line.product_id.service_product_ids:
 					eq_sale_id = line.picking_id.sale_id
 					for service in line.product_id.service_product_ids:
-						equipment_ids = self.env['equipment.service'].crete({'so_ref': eq_sale_id.name,
+						equipment_ids = self.env['equipment.service'].create({'so_ref': eq_sale_id.name,
 														  					'product_id': line.product_id.id,
 																			'partner_id': eq_sale_id.partner_id.id,
 																			'delivery_date': picking.date_done,
