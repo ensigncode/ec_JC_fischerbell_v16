@@ -21,7 +21,7 @@ class PurchaseOrder(models.Model):
 
     partner_id = fields.Many2one('res.partner', string='Vendor', required=True, states=READONLY_STATES, 
                                                 change_default=True, tracking=True, 
-                                                domain="['|','&','&','|', ('company_id', '=', False), ('company_id', '=', company_id), ('supplier_rank', '>', 0), ('code', '=', False), ('code', 'ilike', 'VEN')]", 
+                                                domain="['|','&', ('company_id', '=', False), ('company_id', '=', company_id), ('supplier_rank', '>', 0), ('code', 'not ilike', 'CUS')]", 
                                                 help="You can find a vendor by its Name, TIN, Email or Internal Reference.")
     internal_note = fields.Text('Notes')
     supplier_code = fields.Char('Vendor Code', related="partner_id.supplier_code")
