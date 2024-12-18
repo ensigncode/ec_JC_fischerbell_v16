@@ -64,7 +64,7 @@ class SaleOrder(models.Model):
     # replacement_order_count = fields.Integer('Replacement Order Count', compute="_compute_replacement_order_ids")
     partner_invoice_address = fields.Char()
     check_partner_address = fields.Boolean('Check Partner Address', default=False)
-    customer_code = fields.Char('Customer Code', related="partner_id.customer_code")
+    customer_code = fields.Char('Customer Code', related="partner_id.code")
     terms_and_conditions = fields.Html('Terms and Conditions', compute="_get_terms_and_conditions")
     purchase_ref = fields.Char('Purchase Reference', compute="_compute_purchase_ref", store=True)
     journal_id = fields.Many2one('account.journal', 'Billing Mode')
@@ -139,6 +139,13 @@ class SaleOrder(models.Model):
     sub_order_count = fields.Integer('Sub Order Count', compute='action_view_saleorder')
     is_approved_sale = fields.Boolean()
     sale_reason = fields.Text()
+    partner_id = fields.Many2one(
+        comodel_name='res.partner',
+        string="Customer",
+        required=True, readonly=False, change_default=True, index=True,
+        tracking=1,
+        states=READONLY_FIELD_STATES,
+        domain="['|', ('code', '=', False), ('code', 'ilike', 'CUS')]")
             
     def _get_order_id(self):
         for rec in self:

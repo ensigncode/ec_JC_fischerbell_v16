@@ -24,6 +24,37 @@ class EquipmentService(models.Model):
 	eq_service_date = fields.Datetime(string='Service Date', )
 	eq_reminder_date = fields.Datetime(string='Reminder Date', )
 	service_product_id = fields.Many2one('product.product', string="Service Product", domain="[('detailed_type', '=', 'service')]")
+	quotation_count = fields.Integer( string='Quotations Count',compute='_compute_quotation_count')
+	def _compute_quotation_count(self):
+		for record in self:
+			sale_orders = self.env['sale.order'].search([('equipment_service_id', '=', record.id)])
+			record.quotation_count = len(sale_orders)
+	def action_view_quotation(self):
+		self.ensure_one()
+		sale_orders = self.env['sale.order'].search([('equipment_service_id', '=', self.id)])
+		if sale_orders:
+			return {
+				'type': 'ir.actions.act_window',
+				'name': 'Quotation',
+				'res_model': 'sale.order',
+				'view_mode': 'form',
+				'view_id': self.env.ref('sale.view_order_form').id,
+				'res_id': sale_orders[0].id,
+				'target': 'current',
+			}
+	def action_create_quotation(self):
+		for record in self:
+			record.env['sale.order'].create({
+				'partner_id': record.partner_id.id,
+				'date_order': fields.Date.today(),
+				'equipment_service_id': record.id,
+				'order_line': [(0, 0, {
+					'product_id': record.service_product_id.id,
+					'name': record.service_product_id.name,
+					'product_uom_qty': 1,
+					'price_unit': record.service_product_id.lst_price,
+				})],
+			})
 
 	@api.onchange('product_id')
 	def onchange_product_id(self):
