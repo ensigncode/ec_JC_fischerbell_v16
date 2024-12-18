@@ -26,10 +26,11 @@ class StockPicking(models.Model):
 				if line.product_id.service_product_ids:
 					eq_sale_id = line.picking_id.sale_id
 					for service in line.product_id.service_product_ids:
-						equipment_ids = self.env['equipment.service'].create({'so_ref': eq_sale_id.name,
+						if "/OUT/" in line.picking_id.name:
+							equipment_ids = self.env['equipment.service'].create({'so_ref': eq_sale_id.name,
 														  					'product_id': line.product_id.id,
 																			'partner_id': eq_sale_id.partner_id.id,
-																			'delivery_date': picking.date_done,
+																			'delivered_date': picking.date_done,
 																			'service_product_id': service.product_variant_id.id,
 																			'serial_number': line.lot_id.name,
 																			'manufacturing_date': line.lot_id.manufacturing_date or False,
