@@ -26,7 +26,7 @@ class StockPicking(models.Model):
 				if line.product_id.service_product_ids:
 					eq_sale_id = line.picking_id.sale_id
 					for service in line.product_id.service_product_ids:
-						if "/OUT/" in line.picking_id.name:
+						if "/OUT/" in line.picking_id.name and line.picking_id.origin != False:
 							equipment_ids = self.env['equipment.service'].create({'so_ref': eq_sale_id.name,
 														  					'product_id': line.product_id.id,
 																			'partner_id': eq_sale_id.partner_id.id,
