@@ -30,7 +30,7 @@ class StockPicking(models.Model):
 														  					'product_id': line.product_id.id,
 																			'partner_id': eq_sale_id.partner_id.id,
 																			'delivery_date': picking.date_done,
-																			'service_product_id': service.product_varient_id.id,
+																			'service_product_id': service.product_variant_id.id,
 																			'serial_number': line.lot_id.name,
 																			'manufacturing_date': line.lot_id.manufacturing_date or False,
 																			'expire_date': line.lot_id.expiration_date or False,
