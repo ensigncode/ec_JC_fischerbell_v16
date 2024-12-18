@@ -394,6 +394,11 @@ class PurchaseOrder(models.Model):
             })
             rec.write({'state': 'submitted', 'approval_state': 'waiting_approval'})
 
+    def copy(self, default=None):
+        new_po = super(PurchaseOrder, self).copy(default=default)
+        if self.state == 'purchase':
+            new_po.button_confirm()
+        return new_po
 
 class PurchaseOrderLine(models.Model):
     _inherit = "purchase.order.line"
@@ -410,7 +415,9 @@ class PurchaseOrderLine(models.Model):
     comments = fields.Char()
     request_delivery_date = fields.Datetime("Request Delivery Date")
     estimated_delivery_date = fields.Datetime("Estimated Delivery Date")
-    approval_state = fields.Selection([('draft', 'Draft'), ('approved', 'Approved')], string='State', default='draft')
+    approval_state = fields.Selection([('draft', 'Draft'), ('approved', 'Approved'), ('rejected', 'rejected')], string='State', default='draft')
+    po_reason = fields.Text(string="Reason")
+
 
     def action_approve_line(self):
         for line in self:
@@ -488,3 +495,6 @@ class PurchaseOrderLine(models.Model):
 
         res.update({'sale_ids': sale_ids,'move_ids': move_ids, 'picking_ids': picking_ids})
         return res
+
+    def _create_stock_moves(self, picking):
+        return super(PurchaseOrderLine, self.filtered(lambda x: x.approval_state != 'rejected'))._create_stock_moves(picking)

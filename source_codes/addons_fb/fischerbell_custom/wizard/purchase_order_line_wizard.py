@@ -15,6 +15,8 @@ class RejectReasonWizard(models.TransientModel):
             # Log the reason in the purchase order as a note
             message = f"Purchase Order Line Rejected: {self.reason}"
             purchase_order_line.order_id.message_post(body=message)
+            purchase_order_line.po_reason = self.reason
+            purchase_order_line.approval_state = 'rejected'
 
             # Remove the line
-            purchase_order_line.unlink()
+            # purchase_order_line.unlink()
