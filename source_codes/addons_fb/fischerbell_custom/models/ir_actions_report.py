@@ -85,7 +85,7 @@ class IrActionsReport(models.Model):
 	def _run_wkhtmltopdf(
 			self,
 			bodies,
-			report_ref,
+			report_ref=False,
 			header=None,
 			footer=None,
 			landscape=False,
