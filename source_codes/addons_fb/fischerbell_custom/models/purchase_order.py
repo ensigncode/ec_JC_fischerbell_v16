@@ -24,7 +24,7 @@ class PurchaseOrder(models.Model):
                                                 domain="['|','&', ('company_id', '=', False), ('company_id', '=', company_id), ('supplier_rank', '>', 0), ('code', 'not ilike', 'CUS')]", 
                                                 help="You can find a vendor by its Name, TIN, Email or Internal Reference.")
     internal_note = fields.Text('Notes')
-    supplier_code = fields.Char('Vendor Code', related="partner_id.supplier_code")
+    supplier_code = fields.Char('Vendor Code', related="partner_id.code")
     amount_undiscounted = fields.Float('Amount Before Discount', compute='_compute_purchase_amount_undiscounted', digits=0)
     sale_id = fields.Many2one('sale.order', 'Sale')
     journal_id = fields.Many2one('account.journal', 'Billing Mode')
