@@ -13,7 +13,7 @@ class FischerbellUserTraining(models.Model):
 	datetime = fields.Datetime('Trainer Date amd Time')
 	venue = fields.Char('Trainer Venue')
 	type = fields.Char('Type of Training')
-	partner_id = fields.Many2one('res.partner')
+	partner_id = fields.Many2one('res.partner', 'Customer')
 
 
 

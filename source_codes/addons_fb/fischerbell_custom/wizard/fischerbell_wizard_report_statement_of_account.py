@@ -9,7 +9,7 @@ class ReportStatementOfAccount(models.TransientModel):
     _name = 'report.statement.of.account'
 
     name = fields.Char('Name')
-    partner_ids = fields.Many2many('res.partner', string = 'Partner')
+    partner_ids = fields.Many2many('res.partner', string = 'Customer')
     till_date = fields.Date(string = 'Till Date', default=fields.date.today())
     # partner_id = fields.Many2one('res.partner', 'Partner')
     # start_date = fields.Date('Start Date')

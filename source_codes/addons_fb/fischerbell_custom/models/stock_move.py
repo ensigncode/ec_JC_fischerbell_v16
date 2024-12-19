@@ -13,7 +13,7 @@ class StockMove(models.Model):
 	batch_number = fields.Char('Batch Number', related="customer_id.batch_number")
 	lot_id = fields.Many2one('stock.lot', 'Serial Number')
 	mrp_line_id = fields.Many2one('stock.move', compute="_compute_mrp_line_id", store=True)
-	mrp_customer_id = fields.Many2one('res.partner', compute="_compute_mrp_line_id", store=True)
+	mrp_customer_id = fields.Many2one('res.partner', compute="_compute_mrp_line_id", store=True, string='Customer')
 	mrp_phone = fields.Char('Phone Number', compute="_compute_mrp_line_id", store=True)
 	manufacturing_date = fields.Date('manufacturing date')
 	expiration_date = fields.Date('expiration date')

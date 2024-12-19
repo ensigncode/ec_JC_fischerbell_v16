@@ -25,7 +25,7 @@ class MrpProduction(models.Model):
 	""" Manufacturing Orders """
 	_inherit = 'mrp.production'
 
-	partner_id = fields.Many2one('res.partner', 'Partner')
+	partner_id = fields.Many2one('res.partner', 'Customer')
 	requestor_id = fields.Many2one('res.partner', 'Requestor')
 	note = fields.Char('Note')
 	mrp_team_id = fields.Many2one('res.users', 'MRP Team',default=lambda self: self.env.user)
