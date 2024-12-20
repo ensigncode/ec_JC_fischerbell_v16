@@ -25,6 +25,12 @@ class FitTestTraining(models.Model):
 	reference_no = fields.Char(string='Training Reference', required=True,
 							   readonly=True, default=lambda self: _('New'))
 	url = fields.Char("URL", readonly=True)
+
+	@api.onchange('company')
+	def _onchange_company_id(self):
+		if self.company:
+			self.phone = self.company.phone
+			self.partner_id = self.company.id
 	
 	def action_send_invitation(self):
 		self.ensure_one()

@@ -16,7 +16,7 @@
             <field name="body_html" type="html">
                 <div style="margin: 0px; padding: 0px;">
                     <p style="margin: 0px; padding: 0px; font-size: 13px;">
-        Dear
+        Hello
                         <t t-out="object.partner_id.name or ''">Brandon Freeman</t>
                         <t t-if="object.partner_id.parent_id">
             (

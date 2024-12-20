@@ -280,14 +280,19 @@ class PurchaseOrder(models.Model):
     def request_approved(self):
         for purchase in self:
             if not purchase.partner_id.code:
-                partner_id = purchase.partner_id.copy({'name':purchase.partner_id.name,
-                                                'code':self.env['ir.sequence'].next_by_code('res.partner.vendor') 
-                                                    or  _('New'),
-                                                'supplier_rank':purchase.partner_id.supplier_rank,
-                                                'is_contact_created':True,
-                                                'property_product_pricelist':purchase.partner_id.property_product_pricelist and purchase.partner_id.property_product_pricelist.id or False})
-                purchase.write({'partner_request_state':'approved',
-                            'partner_id':partner_id.id})
+                code = self.env['ir.sequence'].next_by_code('res.partner.vendor') or _('New')
+
+                purchase.partner_id.write({
+                    'code': code,
+                    'supplier_rank': purchase.partner_id.supplier_rank,
+                    'is_contact_created': True,
+                    'property_product_pricelist': purchase.partner_id.property_product_pricelist.id if purchase.partner_id.property_product_pricelist else False
+                })
+
+            purchase.write({
+                'partner_request_state': 'approved',
+                'partner_id': purchase.partner_id.id
+            })
 
     def request_rejected(self):
         for purchase in self:

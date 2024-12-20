@@ -961,14 +961,17 @@ class SaleOrder(models.Model):
     def request_approved(self):
         for sale in self:
             if not sale.partner_id.is_contact_created:
-                partner_id = sale.partner_id.copy({'name':sale.partner_id.name,
-                                                'code':self.env['ir.sequence'].next_by_code('res.partner.customer') 
-                                                    or  _('New'),
-                                                    'is_contact_created':True,
-                                                    'customer_rank':sale.partner_id.customer_rank,
-                                                    'property_product_pricelist':sale.partner_id.property_product_pricelist and sale.partner_id.property_product_pricelist.id or False})
-                sale.write({'partner_request_state':'approved',
-                            'partner_id':partner_id.id})
+                code = self.env['ir.sequence'].next_by_code('res.partner.customer') or _('New')
+                sale.partner_id.write({
+                    'code': code,
+                    'is_contact_created': True,
+                    'customer_rank': sale.partner_id.customer_rank,
+                    'property_product_pricelist': sale.partner_id.property_product_pricelist.id if sale.partner_id.property_product_pricelist else False
+                })
+            sale.write({
+                'partner_request_state': 'approved',
+                'partner_id': sale.partner_id.id
+            })
 
     def request_rejected(self):
         for sale in self:
