@@ -13,7 +13,8 @@ class ResUser(models.Model):
     # {', ' + user['company_id']['zip'] if user['company_id']['zip'] else ''}
     allow_submission = fields.Integer(string="Allow Submission", default=0)
     submission_count = fields.Integer(string="Submission Count",default =0, readonly=True)
-
+    is_portal_user = fields.Boolean()
+    
     @api.depends('name', 'email_signature_option', 'mobile_phone', 'work_phone', 'work_email')
     def _compute_signature(self):
         for user in self.filtered(lambda user: user.name):
@@ -140,4 +141,24 @@ class ResUser(models.Model):
         return super(ResUser, self)._get_default_warehouse_id()
 
 
+    def default_get(self, fields_list):
+        res = super().default_get(fields_list)
+        if res.get('is_portal_user'):
+            portal_group = self.env.ref('base.group_portal')
+            res['groups_id'] = [(4, portal_group.id)]
+        return res
 
+    @api.model
+    def create(self, vals):
+        portal_group = self.env.ref('base.group_portal')
+        if 'sel_groups_1_10_11' in vals:
+            if portal_group.id == vals.get('sel_groups_1_10_11'):
+                vals['is_portal_user'] = True    
+        return super(ResUser, self).create(vals)
+
+    def write(self, vals):
+        portal_group = self.env.ref('base.group_portal')
+        if 'sel_groups_1_10_11' in vals:
+            if portal_group.id == vals.get('sel_groups_1_10_11'):
+                vals['is_portal_user'] = True 
+        return super(ResUser, self).write(vals)

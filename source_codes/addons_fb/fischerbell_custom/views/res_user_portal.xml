@@ -1,0 +1,9 @@
+<odoo>
+    <record id="action_custom_users" model="ir.actions.act_window">
+        <field name="name">Users</field>
+        <field name="res_model">res.users</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[]</field>
+    </record>
+    <menuitem id="menu_custom_user_management" name="Portal User" parent="base.menu_administration" sequence="10" action="action_custom_users" />
+</odoo>

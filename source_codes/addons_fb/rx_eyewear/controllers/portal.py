@@ -16,6 +16,7 @@ class PortalOpticianDetail(portal.CustomerPortal):
         uid = request.session.uid
         user_id = request.env['res.users'].sudo().browse(uid)
         optician_detail_count = 0
+        values = {}
         if user_id :
             optician_detail_count = request.env['optician.detail'].sudo().search_count(
 				[('user_id', '=', user_id.id)])
