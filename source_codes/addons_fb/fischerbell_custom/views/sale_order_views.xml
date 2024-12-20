@@ -183,9 +183,6 @@
             </xpath>
             <xpath expr="//field[@name='order_line']//tree//field[@name='price_subtotal']" position="after">
                 <field name="approval_state" readonly="1"/>
-                <button name="%(fischerbell_custom.action_request_sale_line_price_wizard)d" 
-                type="action" class="oe_highlight" string="Update Price"
-                groups="sales_team.group_sale_manager" attrs="{'invisible':['|',('state','not in',('draft','sent')),('approval_state','in',('approved','pending'))]}"/>
             </xpath>
             <xpath expr="//field[@name='order_line']//tree//field[@name='price_unit']" position="attributes">
                 <attribute name="readonly">True</attribute>
