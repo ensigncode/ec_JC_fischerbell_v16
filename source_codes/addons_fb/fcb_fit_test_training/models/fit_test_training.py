@@ -37,7 +37,8 @@ class FitTestTraining(models.Model):
 		lang = self.env.context.get('lang')
 		template_id = self.env.ref('fcb_fit_test_training.email_template_send_invitation', raise_if_not_found=False)
 		base_url = self.env['ir.config_parameter'].sudo().get_param('web.base.url')
-		self.url = f"{base_url}/fittest_training?fitting_id={self.id}"
+		fitness_url = f"{base_url}/fittest_training"
+		self.url = f"{fitness_url}?fitting_id={self.id}"
 		if template_id and template_id.lang:
 			lang = template_id._render_lang(self.ids)[self.id]
 		ctx = {
