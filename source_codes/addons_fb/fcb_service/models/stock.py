@@ -19,11 +19,10 @@ class StockPicking(models.Model):
 
 	def button_validate(self):
 		res = super().button_validate()
-
 		for picking in self:
 			line_ids = picking.move_line_ids.filtered(lambda x: x.product_id.is_serviceable)
 			for line in line_ids:
-				if line.product_id.service_product_ids:
+				if line.product_id.service_product_ids and picking.state == 'done':
 					eq_sale_id = line.picking_id.sale_id
 					for service in line.product_id.service_product_ids:
 						if "/OUT/" in line.picking_id.name and line.picking_id.origin != False:
