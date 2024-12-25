@@ -233,7 +233,7 @@
                                                             </tr>
                                                             <tr>
                                                                 <td>
-                                                                    <t t-if="len(doc.sale_id.partner_id.phone) &lt; 20">
+                                                                    <t t-if="doc.sale_id and len(doc.sale_id.partner_id.phone) &lt; 20">
                                                                       <span style="font-family: 'Unitext Pro Regular'; line-height: 1.5em;">
                                                                           <br/>
                                                                           <br/>

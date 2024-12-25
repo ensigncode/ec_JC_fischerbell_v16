@@ -43,7 +43,12 @@
                                                     <td width="5%" class="text-center"><t t-esc="int(line.purchase_line_id.product_uom_qty)"/></td>
                                                     <td width="7%" class="text-center"><t t-esc="line.purchase_line_id.product_uom.name"/></td>
                                                     <td width="10%" class="text-center"><t t-esc="'{:0,.2f}'.format(float(line.purchase_line_id.price_unit))"/></td>
-                                                    <td width="10%" style="text-align: right;"><t t-esc="'{:0,.2f}'.format(float(line.purchase_line_id.price_subtotal/int(line.purchase_line_id.product_uom_qty)))"/></td>
+                                                    <t t-if="line.purchase_line_id.product_uom_qty">
+                                                        <td width="10%" style="text-align: right;"><t t-esc="'{:0,.2f}'.format(float(line.purchase_line_id.price_subtotal/int(line.purchase_line_id.product_uom_qty)))"/></td>
+                                                    </t>
+                                                    <t t-else="">
+                                                        <td width="10%" style="text-align: right;"><t t-esc="0"/></td>
+                                                    </t>
                                                 </tr>
                                             </t>
                                         </t>
@@ -246,7 +251,7 @@
                                                                 </td>
                                                                 <td width="53.6%"  >
                                                                     <t t-if="doc.purchase_id.date_order">
-                                                                        <span style="font-family: 'Unitext Pro Regular'; line-height: 1em; font-size: 12px;" t-esc="doc.purchase_id.date_order.strftime('%d/%m/%Y')"/>
+                                                                        <span style="font-family: 'Unitext Pro Regular'; line-height: 1em; font-size: 12px;" t-esc="doc.purchase_id and doc.purchase_id.date_order and doc.purchase_id.date_order.strftime('%d/%m/%Y')"/>
                                                                     </t>
                                                                 </td>
                                                             </tr>
@@ -291,7 +296,7 @@
                                                                     <span style="font-family: 'Unitext Pro Regular'; line-height: 1em; font-size: 12px; font-weight: bold;">:</span>
                                                                 </td>
                                                                 <td width="53.6%" >
-                                                                    <span style="font-family: 'Unitext Pro Regular'; line-height: 1em; font-size: 12px;" t-esc="doc.purchase_id.create_date.strftime('%d/%m/%Y')"></span>
+                                                                    <span style="font-family: 'Unitext Pro Regular'; line-height: 1em; font-size: 12px;" t-esc="doc.purchase_id and doc.purchase_id.create_date.strftime('%d/%m/%Y')"></span>
                                                                 </td>
                                                             </tr>
                                                             <tr>
