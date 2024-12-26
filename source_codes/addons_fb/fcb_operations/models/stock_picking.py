@@ -33,13 +33,14 @@ class StockPicking(models.Model):
 	@api.depends('partner_id')
 	def _compute_contact_ids(self):
 		for res in self : 
-			parent_id = self.partner_id.parent_id if self.partner_id.parent_id else False
-			if parent_id :
-				partner_ids = self.env['res.partner'].sudo().search([('parent_id','=',parent_id.id)])
-				res.contact_ids = partner_ids
-			else :
-				partner_ids = self.env['res.partner'].sudo().search([])
-				res.contact_ids = partner_ids
+			res.contact_ids = []
+			# parent_id = self.partner_id.parent_id if self.partner_id.parent_id else False
+			# if parent_id :
+			# 	partner_ids = self.env['res.partner'].sudo().search([('parent_id','=',parent_id.id)])
+			# 	res.contact_ids = partner_ids
+			# else :
+			# 	partner_ids = self.env['res.partner'].sudo().search([])
+			# 	res.contact_ids = partner_ids
 
 	@api.depends('name')
 	def _generate_qr_code(self):
