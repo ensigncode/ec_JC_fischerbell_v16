@@ -138,8 +138,15 @@ class PurchaseOrder(models.Model):
                 order_line_vals = list(map(lambda y:list(y[-1].keys()),filter(lambda x:isinstance(x,list) and isinstance(x[-1],dict),vals.get('order_line'))))
                 if any(field in PURCHASE_LINE_FIELDS for field in list(itertools.chain(*order_line_vals))):
                     vals['revision_purchase_name'] = (purchase.name.split('-')[0] if not purchase.revision_purchase_name else purchase.revision_purchase_name.split('-')[0]) + '-R%s'%(int(purchase.revision_purchase_count + 1) if int(purchase.revision_purchase_count) == 0 else int(purchase.revision_purchase_count))
-                    vals['name'] = (purchase.name.split('-')[0] if not purchase.revision_purchase_name else purchase.revision_purchase_name.split('-')[0]) + '-R%s'%(int(purchase.revision_purchase_count + 1) if int(purchase.revision_purchase_count) == 0 else int(purchase.revision_purchase_count))
-                    vals['revision_purchase_count'] = purchase.revision_purchase_count + 1
+                    original_name = self.name.split('-R')
+                    main_po = self.search([('name', '=', original_name[0]), ('id', '!=', self.id)])
+                    if main_po:
+                        vals['name'] = (main_po.name.split('-')[0] if not main_po.revision_purchase_name else main_po.revision_purchase_name.split('-')[0]) + '-R%s'%(int(main_po.revision_purchase_count + 1) if int(main_po.revision_purchase_count) == 0 else int(main_po.revision_purchase_count))
+                        main_po.revision_purchase_count = main_po.revision_purchase_count + 1
+                        vals['revision_purchase_count'] = main_po.revision_purchase_count + 1
+                    else:
+                        vals['revision_purchase_count'] = purchase.revision_purchase_count + 1
+                        vals['name'] = (purchase.name.split('-')[0] if not purchase.revision_purchase_name else purchase.revision_purchase_name.split('-')[0]) + '-R%s'%(int(purchase.revision_purchase_count + 1) if int(purchase.revision_purchase_count) == 0 else int(purchase.revision_purchase_count))
                     vals['is_purchase_revise'] = True
         return super(PurchaseOrder,self).write(vals)
 
@@ -400,10 +407,23 @@ class PurchaseOrder(models.Model):
             rec.write({'state': 'submitted', 'approval_state': 'waiting_approval'})
 
     def copy(self, default=None):
-        new_po = super(PurchaseOrder, self).copy(default=default)
         if self.state == 'purchase':
+            default = dict(default or {})
+            original_name = self.name.split('-R')
+            main_po = self.search([('name', '=', original_name[0])])
+            if main_po:
+                main_po = main_po
+            else:
+                main_po = self
+            default['name'] = (main_po.name.split('-')[0] if not main_po.revision_purchase_name else main_po.revision_purchase_name.split('-')[0]) + '-R%s'%(int(main_po.revision_purchase_count + 1) if int(main_po.revision_purchase_count) == 0 else int(main_po.revision_purchase_count))
+            main_po.revision_purchase_count = main_po.revision_purchase_count + 1
+            default['revision_purchase_count'] = main_po.revision_purchase_count
+            new_po = super(PurchaseOrder, self).copy(default=default)
             new_po.button_confirm()
-        return new_po
+            return new_po
+        else:
+            return super(PurchaseOrder, self).copy(default=default)
+
 
 class PurchaseOrderLine(models.Model):
     _inherit = "purchase.order.line"
