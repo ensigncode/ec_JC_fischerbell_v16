@@ -3,7 +3,7 @@
 
     <t t-name="fischerbell_custom.PurchaseOrderRequiredField" t-inherit="web.FormLabel" t-inherit-mode="extension" owl="1">
         <xpath expr="//t[@t-esc='props.string']" position="before">
-            <t t-if="props.fieldInfo.modifiers.required and env.model.root.resModel == 'purchase.order'">
+            <t t-if="props.fieldInfo.modifiers.required">
                 <sup class="text-danger p-1">*</sup>
             </t>
         </xpath>
