@@ -17,6 +17,7 @@
         'security/ir.model.access.csv',
         'report/fit_test_certificate_report.xml',
         'report/fit_test_certificate_template.xml',
+        'report/fit_test_passed_card_report.xml',
         'data/website_data.xml',
         'data/mail_template_data.xml',
         'data/training_seq.xml',

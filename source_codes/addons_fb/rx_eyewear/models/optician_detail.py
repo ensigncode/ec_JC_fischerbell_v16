@@ -40,9 +40,6 @@ class OpticianDetail(models.Model):
     outlet_id = fields.Many2one('outlet.detail', 'Outlet')
 
 
-
-
-
     @api.depends('sale_order_ids')
     def _compute_sale_order_count(self):
         for record in self:
@@ -59,8 +56,7 @@ class OpticianDetail(models.Model):
             result['views'] = [(self.env.ref('sale.view_order_form', False).id, 'form')]
             result['res_id'] = sale_order_ids.id
         return result
-        
-                
+                        
 
     def action_create_quotation(self):
         company_partner_ids = self.mapped("company_id")
