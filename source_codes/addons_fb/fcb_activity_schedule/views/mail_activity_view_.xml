@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="mail_activity_view_form_extend" model="ir.ui.view">
+        <field name="name">mail.activity.view.form</field>
+        <field name="model">mail.activity</field>
+        <field name="priority">21</field>
+        <field name="mode">primary</field>
+        <field name="inherit_id" ref="mail.mail_activity_view_form"/>
+        <field name="arch" type="xml">
+            <field name="user_id" position="after">
+                <field name="state"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="mail_activity_view_extend_tree" model="ir.ui.view">
+        <field name="name">mail.activity.view.extend.tree</field>
+        <field name="model">mail.activity</field>
+        <field name="arch" type="xml">
+            <tree string="Next Activities"
+                    decoration-danger="date_deadline &lt; current_date"
+                    decoration-success="date_deadline == current_date"
+                    create="false">
+                <field name="res_name"/>
+                <field name="activity_type_id"/>
+                <field name="summary"/>
+                <field name="create_uid"/>
+                <field name="user_id"/>
+                <field name="date_deadline"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="mail_activity_action_view" model="ir.actions.act_window">
+        <field name="name">Activities</field>
+        <field name="res_model">mail.activity</field>
+        <field name="view_mode">tree,form,calendar</field>
+        <field name="view_id" ref="mail.mail_activity_view_calendar"/>
+        <field name="view_ids" eval="[(5, 0, 0), 
+            (0, 0, {'view_mode': 'tree', 'view_id': ref('fcb_activity_schedule.mail_activity_view_extend_tree')}), 
+            (0, 0, {'view_mode': 'form', 'view_id': ref('fcb_activity_schedule.mail_activity_view_form_extend')}),
+            (0, 0, {'view_mode': 'calendar', 'view_id': ref('mail.mail_activity_view_calendar')}),
+            ]"/>
+        <field name="context">{'activity_list_view' : True }</field>
+    </record>
+
+    <menuitem
+        id="mail_activity_root_menu"
+        name="Activity"
+        web_icon="fcb_activity_schedule,static/description/icon.png"
+        groups="fcb_activity_schedule.group_mail_activity_schedule_manager"
+        sequence="10"/>
+
+    <menuitem
+        id="mail_activity_sub_menu"
+        name="Activity"
+        action="fcb_activity_schedule.mail_activity_action_view"
+        parent="fcb_activity_schedule.mail_activity_root_menu"
+        sequence="10"/>
+</odoo>
