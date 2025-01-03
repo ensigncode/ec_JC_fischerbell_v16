@@ -146,7 +146,25 @@ class SaleOrder(models.Model):
         tracking=1,
         states=READONLY_FIELD_STATES,
         domain="['|', ('code', '=', False), ('code', 'ilike', 'CUS')]")
-            
+    followup_reminder_sent = fields.Boolean(string="Follow-up Reminder Sent", default=False)
+
+    def _send_followup_reminders(self):
+        """
+        Send follow-up reminders for quotations sent 3 days ago.
+        """
+        today = fields.Date.today()
+        three_days_ago = today - timedelta(days=3)
+        quotations = self.sudo().search([
+            ('state', '=', 'sent'),  # Quotation state
+            ('followup_reminder_sent', '=', False),  # Not already sent
+            ('date_order', '>=', three_days_ago)  # Sent 3 days ago
+        ])
+        for quotation in quotations:
+            template = self.env.ref('fischerbell_custom.followup_quotation_email_template')
+            if template:
+                template.send_mail(quotation.id, force_send=True)
+                quotation.followup_reminder_sent = True
+
     def _get_order_id(self):
         for rec in self:
             rec.order_id = False

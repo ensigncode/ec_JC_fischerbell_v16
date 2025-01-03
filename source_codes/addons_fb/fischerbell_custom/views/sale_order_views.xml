@@ -20,6 +20,7 @@
             </xpath> -->
              <xpath expr="//field[@name='date_order']" position="after">
                 <field name="submited_date" readonly="1"/>
+                <field name="followup_reminder_sent" invisible="1" />
             </xpath>
             <!-- <xpath expr="//field[@name='commitment_date']" position="attributes">
                 <attribute name="invisible">1</attribute>
