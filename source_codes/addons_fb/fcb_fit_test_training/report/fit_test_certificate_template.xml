@@ -149,4 +149,152 @@
 			</t>
 		</t>
 	</template>
+
+	<template id="report_certificate_line">
+		<t t-call="web.basic_layout">
+			<t t-call="web.html_container">
+				<div class="page">
+					<t t-foreach="docs" t-as="o">
+						<div class="container">
+							<t t-if="o.is_pass_fail==True">
+									<div class="row">
+										<div class="col-6" style="padding: 0; margin-left: -37px">
+											<img src="/fcb_fit_test_training/static/src/img/side_bar_image.jpeg"
+											     alt="certificate" style="height: 792px;width: 400px; margin: 0;"/>
+										</div>
+										<div class="col-6 mt-4 pt-4">
+											<t t-if="o.fit_id.training_types == 'aed'">
+												<p style="font-size: 40px;color:grey;">AED Training Certificate</p>
+											</t>
+											<t t-if="o.fit_id.training_types == 'scba'">
+												<p o="font-size: 40px;color:grey;">SCBA Training Certificate</p>
+											</t>
+											<t t-if="o.fit_id.training_types == 'spill_traning'">
+												<p style="font-size: 40px;color:grey;">Spill Training Certificate</p>
+											</t>
+											<t t-if="o.fit_id.training_types == 'fit_test'">
+												<p style="font-size: 40px;color:grey;">Fit Test Certificate</p>
+											</t>
+											<div style="height:470px;">
+											<p style="font-size: 20px;">This is to certify that
+												<br/>
+												<strong style="font-size: 25px;">
+													<t t-if="o.trainee">
+														<span t-field="o.trainee"/>
+													</t>
+												</strong>
+											</p>
+											<p style="font-size: 20px;">IC /FIN No. /Employee No:
+												<t t-if="o.passport_no">
+													<span t-field="o.passport_no"/>
+												</t>
+											</p>
+											<p style="font-size: 20px;">From
+												<br/>
+												<strong>
+													<t t-if="o.fit_id.company">
+														<span t-field="o.fit_id.company"/>
+													</t>
+												</strong>
+											</p>
+											<t t-if="o.fit_id.training_types == 'fit_test'">
+												<p style="font-size: 20px;">Passed the Training
+													<br/>Type of Training:
+													<t t-if="o.product_id">
+														<span t-field="o.product_id"/>
+													</t>
+													<br/>Size / Result:
+															<b>
+																<t t-if="o.size">
+																	<span t-field="o.size"/>&#160;/&#160;
+																</t>
+															</b>
+															<b>
+																<t t-if="o.is_pass_fail == True">Pass</t>
+																<t t-else="">Fail
+																</t>
+															</b>
+													<br/>
+													<span>Tested On:
+														<t t-if="o.tested_on">
+															<span t-field="o.tested_on" t-options='{"widget": "date","format": "dd-MM-yyyy"}'/>
+														</t>
+													</span>
+												</p>
+											</t>
+											<br/>
+											<p t-if="o.fit_id.training_types == 'aed' or o.fit_id.training_types == 'scba' or o.fit_id.training_types == 'spill_traning'">
+												<span style="font-size: 20px;">Attended the Training on
+													<t t-if="o.tested_on">
+														<span t-field="o.tested_on" t-options='{"widget": "date","format": "dd-MM-yyyy"}'/>
+													</t>
+												</span>
+												<br/>
+												<span style="font-size: 20px;">Type of Training:
+													<t t-if="o.product_id">
+														<span t-field="o.product_id"/>
+													</t>
+												</span>
+												<br/>
+												<span style="font-size: 20px;">Result:
+													<strong>
+														<t t-if="o.is_pass_fail == True">Pass</t>
+														<t t-else="">Fail</t>
+													</strong>
+												</span>
+											</p>
+											<span t-field="o.fit_id.trainer_sign" t-options='{"widget": "image"}' style="display: block; width: 100px; text-align: right; margin-left: auto; border-bottom: 1px solid;"/>
+											<strong>
+												<p style="font-size: 15px; text-align: right;"><t t-if="o.fit_id.name">
+													<span t-field="o.fit_id.name"/>
+												</t> | Trainer</p>
+											</strong>
+											<strong>
+												<p style="font-size: 15px; text-align: right;">Fischer Bell Private
+													Limited
+												</p>
+											</strong>
+											<p style="font-size: 10px;text-align: center;">This Certificate is valid for
+												one (1) year from the date issued
+											</p>
+											</div>
+										</div>
+									</div>
+									<p style="page-break-before:always;"></p>
+								</t>
+							<t t-else="">
+								<div class="col-6">
+									<strong style="font-size: 40px;">Fit Test Certificate</strong>
+									<br/>
+									<br/>
+									<br/>
+									<p style="font-size: 30px;">This is to certify that
+										<br/>
+									</p>
+									<p style="font-size: 30px;">IC /FIN No. /Employee No:
+									</p>
+									<p style="font-size: 30px;">From
+										<br/>
+									</p>
+									<p style="font-size: 30px;">Passed the Training
+										<br/>Type of Training:
+
+										<br/>Size:
+
+										<br/>
+										<b>Result:
+										</b>
+									</p>
+									<p style="font-size: 30px;">Tested On
+									</p>
+								</div>
+							</t>
+						</div>
+					</t>
+				</div>
+			</t>
+		</t>
+	</template>
+
+
 </odoo>
