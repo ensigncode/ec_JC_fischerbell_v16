@@ -72,6 +72,11 @@
                                      <field name="is_pass_fail"/>
                                      <field name="fail_reason" attrs="{'invisible': [('is_pass_fail', '=', True)]}"/>
                                      <field name="tested_on"/>
+                                     <button name="action_print_report"
+                                            type="object"
+                                            string="Certificate"
+                                            class="btn-primary"
+                                            icon="fa-print"/>
                                 </tree>
                             </field>
                         </page>
