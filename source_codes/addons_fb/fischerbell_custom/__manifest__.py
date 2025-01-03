@@ -90,6 +90,7 @@
         'views/stock_landed_cost_views.xml',
         'views/stock_barcode_cancel_operation_view.xml',
         'views/calendar_views.xml',
+        'views/mrp_bom_views.xml',
 
         # 'wizard/fischerbell_wizard_report_delivery_with_training.xml',
     ],

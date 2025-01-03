@@ -31,3 +31,4 @@ from . import stock_quant
 from . import stock_landed_cost
 from . import stock_barcode_cancel_operation
 from . import mail_template
+from . import mrp_bom
