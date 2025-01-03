@@ -101,7 +101,7 @@
                 <button name="create_loan_orders" type="object" string="Create Loan Order" attrs="{'invisible':['|','|',('state','in',['draft','done','waiting_approval']),('type','not in','sale'),('partner_request_state','!=','approved')]}" />
 <!--                <button name="create_replacement_orders" type="object" string="Create Replacement Order" attrs="{'invisible':['|',('state','in',['draft','done','waiting_approval']),('type','not in','sale')]}" />-->
                 <field name="approval_state" invisible="1"/>
-               <!-- <button name="action_submit_to_approval" type="object" string="Submit to Approval" attrs="{'invisible': [('state','!=','waiting_approval'),('approval_state','!=','waiting_approval')]}" class="btn-primary" /> -->
+               <button name="action_submit_to_approval" type="object" string="Submit to Approval" attrs="{'invisible': [('state','!=','draft'),('hide_send_by_email', '=', True)]}" class="btn-primary" />
                 <button name="action_approve" type="object" string="Approve" attrs="{'invisible': [('state','!=','sent'),('approval_state','!=','waiting_approval')]}" class="btn-primary" />
                 <button name="action_confirm" type="object" string="Confirm" attrs="{'invisible': ['|','|', ('state','!=','waiting_approval'), ('approval_state','!=','approved'),('partner_request_state','!=','approved')]}" class="btn-primary" />
                 <!-- <button name="action_to_approve" type="object" string="Approve" attrs="{'invisible': ['|',('approval_state','!=','waiting_approval'),('partner_request_state','!=','approved')]}" class="btn-primary"/> -->
@@ -132,6 +132,7 @@
 <!--                </button>-->
             </xpath>
             <xpath expr="//group[@name='sale_header']//group[@name='order_details']//field[@name='payment_term_id']" position="replace">
+                <field name="hide_send_by_email" invisible="1"/>
                 <field name="payment_term_id" options="{'no_open':True,'no_create': True}" attrs="{'invisible': [('type','=','loan')]}"/>
                 <field name="payment_term_id" options="{'no_open':True,'no_create': True}" string="Temporary Loan Period" attrs="{'invisible': [('type','!=','loan')]}"/>
             </xpath>
@@ -188,18 +189,18 @@
                 <field name="approval_state" readonly="1"/>
             </xpath>
             <xpath expr="//button[@name='action_quotation_send'][1]" position="attributes">
-            	<attribute name="attrs">{'invisible':[('state', 'not in',('draft','reject')),('partner_request_state','!=','approved')]}</attribute>
-            	<attribute name="states"></attribute>
+                <attribute name="attrs">{'invisible':['|', ('hide_send_by_email', '=', True), ('state', 'not in', ('draft', 'reject')), ('partner_request_state', '!=', 'approved')]}</attribute>
+                <attribute name="states"></attribute>
             </xpath>
             <xpath expr="//button[@name='action_quotation_send'][2]" position="attributes">
-            	<attribute name="attrs">{'invisible':['|','|', ('state', '!=', 'draft'), ('invoice_count','&gt;=',1),('partner_request_state','!=','approved')]}</attribute>
+                <attribute name="attrs">{'invisible':['|', '|', ('hide_send_by_email', '=', True), ('state', '!=', 'draft'), ('invoice_count', '&gt;=', 1), ('partner_request_state', '!=', 'approved')]}</attribute>
             </xpath>
             <xpath expr="//button[@name='action_quotation_send'][3]" position="attributes">
-            	<attribute name="attrs">{'invisible':['|','|', ('state', '!=', 'draft'), ('invoice_count','&gt;=',1),('partner_request_state','!=','approved')]}</attribute>
+                <attribute name="attrs">{'invisible':['|', '|', ('hide_send_by_email', '=', True), ('state', '!=', 'draft'), ('invoice_count', '&gt;=', 1), ('partner_request_state', '!=', 'approved')]}</attribute>
             </xpath>
             <xpath expr="//button[@name='action_quotation_send'][4]" position="attributes">
-            	<attribute name="attrs">{'invisible':[('state','!=','approve'),('partner_request_state','!=','approved')]}</attribute>
-            	<attribute name="states">approve,sale</attribute>
+                <attribute name="attrs">{'invisible':['|', ('hide_send_by_email', '=', True), ('state', '!=', 'approve'), ('partner_request_state', '!=', 'approved')]}</attribute>
+                <attribute name="states">approve,sale</attribute>
             </xpath>
             <xpath expr="//button[@name='action_cancel']" position="attributes">
             	<attribute name="attrs">{'invisible': [('state', 'not in', ['draft','approve' 'sent','sale']),('id','=',False)]}
