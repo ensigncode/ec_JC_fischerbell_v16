@@ -146,6 +146,8 @@ class SaleOrder(models.Model):
         tracking=1,
         states=READONLY_FIELD_STATES,
         domain="['|', ('code', '=', False), ('code', 'ilike', 'CUS')]")
+    hide_send_by_email = fields.Boolean('Hide Send By Email', compute="_compute_hide_send_by_email")
+
     followup_reminder_sent = fields.Boolean(string="Follow-up Reminder Sent", default=False)
 
     def _send_followup_reminders(self):
@@ -396,6 +398,15 @@ class SaleOrder(models.Model):
                 inv.len_note = len(inv.partner_note)
             else:
                 inv.len_note = False
+
+    @api.depends('order_line.price_unit')
+    def _compute_hide_send_by_email(self):
+        self.hide_send_by_email = False
+        for order in self:
+            if any(order.order_line.filtered(lambda line: line.price_unit < line.product_template_id.list_price)):
+                self.hide_send_by_email = True
+            else:
+                self.hide_send_by_email = False
 
     def action_submit_to_approval(self):
         for order in self:
