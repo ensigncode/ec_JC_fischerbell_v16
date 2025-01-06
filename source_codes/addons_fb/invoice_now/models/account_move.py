@@ -38,6 +38,7 @@ class AccountMove(models.Model):
     invoice_status_content = fields.Text(string="Invoice Status",copy=False)
     invoice_status = fields.Text(string="Invoice Status",copy=False)
     is_completed = fields.Boolean(string="Is Completed",copy=False)
+    applicable_invoicenow = fields.Boolean(string="Applicable for Invoicenow?",related="partner_id.applicable_invoicenow")
 
     @api.model
     def check_invoice_status(self):
