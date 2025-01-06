@@ -45,7 +45,7 @@ class PurchaseOrder(models.Model):
     state = fields.Selection([
         ('draft', 'RFQ'),
         ('sent', 'RFQ Sent'),
-        ('submitted', 'Submitted for Approaval'),
+        ('submitted', 'Submitted for Approval'),
         ('approve', "RFQ Approved"),
         ('reject', "RFQ Rejected"),
         ('purchase', 'Purchase Order'),

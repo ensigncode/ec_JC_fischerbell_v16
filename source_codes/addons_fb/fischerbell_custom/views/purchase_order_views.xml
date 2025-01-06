@@ -124,7 +124,7 @@
             	<div class="alert alert-info text-center o_form_header" role="alert" attrs="{'invisible':[('partner_request_state','!=','pending')]}">
                   <a class="close" data-bs-dismiss="alert" href="#">x</a>
                   <div>
-                    <strong>Vendor is in Apporval Process. </strong>
+                    <strong>Vendor is in Approval Process. </strong>
                   </div>
                 </div>
             </xpath>
