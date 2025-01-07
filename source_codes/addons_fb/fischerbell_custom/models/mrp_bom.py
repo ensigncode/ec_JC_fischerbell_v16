@@ -5,7 +5,7 @@ class MrpBom(models.Model):
 	_inherit = 'mrp.bom'
 	
 	bom_type = fields.Selection([ 
-        ('phantom', 'Kit'),('subcontract','Subcontracting')],string = 'BoM Type')
+        ('phantom', 'Kit'),('subcontract','Subcontracting')],default='phantom',string = 'BoM Type')
 	
 	@api.onchange('bom_type')
 	def onchange_type(self):
