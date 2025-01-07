@@ -95,7 +95,7 @@
 													</strong>
 												</span>
 											</p>
-											<span t-field="doc.trainer_sign" t-options='{"widget": "image"}' style="display: block; width: 100px; text-align: right; margin-left: auto; border-bottom: 1px solid;"/>
+											<span t-field="doc.trainer_sign" t-options='{"widget": "image"}' style="display: block; width: 200px; margin-left: auto; margin-right: 0;"/>
 											<strong>
 												<p style="font-size: 15px; text-align: right;"><t t-if="doc.name">
 													<span t-field="doc.name"/>
