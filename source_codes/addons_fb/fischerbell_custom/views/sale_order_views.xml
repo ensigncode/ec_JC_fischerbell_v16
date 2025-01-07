@@ -100,7 +100,10 @@
             <xpath expr="//button[@name='action_quotation_send']" position="before">
 <!--                <button name="create_exchange_order" type="object" string="Create Exchange Order" attrs="{'invisible':['|',('state','in',['draft','done','waiting_approval']),('type','not in','sale')]}" />-->
                 <button name="create_loan_orders" type="object" string="Create Loan Order" attrs="{'invisible':['|','|',('state','in',['draft','done','waiting_approval']),('type','not in','sale'),('partner_request_state','!=','approved')]}" />
-<!--                <button name="create_replacement_orders" type="object" string="Create Replacement Order" attrs="{'invisible':['|',('state','in',['draft','done','waiting_approval']),('type','not in','sale')]}" />-->
+                <button name="create_ticket" type="object" string="Create Ticket"
+                         attrs="{'invisible':['|','|','|',('state','in',['draft','done','waiting_approval']),('type','not in','sale'),('partner_request_state','!=','approved'),('count_ticket', '&gt;', 0)]}"/>
+
+                <!--                <button name="create_replacement_orders" type="object" string="Create Replacement Order" attrs="{'invisible':['|',('state','in',['draft','done','waiting_approval']),('type','not in','sale')]}" />-->
                 <field name="approval_state" invisible="1"/>
                <button name="action_submit_to_approval" type="object" string="Submit to Approval" attrs="{'invisible': [('state','!=','draft'),('hide_send_by_email', '=', True)]}" class="btn-primary" />
                 <button name="action_approve" type="object" string="Approve" attrs="{'invisible': [('state','!=','sent'),('approval_state','!=','waiting_approval')]}" class="btn-primary" />
@@ -185,6 +188,16 @@
                 <button name="create_sequance_contact" string="Financial Approval" type="object" 
                         class="btn-primary" 
                         attrs="{'invisible': ['|',('is_contact_created','=',True),'|', '|',('partner_request_state', 'in', ('approved', 'pending')),('state', '!=', 'approve'),('approval_state', '!=', 'approved')]}"/>
+            </xpath>
+             <xpath expr="//div[@name='button_box']" position="inside">
+                <button class="oe_stat_button" name="action_view_ticket" type="object" icon="fa-credit-card"  attrs="{'invisible': [('count_ticket', '=', 0)]}">
+                    <div class="o_field_widget o_stat_info" >
+                        <span class="o_stat_value">
+                            <field name="count_ticket" />
+                        </span>
+                        <span class="o_stat_text">Ticket</span>
+                    </div>
+                </button>
             </xpath>
             <xpath expr="//field[@name='order_line']//tree//field[@name='price_subtotal']" position="after">
                 <field name="approval_state" readonly="1"/>

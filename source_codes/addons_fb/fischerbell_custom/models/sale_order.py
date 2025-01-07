@@ -147,6 +147,40 @@ class SaleOrder(models.Model):
         states=READONLY_FIELD_STATES,
         domain="['|', ('code', '=', False), ('code', 'ilike', 'CUS')]")
     hide_send_by_email = fields.Boolean('Hide Send By Email', compute="_compute_hide_send_by_email")
+    count_ticket = fields.Integer(compute="_compute_count_ticket")
+
+    def _compute_count_ticket(self):
+        for rec in self:
+            for record in self:
+                ticket_id = self.env['helpdesk.ticket'].search([('sale_id', '=', record.id)])
+                rec.count_ticket = len(ticket_id)
+
+    def action_view_ticket(self):
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'Ticket',
+            'view_mode': 'tree,form',
+            'res_model': 'helpdesk.ticket',
+            'domain': [('sale_id', '=', self.id)],
+            'context': {'create': False, 'edit': False},
+            'target': 'current'
+        }
+
+    def create_ticket(self):
+        """Open the Service Helpdesk Ticket wizard as a popup."""
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'Create Helpdesk Ticket',
+            'res_model': 'service.helpdesk.ticket',
+            'view_mode': 'form',
+            'view_id': self.env.ref('fischerbell_custom.view_service_helpdesk_ticket_wizard_form').id,
+            'target': 'new',
+            'context': {
+                'default_partner_id': self.partner_id.id,
+                'default_sale_id': self.id,
+
+            },
+        }
 
     followup_reminder_sent = fields.Boolean(string="Follow-up Reminder Sent", default=False)
 
@@ -1229,3 +1263,19 @@ class SaleOrderLine(models.Model):
         sale_id.mapped('order_line').filtered(lambda x:x.id in context.get('active_ids')).write({'order_id':sub_order_id and sub_order_id.id})
         sale_id.write({'sub_order_ids':[(4,sub_order_id.id)]})
         return True
+    
+    @api.depends('product_id')
+    def _compute_name(self):
+        res = super(SaleOrderLine,self)._compute_name()
+        for line in self:
+            bom_ids = self.env['mrp.bom'].sudo().search(['|', ('product_id','=',line.product_id.id),
+                                ('product_tmpl_id','=',line.product_template_id.id),('type','=','phantom')],limit=1 )
+            if bom_ids:
+                # Fetch the components of the BoM
+                component_lines = []
+                for idx, component in enumerate(bom_ids.bom_line_ids, start=1):
+                    component_lines.append(f"{idx}: {component.product_id.display_name}")
+                # Append components to the name
+                components_description = "\n".join(component_lines)
+                line.name = f"{line.name}\n{_('Components:')}\n{components_description}"
+        return res

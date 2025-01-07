@@ -1,0 +1,35 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<odoo>
+    <!-- Wizard Form View -->
+    <record id="view_service_helpdesk_ticket_wizard_form" model="ir.ui.view">
+        <field name="name">service.helpdesk.ticket.wizard.form</field>
+        <field name="model">service.helpdesk.ticket</field>
+        <field name="arch" type="xml">
+            <form string="Service Helpdesk Ticket">
+                <sheet>
+                    <group>
+                        <field name="sale_id" />
+                        <field name="partner_id" />
+                        <field name="date_of_request"/>
+                        <field name="service_priority" widget="radio"/>
+                        <field name="shipping_type"/>
+                    </group>
+                    <footer>
+                        <button string="Submit" type="object" name="action_submit_ticket" class="btn-primary"/>
+                        <button string="Cancel" class="btn-secondary" special="cancel"/>
+                    </footer>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Wizard Action -->
+    <record id="action_service_helpdesk_ticket_wizard" model="ir.actions.act_window">
+        <field name="name">Service Helpdesk Ticket Wizard</field>
+        <field name="res_model">service.helpdesk.ticket</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_service_helpdesk_ticket_wizard_form"/>
+        <field name="target">new</field>
+    </record>
+
+</odoo>
