@@ -60,6 +60,7 @@
         'wizard/request_sale_line_price_view.xml',
         'wizard/invoice_policy_views.xml',
         'wizard/request_partner_details_view.xml',
+        'wizard/service_helpdesk_ticket_view.xml',
         'views/account_move_views.xml',
         'views/fischerbell_aging_report_views.xml',
         'views/fischerbell_configuration_note_views.xml',
@@ -90,6 +91,7 @@
         'views/stock_landed_cost_views.xml',
         'views/stock_barcode_cancel_operation_view.xml',
         'views/calendar_views.xml',
+        'views/helpdesk_ticket_view.xml',
 
         # 'wizard/fischerbell_wizard_report_delivery_with_training.xml',
     ],

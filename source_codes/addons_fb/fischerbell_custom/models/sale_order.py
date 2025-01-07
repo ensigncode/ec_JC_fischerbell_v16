@@ -147,6 +147,40 @@ class SaleOrder(models.Model):
         states=READONLY_FIELD_STATES,
         domain="['|', ('code', '=', False), ('code', 'ilike', 'CUS')]")
     hide_send_by_email = fields.Boolean('Hide Send By Email', compute="_compute_hide_send_by_email")
+    count_ticket = fields.Integer(compute="_compute_count_ticket")
+
+    def _compute_count_ticket(self):
+        for rec in self:
+            for record in self:
+                ticket_id = self.env['helpdesk.ticket'].search([('sale_id', '=', record.id)])
+                rec.count_ticket = len(ticket_id)
+
+    def action_view_ticket(self):
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'Ticket',
+            'view_mode': 'tree,form',
+            'res_model': 'helpdesk.ticket',
+            'domain': [('sale_id', '=', self.id)],
+            'context': {'create': False, 'edit': False},
+            'target': 'current'
+        }
+
+    def create_ticket(self):
+        """Open the Service Helpdesk Ticket wizard as a popup."""
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'Create Helpdesk Ticket',
+            'res_model': 'service.helpdesk.ticket',
+            'view_mode': 'form',
+            'view_id': self.env.ref('fischerbell_custom.view_service_helpdesk_ticket_wizard_form').id,
+            'target': 'new',
+            'context': {
+                'default_partner_id': self.partner_id.id,
+                'default_sale_id': self.id,
+
+            },
+        }
 
     def _get_order_id(self):
         for rec in self:

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+
+		<record id="helpdesk_ticket_view_form_sale" model="ir.ui.view">
+			<field name="name">helpdesk.ticket.form.inherit.sale</field>
+			<field name="model">helpdesk.ticket</field>
+			<field name="priority">80</field>
+			<field name="inherit_id" ref="helpdesk.helpdesk_ticket_view_form"/>
+			<field name="arch" type="xml">
+				<xpath expr="//field[@name='email_cc']" position="after">
+					<field name="sale_id" invisible="1"/>
+				</xpath>
+			</field>
+		</record>
+
+		<record id="helpdesk_ticket_view_form_inherit_helpdesk_stock_product" model="ir.ui.view">
+			<field name='name'>helpdesk.ticket.form.inherit.stock.product</field>
+			<field name="model">helpdesk.ticket</field>
+			<field name="inherit_id" ref="helpdesk_stock.helpdesk_ticket_view_form_inherit_helpdesk_stock"/>
+			<field name="arch" type="xml">
+				<xpath expr="//field[@name='product_id']" position="attributes">
+					<attribute name="invisible">1</attribute>
+				</xpath>
+			</field>
+		</record>
+	</data>
+</odoo>
