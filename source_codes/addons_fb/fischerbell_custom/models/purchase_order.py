@@ -428,6 +428,50 @@ class PurchaseOrder(models.Model):
 class PurchaseOrderLine(models.Model):
     _inherit = "purchase.order.line"
 
+    def get_last_purchase_order(self):
+        order_id = False
+        if self.product_id and self.order_id and self.order_id.partner_id:
+            partner_id = self.sudo().order_id.partner_id.id
+            product_id = self.sudo().product_id and self.product_id.id
+            order_line_ids = self.env['purchase.order.line'].search([('product_id', '=', product_id)])
+            order_list_ids = [line.order_id.id for line in order_line_ids]
+            domain = [('id', 'in', list(set(order_list_ids))), ('state', '=', 'purchase')]
+            # If same Vendor
+            # domain = [('id', 'in', list(set(order_list_ids))), ('state', '=', 'purchase'),
+            #           ('partner_id', '=', partner_id)]
+            if self.order_id and self.order_id.id:
+                domain.append(('id', '!=', self.order_id.id))
+            order_ids = self.env['purchase.order'].search(domain, order='id')
+            order_id = False
+            if order_ids:
+                order_id = [order for order in order_ids][-1]
+        return order_id
+
+    @api.depends('order_id', 'order_id.partner_id', 'product_id')
+    def get_purchase_order_last_purchase_price(self):
+        for obj in self:
+            order_id = obj.sudo().get_last_purchase_order()
+            product_price = 0.0
+            if obj.product_id:
+                if order_id:
+                    product_price = 0.0
+                    for line in order_id.order_line:
+                        if line.product_id.id == obj.product_id.id:
+                            product_price = obj.price_unit
+            obj.sudo().last_purchase_price = product_price
+            obj.sudo().last_po_id = order_id
+
+    def action_open_last_purchase_order(self):
+        self.ensure_one()
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'Purchase Order',
+            'view_mode': 'form',
+            'res_model': 'purchase.order',
+            'res_id': self.sudo().last_po_id.id,
+            'target': 'current',  # or 'new' to open in a new window
+        }
+
     customer_id = fields.Many2one('res.partner', 'Customer Name')
     batch_number = fields.Char('Batch Number', related="customer_id.batch_number")
     lot_id = fields.Many2one('stock.lot', 'Serial Number')
@@ -442,6 +486,8 @@ class PurchaseOrderLine(models.Model):
     estimated_delivery_date = fields.Datetime("Estimated Delivery Date")
     approval_state = fields.Selection([('draft', 'Draft'), ('approved', 'Approved'), ('rejected', 'rejected')], string='State', default='draft')
     po_reason = fields.Text(string="Reason")
+    last_purchase_price = fields.Float("Last Purchase Price", compute="get_purchase_order_last_purchase_price")
+    last_po_id = fields.Many2one("purchase.order", "Last Purchase Order")
 
 
     def action_approve_line(self):
