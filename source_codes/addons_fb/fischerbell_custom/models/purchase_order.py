@@ -125,11 +125,13 @@ class PurchaseOrder(models.Model):
         if 'name' not in vals or vals['name'] == 'New':
             vals['name'] = self.env['ir.sequence'].next_by_code('purchase.order.rfq')
         res = super(PurchaseOrder, self).create(vals)
+        if self.env.context.get('create_direct_purchase'):
+            res.button_confirm()
         default_terms = self.env['purchase.order'].search([('is_default_terms', '=', True)], limit=1).notes
         if default_terms:
             vals['notes'] = default_terms
         if res.partner_id.code:
-            res.write({'partner_request_state':'approved'})
+            res.write({'partner_request_state': 'approved'})
         return res
     
     def write(self,vals):
