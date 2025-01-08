@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+    <t t-inherit="stock_barcode.MainComponent" t-inherit-mode="extension" owl="1">
+        <xpath expr="//div[hasclass('o_barcode_lines')]" position="before">
+            <t t-if="env.model.record.picking_type_code == 'incoming'">
+                <div class="o_barcode_line_title pb-1">
+                    <i class="fa fa-fw fa-comments"></i>
+                    <b>Driver Remarks : </b>
+                    <span class="product-label" t-esc="env.model.record.driver_remarks"></span>
+                </div>
+            </t>
+        </xpath>
+    </t>
+</templates>
