@@ -148,6 +148,26 @@ class SaleOrder(models.Model):
         domain="['|', ('code', '=', False), ('code', 'ilike', 'CUS')]")
     hide_send_by_email = fields.Boolean('Hide Send By Email', compute="_compute_hide_send_by_email")
     count_ticket = fields.Integer(compute="_compute_count_ticket")
+    count_services = fields.Integer(compute="_compute_count_services")
+
+    def _compute_count_services(self):
+        for rec in self:
+            for record in self:
+                ticket_id = self.env['helpdesk.ticket'].search([('sale_id', '=', record.id)])
+                rec.count_services = len(ticket_id.fsm_task_ids)
+
+    def action_view_task(self):
+        self.ensure_one()
+        ticket_id = self.env['helpdesk.ticket'].search([('sale_id', '=', self.id)])
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'Ticket',
+            'view_mode': 'tree,form',
+            'res_model': 'project.task',
+            'domain': [('id', 'in', ticket_id.fsm_task_ids.ids)],
+            'context': {'create': False, 'edit': False},
+            'target': 'current'
+        }
 
     def _compute_count_ticket(self):
         for rec in self:

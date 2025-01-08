@@ -47,7 +47,7 @@
 			</xpath>
 			<xpath expr="//page[@name='purchase_delivery_invoice']//group//group[@name='other_info']//field[@name='user_id']" position="after">
 				<field name="purchase_team_id" optional="hide"/>
-				<field name="artwork_attachment_ids" optional="hide" widget="many2many_binary"/>
+				<field name="artwork_attachment_ids" optional="hide" widget="many2many_binary" string="Artwork/Attachment"/>
 			</xpath>
 			<xpath expr="//page[@name='products']//group//group//field[@name='notes']" optional="hide" position="after">
 				<field name="po_comments" optional="hide"/>
@@ -333,9 +333,24 @@
         parent="purchase.menu_purchase_root"
         sequence="40"/>
 
-     <menuitem id="fischerbell_menu_purchase_update_vendor"
-        name="Vendor Approval Requests"
-        parent="fischerbell_menu_purchase_main_request"
-        action="fischerbell_purchase_venodr_update_request"/>
+	<menuitem id="fischerbell_menu_purchase_update_vendor"
+	          name="Vendor Approval Requests"
+	          parent="fischerbell_menu_purchase_main_request"
+	          action="fischerbell_purchase_venodr_update_request"/>
+
+	<record id="action_view_purchase_orders_only" model="ir.actions.act_window">
+		<field name="name">Create Purchase Orders</field>
+		<field name="res_model">purchase.order</field>
+		<field name="view_mode">tree,form</field>
+		<field name="domain">[('state', '=', 'purchase')]</field>
+        <field name="context">{'default_state': 'draft', 'create_direct_purchase': True}</field>
+	</record>
+
+	<menuitem action="action_view_purchase_orders_only"
+	          id="menu_create_purchase_order"
+	          name="Create Purchase Orders"
+	          parent="purchase.menu_procurement_management"
+	          sequence="8"/>
+
 
 </odoo>
