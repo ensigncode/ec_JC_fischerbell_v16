@@ -61,6 +61,8 @@
         'wizard/invoice_policy_views.xml',
         'wizard/request_partner_details_view.xml',
         'wizard/service_helpdesk_ticket_view.xml',
+        'wizard/purchase_order_cancellation_wizard_views.xml',
+        'wizard/stock_picking_cancellation_wizard_views.xml',
         'views/account_move_views.xml',
         'views/fischerbell_aging_report_views.xml',
         'views/fischerbell_configuration_note_views.xml',

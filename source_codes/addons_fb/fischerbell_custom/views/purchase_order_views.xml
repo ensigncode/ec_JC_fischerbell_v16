@@ -316,6 +316,40 @@
 		</field>
 	</record>
 
+	<record id="update_purchase_order_cancellation_request" model="ir.ui.view">
+		<field name="name">fischerbell.purchase.order.form.inherit.cancellation.approval</field>
+		<field name="model">purchase.order</field>
+		<field name="arch" type="xml">
+			<tree create="0" editable="bottom">
+				<field name="name" readonly="1"/>
+            	<field name="state" readonly="1"/>
+				<field name="cancel_request_by" readonly="1"/>
+				<field name="cancellation_reason" readonly="1"/>
+            	<field name="company_id" readonly="1"/>
+            	<button name="cancellation_request_approved" type="object" string="Approve"
+            		class="oe_highlight"/>
+        		<button name="cancellation_request_rejected" type="object" string="Reject"
+            		class="oe_highlight"/>
+			</tree>
+		</field>
+	</record>
+
+	<record id="update_stock_picking_cancellation_request" model="ir.ui.view">
+		<field name="name">fischerbell.stock_picking.tree.cancellation.approval</field>
+		<field name="model">stock.picking</field>
+		<field name="priority" eval="20"/> <!-- Higher priority for specific actions -->
+		<field name="arch" type="xml">
+			<tree string="Transfer Cancellation Requests">
+				<field name="name" readonly="1"/>
+				<field name="state" readonly="1"/>
+				<field name="cancel_request_by" readonly="1"/>
+				<field name="cancellation_reason" readonly="1"/>
+				<field name="company_id" readonly="1"/>
+				<button name="cancellation_request_approved" type="object" string="Approve" class="oe_highlight"/>
+				<button name="cancellation_request_rejected" type="object" string="Reject" class="oe_highlight"/>
+			</tree>
+		</field>
+	</record>
 
 	<record id="fischerbell_purchase_venodr_update_request" model="ir.actions.act_window">
         <field name="name">Vendor Approval Request</field>
@@ -324,6 +358,26 @@
         <field name="view_id" ref="update_purchase_order_vendor_request"/>
         <field name="context">{'create':0}</field>
         <field name="domain">[('is_requested','=',True),('partner_request_state','=','pending')]</field>
+        <field name="target">current</field>
+    </record>
+
+	<record id="fischerbell_purchase_order_cancellation_request" model="ir.actions.act_window">
+        <field name="name">Purchase Order Cancellation Request</field>
+        <field name="res_model">purchase.order</field>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="update_purchase_order_cancellation_request"/>
+        <field name="context">{'create':0}</field>
+        <field name="domain">[('state','=','cancel_approval')]</field>
+        <field name="target">current</field>
+    </record>
+	
+	<record id="fischerbell_stock_picking_cancellation_request" model="ir.actions.act_window">
+        <field name="name">Transfer Cancellation Request</field>
+        <field name="res_model">stock.picking</field>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="update_stock_picking_cancellation_request"/>
+        <field name="context">{'create':0}</field>
+        <field name="domain">[('state','=','cancel_approval')]</field>
         <field name="target">current</field>
     </record>
     
@@ -352,5 +406,19 @@
 	          parent="purchase.menu_procurement_management"
 	          sequence="8"/>
 
+     <menuitem id="fischerbell_menu_purchase_update_vendor"
+        name="Vendor Approval Requests"
+        parent="fischerbell_menu_purchase_main_request"
+        action="fischerbell_purchase_venodr_update_request"/>
+	
+	<menuitem id="fischerbell_menu_purchase_order_cancellation"
+        name="Purchase Order Cancellation Requests"
+        parent="fischerbell_menu_purchase_main_request"
+        action="fischerbell_purchase_order_cancellation_request"/>
+	
+	<menuitem id="fischerbell_menu_stock_picking_cancellation"
+        name="GRN Cancellation Requests"
+        parent="fischerbell_menu_purchase_main_request"
+        action="fischerbell_stock_picking_cancellation_request"/>
 
 </odoo>

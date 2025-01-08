@@ -59,6 +59,49 @@ class Picking(models.Model):
 	next_delivery_date = fields.Datetime('Next Delivery Date')
 	delivery_instruction = fields.Html(string="Delivery Instruction")
 	invoice_instruction = fields.Html(string="Invoice Instruction")
+	state = fields.Selection(selection_add=[('cancel_approval','Cancel Approval')])
+	cancel_request_by = fields.Many2one("res.users",string="Cancel Request By")
+	cancellation_reason = fields.Text(string="Cancellation Reason")
+	past_state = fields.Char("Past State")
+
+	def action_cancel(self):
+		for picking in self:
+			if picking.picking_type_code == 'incoming' :
+				return {
+					'type': 'ir.actions.act_window',
+					'name': 'Cancel Transfer',
+					'res_model': 'stock.picking.cancellation.wizard',
+					'view_mode': 'form',
+					'target': 'new',
+					'context': {
+						'default_stock_picking_id': picking.id,
+					},
+				}
+			else :
+				return super(Picking, self).action_cancel()
+
+	def cancellation_request_approved(self) :
+		for picking in self : 
+			picking.write({'state': 'cancel'})
+			requester = picking.cancel_request_by.partner_id
+			if requester:
+				picking.message_post(
+					body=f"Your cancellation request for Transfer {picking.name} has been approved.",
+					partner_ids=[requester.id]
+				)
+
+	def cancellation_request_rejected(self) :
+		for picking in self:
+			if picking.past_state :
+				picking.write({'state': picking.past_state})
+			
+			# Notify requester about rejection
+			requester = picking.cancel_request_by.partner_id
+			if requester:
+				picking.message_post(
+					body=f"Your cancellation request for Transfer {picking.name} has been rejected.",
+					partner_ids=[requester.id]
+				)
 
 	def action_update_schedule_date(self):
 		for obj in self:

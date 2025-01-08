@@ -50,6 +50,7 @@ class PurchaseOrder(models.Model):
         ('reject', "RFQ Rejected"),
         ('purchase', 'Purchase Order'),
         ('done', 'Locked'),
+        ('cancel_approval','Cancel Approval'),
         ('cancel', 'Cancelled')
     ], string='Status', readonly=True, index=True, copy=False, default='draft', tracking=True)
     shipment_tracking_date = fields.Datetime("Date")
@@ -77,6 +78,46 @@ class PurchaseOrder(models.Model):
         tracking=True, copy=False)
     is_contact_created = fields.Boolean(related='partner_id.is_contact_created')
     reviewed_by = fields.Many2one("res.users",string="Reviewed By")
+    cancel_request_by = fields.Many2one("res.users",string="Cancel Request By")
+    cancellation_reason = fields.Text(string="Cancellation Reason")
+    past_state = fields.Char("Past State")
+
+    def button_cancel(self):
+        for purchase in self:
+            return {
+                'type': 'ir.actions.act_window',
+                'name': 'Cancel Purchase Order',
+                'res_model': 'purchase.order.cancellation.wizard',
+                'view_mode': 'form',
+                'target': 'new',
+                'context': {
+                    'default_purchase_order_id': purchase.id,
+                },
+            }
+    
+    def cancellation_request_approved(self) :
+        for purchase in self : 
+            purchase.write({'state': 'cancel'})
+            requester = purchase.cancel_request_by.partner_id
+            if requester:
+                purchase.message_post(
+                    body=f"Your cancellation request for Purchase Order {purchase.name} has been approved.",
+                    partner_ids=[requester.id]
+                )
+    
+    def cancellation_request_rejected(self) :
+        for purchase in self:
+            if purchase.past_state :
+                purchase.write({'state': purchase.past_state})
+
+            # Notify requester about rejection
+            requester = purchase.cancel_request_by.partner_id
+            if requester:
+                purchase.message_post(
+                    body=f"Your cancellation request for Purchase Order {purchase.name} has been rejected.",
+                    partner_ids=[requester.id]
+                )
+
 
     @api.constrains('partner_note')
     def _check_partner_note_length(self):
@@ -389,9 +430,9 @@ class PurchaseOrder(models.Model):
     def action_submit_approval(self):
         for rec in self:
             item_zero = []
-            for line in self.order_line:
+            for line in self.order_line.filtered(lambda x:x.display_type not in ['line_section', 'line_note']):
                 if line.price_subtotal == 0:
-                    item_zero.append("- " + line.product_id.name)
+                    item_zero.append("- " + line.product_id.name if line.product_id else '')
             if item_zero:
                 message = "Purchase Order Line found with 0 Subtotal: \n{}".format("\n".join(item_zero))
                 raise UserError(message)

@@ -16,4 +16,6 @@ from . import invoice_policy
 from . import request_partner_details
 from . import purchase_order_line_wizard
 from . import service_helpdest_ticket
+from . import purchase_order_cancellation_wizard
+from . import stock_picking_cancellation_wizard
 
