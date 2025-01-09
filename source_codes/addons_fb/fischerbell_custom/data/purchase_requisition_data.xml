@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+        <record id="type_loan_order" model="purchase.requisition.type">
+            <field name="name">Loan Order</field>
+            <field name="sequence">4</field>
+            <field name="quantity_copy">none</field>
+        </record>
+        <record id="seq_loan_order" model="ir.sequence">
+            <field name="name">Loan Order</field>
+            <field name="code">purchase.requisition.loan_order.order</field>
+            <field name="prefix">LO</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="type_consign_order" model="purchase.requisition.type">
+            <field name="name">Consign Order</field>
+            <field name="sequence">5</field>
+            <field name="quantity_copy">none</field>
+        </record>
+        <record id="seq_consign_order" model="ir.sequence">
+            <field name="name">Consign Order</field>
+            <field name="code">purchase.requisition.consign_order.order</field>
+            <field name="prefix">CO</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="type_replacement_order" model="purchase.requisition.type">
+            <field name="name">Replacement Order</field>
+            <field name="sequence">6</field>
+            <field name="quantity_copy">none</field>
+        </record>
+        <record id="seq_replacement_order" model="ir.sequence">
+            <field name="name">Replacement Order</field>
+            <field name="code">purchase.requisition.replacement_order.order</field>
+            <field name="prefix">RO</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+    </data>
+</odoo>

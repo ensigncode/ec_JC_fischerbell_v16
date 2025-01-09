@@ -81,6 +81,7 @@ class PurchaseOrder(models.Model):
     cancel_request_by = fields.Many2one("res.users",string="Cancel Request By")
     cancellation_reason = fields.Text(string="Cancellation Reason")
     past_state = fields.Char("Past State")
+    po_req_type_id = fields.Many2one('purchase.requisition.type',related='requisition_id.type_id')
 
     def button_cancel(self):
         for purchase in self:

@@ -35,3 +35,4 @@ from . import mrp_bom
 from . import sale_order_option
 from . import helpdesk_ticket
 from . import account_report
+from . import purchase_requisition
