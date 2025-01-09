@@ -9,6 +9,12 @@
 				<field name="request_delivery_date" required="1"/>
 				<field name="estimated_delivery_date"/>
 			</xpath>
+			<xpath expr="//div[@name='reminder']" position="attributes">
+				<attribute name="invisible">1</attribute>
+			</xpath>
+			<xpath expr="//label[@for='receipt_reminder_email']" position="attributes">
+				<attribute name="invisible">1</attribute>
+			</xpath>
 			<xpath expr="//group//group//field[@name='partner_id']" position="after">
 				<field name="supplier_code"/>
 			</xpath>
