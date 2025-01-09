@@ -36,6 +36,9 @@ class OpticianDetail(models.Model):
     sale_order_count = fields.Integer(string="Sale Order",compute="_compute_sale_order_count")
     sg_ht = fields.Float(string="SG HT" ,digits=(16,1))
     add_right = fields.Float(string='ADD RIGHT' ,digits=(16,1))
+    add_left = fields.Float(string="ADD LEFT" ,digits=(16,1))
+    pd_right = fields.Char(string='PD RIGHT' ,digits=(16,1))
+    pd_left = fields.Char(string='PD RIGHT' ,digits=(16,1))
     pescription =fields.Char(string="Pescription")
     outlet_id = fields.Many2one('outlet.detail', 'Outlet')
 

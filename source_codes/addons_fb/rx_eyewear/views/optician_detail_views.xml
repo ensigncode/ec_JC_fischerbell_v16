@@ -32,6 +32,9 @@
 				<field name="requirements" />
 				<field name="sg_ht" />
 				<field name="add_right" />
+				<field name="add_left" />
+				<field name="pd_right" />
+				<field name="pd_left" />
 				<field name="pescription" />
 			</tree>
 		</field>
@@ -68,6 +71,8 @@
 							<field name="add_on_type" />
 							<field name="product_id" />
 							<field name="company_id" />
+							<field name="add_right" />
+							<field name="pd_right" />
 						</group>
 						<group>
 							<field name="sphere_left" />
@@ -80,9 +85,11 @@
 							<field name="pd" />
 							<field name="requirements" />
 							<field name="sg_ht" />
-							<field name="add_right" />
 							<field name="pescription" />
 							<field name="outlet_id"/>
+							<field name="add_left" />
+							<field name="pd_left" />
+							
 						</group>
 					</group>
 					<field name="sale_order_ids" invisible="1" />

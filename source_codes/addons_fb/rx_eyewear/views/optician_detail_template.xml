@@ -218,6 +218,20 @@
 										</div>
 										<div class="col-6">
 											<div class="input-group">
+												<label for="pd">PD Right:</label>
+												<input type="text" placeholder="PD Right" name="pd_right"
+												       id="pd_right"></input>
+											</div>
+										</div>
+										<div class="col-6">
+											<div class="input-group">
+												<label for="pd">PD Left:</label>
+												<input type="text" placeholder="PD Left" name="pd_left"
+												       id="pd_left"></input>
+											</div>
+										</div>
+										<div class="col-6">
+											<div class="input-group">
 												<label for="group">Sg Ht:</label>
 												<input type="number" step="0.000001" name="sg_ht"
 												       id="sg_ht"
@@ -229,6 +243,14 @@
 												<label for="group">Add Right:</label>
 												<input type="number" step="0.000001" name="add_right"
 												       id="add_right"
+												       required="true"></input>
+											</div>
+										</div>
+										<div class="col-6">
+											<div class="input-group">
+												<label for="group">Add Left:</label>
+												<input type="number" step="0.000001" name="add_left"
+												       id="add_left"
 												       required="true"></input>
 											</div>
 										</div>

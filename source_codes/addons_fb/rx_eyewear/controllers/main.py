@@ -76,7 +76,10 @@ class OpticianPortalController(http.Controller):
 				"partner_id" : partner_id.id,
 				'outlet_id': eval(kw.get('outlet_id', '')),
 				'sg_ht' : kw.get('sg_ht') if kw.get('sg_ht') else '',
-				'add_right' : kw.get('add_right') if kw.get('sg_ht') else '',
+				'add_right' : kw.get('add_right') if kw.get('add_right') else '',
+				'add_left' : kw.get('add_left') if kw.get('add_left') else '',
+				'pd_right' : kw.get('pd_right') if kw.get('pd_right') else '',
+				'pd_left' : kw.get('pd_left') if kw.get('pd_left') else '',
 				'pescription' : kw.get('pescription') if kw.get('sg_ht') else '',
 			})
 			if optician_detail_id:
