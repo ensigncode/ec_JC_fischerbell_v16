@@ -43,7 +43,10 @@ class InvoicePolicyWizard(models.TransientModel):
             purchase_id = self.env["purchase.order"].search([("id", '=', self._context.get("active_id"))])
             line_ids = purchase_id.order_line.filtered(lambda x: x.product_id.detailed_type != 'service').mapped(
                 'product_id').write({'purchase_method': self.purchase_method})
-            purchase_id.write({'name': self.env['ir.sequence'].next_by_code('purchase.order.po')})
+            purchase_id.write({
+                'name': self.env['ir.sequence'].next_by_code('purchase.order.po'),
+                'purchase_method' : self.purchase_method,
+                })
             purchase_id.button_confirm()
             email_template = self.env.ref('purchase.email_template_edi_purchase_done', raise_if_not_found=False)
             if email_template:
