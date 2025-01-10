@@ -499,6 +499,33 @@ class SaleOrder(models.Model):
                 raise ValidationError(_('Product must be Approved for the Order Confirmation. \n This Products is not Approved: %s')%('\n'.join(product_ids.mapped('product_id').mapped('name'))))
             # Sent email to customer based on the state
             order.send_mail_triggers_based_on_state()
+
+        purchase_group = self.env.ref('purchase.group_purchase_user', raise_if_not_found=False)
+        purchase_users = purchase_group.users if purchase_group else self.env['res.users']
+
+        low_stock_products = []
+        for line in self.order_line:
+            if line.product_id.type == 'product' and line.product_uom_qty > line.product_id.qty_available:
+                low_stock_products.append(f"{line.product_id.display_name}: Available {line.product_id.qty_available}, Required {line.product_uom_qty}")
+
+        purchase_emails = ", ".join([user.email for user in purchase_users if user.email])
+        if low_stock_products and purchase_emails:
+            subject = _(f"Stock Alert: Low stock for Sale Order {self.name}")
+            body = _(
+                    f"Dear Purhase Manager,<br/><br/>"
+                    f"The following products do not have enough stock for Sale Order {self.name}:<br/><ul>{''.join(f'<li>{p}</li>' for p in low_stock_products)}</ul><br/>"
+                    f"A purchase order has been created for the required quantities. Please review it.<br/>"
+                    f"Please review and take necessary actions.<br/><br/><br/>"
+                    f"Thank You."
+            )
+
+            mail_values = {
+                'subject': subject,
+                'body_html': body,
+                'email_to': purchase_emails,
+                'email_from': self.env.user.email or self.env.company.email,
+            }
+            self.env['mail.mail'].create(mail_values).send()
         return super_call
 
 
