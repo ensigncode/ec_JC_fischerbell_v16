@@ -45,6 +45,9 @@ class InvoicePolicyWizard(models.TransientModel):
                 'product_id').write({'purchase_method': self.purchase_method})
             purchase_id.write({'name': self.env['ir.sequence'].next_by_code('purchase.order.po')})
             purchase_id.button_confirm()
+            email_template = self.env.ref('purchase.email_template_edi_purchase_done', raise_if_not_found=False)
+            if email_template:
+                email_template.send_mail(purchase_id.id, force_send=True)
             if purchase_id.picking_ids:
                 for picking in purchase_id.picking_ids:
                     if purchase_id.collection == 'self_collection':
