@@ -163,6 +163,10 @@ class PurchaseOrder(models.Model):
         for po in self:
             po.is_default_terms = True
 
+    def _creation_message(self):
+        """Override creation message to customize for Purchase Orders."""
+        return _("RFQ created")
+    
     @api.model
     def create(self, vals):
         if 'name' not in vals or vals['name'] == 'New':
