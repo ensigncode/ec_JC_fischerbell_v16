@@ -162,6 +162,9 @@
                     <field name="lead_time_stock" string="Lead Time"/>
                 </div>
             </xpath>
+             <xpath expr="//field[@name='validity_date']" position="attributes">
+                <attribute name="string">Quotation Validity Date</attribute> 
+            </xpath>
             <xpath expr="//field[@name='validity_date']" position="before">
                 <field name="approval_state" widget="badge" decoration-danger="approval_state == 'reject'" decoration-warning="approval_state == 'waiting_approval'" decoration-success="approval_state == 'approved'" decoration-info="approval_state == 'no'" readonly="1"/>
             </xpath>
