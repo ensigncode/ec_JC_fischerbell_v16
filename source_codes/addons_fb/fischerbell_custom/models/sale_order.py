@@ -202,6 +202,25 @@ class SaleOrder(models.Model):
             },
         }
 
+    followup_reminder_sent = fields.Boolean(string="Follow-up Reminder Sent", default=False)
+
+    def _send_followup_reminders(self):
+        """
+        Send follow-up reminders for quotations sent 3 days ago.
+        """
+        today = fields.Date.today()
+        three_days_ago = today - timedelta(days=3)
+        quotations = self.sudo().search([
+            ('state', '=', 'sent'),  # Quotation state
+            ('followup_reminder_sent', '=', False),  # Not already sent
+            ('date_order', '>=', three_days_ago)  # Sent 3 days ago
+        ])
+        for quotation in quotations:
+            template = self.env.ref('fischerbell_custom.followup_quotation_email_template')
+            if template:
+                template.send_mail(quotation.id, force_send=True)
+                quotation.followup_reminder_sent = True
+
     def _get_order_id(self):
         for rec in self:
             rec.order_id = False
@@ -1264,3 +1283,19 @@ class SaleOrderLine(models.Model):
         sale_id.mapped('order_line').filtered(lambda x:x.id in context.get('active_ids')).write({'order_id':sub_order_id and sub_order_id.id})
         sale_id.write({'sub_order_ids':[(4,sub_order_id.id)]})
         return True
+    
+    @api.depends('product_id')
+    def _compute_name(self):
+        res = super(SaleOrderLine,self)._compute_name()
+        for line in self:
+            bom_ids = self.env['mrp.bom'].sudo().search(['|', ('product_id','=',line.product_id.id),
+                                ('product_tmpl_id','=',line.product_template_id.id),('type','=','phantom')],limit=1 )
+            if bom_ids:
+                # Fetch the components of the BoM
+                component_lines = []
+                for idx, component in enumerate(bom_ids.bom_line_ids, start=1):
+                    component_lines.append(f"{idx}: {component.product_id.display_name}")
+                # Append components to the name
+                components_description = "\n".join(component_lines)
+                line.name = f"{line.name}\n{_('Components:')}\n{components_description}"
+        return res

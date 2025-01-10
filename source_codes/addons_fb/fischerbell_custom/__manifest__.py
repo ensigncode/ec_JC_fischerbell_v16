@@ -8,7 +8,7 @@
         Fischerbell Custom
     """,
     'website': 'https://www.sgeede.com/',
-    'depends': ['purchase','account','sale', 'stock','purchase_stock', 'report_xlsx','contacts','mrp','crm','sale_subscription','account_accountant','industry_fsm','helpdesk','marketing_automation','mrp','quality_control','stock_barcode','maintenance','hr','hr_appraisal', 'mail','sale_renting','fcb_accounting'],
+    'depends': ['purchase','purchase_requisition','account','sale', 'stock','purchase_stock', 'report_xlsx','contacts','mrp','crm','sale_subscription','account_accountant','industry_fsm','helpdesk','marketing_automation','mrp','quality_control','stock_barcode','maintenance','hr','hr_appraisal', 'mail','sale_renting','fcb_accounting'],
     'data': [
         'data/fischerbell_consignment_note_send_email_templates.xml',
         'data/ir_server_actions.xml',
@@ -19,6 +19,7 @@
         'data/sale_email_template.xml',
         'data/purchase_email_template.xml',
         'data/sale_triggers.xml',
+        'data/purchase_requisition_data.xml',
         'report/fischerbell_aging_report.xml',
         'report/fischerbell_bill_report.xml',
         'report/fischerbell_consignment_note_templates.xml',
@@ -61,6 +62,8 @@
         'wizard/invoice_policy_views.xml',
         'wizard/request_partner_details_view.xml',
         'wizard/service_helpdesk_ticket_view.xml',
+        'wizard/purchase_order_cancellation_wizard_views.xml',
+        'wizard/stock_picking_cancellation_wizard_views.xml',
         'views/account_move_views.xml',
         'views/fischerbell_aging_report_views.xml',
         'views/fischerbell_configuration_note_views.xml',
@@ -91,6 +94,7 @@
         'views/stock_landed_cost_views.xml',
         'views/stock_barcode_cancel_operation_view.xml',
         'views/calendar_views.xml',
+        'views/mrp_bom_views.xml',
         'views/helpdesk_ticket_view.xml',
 
         # 'wizard/fischerbell_wizard_report_delivery_with_training.xml',

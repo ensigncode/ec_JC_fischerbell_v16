@@ -38,6 +38,9 @@
 
                     </page>
                 </xpath>
+                <xpath expr="//field[@name='payment_reference']" position="after">
+                    <field name="applicable_invoicenow" />
+                </xpath>
             </field>
         </record>
     </data>

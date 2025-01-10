@@ -45,11 +45,12 @@ class PurchaseOrder(models.Model):
     state = fields.Selection([
         ('draft', 'RFQ'),
         ('sent', 'RFQ Sent'),
-        ('submitted', 'Submitted for Approaval'),
+        ('submitted', 'Submitted for Approval'),
         ('approve', "RFQ Approved"),
         ('reject', "RFQ Rejected"),
         ('purchase', 'Purchase Order'),
         ('done', 'Locked'),
+        ('cancel_approval','Cancel Approval'),
         ('cancel', 'Cancelled')
     ], string='Status', readonly=True, index=True, copy=False, default='draft', tracking=True)
     shipment_tracking_date = fields.Datetime("Date")
@@ -77,6 +78,47 @@ class PurchaseOrder(models.Model):
         tracking=True, copy=False)
     is_contact_created = fields.Boolean(related='partner_id.is_contact_created')
     reviewed_by = fields.Many2one("res.users",string="Reviewed By")
+    cancel_request_by = fields.Many2one("res.users",string="Cancel Request By")
+    cancellation_reason = fields.Text(string="Cancellation Reason")
+    past_state = fields.Char("Past State")
+    po_req_type_id = fields.Many2one('purchase.requisition.type',related='requisition_id.type_id')
+
+    def button_cancel(self):
+        for purchase in self:
+            return {
+                'type': 'ir.actions.act_window',
+                'name': 'Cancel Purchase Order',
+                'res_model': 'purchase.order.cancellation.wizard',
+                'view_mode': 'form',
+                'target': 'new',
+                'context': {
+                    'default_purchase_order_id': purchase.id,
+                },
+            }
+    
+    def cancellation_request_approved(self) :
+        for purchase in self : 
+            purchase.write({'state': 'cancel'})
+            requester = purchase.cancel_request_by.partner_id
+            if requester:
+                purchase.message_post(
+                    body=f"Your cancellation request for Purchase Order {purchase.name} has been approved.",
+                    partner_ids=[requester.id]
+                )
+    
+    def cancellation_request_rejected(self) :
+        for purchase in self:
+            if purchase.past_state :
+                purchase.write({'state': purchase.past_state})
+
+            # Notify requester about rejection
+            requester = purchase.cancel_request_by.partner_id
+            if requester:
+                purchase.message_post(
+                    body=f"Your cancellation request for Purchase Order {purchase.name} has been rejected.",
+                    partner_ids=[requester.id]
+                )
+
 
     @api.constrains('partner_note')
     def _check_partner_note_length(self):
@@ -389,9 +431,9 @@ class PurchaseOrder(models.Model):
     def action_submit_approval(self):
         for rec in self:
             item_zero = []
-            for line in self.order_line:
+            for line in self.order_line.filtered(lambda x:x.display_type not in ['line_section', 'line_note']):
                 if line.price_subtotal == 0:
-                    item_zero.append("- " + line.product_id.name)
+                    item_zero.append("- " + line.product_id.name if line.product_id else '')
             if item_zero:
                 message = "Purchase Order Line found with 0 Subtotal: \n{}".format("\n".join(item_zero))
                 raise UserError(message)
@@ -430,6 +472,50 @@ class PurchaseOrder(models.Model):
 class PurchaseOrderLine(models.Model):
     _inherit = "purchase.order.line"
 
+    def get_last_purchase_order(self):
+        order_id = False
+        if self.product_id and self.order_id and self.order_id.partner_id:
+            partner_id = self.sudo().order_id.partner_id.id
+            product_id = self.sudo().product_id and self.product_id.id
+            order_line_ids = self.env['purchase.order.line'].search([('product_id', '=', product_id)])
+            order_list_ids = [line.order_id.id for line in order_line_ids]
+            domain = [('id', 'in', list(set(order_list_ids))), ('state', '=', 'purchase')]
+            # If same Vendor
+            # domain = [('id', 'in', list(set(order_list_ids))), ('state', '=', 'purchase'),
+            #           ('partner_id', '=', partner_id)]
+            if self.order_id and self.order_id.id:
+                domain.append(('id', '!=', self.order_id.id))
+            order_ids = self.env['purchase.order'].search(domain, order='id')
+            order_id = False
+            if order_ids:
+                order_id = [order for order in order_ids][-1]
+        return order_id
+
+    @api.depends('order_id', 'order_id.partner_id', 'product_id')
+    def get_purchase_order_last_purchase_price(self):
+        for obj in self:
+            order_id = obj.sudo().get_last_purchase_order()
+            product_price = 0.0
+            if obj.product_id:
+                if order_id:
+                    product_price = 0.0
+                    for line in order_id.order_line:
+                        if line.product_id.id == obj.product_id.id:
+                            product_price = obj.price_unit
+            obj.sudo().last_purchase_price = product_price
+            obj.sudo().last_po_id = order_id
+
+    def action_open_last_purchase_order(self):
+        self.ensure_one()
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'Purchase Order',
+            'view_mode': 'form',
+            'res_model': 'purchase.order',
+            'res_id': self.sudo().last_po_id.id,
+            'target': 'current',  # or 'new' to open in a new window
+        }
+
     customer_id = fields.Many2one('res.partner', 'Customer Name')
     batch_number = fields.Char('Batch Number', related="customer_id.batch_number")
     lot_id = fields.Many2one('stock.lot', 'Serial Number')
@@ -444,6 +530,8 @@ class PurchaseOrderLine(models.Model):
     estimated_delivery_date = fields.Datetime("Estimated Delivery Date")
     approval_state = fields.Selection([('draft', 'Draft'), ('approved', 'Approved'), ('rejected', 'rejected')], string='State', default='draft')
     po_reason = fields.Text(string="Reason")
+    last_purchase_price = fields.Float("Last Purchase Price", compute="get_purchase_order_last_purchase_price")
+    last_po_id = fields.Many2one("purchase.order", "Last Purchase Order")
 
 
     def action_approve_line(self):

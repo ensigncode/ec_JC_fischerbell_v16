@@ -31,4 +31,8 @@ from . import stock_quant
 from . import stock_landed_cost
 from . import stock_barcode_cancel_operation
 from . import mail_template
+from . import mrp_bom
+from . import sale_order_option
 from . import helpdesk_ticket
+from . import account_report
+from . import purchase_requisition

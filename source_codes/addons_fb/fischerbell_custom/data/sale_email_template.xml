@@ -82,6 +82,35 @@
         </function>
 
 
+        <record id="followup_quotation_email_template" model="mail.template">
+            <field name="name">Quotation Follow-Up Reminder</field>
+            <field name="model_id" ref="sale.model_sale_order"/>
+            <field name="subject">Follow-Up: Quotation ## {{ object.name }}</field>
+            <field name="email_from">{{ object.company_id.email_formatted }}</field>
+            <field name="email_to">{{ object.partner_id.email_formatted }}</field>
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px;">
+
+                    <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                        Dear <t t-out="object.partner_id.name or ''"></t>,
+                        <br/>
+                        We hope this message finds you well.
+                        <br />
+                        We are following up on the quotation <b>#<t t-out="object.name" /></b>  sent to you on <t t-out="object.date_order" />.
+                        Please feel free to reach out if you have any questions or would like to proceed.
+                        <br/>
+                        Please do not hesitate to contact us if you have any questions.
+                        <br/>
+                        <t class="o_signature">
+                            <div t-if="not is_html_empty(object.env.user.sudo().signature)"
+                                 t-out="object.env.user.sudo().signature" style="font-size: 13px;"/>
+                        </t>
+                    </p>
+                </div>
+            </field>
+            <field name="lang">{{ object.partner_id.lang }}</field>
+        </record>
+    
 <!--        <record id="email_template_statement_of_account" model="mail.template">-->
 <!--            <field name="name">Your Email Template Statement Of Account</field>-->
 <!--            <field name="subject">Subject: ${object.name}</field>-->

@@ -23,7 +23,10 @@ class StockPicking(models.Model):
 			self.driver_ids = self.env['res.partner'].search([('is_driver','=',True),('postal_code_ids','in',postal_code_id.ids)]) 
 		else :
 			self.driver_ids = False
-		
+
+	collection = fields.Selection([('self_collection', 'Send Driver For Self Collection'),('assigned_driver', 'Delivery')],
+					related="purchase_id.collection", string="Collection",default="self_collection")
+	driver_remarks = fields.Text(string="Driver Remarks",related="purchase_id.driver_remarks")	
 	driver_id = fields.Many2one('res.partner',string="Driver")
 	forwarder_id = fields.Many2one('res.partner',string="Forwarder")
 	driver_ids = fields.Many2many('res.partner',string="Driver",compute="_get_driver_id_domain")
@@ -37,7 +40,14 @@ class StockPicking(models.Model):
 	weight_shipping_label = fields.Float(string="Weight for Shipping label")
 	weight_uom_shipping_label   = fields.Many2one("uom.uom",string="Weight Unit name")
 
-
+	def _get_fields_stock_barcode(self):
+		""" Inject the field 'quality_check_todo' in the initial state of the barcode view.
+		"""
+		fields = super(StockPicking, self)._get_fields_stock_barcode()
+		fields.append('driver_remarks')
+		fields.append('driver_id')
+		return fields
+	
 	@api.onchange('carrier_id')
 	def onchange_carrier_id(self):
 		for res in self:

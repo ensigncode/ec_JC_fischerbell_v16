@@ -59,6 +59,64 @@ class Picking(models.Model):
 	next_delivery_date = fields.Datetime('Next Delivery Date')
 	delivery_instruction = fields.Html(string="Delivery Instruction")
 	invoice_instruction = fields.Html(string="Invoice Instruction")
+	state = fields.Selection(selection_add=[('cancel_approval','Cancel Approval')])
+	cancel_request_by = fields.Many2one("res.users",string="Cancel Request By")
+	cancellation_reason = fields.Text(string="Cancellation Reason")
+	past_state = fields.Char("Past State")
+
+	def action_cancel(self):
+		for picking in self:
+			if picking.picking_type_code == 'incoming' :
+				return {
+					'type': 'ir.actions.act_window',
+					'name': 'Cancel Transfer',
+					'res_model': 'stock.picking.cancellation.wizard',
+					'view_mode': 'form',
+					'target': 'new',
+					'context': {
+						'default_stock_picking_id': picking.id,
+					},
+				}
+			else :
+				return super(Picking, self).action_cancel()
+
+	def cancellation_request_approved(self) :
+		for picking in self : 
+			picking.write({'state': 'cancel'})
+			requester = picking.cancel_request_by.partner_id
+			if requester:
+				picking.message_post(
+					body=f"Your cancellation request for Transfer {picking.name} has been approved.",
+					partner_ids=[requester.id]
+				)
+
+	def cancellation_request_rejected(self) :
+		for picking in self:
+			if picking.past_state :
+				picking.write({'state': picking.past_state})
+			
+			# Notify requester about rejection
+			requester = picking.cancel_request_by.partner_id
+			if requester:
+				picking.message_post(
+					body=f"Your cancellation request for Transfer {picking.name} has been rejected.",
+					partner_ids=[requester.id]
+				)
+
+	def action_update_schedule_date(self):
+		for obj in self:
+			if obj.state in ('draft', 'cancel', 'done'):
+				continue
+			if obj.backorder_id and obj.scheduled_date:
+				for line in obj.move_ids_without_package:
+					if line.purchase_line_id:
+						line.purchase_line_id.estimated_delivery_date = obj.scheduled_date
+
+	# def write(self, vals):
+	# 	res = super(Picking, self).write(vals)
+	#
+	# 	return res
+
 
 	@api.depends('move_ids.state', 'move_ids.date', 'move_type')
 	def _compute_scheduled_date(self):
@@ -273,9 +331,9 @@ class Picking(models.Model):
 			if picking.picking_type_code == 'outgoing' and len(picking.upload_images) == 0:
 				raise ValidationError("Please Upload image after Validate Order!")
 			if not picking.enough_stock and picking.sale_id.delivery_option != 'partial_delivery':
-                                no_stock_line_ids = any(line.product_uom_qty > line.product_template_id.qty_available for line in picking.sale_id.order_line)
-                                if no_stock_line_ids:
-                                        raise UserError('Product stock is not enough as demand. Customers wants wait till all stocks be ready for shipment.')
+								no_stock_line_ids = any(line.product_uom_qty > line.product_template_id.qty_available for line in picking.sale_id.order_line)
+								if no_stock_line_ids:
+										raise UserError('Product stock is not enough as demand. Customers wants wait till all stocks be ready for shipment.')
 			#if picking.picking_type_code == 'internal:
 				#raise ValidationError("Sorry you cannot validate, as this transfer is not yet check.")
 			if picking.picking_type_code == 'incoming':
@@ -475,6 +533,7 @@ class Picking(models.Model):
 		if vals.get('next_delivery_date') and self.purchase_id:
 			self.purchase_id.next_delivery_date = vals.get('next_delivery_date')
 		for picking in self:
+			picking.action_update_schedule_date()
 			if picking.state == 'done' and picking.sale_id and picking.picking_type_code == 'outgoing' and not picking.sale_id.invoice_ids and picking.sale_id.type != 'loan':
 				picking.sale_id._create_invoices()
 
@@ -484,7 +543,9 @@ class Picking(models.Model):
 
 			if picking.is_return_loan and picking.state == 'cancel':
 				for activity in picking.activity_ids:
-					activity.action_done()		
+					activity.action_done()
+			# for obj in self:
+			# 	obj.action_update_schedule_date()
 
 		return res
 

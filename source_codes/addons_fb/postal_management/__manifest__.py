@@ -11,6 +11,7 @@
                 'sale',
                 'fleet',
                 'delivery',
+                'stock_barcode'
             ],
     'data': [
         'security/ir.model.access.csv',
@@ -26,6 +27,11 @@
         'demo/demo.xml',
 
     ],
+    'assets': {
+        'web.assets_backend': [
+            'postal_management/static/src/xml/stock_barcode.xml',
+        ],
+    },
     'demo': [
     ],
     'installable': True,

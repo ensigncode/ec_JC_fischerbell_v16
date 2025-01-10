@@ -53,5 +53,44 @@
             <field name="lang">{{ object.partner_id.lang }}</field>
             <field name="auto_delete" eval="True"/>
         </record>
+
+        <record id="email_template_cancellation_approval_template" model="mail.template">
+            <field name="name">Purchase: Request For Cancellation</field>
+            <field name="model_id" ref="fischerbell_custom.model_purchase_order_cancellation_wizard"/>
+            <field name="email_from">{{ (object.purchase_order_id.user_id.email_formatted or object.purchase_order_id.company_id.email_formatted or user.email_formatted) }}</field>
+            <field name="subject">Transfer (Ref {{ object.purchase_order_id.name or 'n/a' }})</field>
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px;">
+                    <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                        Dear Manager, <br/>
+                        A cancellation request for Purchase Order <strong><t t-out="object.purchase_order_id.name or ''"></t></strong><br/>
+                        <strong>Reason:</strong> <t t-out="object.reason or ''"></t><br/>
+                        Please log in to the system to approve or reject the request.<br/><br/>
+                        Thanks.
+                    </p>
+                </div>
+            </field>
+            <field name="lang">{{ object.purchase_order_id.partner_id.lang }}</field>
+        </record>
+
+        <record id="email_template_picking_cancellation_approval_template" model="mail.template">
+            <field name="name">Transfer: Request For Cancellation</field>
+            <field name="model_id" ref="fischerbell_custom.model_stock_picking_cancellation_wizard"/>
+            <field name="email_from">{{ (object.stock_picking_id.user_id.email_formatted or object.stock_picking_id.company_id.email_formatted or user.email_formatted) }}</field>
+            <field name="subject">Order (Ref {{ object.stock_picking_id.name or 'n/a' }})</field>
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px;">
+                    <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                        Dear Manager, <br/>
+                        A cancellation request for GRN <strong><t t-out="object.stock_picking_id.name or ''"></t></strong><br/>
+                        <strong>Reason:</strong> <t t-out="object.reason or ''"></t><br/>
+                        Please log in to the system to approve or reject the request.<br/><br/>
+                        Thanks.
+                    </p>
+                </div>
+            </field>
+            <field name="lang">{{ object.stock_picking_id.partner_id.lang }}</field>
+        </record>
+
     </data>
 </odoo>
