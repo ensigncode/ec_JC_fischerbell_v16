@@ -82,6 +82,7 @@ class PurchaseOrder(models.Model):
     cancellation_reason = fields.Text(string="Cancellation Reason")
     past_state = fields.Char("Past State")
     po_req_type_id = fields.Many2one('purchase.requisition.type',related='requisition_id.type_id')
+    reject_reason = fields.Text(string="Reject Reason")
 
     def button_cancel(self):
         for purchase in self:
@@ -420,11 +421,13 @@ class PurchaseOrder(models.Model):
     def action_to_reject(self):
         for order in self:
             if order.state == 'submitted' and order.approval_state == 'waiting_approval' and self.env.user.has_group("fischerbell_custom.group_purchase_order_approver"):
-                order.write({
-                    'state': 'reject',
-                    'approval_state': 'reject',
-                    'reviewed_by': self.env.user.id
-                })
+                return {'name': 'Reject Reason',
+                    'type': 'ir.actions.act_window',
+                    'res_model': 'reject.reason.wizard',
+                    'view_mode': 'form',
+                    'view_type': 'form',
+                    'target': 'new',
+                    'context': {'default_reason': '', 'active_id': self.id, 'purchase_id': self.id, 'is_purchase': True},}
             else:
                 raise ValidationError("Sorry, you are not allowed to reject this order.")
     

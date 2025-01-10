@@ -9,6 +9,10 @@
 				<field name="request_delivery_date" required="1"/>
 				<field name="estimated_delivery_date"/>
 			</xpath>
+			<xpath expr="//field[@name='currency_id']" position="before">
+				<field name="reject_reason" attrs="{'invisible': [('state', '!=', 'reject')]}"/>
+			</xpath>
+
 			<xpath expr="//div[@name='reminder']" position="attributes">
 				<attribute name="invisible">1</attribute>
 			</xpath>
@@ -63,7 +67,7 @@
 			<xpath expr="//header//button[@name='button_cancel']" position="before">
 				<field name="partner_request_state" invisible="1"/>
 				<field name="is_contact_created" invisible="1"/>
-				<button name="action_submit_approval" type="object" string="Send for Approval" attrs="{'invisible': [('state','!=','sent')]}" class="btn-primary" />
+				<button name="action_submit_approval" type="object" string="Send for Approval" attrs="{'invisible': [('state','!=','draft')]}" class="btn-primary" />
 				<!-- <button name="sc_approved" string="Approved" type="object" attrs="{'invisible': ['|',('partner_request_state','!=','approved'),('state','=','approved')]}" class="btn-primary"/> -->
 				<button name="create_sequance_contact" string="Financial Approval" type="object" 
                         class="btn-primary" attrs="{'invisible': ['|',('is_contact_created','=',True),'|', '|',('partner_request_state', 'in', ('approved', 'pending')),('state', '!=', 'approve'),('approval_state', '!=', 'approved')]}"/>
@@ -108,11 +112,11 @@
 
 			</xpath> -->
 			<xpath expr="//button[@name='action_rfq_send'][1]" position="attributes">
-				<attribute name="attrs">{'invisible':[('state','!=','draft')]}</attribute>
+				<attribute name="attrs">{'invisible':[('state','!=','approve')]}</attribute>
 				<attribute name="states"></attribute>
 			</xpath>
 			<xpath expr="//button[@name='action_rfq_send'][2]" position="attributes">
-				<attribute name="attrs">{'invisible':['|',('partner_request_state','!=','approved'),('state','in',('draft','sent','purchase','done'))]}</attribute>
+				<attribute name="attrs">{'invisible':['|',('partner_request_state','!=','approved'),('state','in',('draft','sent','purchase','done', 'submitted', 'approve'))]}</attribute>
 				<attribute name="states"></attribute>
 			</xpath>
 			<xpath expr="//header//button[@name='print_quotation'][1]" position="attributes">
