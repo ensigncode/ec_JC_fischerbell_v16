@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record id="view_prescription_type_tree" model="ir.ui.view">
+            <field name="name">prescription.type.tree</field>
+            <field name="model">prescription.type</field>
+            <field name="arch" type="xml">
+                <tree editable="bottom">
+                    <field name="name" string="Name" />
+                </tree>
+            </field>
+        </record>
+        <record id="action_prescription_type" model="ir.actions.act_window">
+            <field name="name">Prescription Type</field>
+            <field name="res_model">prescription.type</field>
+            <field name="view_mode">tree</field>
+        </record>
+    </data>
+</odoo>

@@ -28,4 +28,9 @@
         action="rx_eyewear.optician_detail_action"
         sequence="301"
     />
+
+    <menuitem id="menu_rx_configuration" name="Configuration" parent="rx_eyewear_menu" sequence="1">
+        <menuitem id="rx_eyewear_menu_lens_type" name="Lens Type" action="rx_eyewear.action_lens_type" sequence="1"/>
+        <menuitem id="rx_eyewear_menu_prescription_type" name="Prescription Type" action="rx_eyewear.action_prescription_type" sequence="1"/>
+    </menuitem>
 </odoo>

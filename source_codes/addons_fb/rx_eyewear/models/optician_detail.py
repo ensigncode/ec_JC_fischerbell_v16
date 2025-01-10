@@ -15,7 +15,7 @@ class OpticianDetail(models.Model):
     email = fields.Char(string="Email")
     emp_no = fields.Char(string="NRIC / FIN No. / Employee No.")
     dept_code = fields.Char(string="Department code")
-    lens_type = fields.Char(string="Lens Type")
+    lens_type = fields.Many2one('lens.type', string="Lens Type")
     presc_type = fields.Char(string="Type of Prescription")
     add_on_type = fields.Char(string="Add on type")
     product_id = fields.Many2one('product.template',string="Frame", domain = "[('is_optic', '=', True)]")
@@ -39,7 +39,7 @@ class OpticianDetail(models.Model):
     add_left = fields.Float(string="ADD LEFT" ,digits=(16,1))
     pd_right = fields.Char(string='PD RIGHT' ,digits=(16,1))
     pd_left = fields.Char(string='PD RIGHT' ,digits=(16,1))
-    pescription =fields.Char(string="Pescription")
+    pescription = fields.Many2one('prescription.type', string="Prescription")
     outlet_id = fields.Many2one('outlet.detail', 'Outlet')
 
 

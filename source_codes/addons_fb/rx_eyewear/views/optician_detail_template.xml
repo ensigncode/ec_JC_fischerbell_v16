@@ -107,10 +107,12 @@
 												<select id="lens_type" name="lens_type"
 												        required="true">
 													<option value=""></option>
-													<option value="poly_carbonate_lens">POLYCARBONATE
-														LENS​
-													</option>
-													<option value="mr_lens">MR LENS​</option>
+													<t t-foreach="lens_types" t-as="lens_name">
+														<option t-att-value="lens_name.id"
+																t-att-id="lens_name.id">
+															<span t-esc="lens_name.name"></span>
+														</option>
+													</t>
 												</select>
 											</div>
 										</div>
@@ -266,10 +268,17 @@
 										</div>
 										<div class="col-6">
 											<div class="input-group">
-												<label for="group">Pescription:</label>
-												<textarea placeholder="Your Pescription"
-												          name="pescription" rows="4" cols="50"
-												          id="pescription"></textarea>
+												<label for="pescription">Prescription:</label>
+												<select id="pescription" name="pescription"
+														required="true">
+													<option value=""></option>
+													<t t-foreach="prescription_types" t-as="prescription_name">
+														<option t-att-value="prescription_name.id"
+																t-att-id="prescription_name.id">
+															<span t-esc="prescription_name.name"></span>
+														</option>
+													</t>
+												</select>
 											</div>
 										</div>
 									</div>
