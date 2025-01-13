@@ -31,7 +31,7 @@ class PurchaseOrderCancellationWizard(models.TransientModel):
         
         if mail_template:
             mail_template.email_to = recipients
-            mail_template.send_mail(self.env.user.id, force_send=True)
+            mail_template.send_mail(self.id, force_send=True)
         
         self.env['mail.activity'].sudo().create({
                 'res_model_id': self.env.ref('purchase.model_purchase_order').id,
