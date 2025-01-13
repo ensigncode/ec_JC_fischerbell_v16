@@ -18,6 +18,7 @@
         'data/workshhet_data.xml',
         'data/project_task_seq.xml',
         'data/helpdesk_data.xml',
+        'data/account_payment_term_data.xml',
         'views/service_views.xml',
         'views/product_template_view.xml',
         'views/project_task_view.xml',

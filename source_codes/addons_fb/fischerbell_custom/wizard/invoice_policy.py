@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 
-from odoo import api, fields, models
+from odoo import api, fields, models, _
 from collections import defaultdict  # Add this import
+from odoo.exceptions import UserError, ValidationError
+
 
 
 class InvoicePolicyWizard(models.TransientModel):
@@ -21,19 +23,40 @@ class InvoicePolicyWizard(models.TransientModel):
         help='Ordered Quantity: Invoice quantities ordered by the customer.\n'
              'Delivered Quantity: Invoice quantities delivered to the customer.')
 
+    def _notify_supplier_of_pickup(self, purchase_id):
+        """Send email notification to the supplier when collection is 'self_collection'."""
+        if not purchase_id.partner_id.email:
+            raise ValidationError(_("The supplier does not have an email address."))
+
+        # Get the email template
+        email_template = self.env.ref('fischerbell_custom.email_template_pickup_arranged_driver_notification_template', raise_if_not_found=False)
+        if not email_template:
+            raise ValidationError(_("The email template for pickup arrangement is missing. Please configure it in the system."))
+
+        # Send the email using the template
+        email_template.send_mail(purchase_id.id, force_send=True)
+
+
     def btn_confirm(self):
         product_list = []
         if self._context.get("active_model") == 'purchase.order' and self._context.get("is_purchase"):
             purchase_id = self.env["purchase.order"].search([("id", '=', self._context.get("active_id"))])
             line_ids = purchase_id.order_line.filtered(lambda x: x.product_id.detailed_type != 'service').mapped(
                 'product_id').write({'purchase_method': self.purchase_method})
-            purchase_id.write({'name': self.env['ir.sequence'].next_by_code('purchase.order.po')})
+            purchase_id.write({
+                'name': self.env['ir.sequence'].next_by_code('purchase.order.po'),
+                'purchase_method' : self.purchase_method,
+                })
             purchase_id.button_confirm()
+            email_template = self.env.ref('purchase.email_template_edi_purchase_done', raise_if_not_found=False)
+            if email_template:
+                email_template.send_mail(purchase_id.id, force_send=True)
             if purchase_id.picking_ids:
                 for picking in purchase_id.picking_ids:
                     if purchase_id.collection == 'self_collection':
                         picking.update({'pick_up': 'pc_driver'})
-                    elif purchase_id.collection == 'assigned_driver':
+                        self._notify_supplier_of_pickup(purchase_id)
+                    elif purchase_id.collection == 'assigned_driver':   
                         picking.update({'pick_up': 'pc_supplier'})
                     else:
                         picking.update({'pick_up': ''})

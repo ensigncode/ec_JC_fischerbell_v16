@@ -54,6 +54,27 @@
             <field name="auto_delete" eval="True"/>
         </record>
 
+            <record id="email_template_pickup_arranged_driver_notification_template" model="mail.template">
+                <field name="name">Purchase: Notification for Driver pickup arrangement</field>
+                <field name="model_id" ref="purchase.model_purchase_order"/>
+                <field name="email_from">{{ (object.user_id.email_formatted or object.company_id.email_formatted or user.email_formatted) }}</field>
+                <field name="email_to">{{ (object.partner_id.email_formatted or object.email) }}</field>
+                <field name="subject">Pickup Arrangement Notification</field>
+                <field name="body_html" type="html">
+                    <div style="margin: 0px; padding: 0px;">
+                        <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                            Dear <strong><t t-out="object.partner_id.name or ''"></t></strong>, <br/> <br/>
+                            We have arranged a driver for the pickup of your delivery.<br/>
+                            The driver will come on <strong><t t-out="object.request_delivery_date.date().strftime('%d-%m-%Y') or ''"></t></strong>  to collect the goods.<br/> <br/>
+                            Thank you for your cooperation.<br/><br/>
+                            Best regards, <br/>
+                            <strong><t t-out="object.company_id.name or ''"></t></strong>
+                        </p>
+                    </div>
+                </field>
+                <field name="lang">{{ object.partner_id.lang }}</field>
+            </record>
+
         <record id="email_template_cancellation_approval_template" model="mail.template">
             <field name="name">Purchase: Request For Cancellation</field>
             <field name="model_id" ref="fischerbell_custom.model_purchase_order_cancellation_wizard"/>

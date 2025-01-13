@@ -2,10 +2,9 @@
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 
 from itertools import groupby
-from odoo.exceptions import MissingError, ValidationError, AccessError
 
 from odoo import api,fields, models, _
-from odoo.exceptions import UserError, ValidationError
+from odoo.exceptions import UserError, ValidationError, AccessError
 from datetime import datetime, timedelta, date
 from odoo.fields import Command
 import re
@@ -440,6 +439,10 @@ class SaleOrder(models.Model):
                     'approval_state': 'approved',
                     'reviewed_by': self.env.user.id
                 })
+                if order.have_special_permission : 
+                    order.write({
+                        'invoice_status': 'to invoice',
+                    })
             else:
                 raise ValidationError("Sorry, you are not allowed to reject this order.")
         return True

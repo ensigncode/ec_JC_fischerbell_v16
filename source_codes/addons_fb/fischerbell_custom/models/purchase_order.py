@@ -84,6 +84,36 @@ class PurchaseOrder(models.Model):
     past_state = fields.Char("Past State")
     po_req_type_id = fields.Many2one('purchase.requisition.type',related='requisition_id.type_id')
     reject_reason = fields.Text(string="Reject Reason")
+    purchase_method = fields.Selection([
+        ('purchase', 'On Ordered quantities'),
+        ('receive', 'On Received quantities'),
+    ], string="Control Policy", help="On ordered quantities: Control bills based on ordered quantities.\n"
+        "On received quantities: Control bills based on received quantities.", required=False)
+    
+    can_create_bill = fields.Boolean(
+        string="Can Create Bill",
+        compute="_compute_can_create_bill",
+        store=True
+    )
+
+    @api.depends('purchase_method', 'picking_ids.state', 'order_line.qty_received', 'state')
+    def _compute_can_create_bill(self):
+        for order in self:
+            # Default: Cannot create bill
+            order.can_create_bill = False
+            
+            if order.state not in ('purchase', 'done'):
+                continue
+            
+            if order.purchase_method == 'purchase':
+                # Check if all GRNs are done for ordered quantities
+                if all(picking.state == 'done' for picking in order.picking_ids):
+                    order.can_create_bill = True
+            
+            elif order.purchase_method == 'receive':
+                # Check if at least one GRN is done
+                if any(picking.state == 'done' for picking in order.picking_ids):
+                    order.can_create_bill = True
 
     def button_cancel(self):
         for purchase in self:
@@ -164,6 +194,10 @@ class PurchaseOrder(models.Model):
         for po in self:
             po.is_default_terms = True
 
+    def _creation_message(self):
+        """Override creation message to customize for Purchase Orders."""
+        return _("RFQ created")
+    
     @api.model
     def create(self, vals):
         if 'name' not in vals or vals['name'] == 'New':
@@ -185,7 +219,7 @@ class PurchaseOrder(models.Model):
                 if any(field in PURCHASE_LINE_FIELDS for field in list(itertools.chain(*order_line_vals))):
                     vals['revision_purchase_name'] = (purchase.name.split('-')[0] if not purchase.revision_purchase_name else purchase.revision_purchase_name.split('-')[0]) + '-R%s'%(int(purchase.revision_purchase_count + 1) if int(purchase.revision_purchase_count) == 0 else int(purchase.revision_purchase_count))
                     original_name = self.name.split('-R')
-                    main_po = self.search([('name', '=', original_name[0]), ('id', '!=', self.id)])
+                    main_po = self.search([('name', '=', original_name[0]), ('id', '!=', self.id)],limit=1)
                     if main_po:
                         vals['name'] = (main_po.name.split('-')[0] if not main_po.revision_purchase_name else main_po.revision_purchase_name.split('-')[0]) + '-R%s'%(int(main_po.revision_purchase_count + 1) if int(main_po.revision_purchase_count) == 0 else int(main_po.revision_purchase_count))
                         main_po.revision_purchase_count = main_po.revision_purchase_count + 1
