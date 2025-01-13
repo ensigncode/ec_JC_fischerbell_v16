@@ -276,6 +276,17 @@ class PurchaseOrder(models.Model):
     #       if not self.mail_sended:
     #           raise ValidationError("Please Send Email First")
 
+    def button_confirm_po(self):
+        return {
+                'type': 'ir.actions.act_window',
+                'name': 'Invoice Policy',
+                'view_mode': 'form',
+                'res_model': 'invoice.policy.wizard',
+                'domain': [],
+                'context': {'is_purchase':True},
+                'target': 'new',
+            }
+
     def button_confirm_wizard(self):
     # if self.request_delivery_date and self.estimated_delivery_date and self.mail_sended:
         if self.mail_sended:

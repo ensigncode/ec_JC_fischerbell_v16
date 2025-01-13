@@ -106,6 +106,7 @@
 			</xpath>
 			<xpath expr="//header//button[@name='print_quotation'][1]" position="after">
 			   <button name="button_confirm_wizard" type="object" string="Confirm Order" context="{'validate_analytic': True}" class="oe_highlight" id="bid_confirm" data-hotkey="v" attrs="{'invisible':['|',('partner_request_state','!=','approved'),('state','!=','approve')]}"/>
+			   <button name="button_confirm_po" type="object" string="Confirm Order" context="{'validate_analytic': True}" class="oe_highlight" id="bid_confirm" data-hotkey="v" attrs="{'invisible':[('state','!=','draft')]}"/>
 			</xpath>
 			<!-- <xpath expr="//header//button[@name='print_quotation'][2]" position="after">
 			    <button name="button_confirm_wizard" type="object" context="{'validate_analytic': True}" attrs="{'invisible':['|',('partner_request_state','!=','approved'),('state','!=','approve')]}" string="Confirm Order" id="draft_confirm"/>
