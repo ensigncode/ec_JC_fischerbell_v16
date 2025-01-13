@@ -67,6 +67,7 @@ class PurchaseOrder(models.Model):
     partner_request_state = fields.Selection([('none','None'),('pending','Pending'),('approved','Approved'),
                                             ('rejected','Rejected')],default='none', string='Partner Request')
     is_requested = fields.Boolean('Requested')
+    is_supplier = fields.Boolean('Suppli Confirmation')
     approval_state = fields.Selection(
         selection=[
             ('no', 'Nothing To Approve'),
@@ -309,6 +310,20 @@ class PurchaseOrder(models.Model):
     #   else:
     #       if not self.mail_sended:
     #           raise ValidationError("Please Send Email First")
+
+    def button_confirm_po(self):
+        return {
+                'type': 'ir.actions.act_window',
+                'name': 'Invoice Policy',
+                'view_mode': 'form',
+                'res_model': 'invoice.policy.wizard',
+                'domain': [],
+                'context': {'is_purchase':True},
+                'target': 'new',
+            }
+
+    def button_supplier_confirm(self):
+        self.is_supplier = True
 
     def button_confirm_wizard(self):
     # if self.request_delivery_date and self.estimated_delivery_date and self.mail_sended:
