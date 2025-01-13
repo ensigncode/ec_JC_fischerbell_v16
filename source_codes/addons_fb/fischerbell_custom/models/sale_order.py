@@ -1318,14 +1318,19 @@ class SaleOrderLine(models.Model):
     def _compute_name(self):
         res = super(SaleOrderLine,self)._compute_name()
         for line in self:
-            bom_ids = self.env['mrp.bom'].sudo().search(['|', ('product_id','=',line.product_id.id),
-                                ('product_tmpl_id','=',line.product_template_id.id),('type','=','phantom')],limit=1 )
-            if bom_ids:
-                # Fetch the components of the BoM
-                component_lines = []
-                for idx, component in enumerate(bom_ids.bom_line_ids, start=1):
-                    component_lines.append(f"{idx}: {component.product_id.display_name}")
-                # Append components to the name
-                components_description = "\n".join(component_lines)
-                line.name = f"{line.name}\n{_('Components:')}\n{components_description}"
+            if line.product_id :
+                bom_ids = self.env['mrp.bom'].sudo().search([
+                    '|',
+                    ('product_id', '=', line.product_id.id),
+                    ('product_tmpl_id', '=', line.product_template_id.id),
+                    ('type', '=', 'phantom')
+                ], limit=1, order='product_id desc')
+                if bom_ids:
+                    # Fetch the components of the BoM
+                    component_lines = []
+                    for idx, component in enumerate(bom_ids.bom_line_ids, start=1):
+                        component_lines.append(f"{idx}: {component.product_id.display_name}")
+                    # Append components to the name
+                    components_description = "\n".join(component_lines)
+                    line.name = f"{line.name}\n{_('Components:')}\n{components_description}"
         return res
