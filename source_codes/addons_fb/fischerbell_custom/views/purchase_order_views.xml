@@ -28,6 +28,12 @@
 				<button name="action_open_last_purchase_order" type="object" icon="fa-share-square-o" title="Last Purchase Order" attrs="{'invisible': [('last_purchase_price', '=', 0.0)]}"/>
 				<field name="last_po_id" invisible="1"/>
 			</xpath>
+			<xpath expr="//field[@name='order_line']//field[@name='product_id']" position="after">
+				<field name="product_code"/>
+			</xpath>
+			<xpath expr="//field[@name='order_line']//tree//field[@name='product_id']" position="attributes">
+				<attribute name="context">{'partner_id':parent.partner_id, 'quantity':product_qty,'uom':product_uom, 'company_id': parent.company_id, 'is_purchase_order': True}</attribute>
+			</xpath>
 			<xpath expr="//field[@name='order_line']//field[@name='name']" position="after">
 				<field name="comments" sting="Comments" optional="hide"/>
 				<field name="customer_id"  optional="hide"/>

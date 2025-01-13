@@ -584,6 +584,7 @@ class PurchaseOrderLine(models.Model):
     po_reason = fields.Text(string="Reason")
     last_purchase_price = fields.Float("Last Purchase Price", compute="get_purchase_order_last_purchase_price")
     last_po_id = fields.Many2one("purchase.order", "Last Purchase Order")
+    product_code = fields.Char('Product Code', related="product_id.default_code")
 
 
     def action_approve_line(self):
