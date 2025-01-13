@@ -67,6 +67,7 @@ class PurchaseOrder(models.Model):
     partner_request_state = fields.Selection([('none','None'),('pending','Pending'),('approved','Approved'),
                                             ('rejected','Rejected')],default='none', string='Partner Request')
     is_requested = fields.Boolean('Requested')
+    is_supplier = fields.Boolean('Suppli Confirmation')
     approval_state = fields.Selection(
         selection=[
             ('no', 'Nothing To Approve'),
@@ -286,6 +287,9 @@ class PurchaseOrder(models.Model):
                 'context': {'is_purchase':True},
                 'target': 'new',
             }
+
+    def button_supplier_confirm(self):
+        self.is_supplier = True
 
     def button_confirm_wizard(self):
     # if self.request_delivery_date and self.estimated_delivery_date and self.mail_sended:
