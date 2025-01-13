@@ -22,6 +22,8 @@ class OpticianPortalController(http.Controller):
 		optic_product_ids = request.env['product.template'].sudo().search([('is_optic','=',True)])
 		company_ids = request.env['res.partner'].sudo().search([('is_company','=',True)])
 		outlet_ids = request.env['outlet.detail'].sudo().search([])
+		lens_types = request.env['lens.type'].sudo().search([])
+		prescription_types = request.env['prescription.type'].sudo().search([])
   		
 		submission_count = request.env.user.submission_count
 		allow_submission = request.env.user.allow_submission
@@ -58,7 +60,7 @@ class OpticianPortalController(http.Controller):
 				'email' : kw.get('email') if kw.get('email') else '',
 				'emp_no' : kw.get('emp_no') if kw.get('emp_no') else '',
 				'dept_code' : kw.get('dept_code') if kw.get('dept_code') else '',
-				'lens_type' : kw.get('lens_type') if kw.get('lens_type') else '',
+				'lens_type' : int(kw.get('lens_type')) if kw.get('lens_type') else '',
 				'presc_type' : kw.get('presc_type') if kw.get('presc_type') else '',
 				'add_on_type' : lens_type.get(kw.get('add_on_type'),'') if kw.get('add_on_type') else '',
 				'product_id' : eval(kw.get('product_id', '')),
@@ -80,7 +82,7 @@ class OpticianPortalController(http.Controller):
 				'add_left' : kw.get('add_left') if kw.get('add_left') else '',
 				'pd_right' : kw.get('pd_right') if kw.get('pd_right') else '',
 				'pd_left' : kw.get('pd_left') if kw.get('pd_left') else '',
-				'pescription' : kw.get('pescription') if kw.get('sg_ht') else '',
+				'pescription' : int(kw.get('pescription')) if kw.get('sg_ht') else '',
 			})
 			if optician_detail_id:
 				request.env.user.sudo().write({'submission_count': request.env.user.submission_count + 1})
@@ -95,7 +97,7 @@ class OpticianPortalController(http.Controller):
                 
 				return request.redirect('/optician-detail')
 
-		return request.render('rx_eyewear.opptician_detail_page_template', {'optic_product_ids': optic_product_ids,'outlet_ids':outlet_ids,'disable_form': disable_form})
-
-
-
+		return request.render('rx_eyewear.opptician_detail_page_template',
+							  {'optic_product_ids': optic_product_ids, 'outlet_ids': outlet_ids,
+							   'lens_types': lens_types, 'prescription_types': prescription_types,
+							   'disable_form': disable_form})

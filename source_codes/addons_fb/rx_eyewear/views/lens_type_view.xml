@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record id="view_lens_type_tree" model="ir.ui.view">
+            <field name="name">lens.type.tree</field>
+            <field name="model">lens.type</field>
+            <field name="arch" type="xml">
+                <tree editable="bottom">
+                    <field name="name" string="Name" />
+                </tree>
+            </field>
+        </record>
+        <record id="action_lens_type" model="ir.actions.act_window">
+            <field name="name">Lens Type</field>
+            <field name="res_model">lens.type</field>
+            <field name="view_mode">tree</field>
+        </record>
+    </data>
+</odoo>

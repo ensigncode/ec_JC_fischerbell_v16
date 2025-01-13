@@ -16,6 +16,8 @@
         "views/sale_order_views.xml",
         "views/purchase_order_views.xml",
         "views/outlet_detail_view.xml",
+        "views/lens_type_view.xml",
+        "views/prescription_type_view.xml",
         "views/menus.xml",
         'data/rx_eyewear_group.xml',
         "data/optician_submission_email_template.xml",
