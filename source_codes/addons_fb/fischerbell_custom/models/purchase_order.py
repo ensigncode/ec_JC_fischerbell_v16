@@ -35,7 +35,7 @@ class PurchaseOrder(models.Model):
     partner_note = fields.Text('Note (200 characters)')
     is_default_terms = fields.Boolean('Is Default Terms')
     po_comments = fields.Char(string="Comments")
-    request_delivery_date = fields.Datetime("Request Delivery Date")
+    request_delivery_date = fields.Datetime("Confirmation Date")
     estimated_delivery_date = fields.Datetime("Estimated Delivery Date")
     revision_purchase_count = fields.Float(sting="Revision Purchase Count",default=1.0)
     revision_purchase_name = fields.Char(sting="Revision Purchase Name")
