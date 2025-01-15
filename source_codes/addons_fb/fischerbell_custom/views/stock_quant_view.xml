@@ -11,6 +11,22 @@
 			</xpath>
 		</field>
 	</record>
+	    <record model="ir.ui.view" id="view_stock_quant_tree_inherit">
+        <field name="name">stock.quant.tree.inherit</field>
+        <field name="model">stock.quant</field>
+        <field name="inherit_id" ref="stock.view_stock_quant_tree"></field>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='product_uom_id']" position="after">
+                <field name="po_source_type" />
+            </xpath>
+        </field>
+    </record>
+	<record id="stock.dashboard_open_quants" model="ir.actions.act_window">
+		<field name="context">{'search_default_po_source_type_group': 1}</field>
+	</record>
+	<record id="stock.location_open_quants" model="ir.actions.act_window">
+		<field name="context">{'search_default_po_source_type_group': 1}</field>
+	</record>
 
 	<record id="view_quant_search_inherit_expiration" model="ir.ui.view">
 		<field name="name">quants.search.inherit.expiration</field>
@@ -18,6 +34,9 @@
 		<field name="inherit_id" ref="stock.quant_search_view"/>
 		<field name="arch" type="xml">
 			<!-- Use xpath to target the correct location -->
+			<field name="product_id" position="after">
+				<field name="po_source_type"/>
+			</field>
 			<xpath expr="//group" position="inside">
 				<filter string="Expiring in 1 Month" name="expiration_1_month"
 				        domain="[('expiration_date', '&lt;', (context_today() + datetime.timedelta(days=30)).strftime('%Y-%m-%d')),
@@ -35,6 +54,18 @@
 				        domain="[('expiration_date', '&lt;', (context_today() + datetime.timedelta(days=365)).strftime('%Y-%m-%d')),
                 ('expiration_date', '&gt;', context_today().strftime('%Y-%m-%d'))]"/>
 			</xpath>
+			<xpath expr="//filter[@name='transit_loc']" position="after">
+                    <filter string="Source Type"
+                    name="filter_source_type"
+                    domain="[]">
+		                <filter name="source_type_po" string="From Purchase Order" domain="[('po_source_type', '=', 'po')]"/>
+		                <filter name="source_type_service" string="From Service" domain="[('po_source_type', '=', 'service')]"/>
+		                <filter name="source_type_other" string="Other" domain="[('po_source_type', '=', 'other')]"/>
+		            </filter>
+            </xpath>
+            <xpath expr="//filter[@name='productgroup']" position="after">
+                    <filter name="po_source_type_group" string="Po/Services" context="{'group_by': 'po_source_type'}"/>
+            </xpath>
 		</field>
 	</record>
 </odoo>

@@ -52,6 +52,8 @@ class Inventory(models.Model):
         if self.user_has_groups('stock.group_stock_user') and not self.user_has_groups('stock.group_stock_manager'):
             ctx['search_default_my_count'] = True
 
+        ctx['search_default_po_source_type_group'] = 1
+
         domain  = [('location_id.usage', 'in', ['internal', 'transit'])]
         if self.product_ids:
         	domain += [('product_id', 'in', self.product_ids.ids)]
