@@ -14,6 +14,7 @@
 		'sale_purchase',
 	],
 	'data': [
+        "security/ir.model.access.csv",
 		"data/email_template_alert_reminder.xml",
 		"data/email_alert_temp_sale_person.xml",
 		"data/replenish_stock_notification_template.xml",
@@ -24,6 +25,7 @@
 		"views/res_partner_views.xml",
 		"views/stock_location_views.xml",
 		"reports/packing_label_report.xml",
+        "wizard/picking_assign_responsible_views.xml"
 	],
 	'demo': [
 	],

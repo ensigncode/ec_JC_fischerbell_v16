@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- View picking.assign.responsible form -->
+    <record id="view_picking_assign_responsible_form" model="ir.ui.view">
+        <field name="name">view.picking.assign.responsible.form</field>
+        <field name="model">picking.assign.responsible</field>
+        <field name="arch" type="xml">
+            <form string="Picking Assign Responsible">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="picking_ids" widget="many2many_tags" invisible="1"/>
+                            <field name="user_id"/>
+                        </group>
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="action_assign" type="object" string="Assing" class="btn-primary"/>
+                    <button string="Cancel" class="btn-default" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+</odoo>
