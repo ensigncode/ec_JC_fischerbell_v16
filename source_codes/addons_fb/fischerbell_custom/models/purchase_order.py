@@ -516,6 +516,7 @@ class PurchaseOrder(models.Model):
             default['revision_purchase_count'] = main_po.revision_purchase_count
             new_po = super(PurchaseOrder, self).copy(default=default)
             new_po.button_confirm()
+            main_po.button_done()
             return new_po
         else:
             return super(PurchaseOrder, self).copy(default=default)
