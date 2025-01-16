@@ -146,16 +146,16 @@
 												</select>
 											</div>
 										</div>
-										<div class="col-6">
+										<!-- <div class="col-6">
 											<div class="input-group">
 												<label for="group">Group:</label>
 												<input type="text" name="company_id"
-												       id="company_id"></input>
+												       id="company_id"></input> -->
 												<!-- <select id="company_id" name="company_id">
 													<option value=""></option>
 												</select> -->
-											</div>
-										</div>
+											<!-- </div>
+										</div> -->
 										<div class="col-6">
 											<div class="input-group">
 												<label for="sphere_left">SPHERE Left:</label>
