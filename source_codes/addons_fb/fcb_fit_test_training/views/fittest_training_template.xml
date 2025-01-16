@@ -39,7 +39,7 @@
 														<div class="col-sm">
 															<input id="reference_no" type="text"
 															       class="form-control s_website_form_input"
-															       name="reference_no"/>
+															       t-att-value="fitting_id.reference_no"/>
 														</div>
 													</div>
 												</div>
@@ -53,9 +53,9 @@
 															<span class="s_website_form_mark">*</span>
 														</label>
 														<div class="col-sm">
-															<input id="namee" type="text"
+															<input id="name" type="text"
 															       class="form-control s_website_form_input"
-															       name="name" required=""/>
+															       t-att-value="fitting_id.name" required=""/>
 														</div>
 													</div>
 												</div>
@@ -71,13 +71,13 @@
 															<span class="s_website_form_mark">*</span>
 														</label>
 														<div class="col-sm">
-															<select id="partner_id" name="partner_id"
+															<select id="partner_id" name="fitting_id.partner_id"
 															        t-attf-class="form-control s_website_form_input"
 															        required="true">
 																<option value="">select...</option>
 																<t t-foreach="request.env['res.partner'].sudo().search([('is_company','!=',True),('parent_id','=', False)]) or []"
 																   t-as="partner_id">
-																	<option t-att-value="partner_id.id"
+																	<option t-att-value="fitting_id.partner_id.id"
 																	        t-att-selected="partner_id.id == (partner_id and partner_id.id and 'selected')">
 																		<t t-esc="partner_id.name"/>
 																	</option>
@@ -100,7 +100,7 @@
 													<div class="col-sm">
 														<input id="date_of_training" type="date"
 														       class="form-control s_website_form_input"
-														       name="date" required="true"
+														       t-att-value="fitting_id.date or ''" required="true"
 														/>
 													</div>
 												</div>
@@ -117,7 +117,7 @@
 													<div class="col-sm">
 														<input id="charge_name" type="text"
 														       class="form-control s_website_form_input"
-														       name="charge_name"
+														       t-att-value="fitting_id.charge_name or ''"
 														       data-fill-with="charge_name"/>
 													</div>
 												</div>
@@ -134,7 +134,7 @@
 													<div class="col-sm">
 														<input id="phone" type="tel"
 														       class="form-control s_website_form_input"
-														       name="phone"/>
+														       t-att-value="fitting_id.phone"/>
 													</div>
 												</div>
 											</div>
@@ -150,7 +150,7 @@
 													<div class="col-sm">
 														<select id="company_id"
 														        t-attf-class="form-control s_website_form_input"
-														        name="company_id" required="true">
+														        t-att-value="company_id" required="true">
 															<option value="">select...</option>
 															<t t-foreach="request.env['res.partner'].sudo().search([('is_company','=',True)]) or []"
 															   t-as="company_id">
@@ -206,7 +206,7 @@
 													<div class="col-sm">
 														<input id="location" type="text"
 														       class="form-control s_website_form_input"
-														       name="location" required=""/>
+														       t-att-value="fitting_id.location" required=""/>
 													</div>
 												</div>
 											</div>

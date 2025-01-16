@@ -20,6 +20,8 @@ class StockLot(models.Model):
 	attribute_one = fields.Html('Attribute 1')
 	attribute_two = fields.Html('Attribute 2')
 	manufacturing_date = fields.Date('manufacturing date',compute='_compute_get_manufacturing_date')
+	is_from_po = fields.Boolean('IS From PO')
+	is_from_service = fields.Boolean('IS From Services')
 
 	@api.depends('product_id.tracking')
 	def _compute_get_tracking(self):

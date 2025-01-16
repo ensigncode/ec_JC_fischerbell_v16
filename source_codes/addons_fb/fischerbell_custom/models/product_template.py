@@ -50,8 +50,6 @@ class ProductTemplate(models.Model):
 	serial_number = fields.Char('Serial Number')
 	requires_traceability = fields.Boolean('Requires Traceability')
 
-
-
 	@api.depends_context('company')
 	@api.depends('product_variant_ids', 'product_variant_ids.standard_price', 'purchase_line_ids')
 	def _compute_standard_price(self):
@@ -192,6 +190,10 @@ class ProductProduct(models.Model):
 	# requires_traceability = fields.Boolean('Requires Traceability')
 
 
+	def name_get(self):
+		if self._context.get('is_purchase_order', True) or self._context.get('default_description_sale', True):
+			return [(record.id, record.name) for record in self]
+		return super(ProductProduct, self).name_get()
 
 
 	def _compute_sheet_url(self):

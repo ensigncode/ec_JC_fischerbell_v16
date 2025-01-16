@@ -81,5 +81,15 @@ class StockPicking(models.Model):
 					e2 = template_id.sudo().send_mail(picking.id, email_values={'email_from': self.env.user.email, 'email_to': picking.partner_id.email})
 
 		
-		
+	def action_assign_responsible_user(self):
+		return {
+            'name': ("Assign Responsible"),
+            'type': 'ir.actions.act_window',
+            'res_model': 'picking.assign.responsible',
+            'view_mode': 'form',
+			'target': 'new',
+            'context': {
+				'default_picking_ids' : self.ids
+			}
+        }
 		

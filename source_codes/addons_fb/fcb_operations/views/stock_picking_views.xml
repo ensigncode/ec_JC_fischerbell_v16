@@ -16,4 +16,16 @@
             </xpath>
         </field>
     </record>
+
+
+    <record id="stock_vpicktree_inherit" model="ir.ui.view">
+        <field name="name">stock.picking.packing.label.view.form</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.vpicktree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <button string="Assign Responsible" name="action_assign_responsible_user" type="object" class="oe_highlight"/>
+            </xpath>
+        </field>
+    </record>
 </odoo>

@@ -386,6 +386,16 @@ class Picking(models.Model):
 		for record in self : 
 			if record.purchase_id and record.state == 'done' : 
 				record.purchase_id.action_create_invoice() 
+				for move_id in record.move_ids_without_package:
+					if move_id.lot_ids.ids:
+						lot_ids = self.env['stock.lot'].search([('id', 'in', move_id.lot_ids.ids)])
+						lot_ids.write({'is_from_po': True})
+			if record.ticket_id and record.ticket_id.service_type == 'outsource_service' and record.state == 'done':
+				for move_id in record.move_ids_without_package:
+					if move_id.lot_ids.ids:
+						lot_ids = self.env['stock.lot'].search([('id', 'in', move_id.lot_ids.ids)])
+						lot_ids.write({'is_from_service': True})
+
 		return res
 
 

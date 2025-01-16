@@ -35,7 +35,7 @@ class PurchaseOrder(models.Model):
     partner_note = fields.Text('Note (200 characters)')
     is_default_terms = fields.Boolean('Is Default Terms')
     po_comments = fields.Char(string="Comments")
-    request_delivery_date = fields.Datetime("Request Delivery Date")
+    request_delivery_date = fields.Datetime("Confirmation Date")
     estimated_delivery_date = fields.Datetime("Estimated Delivery Date")
     revision_purchase_count = fields.Float(sting="Revision Purchase Count",default=1.0)
     revision_purchase_name = fields.Char(sting="Revision Purchase Name")
@@ -516,6 +516,7 @@ class PurchaseOrder(models.Model):
             default['revision_purchase_count'] = main_po.revision_purchase_count
             new_po = super(PurchaseOrder, self).copy(default=default)
             new_po.button_confirm()
+            main_po.button_done()
             return new_po
         else:
             return super(PurchaseOrder, self).copy(default=default)
@@ -584,6 +585,7 @@ class PurchaseOrderLine(models.Model):
     po_reason = fields.Text(string="Reason")
     last_purchase_price = fields.Float("Last Purchase Price", compute="get_purchase_order_last_purchase_price")
     last_po_id = fields.Many2one("purchase.order", "Last Purchase Order")
+    product_code = fields.Char('Product Code', related="product_id.default_code")
 
 
     def action_approve_line(self):
