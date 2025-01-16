@@ -6,7 +6,7 @@
     'category': 'Account',
     'summary': '',
     'website': '',
-    'depends': ['account','l10n_in','account_asset','account_reports','purchase_stock',
+    'depends': ['account','account_asset','account_reports','purchase_stock',
             'stock_dropshipping'],
     'data': [
         "data/demo_data.xml",
