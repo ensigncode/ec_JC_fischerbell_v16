@@ -42,6 +42,7 @@
 				<field name="batch_number" invisible="1"/>
 				<field name="lot_id" optional="hide"/>
 				<field name="request_delivery_date"  optional="hide"/>
+				<field name="used_lot_serials"  optional="hide"/>
 				<field name="approval_state"  optional="hide"/>
 				<field name="estimated_delivery_date"  optional="hide"/>
 				<field name="po_reason"  optional="hide"/>
