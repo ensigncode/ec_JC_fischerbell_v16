@@ -113,5 +113,83 @@
             <field name="lang">{{ object.stock_picking_id.partner_id.lang }}</field>
         </record>
 
+        <record id="email_template_grn_notification" model="mail.template">
+            <field name="name">GRN: Notification</field>
+            <field name="model_id" ref="stock.model_stock_picking"/>
+            <field name="email_from">{{ object.company_id.email or user.email_formatted }}</field>
+            <field name="subject">GRN Validated: {{ object.name or 'n/a' }}</field>
+            <field name="body_html" type="html">
+                <div style="margin: 0; padding: 20px; font-family: Arial, sans-serif; font-size: 14px; color: #333;">
+                    <p style="margin: 0; padding: 0; font-size: 16px; font-weight: bold; color: #007bff;">Dear Team,</p>
+                    <p style="margin: 10px 0; padding: 0;">A Goods Receipt Note (GRN) has been validated with the following details:</p>
+                    
+                    <table style="width: 100%; border-collapse: collapse; margin: 15px 0; font-size: 14px; color: #333;">
+                        <tr>
+                            <td style="padding: 8px; border: 1px solid #ddd; font-weight: bold; width: 30%;">GRN Reference:</td>
+                            <td style="padding: 8px; border: 1px solid #ddd;"><t t-out="object.name or 'n/a'"/></td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 8px; border: 1px solid #ddd; font-weight: bold;">Vendor:</td>
+                            <td style="padding: 8px; border: 1px solid #ddd;"><t t-out="object.partner_id.name or 'n/a'"/></td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 8px; border: 1px solid #ddd; font-weight: bold;">Receipt Date:</td>
+                            <td style="padding: 8px; border: 1px solid #ddd;"><t t-out="object.scheduled_date or 'n/a'"/></td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 8px; border: 1px solid #ddd; font-weight: bold;">Total Products:</td>
+                            <td style="padding: 8px; border: 1px solid #ddd;">
+                                <t t-out="sum([line.product_qty for line in object.move_ids_without_package]) or 0"/>
+                            </td>
+                        </tr>
+                    </table>
+                    
+                    <p style="margin: 10px 0; padding: 0; font-weight: bold;">Product Details:</p>
+                    <ul style="padding-left: 20px; margin: 10px 0;">
+                        <t t-foreach="object.move_ids_without_package" t-as="line">
+                            <li>
+                                <strong><t t-out="line.product_id.display_name or 'n/a'"/></strong>: 
+                                <t t-out="line.product_qty or 0"/> 
+                                <t t-out="line.product_uom.name or ''"/>
+                            </li>
+                        </t>
+                    </ul>
+
+                    <hr style="margin: 20px 0; border: none; border-top: 1px solid #ddd;" />
+
+                    <p style="margin: 10px 0; padding: 0;">Additionally, the associated purchase details are:</p>
+                    <table style="width: 100%; border-collapse: collapse; margin: 15px 0; font-size: 14px; color: #333;">
+                        <tr>
+                            <td style="padding: 8px; border: 1px solid #ddd; font-weight: bold; width: 30%;">Purchase Order:</td>
+                            <td style="padding: 8px; border: 1px solid #ddd;"><t t-out="object.origin or 'n/a'"/></td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 8px; border: 1px solid #ddd; font-weight: bold;">Purchase Date:</td>
+                            <td style="padding: 8px; border: 1px solid #ddd;">
+                                <t t-out="object.purchase_id.date_order or 'n/a'"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 8px; border: 1px solid #ddd; font-weight: bold;">Total Ordered Quantity:</td>
+                            <td style="padding: 8px; border: 1px solid #ddd;">
+                                <t t-out="sum([line.product_qty for line in object.purchase_id.order_line]) or 0"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 8px; border: 1px solid #ddd; font-weight: bold;">Expected Delivery Date:</td>
+                            <td style="padding: 8px; border: 1px solid #ddd;">
+                                <t t-out="object.purchase_id.date_planned or 'n/a'"/>
+                            </td>
+                        </tr>
+                    </table>
+
+                    <p style="margin: 20px 0 10px; padding: 0; color: #007bff; font-weight: bold;">Please log in to the system for further details.</p>
+                    <p style="margin: 0; padding: 0;">Thanks,</p>
+                </div>
+            </field>
+            <field name="lang">{{ object.partner_id.lang }}</field>
+        </record>
+
+
     </data>
 </odoo>

@@ -12,6 +12,10 @@ class ResConfigSettings(models.TransientModel):
         default=5,
         help="Number of days to check for delivery lead time and notify managers if stock is insufficient."
     )
+    notification_email_ids = fields.Char(
+        string="Notification Emails",
+        help="Comma-separated list of email addresses to notify when a vendor bill is validated."
+    )
 
 
     def set_values(self):
@@ -19,6 +23,9 @@ class ResConfigSettings(models.TransientModel):
 
         self.env['ir.config_parameter'].sudo().set_param('fischerbell_custom.freight_charge_id', int(self.freight_charge_id))
         self.env['ir.config_parameter'].sudo().set_param('fischerbell_custom.return_time', int(self.return_time))
+        self.env['ir.config_parameter'].sudo().set_param(
+            'account.vendor_bill_notification_emails', self.notification_email_ids
+        )
 
         return res
 
@@ -29,5 +36,8 @@ class ResConfigSettings(models.TransientModel):
         return_time =  self.env['ir.config_parameter'].sudo().get_param('fischerbell_custom.return_time')
         res['freight_charge_id'] = int(freight_charge_id)
         res['return_time'] = int(return_time)
+        res['notification_email_ids'] = self.env['ir.config_parameter'].sudo().get_param(
+            'account.vendor_bill_notification_emails', default=''
+        )
 
         return res
