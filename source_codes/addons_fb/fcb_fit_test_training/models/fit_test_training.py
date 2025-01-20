@@ -26,6 +26,12 @@ class FitTestTraining(models.Model):
 							   readonly=True, default=lambda self: _('New'))
 	url = fields.Char("URL", readonly=True)
 
+	@api.onchange('name_of_trainer')
+	def _onchange_name_of_trainer(self):
+		if self.name_of_trainer:
+			self.location = self.name_of_trainer.city if self.name_of_trainer.city else '' 
+			self.phone = self.name_of_trainer.phone if self.name_of_trainer.phone else '' 
+
 	@api.onchange('company')
 	def _onchange_company_id(self):
 		if self.company:

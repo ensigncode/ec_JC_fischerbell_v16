@@ -8,7 +8,7 @@
             <tree string="fit test training Detail" sample="1">
                 <field name="name"/>
                 <field name="date"/>
-                <field name="charge_name"/>
+                <field name="charge_name" invisible="1" />
                 <field name="phone"/>
                 <field name="company"/>
                 <!-- <field name="training_type"/> -->
@@ -40,7 +40,7 @@
                     <group>
                         <group>
                             <field name="name_of_trainer"/>
-                            <field name="charge_name"/>
+                            <field name="charge_name" invisible="1" />
                             <!-- <field name="training_type"/> -->
                             <field name="company"/>
                             <field name="training_types"/>
@@ -52,7 +52,7 @@
                             <field name="phone"/>
 <!--                            <field name="number_of_person"/>-->
                             <field name="location"/>
-                            <field name="partner_id"/>
+                            <field name="partner_id" invisible="1" />
                         </group>
                     </group>
                     <notebook>
