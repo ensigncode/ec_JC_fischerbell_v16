@@ -525,6 +525,24 @@ class PurchaseOrder(models.Model):
 class PurchaseOrderLine(models.Model):
     _inherit = "purchase.order.line"
 
+    used_lot_serials = fields.Char(
+        string="Used Lot/Serial Numbers",
+        compute="_compute_used_lot_serials",
+        store=False,  # Not stored in the database, computed dynamically
+    )
+
+    @api.depends('move_ids')
+    def _compute_used_lot_serials(self):
+        for line in self:
+            # Find related stock moves for completed receipts
+            done_moves = line.move_ids.filtered(lambda move: move.state == 'done')
+            
+            # Extract lot/serial numbers from stock move lines
+            lot_serials = done_moves.mapped('move_line_ids.lot_id.name')
+            
+            # Join the lot/serial numbers for display
+            line.used_lot_serials = ', '.join(lot_serials) if lot_serials else ''
+
     def get_last_purchase_order(self):
         order_id = False
         if self.product_id and self.order_id and self.order_id.partner_id:

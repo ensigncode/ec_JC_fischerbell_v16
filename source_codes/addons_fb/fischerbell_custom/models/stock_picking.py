@@ -325,6 +325,26 @@ class Picking(models.Model):
 				'context': dict(self.env.context, default_show_transfers=show_transfers,
 								default_pick_ids=[(4, p.id) for p in self]),
 			}
+	def _send_grn_notification(self):
+		"""Send email notification when GRN is validated."""
+		# Fetch emails from res.config.settings
+		email_string = self.env['ir.config_parameter'].sudo().get_param(
+			'account.vendor_bill_notification_emails', default=''
+		)
+		email_list = [email.strip() for email in email_string.split(',') if email.strip()]
+
+		if not email_list:
+			return  # No emails configured, skip sending
+
+		# Load the email template
+		template = self.env.ref('fischerbell_custom.email_template_grn_notification', raise_if_not_found=False)
+		if not template:
+			raise ValidationError(_("Email template for GRN notification is missing."))
+		email_values = {}
+		for picking in self:
+			if picking.picking_type_id.code == 'incoming':  # Ensure it's an incoming shipment
+				email_values['email_to'] = ",".join(email_list)
+				template.send_mail(picking.id, force_send=True, email_values=email_values)
 
 	def button_validate(self):
 		for picking in self:
@@ -337,6 +357,7 @@ class Picking(models.Model):
 			#if picking.picking_type_code == 'internal:
 				#raise ValidationError("Sorry you cannot validate, as this transfer is not yet check.")
 			if picking.picking_type_code == 'incoming':
+				picking._send_grn_notification()
 				for move_line in picking.move_ids_without_package:
 					qty = int(move_line.product_uom_qty)
 					if move_line.quantity_done > move_line.product_uom_qty:

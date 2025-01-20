@@ -16,6 +16,17 @@
                             </div>
                         </div>
                     </div>
+
+                     <div class="col-12 col-lg-6 o_setting_box" id="freight_charge">
+                        <div class="o_setting_left_pane"/>
+                        <div class="o_setting_right_pane">
+                            <span class="o_form_label">Vendor Bill Email Notification</span>
+                            <div class="text-muted">Comma-separated list of email addresses to notify when a vendor bill is validated.</div>
+                            <div class="row mt16 mb16">
+                                <field name="notification_email_ids" />
+                            </div>
+                        </div>
+                    </div>
                 </xpath>
             </field>
         </record>
