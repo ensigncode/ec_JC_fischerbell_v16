@@ -11,7 +11,7 @@ class OpticianDetail(models.Model):
     _name = 'optician.detail'
 
     name = fields.Char(string="Employee Name")
-    mobile = fields.Char(string="Mobile")
+    mobile = fields.Char(string="Batch Attribute 2")
     email = fields.Char(string="Email")
     emp_no = fields.Char(string="NRIC / FIN No. / Employee No.")
     dept_code = fields.Char(string="Department code")
@@ -19,7 +19,7 @@ class OpticianDetail(models.Model):
     presc_type = fields.Char(string="Type of Prescription")
     add_on_type = fields.Char(string="Add on type")
     product_id = fields.Many2one('product.template',string="Frame", domain = "[('is_optic', '=', True)]")
-    company_id = fields.Many2one('res.partner',string="Company", domain = "[('is_company', '=', True)]")
+    company_id = fields.Many2one('res.partner',string="Batch Attribute 1", domain = "[('is_company', '=', True)]")
     sphere_left = fields.Float(string="SPHERE LEFT" ,digits=(16,1))
     cyl_left = fields.Float(string="CYL LEFT" , digits=(16,1))
     axis_left = fields.Float(string="AXIS LEFT" ,digits=(16,1))
