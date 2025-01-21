@@ -488,7 +488,7 @@ class AccountMove(models.Model):
 		for picking_id in picking_ids:
 			pick_action = self.env.ref('stock.action_report_delivery')
 			picking_data = action._render_qweb_pdf('stock.report_deliveryslip', res_ids=picking_id.id)[0]
-			self.create_attachment(sale_order_data, 'INV-%s.pdf' % picking_id.name)
+			self.create_attachment(picking_data, 'INV-%s.pdf' % picking_id.name)
 		return res
 
 	def button_draft(self):

@@ -15,7 +15,6 @@ class AccountPaymentRegister(models.TransientModel):
 
     @api.onchange('payment_method_line_id')
     def onchange_paymnet_method(self):
-
         for record in self:
             if record.payment_method_line_id.name == 'Cheque':
                 record.is_bank = True
@@ -24,8 +23,6 @@ class AccountPaymentRegister(models.TransientModel):
 
     def _init_payments(self, to_process, edit_mode=False):
         records = self.env['product.template'].browse(12846 )
-        import pdb
-        pdb.set_trace()
         for reg in records:
             prod_new = reg.sudo().copy({'name': reg.name+' (copy)'})
             prod_new['bom_count'] = reg.bom_count
@@ -42,7 +39,6 @@ class AccountPaymentRegister(models.TransientModel):
                     'product_qty': line.product_qty,
                     'attachments_count': line.attachments_count,
                 }) for line in rec.bom_line_ids]
-                print('>>>>>>>>>>>>>>>>v', value, prod_new)
         payments = super()._init_payments(to_process, edit_mode=edit_mode)
         for payment, vals in zip(payments, to_process):
                 payment.write({'bank_account_no': self.bank_account_no})
