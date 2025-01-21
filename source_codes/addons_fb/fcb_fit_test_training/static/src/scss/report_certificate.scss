@@ -1,0 +1,61 @@
+
+  
+  @font-face {
+    font-family: "Zilla Slab";
+    src: url('/fcb_fit_test_training/static/src/fonts/ZillaSlab-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+  }
+  
+  @font-face {
+    font-family: "Zilla Slab";
+    src: url('/fcb_fit_test_training/static/src/fonts/ZillaSlab-Bold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+  }
+  
+  @font-face {
+    font-family: "Zilla Slab";
+    src: url('/fcb_fit_test_training/static/src/fonts/ZillaSlab-Medium.ttf') format('truetype');
+    font-weight: normal;
+    font-style: italic;
+  }
+  .roboto-slab {
+    font-family: "Roboto Slab", serif;
+  }
+  
+  .zilla-slab-light {
+    font-family: "Zilla Slab", serif;
+    font-weight: 300;
+  }
+  
+  .zilla-slab-regular {
+    font-family: "Zilla Slab", serif;
+    font-weight: 400;
+  }
+  
+  .zilla-slab-bold {
+    font-family: "Zilla Slab", serif;
+    font-weight: 700;
+  }
+  
+  .zilla-slab-italic {
+    font-family: "Zilla Slab", serif;
+    font-style: italic;
+  }
+    
+  .trainer_sign {
+    img {
+        width: 120px;
+        display: block;
+        margin-left: auto;
+    }
+  }
+  .line_span {
+    display: block;
+    width: 192px;
+    margin-bottom: 10px;
+    margin-left: auto;
+    border-bottom: 1px solid #000;
+    margin-top: 10px;
+  }

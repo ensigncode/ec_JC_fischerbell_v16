@@ -30,6 +30,9 @@
             'web.assets_frontend': [
                 'fcb_fit_test_training/static/src/js/onchange_ref.js',
             ],
+            'web.report_assets_common': [
+                'fcb_fit_test_training/static/src/scss/report_certificate.scss',
+            ],
         },
     'auto_install': False,
     'installable': True,

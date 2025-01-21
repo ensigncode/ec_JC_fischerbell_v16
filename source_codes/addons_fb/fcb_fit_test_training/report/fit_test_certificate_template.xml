@@ -25,12 +25,12 @@
 												<p style="font-size: 40px;color:grey;">Spill Training Certificate</p>
 											</t>
 											<t t-if="doc.training_types == 'fit_test'">
-												<p style="font-size: 40px;color:grey;">Fit Test Certificate</p>
+												<p class="zilla-slab-regular" style="font-size: 40px;">Fit Test Certificate</p>
 											</t>
 											<div style="height:470px;">
 											<p style="font-size: 20px;">This is to certify that
-												<br/>
-												<strong style="font-size: 25px;">
+												
+												<strong>
 													<t t-if="o.trainee">
 														<span t-field="o.trainee"/>
 													</t>
@@ -38,11 +38,10 @@
 											</p>
 											<p style="font-size: 20px;">IC /FIN No. /Employee No:
 												<t t-if="o.passport_no">
-													<span t-field="o.passport_no"/>
+													<strong t-field="o.passport_no"/>
 												</t>
 											</p>
 											<p style="font-size: 20px;">From
-												<br/>
 												<strong>
 													<t t-if="doc.company">
 														<span t-field="doc.company"/>
@@ -50,7 +49,7 @@
 												</strong>
 											</p>
 											<t t-if="doc.training_types == 'fit_test'">
-												<p style="font-size: 20px;">Passed the Training
+												<p style="font-size: 20px;">Passed the Qualitative Fit Test Training
 													<br/>Type of Training:
 													<t t-if="o.product_id">
 														<span t-field="o.product_id"/>
@@ -69,7 +68,7 @@
 													<br/>
 													<span>Tested On:
 														<t t-if="o.tested_on">
-															<span t-field="o.tested_on" t-options='{"widget": "date","format": "dd-MM-yyyy"}'/>
+															<span t-field="o.tested_on" t-options='{"widget": "date","format": "dd MMMM yyyy"}'/>
 														</t>
 													</span>
 												</p>
@@ -95,7 +94,9 @@
 													</strong>
 												</span>
 											</p>
-											<span t-field="doc.trainer_sign" t-options='{"widget": "image"}' style="display: block; width: 200px; margin-left: auto; margin-right: 0;border-bottom:1px solid;"/>
+											<span class="trainer_sign" t-field="doc.trainer_sign" t-options='{"widget": "image"}' style=""/>
+											<span class="line_span"> </span>
+											<!-- <span t-field="doc.trainer_sign" t-options='{"widget": "image"}' style="display: block; width: 200px; margin-left: auto; margin-right: 0;border-bottom:1px solid;"/> -->
 											<strong>
 												<p style="font-size: 15px; text-align: right;"><t t-if="doc.name">
 													<span t-field="doc.name"/>
@@ -106,7 +107,7 @@
 													Limited
 												</p>
 											</strong>
-											<p style="font-size: 10px;text-align: center;">This Certificate is valid for
+											<p style="font-size: 13px;text-align: center;">This Certificate is valid for
 												one (1) year from the date issued
 											</p>
 											</div>
@@ -118,7 +119,7 @@
 							</t>
 							<t t-else="">
 								<div class="col-6">
-									<strong style="font-size: 40px;">Fit Test Certificate</strong>
+									<strong class="zilla-slab-regular" style="font-size: 40px;">Fit Test Certificate</strong>
 									<br/>
 									<br/>
 									<br/>
@@ -173,32 +174,33 @@
 												<p style="font-size: 40px;color:grey;">Spill Training Certificate</p>
 											</t>
 											<t t-if="o.fit_id.training_types == 'fit_test'">
-												<p style="font-size: 40px;color:grey;">Fit Test Certificate</p>
+												<p class="zilla-slab-regular" style="font-size: 40px;">Fit Test Certificate</p>
 											</t>
 											<div style="height:470px;">
 											<p style="font-size: 20px;">This is to certify that
-												<br/>
-												<strong style="font-size: 25px;">
+												<!-- <br/> -->
+												<strong>
 													<t t-if="o.trainee">
 														<span t-field="o.trainee"/>
 													</t>
 												</strong>
 											</p>
+											<br/>
 											<p style="font-size: 20px;">IC /FIN No. /Employee No:
 												<t t-if="o.passport_no">
-													<span t-field="o.passport_no"/>
+													<strong t-field="o.passport_no"/>
 												</t>
 											</p>
 											<p style="font-size: 20px;">From
-												<br/>
+												<!-- <br/> -->
 												<strong>
 													<t t-if="o.fit_id.company">
-														<span t-field="o.fit_id.company"/>
+														<strong t-field="o.fit_id.company"/>
 													</t>
 												</strong>
 											</p>
 											<t t-if="o.fit_id.training_types == 'fit_test'">
-												<p style="font-size: 20px;">Passed the Training
+												<p style="font-size: 20px;">Passed the Qualitative Fit Test Training
 													<br/>Type of Training:
 													<t t-if="o.product_id">
 														<span t-field="o.product_id"/>
@@ -214,10 +216,10 @@
 																<t t-else="">Fail
 																</t>
 															</b>
-													<br/>
+													<br/><br/>
 													<span>Tested On:
 														<t t-if="o.tested_on">
-															<span t-field="o.tested_on" t-options='{"widget": "date","format": "dd-MM-yyyy"}'/>
+															<span t-field="o.tested_on" t-options='{"widget": "date","format": "dd MMMM yyyy"}'/>
 														</t>
 													</span>
 												</p>
@@ -243,7 +245,8 @@
 													</strong>
 												</span>
 											</p>
-											<span t-field="o.fit_id.trainer_sign" t-options='{"widget": "image"}' style="display: block; width: 100px; text-align: right; margin-left: auto; border-bottom: 1px solid;"/>
+											<span class="trainer_sign" t-field="o.fit_id.trainer_sign" t-options='{"widget": "image"}' style=""/>
+											<span class="line_span"> </span>
 											<strong>
 												<p style="font-size: 15px; text-align: right;"><t t-if="o.fit_id.name">
 													<span t-field="o.fit_id.name"/>
@@ -254,7 +257,7 @@
 													Limited
 												</p>
 											</strong>
-											<p style="font-size: 10px;text-align: center;">This Certificate is valid for
+											<p style="font-size: 13px;text-align: center;">This Certificate is valid for
 												one (1) year from the date issued
 											</p>
 											</div>
@@ -264,7 +267,7 @@
 								</t>
 							<t t-else="">
 								<div class="col-6">
-									<strong style="font-size: 40px;">Fit Test Certificate</strong>
+									<strong class="zilla-slab-regular" style="font-size: 40px;">Fit Test Certificate</strong>
 									<br/>
 									<br/>
 									<br/>
