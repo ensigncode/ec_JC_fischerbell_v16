@@ -7,6 +7,9 @@ from odoo import api,fields, models
 class AccountPayment(models.Model):
 	_inherit = "account.payment"
 
+	bank_account_no = fields.Char('Bank No')
+	
+
 	def action_post(self):
 		res = super(AccountPayment, self).action_post()
 		for payment in self:

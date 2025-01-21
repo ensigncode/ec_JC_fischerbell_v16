@@ -102,6 +102,8 @@
         'views/calendar_views.xml',
         'views/mrp_bom_views.xml',
         'views/helpdesk_ticket_view.xml',
+        'views/account_payment.xml',
+        'wizard/account_register_payment.xml',
 
         # 'wizard/fischerbell_wizard_report_delivery_with_training.xml',
     ],
