@@ -191,5 +191,8 @@
                 <p>Thank you!</p>
             </field>
         </record>
+        <record id="term_condition" model="optician.term.condition">
+              <field name="name">Tems Condition</field>
+        </record>
     </data>
 </odoo>

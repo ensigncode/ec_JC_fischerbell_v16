@@ -38,7 +38,7 @@ class OpticianDetail(models.Model):
     add_right = fields.Float(string='ADD RIGHT' ,digits=(16,1))
     add_left = fields.Float(string="ADD LEFT" ,digits=(16,1))
     pd_right = fields.Char(string='PD RIGHT' ,digits=(16,1))
-    pd_left = fields.Char(string='PD RIGHT' ,digits=(16,1))
+    pd_left = fields.Char(string='PD Left' ,digits=(16,1))
     pescription = fields.Many2one('prescription.type', string="Prescription")
     outlet_id = fields.Many2one('outlet.detail', 'Outlet')
 

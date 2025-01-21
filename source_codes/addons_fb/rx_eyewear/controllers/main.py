@@ -1,11 +1,12 @@
 from odoo import http ,_
-from odoo.http import request
+from odoo.http import request, content_disposition
 from odoo.addons.resource.models.resource import float_to_time, HOURS_PER_DAY
 
 from datetime import datetime, date, timedelta, time
 from pytz import timezone, UTC
 from odoo.tools import float_compare, format_date
 
+import base64
 
 lens_type = {
 	'blue_ray':'BLUE RAY​',
@@ -101,3 +102,18 @@ class OpticianPortalController(http.Controller):
 							  {'optic_product_ids': optic_product_ids, 'outlet_ids': outlet_ids,
 							   'lens_types': lens_types, 'prescription_types': prescription_types,
 							   'disable_form': disable_form})
+
+
+
+class Binary(http.Controller):
+
+    @http.route('/web/binary/download_document/rx_eyewear/<model("eyewear.import.export.data"):order_line>', type='http', auth="user")
+    def download_document(self, order_line, **kw):
+        data = order_line.print_report_excel_data()
+        filecontent = base64.b64decode(data)
+        if not filecontent:
+            return request.not_found()
+        else:
+            return request.make_response(filecontent,
+                                         [('Content-Type', 'application/octet-stream'),
+                                          ('Content-Disposition', content_disposition('Eyewear_template.xlsx'))])

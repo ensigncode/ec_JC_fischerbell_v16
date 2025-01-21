@@ -8,4 +8,5 @@ from . import product_template
 from . import sale_order
 from . import purchase_order
 from . import outlet_detail
+from . import term_condition
 

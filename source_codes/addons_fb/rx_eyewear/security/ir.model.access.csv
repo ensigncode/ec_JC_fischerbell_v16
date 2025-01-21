@@ -4,3 +4,5 @@ rx_eyewear.access_outlet_detail,access_outlet_detail,rx_eyewear.model_outlet_det
 access_optician_detail_manager,optician_detail_manager,model_optician_detail,,1,1,1,1
 rx_eyewear.access_lens_type,access_lens_type,rx_eyewear.model_lens_type,base.group_user,1,1,1,1
 rx_eyewear.access_prescription_type,access_prescription_type,rx_eyewear.model_prescription_type,base.group_user,1,1,1,1
+rx_eyewear.access_optician_term_condition,access_optician_term_condition,rx_eyewear.model_optician_term_condition,base.group_user,1,1,1,1
+rx_eyewear.access_eyewear_import_export_data,access_eyewear_import_export_data,rx_eyewear.model_eyewear_import_export_data,base.group_user,1,1,1,1
