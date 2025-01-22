@@ -63,6 +63,7 @@ class Picking(models.Model):
 	cancel_request_by = fields.Many2one("res.users",string="Cancel Request By")
 	cancellation_reason = fields.Text(string="Cancellation Reason")
 	past_state = fields.Char("Past State")
+	is_exceed_picking = fields.Boolean()
 
 	def action_cancel(self):
 		for picking in self:
@@ -215,12 +216,12 @@ class Picking(models.Model):
 	# 				total_qty += order.qty_done
 
 	# 		total_option.append({
-    #             'product_id': line,
+	#             'product_id': line,
 	# 			'default_code':line,
-    #             'qty_done' : total_qty,
+	#             'qty_done' : total_qty,
 	# 			'product_uom_id': line,
-                
-    #         })
+				
+	#         })
 	# 		total_qty = 0
 	# 	return total_option
 	
@@ -262,9 +263,9 @@ class Picking(models.Model):
 					
 	# 		for product_name, quantity in product_quantity.items():
 	# 			move_lines.append({
-    #                 'product_name': product_name,
-    #                 'total_quantity': quantity,
-    #             })
+	#                 'product_name': product_name,
+	#                 'total_quantity': quantity,
+	#             })
 	# 		print(move_lines, 'moveeeeeeeeeeeeeeeeeeeeeeeeeeeeee==================')
 
 	
@@ -597,4 +598,23 @@ class Picking(models.Model):
 			template = self.env.ref('fischerbell_custom.email_template_to_customer')
 			email_values = {'email_to': sale_order_ref.partner_id.email}
 			template.sudo().send_mail(sale_order_ref.id, email_values=email_values)
+
+
+	def action_update_quantity(self):
+		line_list = []
+		for move_line in self.move_ids_without_package:
+			line_list.append((0, 0, {
+				'product_id': move_line.product_id.id,
+				'move_qty': move_line.product_uom_qty,
+			}))
+
+		return {
+			'name': 'Move Lines',
+			'type': 'ir.actions.act_window',
+			'res_model': 'stock.move.wizard',
+			'view_mode': 'form',
+			'target': 'new',
+			'context': {
+				'default_move_line_ids': line_list,			},
+		}
 

@@ -5,8 +5,12 @@
 		<field name="model">stock.picking</field>
 		<field name="inherit_id" ref="stock.view_picking_form" />
 		<field name="arch" type="xml">
+		<xpath expr="//header" position="inside">
+            <button name="action_update_quantity" type="object" string="Update Exceed Quantity" class="btn-primary" attrs="{'invisible': ['|', '|',  ('picking_type_code','!=','incoming'), ('state', '!=', 'assigned'), ('is_exceed_picking', '=', True)]}"/>
+        </xpath>
 			 <xpath expr="//field[@name='products_availability']" position="after">
 				 <field name="next_delivery_date"/>
+				 <field name="is_exceed_picking" invisible="1"/>
 			</xpath>
 			<xpath expr="//notebook//page[@name='note']" position="attributes">
 				<attribute name="string">Special Remark</attribute>

@@ -36,6 +36,9 @@ class SaleOrder(models.Model):
     _inherit = "sale.order"
 
     # attn_to = fields.Char('Attn To', related="partner_id.attn_to")
+    origin = fields.Char(
+        string="Source Document(PO REF)",
+        help="Reference of the document that generated this sales order request")
     type = fields.Selection([
         ('sale', 'Sale Order'),
         ('loan', 'Loan Order'),

@@ -104,6 +104,7 @@
         'views/helpdesk_ticket_view.xml',
         'views/account_payment.xml',
         'wizard/account_register_payment.xml',
+        'wizard/update_po_quantity.xml',
 
         # 'wizard/fischerbell_wizard_report_delivery_with_training.xml',
     ],
