@@ -190,6 +190,55 @@
             <field name="lang">{{ object.partner_id.lang }}</field>
         </record>
 
+        <record id="email_template_notify_account_manager" model="mail.template">
+            <field name="name">Notify Account Manager</field>
+            <field name="model_id" ref="purchase.model_purchase_order"/>
+            <field name="subject">{{ object.company_id.name }} Purchase Order: {{ object.name or 'n/a' }}</field>
+            <field name="partner_to">{{ object.partner_id.id }}</field>
+            <field name="description">Notify Account Manager</field>
+            <field name="body_html" type="html">
+                <div style="font-family: Arial, sans-serif; font-size: 14px;">
+                    <p>Dear <strong><t t-out="object.partner_id.name or ''">Vendor Name</t></strong>,</p>
+                    <p>We are pleased to share with you the details of a new purchase order <strong><t t-out="object.name or ''"></t></strong>.</p>
+                    <p><strong>Order Details:</strong></p>
+                    <ul>
+                        <li><strong>Purchase Order Reference:</strong> <t t-out="object.name or ''">PO12345</t></li>
+                        <li><strong>Total Amount:</strong> <t t-out="format_amount(object.amount_total, object.currency_id) or ''"></t></li>
+                        <li><strong>Vendor Reference:</strong> <t t-out="object.partner_ref or 'N/A'">REF-ABC</t></li>
+                        <li><strong>Order Date:</strong> <t t-out="format_date(object.date_order) or ''">01/01/2025</t></li>
+                        <li><strong>Scheduled Receipt Date:</strong> <t t-out="format_date(object.date_planned) or 'N/A'">15/01/2025</t></li>
+                    </ul>
+                    <p>Please find the attached purchase order for your reference. We kindly request you to review and acknowledge the receipt of this order at your earliest convenience.</p>
+                    <t t-if="not is_html_empty(object.user_id.signature)">
+                        <p>Thank you for your cooperation.</p>
+                        <p><strong><t t-out="object.user_id.name or ''">Mitchell Admin</t></strong></p>
+                        <p><t t-out="object.user_id.signature or ''">Signature</t></p>
+                    </t>
+                    <p>Best regards,</p>
+                    <p><strong><t t-out="object.company_id.name or ''">Your Company</t></strong></p>
+                </div>
+            </field>
+            <field name="report_template" ref="purchase.action_report_purchase_order"/>
+            <field name="report_name">PO_{{ (object.name or '').replace('/','_') }}</field>
+            <field name="lang">{{ object.partner_id.lang }}</field>
+            <field name="auto_delete" eval="True"/>
+        </record>
+
+        <record id="email_template_notify_buyer" model="mail.template">
+            <field name="name">Notify Buyer on Payment</field>
+            <field name="model_id" ref="purchase.model_purchase_order"/>
+            <field name="subject">Payment Completed for {{ object.name or 'n/a' }}</field>
+            <field name="email_from">${(object.company_id.email or 'info@yourcompany.com')|safe}</field>
+            <field name="email_to">{{ (object.partner_id.email_formatted or object.email) }}</field>
+            <field name="body_html" type="html">
+                <div style="font-family: Arial, sans-serif; font-size: 14px;">
+                    <p>Hello,</p>
+                    <p>The payment for Purchase Order <t t-out="object.name or ''" /> has been completed. Please follow up if needed.</p>
+                    <p>Thank you.</p>
+                </div>
+            </field>
+        </record>
+
 
     </data>
 </odoo>

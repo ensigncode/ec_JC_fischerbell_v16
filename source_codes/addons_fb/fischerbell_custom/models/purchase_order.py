@@ -174,7 +174,18 @@ class PurchaseOrder(models.Model):
                         modified_subject = f"{company_name} ({reference}) - {partner_name}"
                         email_template.subject = modified_subject
         return res
-
+    
+    @api.model
+    def payment_done_notify_buyer(self):
+        """Send an email to the buyer when payment is done."""
+        email_values = {}
+        for purchase_order in self :
+            template = self.env.ref('fischerbell_custom.email_template_notify_buyer', raise_if_not_found=False)
+            email_values = {
+                'email_to': purchase_order.partner_id.email if purchase_order.partner_id.email else self.env.user.email ,
+            }
+            if template and purchase_order.partner_id:
+                template.send_mail(purchase_order.id, email_values=email_values, force_send=True)
 
     def create_manager_approval(self):
         for record in self:

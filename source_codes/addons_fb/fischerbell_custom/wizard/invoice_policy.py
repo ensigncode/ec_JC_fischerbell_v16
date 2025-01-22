@@ -36,6 +36,48 @@ class InvoicePolicyWizard(models.TransientModel):
         # Send the email using the template
         email_template.send_mail(purchase_id.id, force_send=True)
 
+    def _notify_account_managers(self):
+        """Send email to account managers when the PO is confirmed."""
+        # Get the current purchase order
+        purchase_id = self.env["purchase.order"].browse(self._context.get("active_id"))
+        if not purchase_id:
+            return
+
+        # Fetch the account manager group
+        account_manager_group = self.env.ref('account.group_account_manager', raise_if_not_found=False)
+        if not account_manager_group or not account_manager_group.users:
+            return
+
+        # Prepare the list of email addresses
+        email_list = [user.partner_id.email for user in account_manager_group.users if user.partner_id.email]
+
+        # Ensure there are valid email addresses
+        if not email_list:
+            return
+
+        # Prepare the email template
+        template = self.env.ref('fischerbell_custom.email_template_notify_account_manager', raise_if_not_found=False)
+        if template:
+            # Update the email values to include the email addresses
+            email_values = {
+                'email_to': ",".join(email_list),
+            }
+            # Send the email
+            template.send_mail(purchase_id.id, email_values=email_values, force_send=True)
+
+    
+    def _create_payment_activity(self):
+        """Create a mail activity for payment process."""
+        purchase_id = self.env["purchase.order"].browse(self._context.get("active_id"))
+        activity_type = self.env.ref('mail.mail_activity_data_todo', raise_if_not_found=False)
+        if activity_type:
+            purchase_id.activity_schedule(
+                activity_type_id=activity_type.id,
+                summary='Process Payment for this Purchase Order',
+                note='Please process payment for the Purchase Order: %s' % purchase_id.name,
+                user_id=self.env.user.id  # Assign to current user or change as needed
+            )
+    
 
     def btn_confirm(self):
         product_list = []
@@ -49,6 +91,8 @@ class InvoicePolicyWizard(models.TransientModel):
                 })
             purchase_id.button_confirm()
             email_template = self.env.ref('purchase.email_template_edi_purchase_done', raise_if_not_found=False)
+            self._notify_account_managers()
+            self._create_payment_activity()
             if email_template:
                 email_template.send_mail(purchase_id.id, force_send=True)
             if purchase_id.picking_ids:
