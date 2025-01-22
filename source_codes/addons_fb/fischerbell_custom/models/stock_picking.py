@@ -406,6 +406,7 @@ class Picking(models.Model):
 		for record in self : 
 			if record.purchase_id and record.state == 'done' : 
 				record.purchase_id.action_create_invoice() 
+				record.purchase_id.button_done()
 				for move_id in record.move_ids_without_package:
 					if move_id.lot_ids.ids:
 						lot_ids = self.env['stock.lot'].search([('id', 'in', move_id.lot_ids.ids)])
