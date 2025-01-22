@@ -8,6 +8,7 @@ from datetime import datetime, date
 from dateutil.relativedelta import relativedelta
 from PyPDF2 import PdfFileReader, PdfFileWriter
 from io import BytesIO
+from datetime import timedelta
 
 class Picking(models.Model):
 	_inherit = "stock.picking"
@@ -64,6 +65,8 @@ class Picking(models.Model):
 	cancellation_reason = fields.Text(string="Cancellation Reason")
 	past_state = fields.Char("Past State")
 	is_exceed_picking = fields.Boolean()
+	assigned_date = fields.Datetime(string="Assigned Date", readonly=True, copy=False)
+	
 
 	def action_cancel(self):
 		for picking in self:
@@ -112,11 +115,6 @@ class Picking(models.Model):
 				for line in obj.move_ids_without_package:
 					if line.purchase_line_id:
 						line.purchase_line_id.estimated_delivery_date = obj.scheduled_date
-
-	# def write(self, vals):
-	# 	res = super(Picking, self).write(vals)
-	#
-	# 	return res
 
 
 	@api.depends('move_ids.state', 'move_ids.date', 'move_type')
@@ -617,4 +615,28 @@ class Picking(models.Model):
 			'context': {
 				'default_move_line_ids': line_list,			},
 		}
+
+
+	@api.depends('move_type', 'immediate_transfer', 'move_ids.state', 'move_ids.picking_id')
+	def _compute_state(self):
+		super(Picking, self)._compute_state()  # Call the original compute method
+		for picking in self:
+			if picking.state == 'assigned' and not picking.assigned_date:
+				picking.assigned_date = fields.Datetime.now()
+
+	def cron_alert_picking_assign_date(self):
+		days_limit = self.env.company.picking_notification_days
+		cutoff_date = fields.Datetime.now() - timedelta(days=days_limit)
+		picking_ids = self.search([('state', '=', 'assigned'), ('assigned_date', '<=', cutoff_date)])
+		picking_ids = self.browse(924)
+		template_id = self.env.ref('fischerbell_custom.email_template_picking_assigned_date', raise_if_not_found=True)
+		stock_group = self.env.ref('stock.group_stock_manager', raise_if_not_found=False)
+		stock_users = stock_group.users if stock_group else self.env['res.users']
+		stock_emails = ", ".join([user.email for user in stock_users if user.email])
+		if template_id and stock_emails:
+			for picking in picking_ids:
+				if picking.assigned_date:
+					date_diff = fields.Datetime.now() - picking.assigned_date
+					template_id.sudo().with_context(days=date_diff.days).send_mail(picking.id, email_values={'email_from': self.env.user.email, 'email_to': stock_emails})
+	
 

@@ -17,6 +17,7 @@
                 'fcb_accounting'],
     'data': [
         'data/fischerbell_consignment_note_send_email_templates.xml',
+        'data/stock_mail_template.xml',
         'data/ir_server_actions.xml',
         'data/ir_crons.xml',
         'data/ir_sequence.xml',

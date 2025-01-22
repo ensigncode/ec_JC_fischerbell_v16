@@ -92,6 +92,16 @@
             <field name="interval_type">days</field>
             <field name="active" eval="True"></field>
         </record>
+
+        <record id="alert_picking_assigned_dates_cron" model="ir.cron">
+            <field name="name">Alert for Picking Assigned date</field>
+            <field name="model_id" ref="stock.model_stock_picking"/>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+            <field name="state">code</field>
+            <field name="code">model.cron_alert_picking_assign_date()</field>
+        </record>
         
     </data>
 </odoo>

@@ -16,6 +16,12 @@ class ResConfigSettings(models.TransientModel):
         string="Notification Emails",
         help="Comma-separated list of email addresses to notify when a vendor bill is validated."
     )
+    picking_notification_days = fields.Integer(
+        string="Picking Notification Days",
+        related="company_id.picking_notification_days",
+        readonly=False,
+        help="Number of days after which a notification email will be sent for pickings in 'Ready' state."
+    )
 
 
     def set_values(self):

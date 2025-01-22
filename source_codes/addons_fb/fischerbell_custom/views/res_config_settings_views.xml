@@ -8,17 +8,16 @@
             <field name="arch" type="xml">
                 <xpath expr="//div[@name='purchase_setting_container']" position="inside">
                     <div class="col-12 col-lg-6 o_setting_box" id="freight_charge">
-                        <div class="o_setting_left_pane"/>
+                        <div class="o_setting_left_pane" />
                         <div class="o_setting_right_pane">
                             <span class="o_form_label">Product</span>
                             <div class="row mt16 mb16">
-                                <field name="freight_charge_id" class="text-center "/>
+                                <field name="freight_charge_id" class="text-center " />
                             </div>
                         </div>
                     </div>
-
-                     <div class="col-12 col-lg-6 o_setting_box" id="freight_charge">
-                        <div class="o_setting_left_pane"/>
+                    <div class="col-12 col-lg-6 o_setting_box" id="freight_charge">
+                        <div class="o_setting_left_pane" />
                         <div class="o_setting_right_pane">
                             <span class="o_form_label">Vendor Bill Email Notification</span>
                             <div class="text-muted">Comma-separated list of email addresses to notify when a vendor bill is validated.</div>
@@ -30,7 +29,6 @@
                 </xpath>
             </field>
         </record>
-
         <record id="fischerbell_res_config_settings_view_form" model="ir.ui.view">
             <field name="name">fischerbell.res.config.settings.view.form</field>
             <field name="model">res.config.settings</field>
@@ -38,12 +36,12 @@
             <field name="arch" type="xml">
                 <xpath expr="//div[@id='proforma_configuration']" position="after">
                     <div class="col-12 col-lg-6 o_setting_box" id="proforma_configuration">
-                        <div class="o_setting_left_pane"/>
+                        <div class="o_setting_left_pane" />
                         <div class="o_setting_right_pane">
                             <span class="o_form_label">Return Time (Weeks)</span>
                             <div class="row mt16 mb16">
                                 <div class="content-group col-lg-3">
-                                    <field name="return_time" class="text-center "/>
+                                    <field name="return_time" class="text-center " />
                                 </div>
                             </div>
                         </div>
@@ -54,7 +52,7 @@
         <record id="view_res_config_settings_inherit" model="ir.ui.view">
             <field name="name">res.config.settings.inherit.view.form</field>
             <field name="model">res.config.settings</field>
-            <field name="inherit_id" ref="sale.res_config_settings_view_form"/>
+            <field name="inherit_id" ref="sale.res_config_settings_view_form" />
             <field name="arch" type="xml">
                 <xpath expr="//div[hasclass('settings')]" position="inside">
                     <div class="app_settings_block" data-string="Sales">
@@ -62,16 +60,38 @@
                         <div class="row mt16 o_settings_container">
                             <div class="col-12 col-lg-6">
                                 <div class="o_setting_left_pane">
-                                    <field name="delivery_lead_time_days"/>
+                                    <field name="delivery_lead_time_days" />
                                 </div>
                                 <div class="o_setting_right_pane">
-                                    <label for="delivery_lead_time_days"/>
+                                    <label for="delivery_lead_time_days" />
                                     <p>Specify the number of days for checking delivery lead time and sending notifications.</p>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </xpath>
+            </field>
+        </record>
+        <record id="res_config_settings_view_form_ip" model="ir.ui.view">
+            <field name="name">res.config.settings.view.form.inherit.stock.account</field>
+            <field name="model">res.config.settings</field>
+            <field name="inherit_id" ref="stock.res_config_settings_view_form" />
+            <field name="arch" type="xml">
+                <div id="production_lot_info" position="after">
+                    <h2>Picking Notification days</h2>
+                    <div class="row mt16 o_settings_container">
+                        <div class="col-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_right_pane">
+                                <div class="content-group" >
+                                    <div class="mt16">
+                                        <label for="picking_notification_days" class="mr8" string="Picking Notification days"/>
+                                        <field name="picking_notification_days"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </field>
         </record>
     </data>
