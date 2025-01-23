@@ -1,9 +1,15 @@
 # -*- coding: utf-8 -*-
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 
-from odoo import api,fields, models
+from odoo import api,fields, models, _
 from odoo.exceptions import UserError, ValidationError
 from datetime import datetime, timedelta, date
+import base64
+from openpyxl import Workbook
+from openpyxl.styles import Border, Side, Alignment, Font
+from io import BytesIO
+import xlrd
+import xlsxwriter
 
 class StockMove(models.Model):
 	_inherit = "stock.move"
@@ -19,7 +25,130 @@ class StockMove(models.Model):
 	expiration_date = fields.Date('expiration date')
 	serial_number = fields.Char('Serial Number')
 	inventory_id = fields.Many2one('stock.inventory')
+	upload_file = fields.Binary(string="Upload File")
+	filename = fields.Char('Filename')
 	
+	def action_download_sample_file(self):
+		wb = Workbook()
+		ws = wb.active
+		ws.title = "Sample"
+		if self.product_id.use_expiration_date:
+			headers = ['Lot/Serial No', 'Manufacturing Date', 'Expiry Date']
+		else:
+			headers = ['Lot/Serial No', 'Manufacturing Date']
+
+		for col, header in enumerate(headers, start=1):
+			ws.cell(row=1, column=col, value=header)
+		
+		fp = BytesIO()
+		wb.save(fp)
+		fp.seek(0)
+		sample_data = fp.read()
+		fp.close()
+		
+		wiz_id = self.env['download.report.wizard'].create({
+			'file': base64.b64encode(sample_data)
+		})
+		return {
+			'type': 'ir.actions.act_url',
+			'url': 'web/content/?model=download.report.wizard&download=true&field=file&id=%s&filename=Sample.xlsx' % wiz_id.id,
+			'target': 'self',
+		}
+
+	def upload_excel_file(self):
+		self.ensure_one()
+
+		if not self.upload_file:
+			raise ValidationError("Please upload a file.")
+
+		file_content = base64.b64decode(self.upload_file)
+
+		workbook = xlrd.open_workbook(file_contents=file_content)
+		sheet = workbook.sheet_by_index(0)
+
+		total_demand = self.product_uom_qty
+		created_lines_count = 0
+
+		for row_idx in range(1, sheet.nrows):
+			if created_lines_count >= total_demand:
+				raise UserError(
+				"The file has extra lots. Only %d are needed. Please adjust it."% total_demand
+			)
+
+			lot_name = sheet.cell(row_idx, 0).value
+			manufacturing_date = sheet.cell(row_idx, 1).value
+			expired_date = False
+			if self.product_id.use_expiration_date:
+				expired_date = sheet.cell(row_idx, 2).value
+
+
+
+			if isinstance(manufacturing_date, (float, int)):
+				manufacturing_date = datetime(1899, 12, 30) + timedelta(days=manufacturing_date)
+				manufacturing_date = manufacturing_date.date()
+			else:
+				manufacturing_date = datetime.strptime(manufacturing_date, '%Y-%m-%d').date()
+
+			if expired_date and isinstance(expired_date, (float, int)):
+				expired_date = datetime(1899, 12, 30) + timedelta(days=expired_date)
+				expired_date = expired_date.date()
+			else:
+				if expired_date:
+					expired_date = datetime.strptime(expired_date, '%Y-%m-%d').date()
+
+
+			company_id = self.env.user.company_id.id
+			print("Company id = ",company_id)
+
+			product_id = self.product_id.id
+			print("Product id",product_id)
+
+
+			lot = self.env['stock.lot'].search([('name', '=', lot_name)])
+			if not lot:
+				print("lot not found", lot)
+				lot = self.env['stock.lot'].create({
+				'name': lot_name,
+				'product_id': product_id,
+				'company_id': company_id,
+				'expiration_date':expired_date,
+				})
+
+			else:
+				raise UserError("A lot with the name '%s' for product '%s' has already been created." % (lot_name, self.product_id.name))
+
+
+			self.env['stock.move.line'].create({
+				'move_id': self.id,
+				'product_id': product_id,
+				'lot_id': lot.id,
+				'qty_done': 1,
+				'manufacturing_date': manufacturing_date,
+				'expiration_date':expired_date,
+				'picking_id':self.picking_id.id,
+			})
+			print("line create")
+			created_lines_count += 1
+
+		if self.picking_type_id.show_reserved:
+			view = self.env.ref('stock.view_stock_move_operations')
+			
+		else:
+			view = self.env.ref('stock.view_stock_move_nosuggest_operations')
+
+		return {
+			'name': _('Detailed Operations'),
+			'type': 'ir.actions.act_window',
+			'view_mode': 'form',
+			'res_model': 'stock.move',
+			'views': [(view.id, 'form')],
+			'view_id': view.id,
+			'target': 'new',
+			'res_id': self.id,
+		}
+
+
+
 	@api.model
 	def create(self, vals):
 		# assigning the sequence for the record

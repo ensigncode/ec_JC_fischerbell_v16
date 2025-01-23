@@ -108,7 +108,7 @@
 		</xpath>
 			<xpath expr="//header//button[@name='button_cancel']" position="attributes">
 				 <attribute name="states"></attribute>
-				 <attribute name="attrs">{'invisible': [('state','in',('draft','done','cancel','purchase'))]}</attribute>
+				 <attribute name="attrs">{'invisible': [('state','in',('draft','done','cancel','purchase','cancel_approval'))]}</attribute>
 			</xpath>
 			<xpath expr="//notebook//page[@name='special_remark']" position="after">
 				<page string="Shipment Tracking">

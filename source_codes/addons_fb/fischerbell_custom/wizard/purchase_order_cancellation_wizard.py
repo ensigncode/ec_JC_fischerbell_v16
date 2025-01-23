@@ -15,9 +15,7 @@ class PurchaseOrderCancellationWizard(models.TransientModel):
             raise UserError("You must provide a reason for cancellation.")
         if self.purchase_order_id :
             self.purchase_order_id.write({
-                'past_state' : self.purchase_order_id.state
-            })
-            self.purchase_order_id.write({
+                    'past_state' : self.purchase_order_id.state,
                     'state': 'cancel_approval',
                     'cancel_request_by': self.env.user.id,
                     'cancellation_reason' : self.reason,
