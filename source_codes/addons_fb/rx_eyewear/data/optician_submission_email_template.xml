@@ -51,14 +51,14 @@
                             <t t-out="object.dept_code" />
                         </td>
                     </tr>
-                    <tr>
+                    <!-- <tr>
                         <td>
                             <strong>Prescription Type:</strong>
                         </td>
                         <td>
                             <t t-out="object.presc_type" />
                         </td>
-                    </tr>
+                    </tr> -->
                     <tr>
                         <td>
                             <strong>Add-On Type:</strong>

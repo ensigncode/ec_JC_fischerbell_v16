@@ -62,7 +62,7 @@ class OpticianPortalController(http.Controller):
 				'emp_no' : kw.get('emp_no') if kw.get('emp_no') else '',
 				'dept_code' : kw.get('dept_code') if kw.get('dept_code') else '',
 				'lens_type' : int(kw.get('lens_type')) if kw.get('lens_type') else '',
-				'presc_type' : kw.get('presc_type') if kw.get('presc_type') else '',
+				# 'presc_type' : kw.get('presc_type') if kw.get('presc_type') else '',
 				'add_on_type' : lens_type.get(kw.get('add_on_type'),'') if kw.get('add_on_type') else '',
 				'product_id' : eval(kw.get('product_id', '')),
     			'company_id' : company_id.id if company_id else False,
