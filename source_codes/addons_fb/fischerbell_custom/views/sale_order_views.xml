@@ -6,7 +6,7 @@
         <field name="inherit_id" ref="sale.view_order_form"/>
         <field name="priority">17</field>
         <field name="arch" type="xml">
-        	<xpath expr="//div[@class='alert alert-danger mb-0' and @role='alert']" position="replace">
+        <xpath expr="//div[@class='alert alert-danger mb-0' and @role='alert']" position="replace">
                 <div class="alert alert-danger mb-0" role="alert"
                      attrs="{'invisible': [('partner_credit_warning', '=', '')]}">
                     <b class="text-danger"><field name="partner_credit_warning"/></b>
@@ -253,21 +253,32 @@
             </xpath>
             <xpath expr="//page[@name='optional_products']//tree//field[@name='product_id']" position="before">
                 <field name="customer_sku" />
+                <field name="product_detail_sheet_url" optional="hide" />
+                <field name="child_id" optional="hide" />
+                <field name="product_template_id" optional="hide" />
             </xpath>
             <xpath expr="//page[@name='optional_products']//tree//field[@name='product_id']" position="after">
                 <field name="product_code" />
+                <field name="bp_code" optional="hide" />
             </xpath>
             <xpath expr="//page[@name='optional_products']//tree//field[@name='name']" position="after">
                 <field name="terms_and_condition_ids" />
+                <field name="pricing_id" optional="hide" />
+                <field name="route_id" optional="hide" />
+            </xpath>
+            <xpath expr="//page[@name='optional_products']//tree//field[@name='uom_id']" position="after">
+                <field name="lead_time_stock" optional="hide" />
             </xpath>
             <xpath expr="//page[@name='optional_products']//tree//field[@name='price_unit']" position="after">
                 <field name="company_id" invisible="1" />
                 <field name="last_price" />
+                <field name="last_order_date" optional="hide" />
                 <field name="tax_id" />
             </xpath>
             <xpath expr="//page[@name='optional_products']//tree//field[@name='discount']" position="after">
                 <field name="price_subtotal" />
                 <field name="approval_state" />
+                <field name="task_id" optional="hide" />
             </xpath>
         </field>
     </record>

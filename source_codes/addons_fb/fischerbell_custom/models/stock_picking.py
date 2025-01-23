@@ -349,6 +349,16 @@ class Picking(models.Model):
 		for picking in self:
 			if picking.picking_type_code == 'outgoing' and len(picking.upload_images) == 0:
 				raise ValidationError("Please Upload image after Validate Order!")
+			if picking.picking_type_id.code == 'outgoing':
+				template = self.env.ref('fischerbell_custom.email_template_delivery_confirmation', raise_if_not_found=False)
+				if template and picking.partner_id.email:
+					attachment_ids = [(4, attachment.id) for attachment in picking.upload_images]
+
+					template.send_mail(picking.id, force_send=True,
+						email_values = {
+                			'attachment_ids': attachment_ids
+						}
+					)
 			if not picking.enough_stock and picking.sale_id.delivery_option != 'partial_delivery':
 								no_stock_line_ids = any(line.product_uom_qty > line.product_template_id.qty_available for line in picking.sale_id.order_line)
 								if no_stock_line_ids:

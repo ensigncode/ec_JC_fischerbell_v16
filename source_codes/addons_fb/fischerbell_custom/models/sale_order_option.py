@@ -78,9 +78,81 @@ class SaleOrderOption(models.Model):
         compute='_compute_product_uom_qty',
         digits='Product Unit of Measure', default=1.0,
         store=True, readonly=False, required=True, precompute=True)
+    product_detail_sheet = fields.Many2one('ir.attachment')
+    product_detail_sheet_url = fields.Char('Sheet Url',compute="_compute_sheet_url")
+    child_id = fields.Many2one("res.partner",string="Employee id")
+    child_name = fields.Char("Employee name")
+    product_template_id = fields.Many2one(
+        string="Product Template",
+        comodel_name='product.template',
+        compute='_compute_product_template_id',
+        readonly=False,
+        search='_search_product_template_id',
+        # previously related='product_id.product_tmpl_id'
+        # not anymore since the field must be considered editable for product configurator logic
+        # without modifying the related product_id when updated.
+        domain=[('sale_ok', '=', True)])
+    bp_code = fields.Char('BP Code')
+    pricing_id = fields.Many2one('product.pricing',
+            compute='_compute_pricing', store=True, precompute=True)
+    route_id = fields.Many2one('stock.route', string='Route', 
+        domain=[('sale_selectable', '=', True)], ondelete='restrict', check_company=True)
+    lead_time_stock = fields.Char('Lead Time Stock', compute="_compute_lead_time_stock", store=True)
+    task_id = fields.Many2one(
+        'project.task', 'Generated Task',
+        index=True, copy=False)
     
+    @api.depends('product_template_id.virtual_available')
+    def _compute_lead_time_stock(self):
+        self.lead_time_stock = ''
+        for line in self:
+            if line.product_template_id.virtual_available > 0:
+                line.lead_time_stock = 'Ex-Stock'
+            else:
+                line.lead_time_stock = 'Indent'
+
+    @api.depends('product_id', 'order_id.recurrence_id')
+    def _compute_pricing(self):
+        # search pricing_ids for each variant in self
+        available_pricing_ids = self.env['product.pricing'].search([
+            ('product_template_id', 'in', self.product_id.product_tmpl_id.ids),
+            ('recurrence_id', 'in', self.order_id.recurrence_id.ids),
+            '|',
+            ('product_variant_ids', 'in', self.product_id.ids),
+            ('product_variant_ids', '=', False),
+            '|',
+            ('pricelist_id', 'in', self.order_id.pricelist_id.ids),
+            ('pricelist_id', '=', False)
+        ])
+        for line in self:
+            if not line.product_id.recurring_invoice:
+                line.pricing_id = False
+                continue
+            line.pricing_id = available_pricing_ids.filtered(
+                lambda pricing:
+                    line.product_id.product_tmpl_id == pricing.product_template_id and (
+                        line.product_id in pricing.product_variant_ids or not pricing.product_variant_ids
+                    ) and (line.order_id.pricelist_id == pricing.pricelist_id or not pricing.pricelist_id)
+            )[:1]
+
+    @api.depends('product_id')
+    def _compute_product_template_id(self):
+        for line in self:
+            line.product_template_id = line.product_id.product_tmpl_id
     
+    def _search_product_template_id(self, operator, value):
+        return [('product_id.product_tmpl_id', operator, value)]
     
+    def _compute_sheet_url(self):
+        base_url = self.env.company.get_base_url()
+        for rec in self:
+            if rec.product_detail_sheet:
+                access_token = rec.product_detail_sheet.generate_access_token()
+                url = f"{base_url}/web/content/?model=ir.attachment&id={rec.product_detail_sheet.id}&filename_field=name&access_token={access_token[0]}&field=datas&download=true"
+                rec.product_detail_sheet_url = url
+            else:
+                rec.product_detail_sheet_url = ''
+                    
     @api.depends('product_id')
     def _compute_product_uom(self):
         for line in self:
