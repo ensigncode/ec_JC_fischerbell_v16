@@ -15,7 +15,7 @@
             </field>
         </record>
         <record id="act_import_export_eyewear_order_drc" model="ir.actions.act_window">
-            <field name="name">Import/Export Eyewear</field>
+            <field name="name">Import Eyewear</field>
             <field name="res_model">eyewear.import.export.data</field>
             <field name="view_mode">form</field>
             <field name="view_id" ref="fischerbell_import_export_wizard"/>

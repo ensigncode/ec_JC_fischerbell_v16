@@ -39,19 +39,14 @@ class OpticianPortalController(http.Controller):
 			if kw.get('name') and kw.get('mobile') :
 				name = kw.get('name')
 				mobile = kw.get('mobile')
-				company = kw.get('company_id')
-				company_id = request.env['res.partner'].sudo().search([('name','=',company),('is_company','=',True)],limit=1)
+				# company = kw.get('company_id')
+				# company_id = request.env['res.partner'].sudo().search([('name','=',company),('is_company','=',True)],limit=1)
 				
 				partner_id = request.env['res.partner'].sudo().search(['|',('mobile','=',mobile),('phone','=',mobile),('name','=',name)])
 				if not partner_id : 
 					partner_id = request.env['res.partner'].sudo().create({
 						'name' : name,
 						'mobile' : mobile,
-					})
-				if not company_id : 
-					company_id = request.env['res.partner'].sudo().create({
-						'name' : company,
-						'is_company' : True,
 					})
 			
 
@@ -62,10 +57,8 @@ class OpticianPortalController(http.Controller):
 				'emp_no' : kw.get('emp_no') if kw.get('emp_no') else '',
 				'dept_code' : kw.get('dept_code') if kw.get('dept_code') else '',
 				'lens_type' : int(kw.get('lens_type')) if kw.get('lens_type') else '',
-				# 'presc_type' : kw.get('presc_type') if kw.get('presc_type') else '',
 				'add_on_type' : lens_type.get(kw.get('add_on_type'),'') if kw.get('add_on_type') else '',
 				'product_id' : eval(kw.get('product_id', '')),
-    			'company_id' : company_id.id if company_id else False,
 				'sphere_left' : kw.get('sphere_left') if kw.get('sphere_left') else '',
 				'cyl_left' : kw.get('cyl_left') if kw.get('cyl_left') else '',
 				'axis_left' : kw.get('axis_left') if kw.get('axis_left') else '',
