@@ -78,8 +78,8 @@ class SaleOrderOption(models.Model):
         compute='_compute_product_uom_qty',
         digits='Product Unit of Measure', default=1.0,
         store=True, readonly=False, required=True, precompute=True)
-    product_detail_sheet = fields.Many2one('ir.attachment')
-    product_detail_sheet_url = fields.Char('Sheet Url',compute="_compute_sheet_url")
+    product_detail_sheet = fields.Many2one('ir.attachment',string="Detail sheet")
+    product_detail_sheet_url = fields.Char(string='Sheet Url', compute="_compute_sheet_url")
     child_id = fields.Many2one("res.partner",string="Employee id")
     child_name = fields.Char("Employee name")
     product_template_id = fields.Many2one(
