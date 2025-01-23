@@ -8,8 +8,8 @@
             <form string="Service Helpdesk Ticket">
                 <sheet>
                     <group>
-                        <field name="sale_id" />
-                        <field name="partner_id" />
+                        <field name="sale_id" readonly="1" force_save="1"/>
+                        <field name="partner_id" readonly="1" force_save="1"/>
                         <field name="date_of_request"/>
                         <field name="service_priority" widget="radio"/>
                         <field name="shipping_type"/>
