@@ -16,7 +16,7 @@ class OpticianDetail(models.Model):
     emp_no = fields.Char(string="NRIC / FIN No. / Employee No.")
     dept_code = fields.Char(string="Department code")
     lens_type = fields.Many2one('lens.type', string="Lens Type")
-    presc_type = fields.Char(string="Type of Prescription")
+    # presc_type = fields.Char(string="Type of Prescription")
     add_on_type = fields.Char(string="Add on type")
     product_id = fields.Many2one('product.template',string="Frame", domain = "[('is_optic', '=', True)]")
     company_id = fields.Many2one('res.partner',string="Batch Attribute 1", domain = "[('is_company', '=', True)]")
@@ -145,12 +145,11 @@ class FischerbellOpticianDetailReport(models.AbstractModel):
         sheet.write(0, 14, 'PD',content1)
         sheet.write(0, 15, 'REQUIREMENTS',content1)
         sheet.write(0, 16, 'Type of Lens',content1)
-        sheet.write(0, 17, 'Type of Prescription',content1)
-        sheet.write(0, 18, 'Add on',content1)
-        sheet.write(0, 19, 'SG HT',content1)
-        sheet.write(0, 20, 'ADD RIGHT',content1)
-        sheet.write(0, 21, 'Pescription',content1)
-        sheet.write(0, 22, 'Outlet',content1)
+        sheet.write(0, 17, 'Add on',content1)
+        sheet.write(0, 18, 'SG HT',content1)
+        sheet.write(0, 19, 'ADD RIGHT',content1)
+        sheet.write(0, 20, 'Pescription',content1)
+        sheet.write(0, 21, 'Outlet',content1)
 
 
 
@@ -190,9 +189,7 @@ class FischerbellOpticianDetailReport(models.AbstractModel):
             x += 1
             sheet.write(y, x, optician_detail.requirements or '', content2)
             x += 1
-            sheet.write(y, x, optician_detail.lens_type or '', content2)
-            x += 1
-            sheet.write(y, x, optician_detail.presc_type or '', content2)
+            sheet.write(y, x, optician_detail.lens_type.name or '', content2)
             x += 1
             sheet.write(y, x, optician_detail.add_on_type or '', content2)
             x += 1

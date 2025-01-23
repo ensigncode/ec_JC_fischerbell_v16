@@ -44,13 +44,13 @@ class ImportExportData(models.Model):
 
         term_condition = self.env['optician.term.condition'].search([], limit=1)
 
-        header_list = ["User", "Employee Name", "Mobile", "Email", "NRIC / FIN No. / Employee No", "Department code", "Lens Type", "Type of Prescription", "Add on type", "Frame", "Company", "SPHERE LEFT", "CYL LEFT", "AXIS LEFT", "SPHERE RIGHT", "CYL RIGHT", "AXIS RIGHT", "ADD", "PD", "REQUIRMENTS", "SG HT", "Prescription", "Outlet", "ADD RIGHT", "ADD LEFT", "PD RIGHT", "PD LEFT", "Terms And Conditions"]
+        header_list = ["User", "Employee Name", "Mobile", "Email", "NRIC / FIN No. / Employee No", "Department code", "Lens Type",  "Add on type", "Frame", "Company", "SPHERE LEFT", "CYL LEFT", "AXIS LEFT", "SPHERE RIGHT", "CYL RIGHT", "AXIS RIGHT", "ADD", "PD", "REQUIRMENTS", "SG HT", "Prescription", "Outlet", "ADD RIGHT", "ADD LEFT", "PD RIGHT", "PD LEFT", "Terms And Conditions"]
         col = 0
         for header in header_list:
             sheet.write(0, col, header, cell)
             if len(header) > 7:
                 sheet.set_column(col, col, len(header)+5)
-            if col == 27:
+            if col == 26:
                 sheet.write(1, col, term_condition.name, note_format)
             col += 1
 

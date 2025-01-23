@@ -67,7 +67,7 @@
 							<field name="emp_no" />
 							<field name="dept_code" />
 							<field name="lens_type" />
-							<field name="presc_type" />
+							<!-- <field name="presc_type" /> -->
 							<field name="add_on_type" />
 							<field name="product_id" />
 							<field name="company_id" />
