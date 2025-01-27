@@ -335,7 +335,7 @@
 		</field>
 	</record>
 
-	<record id="fischerbell_purchase_order_view_form_inherit_incoterm" model="ir.ui.view">
+	<!-- <record id="fischerbell_purchase_order_view_form_inherit_incoterm" model="ir.ui.view">
 		<field name="name">fischerbell.purchase.order.form.inherit.incoterm</field>
 		<field name="model">purchase.order</field>
 		<field name="inherit_id" ref="fcb_service.fischerbell_purchase_order_view_form_inherit"/>
@@ -349,7 +349,7 @@
                 <attribute name="attrs">{}</attribute>
             </xpath>
 		</field>
-	</record>
+	</record> -->
 
 	<record id="update_purchase_order_vendor_request" model="ir.ui.view">
 		<field name="name">fischerbell.purchase.order.form.inherit.approval</field>
