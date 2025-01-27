@@ -54,7 +54,7 @@ class StockMoveLineWizard(models.TransientModel):
     product_id = fields.Many2one('product.product')
     move_id = fields.Many2one('stock.move.wizard')
     move_qty = fields.Float('Demand Qty')
-    line_qty = fields.Float('Requied Qty')
+    line_qty = fields.Float('Required Qty')
     total_qty = fields.Float('Total Quantity', compute='_compute_total_qty')
 
     @api.depends('line_qty')
