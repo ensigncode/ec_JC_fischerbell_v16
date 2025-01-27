@@ -163,7 +163,7 @@ class SaleOrder(models.Model):
         ticket_id = self.env['helpdesk.ticket'].search([('sale_id', '=', self.id)])
         return {
             'type': 'ir.actions.act_window',
-            'name': 'Ticket',
+            'name': 'Services',
             'view_mode': 'tree,form',
             'res_model': 'project.task',
             'domain': [('id', 'in', ticket_id.fsm_task_ids.ids)],
