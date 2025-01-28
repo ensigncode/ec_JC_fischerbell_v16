@@ -130,4 +130,5 @@ class FitTestTrainingTrainee(models.Model):
 	product_id = fields.Many2one('product.product', string="Product", domain=[('is_fit_test_training', '=', True)])
 
 	def action_print_report(self):
-		return self.env.ref('fcb_fit_test_training.action_report_certificate_line').report_action(self.id)
+		if self.is_pass_fail:
+			return self.env.ref('fcb_fit_test_training.action_report_certificate_line').report_action(self.id)

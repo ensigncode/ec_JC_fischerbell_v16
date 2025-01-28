@@ -270,6 +270,7 @@
                 <field name="company_id" invisible="1" />
                 <field name="last_price" />
                 <field name="last_order_date" optional="hide" />
+                <field name="last_sale_id" optional="hide"/>
                 <field name="tax_id" />
             </xpath>
             <xpath expr="//page[@name='optional_products']//tree//field[@name='discount']" position="after">
