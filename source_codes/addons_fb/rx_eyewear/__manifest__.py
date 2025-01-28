@@ -19,6 +19,7 @@
         "views/lens_type_view.xml",
         "views/prescription_type_view.xml",
         "views/term_condition.xml",
+        "views/fee_eyewear.xml",
         "views/menus.xml",
         "wizard/import_export_data.xml",
         'data/rx_eyewear_group.xml',

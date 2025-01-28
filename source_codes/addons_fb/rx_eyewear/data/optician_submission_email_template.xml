@@ -194,5 +194,8 @@
         <record id="term_condition" model="optician.term.condition">
               <field name="name">Tems Condition</field>
         </record>
+        <record id="fee_eyewear" model="fee.eyewear">
+              <field name="name">Test Data</field>
+        </record>
     </data>
 </odoo>

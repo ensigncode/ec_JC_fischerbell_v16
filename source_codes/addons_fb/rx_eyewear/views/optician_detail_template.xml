@@ -34,6 +34,15 @@
 									</div>
 
 								</t>
+								<t t-if="fee_data">
+								    <div class="container s_allow_columns">
+								        <div class="popup-message" style="text-align: center;     background-color: #FFBC11">
+								            <p style="font-size: 16px; color: black;">Note:
+								                <t t-esc="fee_data" />
+								            </p>
+								        </div>
+								    </div>
+								</t>
 								<form method="post" enctype="multipart/form-data"
 								      action="/optician-detail">
 									<input type="hidden" name="leave_hours" id="leave_hours"/>

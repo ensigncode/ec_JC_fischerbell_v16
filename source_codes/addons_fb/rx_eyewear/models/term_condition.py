@@ -8,5 +8,6 @@ from odoo.tools.misc import xlsxwriter
 
 class TermsConditions(models.Model):
     _name = 'optician.term.condition'
+    _description = 'Terms Conditions'
 
     name = fields.Char()

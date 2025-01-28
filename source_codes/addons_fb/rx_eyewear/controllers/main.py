@@ -25,6 +25,7 @@ class OpticianPortalController(http.Controller):
 		outlet_ids = request.env['outlet.detail'].sudo().search([])
 		lens_types = request.env['lens.type'].sudo().search([])
 		prescription_types = request.env['prescription.type'].sudo().search([])
+		fee_data = request.env['fee.eyewear'].sudo().search([], limit=1)
   		
 		submission_count = request.env.user.submission_count
 		allow_submission = request.env.user.allow_submission
@@ -94,7 +95,9 @@ class OpticianPortalController(http.Controller):
 		return request.render('rx_eyewear.opptician_detail_page_template',
 							  {'optic_product_ids': optic_product_ids, 'outlet_ids': outlet_ids,
 							   'lens_types': lens_types, 'prescription_types': prescription_types,
-							   'disable_form': disable_form})
+							   'disable_form': disable_form,
+							   'fee_data': fee_data.name if fee_data else ''
+							   })
 
 
 
