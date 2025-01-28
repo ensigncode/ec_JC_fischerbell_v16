@@ -6,12 +6,12 @@
         <field name="inherit_id" ref="sale.view_order_form"/>
         <field name="priority">17</field>
         <field name="arch" type="xml">
-        <xpath expr="//div[@class='alert alert-danger mb-0' and @role='alert']" position="replace">
+        <!-- <xpath expr="//div[@class='alert alert-danger mb-0' and @role='alert']" position="replace">
                 <div class="alert alert-danger mb-0" role="alert"
                      attrs="{'invisible': [('partner_credit_warning', '=', '')]}">
                     <b class="text-danger"><field name="partner_credit_warning"/></b>
                 </div>
-            </xpath>
+            </xpath> -->
 
             <xpath expr="//field[@name='origin']" position="attributes">
                 <attribute name="string">Souce Document(PO REF)</attribute>
