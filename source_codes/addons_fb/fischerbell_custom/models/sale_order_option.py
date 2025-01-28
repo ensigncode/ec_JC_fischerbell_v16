@@ -101,6 +101,7 @@ class SaleOrderOption(models.Model):
     task_id = fields.Many2one(
         'project.task', 'Generated Task',
         index=True, copy=False)
+
     
     @api.depends('product_template_id.virtual_available')
     def _compute_lead_time_stock(self):

@@ -99,9 +99,16 @@
 												<div class="col-7">
 												</div>
 												<div class="col-5">
-													<div>
-														<span class="trainer_sign" t-field="doc.trainer_sign" t-options='{"widget": "image"}' style=""/>
-													</div>
+													<t t-if="doc.trainer_sign">
+														<div>
+															<span class="trainer_sign" t-field="doc.trainer_sign" t-options='{"widget": "image"}' style=""/>
+														</div>
+													</t>
+													<t t-else="">
+														<div style="height:75px;">
+															<span class="trainer_sign"  />
+														</div>
+													</t>
 													<span class="line_span"> </span>
 													<p style="font-size: 15px; margin-bottom:0;font-weight:bold;text-align:center;">
 														<t t-if="doc.name">
@@ -115,7 +122,7 @@
 											</div>
 
 											
-											<p style="font-size: 13px;text-align: center;margin-top:7%;">This Certificate is valid for
+											<p style="font-size: 15px;text-align: start;margin-top:20%;">This Certificate is valid for
 												one (1) year from the date issued
 											</p>
 											</div>

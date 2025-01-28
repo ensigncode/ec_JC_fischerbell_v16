@@ -1236,6 +1236,15 @@ class SaleOrderLine(models.Model):
     change_reason = fields.Text(string="Reason for Change", readonly=True)
 
 
+    def _prepare_invoice_line(self, **optional_values):
+        res = super(SaleOrderLine,self)._prepare_invoice_line(**optional_values)
+        if self.qty_to_invoice == 0.0:
+            res.update({'quantity':self.product_uom_qty})
+        else:
+            res.update({'quantity':self.qty_to_invoice})
+
+        return res
+
     @api.depends('customer_id','product_id','state')
     def _compute_last_order_price(self):
         for price in self:
