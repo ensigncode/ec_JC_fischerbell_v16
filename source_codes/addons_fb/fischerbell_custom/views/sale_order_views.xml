@@ -6,7 +6,7 @@
         <field name="inherit_id" ref="sale.view_order_form"/>
         <field name="priority">17</field>
         <field name="arch" type="xml">
-        <!-- <xpath expr="//div[@class='alert alert-danger mb-0' and @role='alert']" position="replace">
+       <!--  <xpath expr="//div[@class='alert alert-danger mb-0' and @role='alert']" position="replace">
                 <div class="alert alert-danger mb-0" role="alert"
                      attrs="{'invisible': [('partner_credit_warning', '=', '')]}">
                     <b class="text-danger"><field name="partner_credit_warning"/></b>
@@ -425,38 +425,39 @@
         <field name="name">sale.order.analysis.report.tree.view</field>
         <field name="model">sale.order.line</field>
         <field name="arch" type="xml">
-            <header>
-            	<button name="create_order" type="object" string="Create Order"
-                    class="btn-primary"/>
-                <button name="update_request_price" type="object"
-                			invisible="context.get('is_suborder')" 
-                            class="btn-primary" string="Approve Request"
-                            attrs="{'invisible':[('approval_state','!=','pending')]}"
-                            groups="account.group_account_manager"/>
-                <button name="reject_request" type="object" 
-                            invisible="context.get('is_suborder')"
-                            class="btn-primary" string="Reject Request"
-                            attrs="{'invisible':[('approval_state','!=','pending')]}"
-                            groups="account.group_account_manager"/>
-            </header>
-            <tree string="Sales Order Lines" create="false">
-                <field name="order_id"/>
-                <field name="product_id" string="Product"/>
-                <field name="name"/>
-                <field name="salesman_id"/>
-                <field name="product_uom_qty" string="Qty"/>
-                <field name="qty_delivered"/>
-                <field name="qty_invoiced"/>
-                <field name="qty_to_invoice"/>
-                <field name="product_uom" string="Unit of Measure" groups="uom.group_uom"/>
-                <field name="last_invoice_date" />
-                <field name="last_invoice_price" />
-                <field name="price_unit"/>
-                <field name="request_price" groups="account.group_account_manager"/>
-                <field name="approval_state"/>
-                <field name="price_subtotal" sum="Total" widget="monetary"/>
-                <field name="currency_id" invisible="1"/>
-            </tree>
+            <form>
+                <header>
+                    <button name="create_order" type="object" string="Create Order"
+                        class="btn-primary"/>
+                    <button name="update_request_price" type="object"
+                                invisible="context.get('is_suborder')" 
+                                class="btn-primary" string="Approve Request"
+                                attrs="{'invisible':[('approval_state','!=','pending')]}"
+                                groups="account.group_account_manager"/>
+                    <button name="reject_request" type="object" 
+                                invisible="context.get('is_suborder')"
+                                class="btn-primary" string="Reject Request"
+                                attrs="{'invisible':[('approval_state','!=','pending')]}"
+                                groups="account.group_account_manager"/>
+                </header>
+                <tree string="Sales Order Lines" create="false">
+                    <field name="order_id"/>
+                    <field name="product_id" string="Product"/>
+                    <field name="name"/>
+                    <field name="salesman_id"/>
+                    <field name="product_uom_qty" string="Qty"/>
+                    <field name="qty_delivered"/>
+                    <field name="qty_invoiced"/>
+                    <field name="qty_to_invoice"/>
+                    <field name="product_uom" string="Unit of Measure" groups="uom.group_uom"/>
+                    <field name="last_invoice_date" />
+                    <field name="last_invoice_price" />
+                    <field name="price_unit"/>
+                    <field name="request_price" groups="account.group_account_manager"/>
+                    <field name="price_subtotal" sum="Total" widget="monetary"/>
+                    <field name="currency_id" invisible="1"/>
+                </tree>
+            </form>
         </field>
     </record>
     <record id="fischerbell_action_order_report_all" model="ir.actions.act_window">
