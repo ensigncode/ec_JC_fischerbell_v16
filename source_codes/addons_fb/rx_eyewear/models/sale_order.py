@@ -10,6 +10,49 @@ class SaleOrder(models.Model):
     optician_detail_id = fields.Many2one('optician.detail',string="Optician Detail")
     optician_detail_ids = fields.Many2many('optician.detail',string="Optician Detail")
     serial_number = fields.Char(string="Serial Number")
+    header_message = fields.Html(string="Header Message", readonly=True)
+    is_header_message = fields.Boolean()
+
+    @api.onchange('order_line')
+    def _check_optician_product_budget(self):
+        for order in self:
+            warning_messages = []
+            total_price = 0.0  # Initialize total price
+
+            # Calculate the total price of eyewear products and validate selection
+            for line in order.order_line:
+                if line.product_id.is_optic:
+                    # Check if the product is in the customer's eyewear selection
+                    total_price += line.price_subtotal
+                    if line.product_id.id not in order.partner_id.product_eyewaer_ids.ids:
+                        warning_messages.append(
+                            _("The selected eyewear product '%s' is not available in the customer's eyewear selection!") 
+                            % line.product_id.display_name
+                        )
+                    
+
+        # Check if the total price exceeds the allocated budget
+        if order.partner_id.total_budget:
+            if total_price > order.partner_id.total_budget:
+                warning_messages.append(
+                    _("The total price of selected eyewear products exceeds the customer's allocated budget! "
+                      "The allocated budget is %s.") % order.partner_id.total_budget
+                )
+        
+        if not  order.partner_id.total_budget and total_price > 0:
+            warning_messages.append(
+                _("The customer '%s' does not have an allocated eyewear budget!") % order.partner_id.name
+            )
+
+        # Update the header message based on warnings
+        if warning_messages:
+            order.header_message = '<br/>'.join(warning_messages)
+            order.is_header_message = True
+        else:
+            order.header_message = False
+            order.is_header_message = False
+
+
 
 class SaleOrderLine(models.Model):
     _inherit = 'sale.order.line'

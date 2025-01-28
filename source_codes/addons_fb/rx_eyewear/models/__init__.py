@@ -10,4 +10,5 @@ from . import purchase_order
 from . import outlet_detail
 from . import term_condition
 from . import fee_eyewear
+from . import res_partner
 
