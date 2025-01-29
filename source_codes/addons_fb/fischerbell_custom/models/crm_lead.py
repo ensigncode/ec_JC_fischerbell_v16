@@ -7,7 +7,7 @@ import pytz
 class CrmLead(models.Model):
     _inherit = 'crm.lead'
 
-    operation_type_id = fields.Many2one('opportunity.type', 'Opportunit')
+    operation_type_id = fields.Many2one('opportunity.type', 'Opportunity')
 
     @api.onchange('operation_type_id')
     def _onchange_operation_type_id(self):
