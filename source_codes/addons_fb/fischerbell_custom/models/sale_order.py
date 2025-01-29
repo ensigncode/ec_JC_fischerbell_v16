@@ -208,15 +208,24 @@ class SaleOrder(models.Model):
 
     def _send_followup_reminders(self):
         """
-        Send follow-up reminders for quotations sent 3 days ago.
+        Send follow-up reminders for quotations sent exactly 3 days ago.
         """
-        today = fields.Date.today()
+        today = fields.Datetime.now()
         three_days_ago = today - timedelta(days=3)
+
+        # Truncate the time part to match the date order precision (00:00:00 for both dates)
+        three_days_ago_start = three_days_ago.replace(hour=0, minute=0, second=0, microsecond=0)
+        three_days_ago_end = three_days_ago.replace(hour=23, minute=59, second=59, microsecond=999999)
+
+        # Fetch quotations sent exactly 3 days ago by comparing with the datetime range
         quotations = self.sudo().search([
-            ('state', '=', 'sent'),  # Quotation state
-            ('followup_reminder_sent', '=', False),  # Not already sent
-            ('date_order', '>=', three_days_ago)  # Sent 3 days ago
+            ('state', '=', 'sent'),
+            ('followup_reminder_sent', '=', False),
+            ('date_order', '>=', three_days_ago_start),
+            ('date_order', '<=', three_days_ago_end)
         ])
+        
+
         for quotation in quotations:
             template = self.env.ref('fischerbell_custom.followup_quotation_email_template')
             if template:
