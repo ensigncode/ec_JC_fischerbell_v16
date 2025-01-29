@@ -45,7 +45,7 @@ class SaleOrder(models.Model):
             )
 
         # Update the header message based on warnings
-        if warning_messages:
+        if len(warning_messages) > 0:
             order.header_message = '<br/>'.join(warning_messages)
             order.is_header_message = True
         else:
