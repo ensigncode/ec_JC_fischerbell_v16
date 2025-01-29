@@ -13,6 +13,9 @@ from werkzeug.urls import url_parse
 class ProductTemplate(models.Model):
 	_inherit = "product.template"
 
+	default_code = fields.Char(
+        'Product Code', compute='_compute_default_code',
+        inverse='_set_default_code', store=True)
 	max_price = fields.Float('Max Sales Price')
 	min_price = fields.Float('Min Sales Price')
 	sales_line_ids = fields.One2many('sale.order.line', 'product_template_id', 'Sales Line')
@@ -187,6 +190,7 @@ class ProductProduct(models.Model):
 	product_detail_sheet_url = fields.Char('Sheet Url',compute="_compute_sheet_url")
 	approval_request = fields.Selection([('draft','Draft'),('approved','Approved'),
 										('rejected','Rejected')], string='Approval Request', default='draft')
+	default_code = fields.Char('Product Code', index=True)
 	# requires_traceability = fields.Boolean('Requires Traceability')
 
 
