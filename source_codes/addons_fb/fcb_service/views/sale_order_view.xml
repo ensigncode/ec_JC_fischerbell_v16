@@ -10,6 +10,9 @@
 				<field name="have_special_permission_note" placeholder="Log Note ..."/>
 				<field name="equipment_service_id"/>
 			</field>
+			<button id="create_invoice" position="attributes">
+                <attribute name="attrs">{'invisible': ['|',('is_subscription', '=', True), ('invoice_status', '!=', 'to invoice'),('have_special_permission','=',False)]}</attribute>
+            </button>
 			<page name="customer_signature" position="after">
 				<page string="Service" name="service">
 					<group string="Service Products">

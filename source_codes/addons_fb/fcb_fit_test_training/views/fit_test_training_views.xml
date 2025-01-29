@@ -76,7 +76,8 @@
                                             type="object"
                                             string="Certificate"
                                             class="btn-primary"
-                                            icon="fa-print"/>
+                                            icon="fa-print"
+                                            attrs="{'invisible': [('is_pass_fail', '=', False)]}"/>
                                 </tree>
                             </field>
                         </page>

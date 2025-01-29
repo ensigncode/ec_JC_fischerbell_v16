@@ -109,6 +109,7 @@
                 </div>
             </field>
             <field name="lang">{{ object.partner_id.lang }}</field>
+            <field name="auto_delete" eval="False"/>
         </record>
     
 <!--        <record id="email_template_statement_of_account" model="mail.template">-->
