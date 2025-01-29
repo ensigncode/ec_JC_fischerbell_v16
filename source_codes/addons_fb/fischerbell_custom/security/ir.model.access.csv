@@ -36,3 +36,4 @@ fischerbell_custom.access_stock_picking_cancellation_wizard,access_stock_picking
 
 fischerbell_custom.access_stock_move_wizard,access_stock_move_wizard,fischerbell_custom.model_stock_move_wizard,base.group_user,1,1,1,1
 fischerbell_custom.access_stock_move_line_wizard,access_stock_move_line_wizard,fischerbell_custom.model_stock_move_line_wizard,base.group_user,1,1,1,1
+fischerbell_custom.access_opportunity_type,access_opportunity_type,fischerbell_custom.model_opportunity_type,base.group_user,1,1,1,1
