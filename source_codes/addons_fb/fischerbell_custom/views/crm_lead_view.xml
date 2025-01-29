@@ -9,5 +9,51 @@
             <field name="target">new</field>
         </record>
         <menuitem action="action_open_monthly_report_wizard" id="menu_weekly_report" name="Monthly Report" parent="crm.crm_menu_report" />
+
+        <record id="crm_lead_kanban_view_inherit" model="ir.ui.view">
+            <field name="name">CRM Lead Kanban View Inherit</field>
+            <field name="model">crm.lead</field>
+            <field name="inherit_id" ref="crm.crm_case_kanban_view_leads"/>
+            <field name="arch" type="xml">
+                <!-- Replace Name Field -->
+                <xpath expr="//field[@name='name']" position="replace">
+                    <strong>
+                        <field name="operation_type_id" options="{'no_create_edit': True}"/>
+                    </strong>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="quick_create_opportunity_form_inherit" model="ir.ui.view">
+            <field name="name">Quick Create Opportunity Form Inherit</field>
+            <field name="model">crm.lead</field>
+            <field name="inherit_id" ref="crm.quick_create_opportunity_form"/>
+            <field name="arch" type="xml">
+                <!-- Add Opportunity Category Field -->
+                <xpath expr="//field[@name='name']" position="after">
+                    <field name="operation_type_id" required="1" options="{'no_create_edit': True}"/>
+                </xpath>
+                <xpath expr="//field[@name='name']" position="attributes">
+                   <attribute name="invisible">1</attribute>
+                </xpath>
+            </field>
+        </record>
+        <record id="crm_lead_view_form_form_inherit_ip" model="ir.ui.view">
+            <field name="name">CRM Create Opportunity Form Inherit</field>
+            <field name="model">crm.lead</field>
+            <field name="inherit_id" ref="crm.crm_lead_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//group[@name='lead_partner']" position="inside">
+                    <field name="operation_type_id" required="1" options="{'no_create_edit': True}"/>
+                </xpath>
+                <xpath expr="//group[@name='opportunity_partner']" position="inside">
+                    <field name="operation_type_id" required="1" options="{'no_create_edit': True}"/>
+                </xpath>
+                <xpath expr="//field[@name='name']" position="attributes">
+                   <attribute name="readonly">1</attribute>
+                   <attribute name="force_save">1</attribute>
+                </xpath>
+            </field>
+        </record>
     </data>
 </odoo>

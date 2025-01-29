@@ -1,3 +1,4 @@
+from . import res_partner
 from . import account_move
 from . import account_move_line
 from . import fischerbell_configuration_note
@@ -14,7 +15,6 @@ from . import product_supplierinfo
 from . import product_template
 from . import purchase_order
 from . import res_config_settings
-from . import res_partner
 from . import sale_order
 from . import stock_lot
 from . import stock_move
@@ -36,3 +36,4 @@ from . import sale_order_option
 from . import helpdesk_ticket
 from . import account_report
 from . import purchase_requisition
+from . import opportunity_type

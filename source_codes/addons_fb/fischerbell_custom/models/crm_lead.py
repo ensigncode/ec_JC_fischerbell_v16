@@ -7,6 +7,13 @@ import pytz
 class CrmLead(models.Model):
     _inherit = 'crm.lead'
 
+    operation_type_id = fields.Many2one('opportunity.type', 'Opportunit')
+
+    @api.onchange('operation_type_id')
+    def _onchange_operation_type_id(self):
+        for record in self:
+            record.name = record.operation_type_id.name
+
 
     def cron_remainder_to_salesperson(self):
         user_tz = pytz.timezone(self.env.context.get('tz') or self.env.user.tz or 'UTC')

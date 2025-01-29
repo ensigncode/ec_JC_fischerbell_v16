@@ -104,6 +104,7 @@
         'views/mrp_bom_views.xml',
         'views/helpdesk_ticket_view.xml',
         'views/account_payment.xml',
+        'views/opportunity_type.xml',
         'wizard/account_register_payment.xml',
         'wizard/update_po_quantity.xml',
 
