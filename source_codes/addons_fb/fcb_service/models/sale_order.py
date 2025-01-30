@@ -29,10 +29,10 @@ class SaleOrder(models.Model):
 				if not prepayment_term:
 					raise ValidationError(_("Prepayment payment term is not configured. Please contact the administrator."))
 				order.payment_term_id = prepayment_term
-				# order.invoice_status = 'to invoice'
+				self.invoice_status = 'to invoice'
 			else:
 				order.payment_term_id = order.partner_id.property_payment_term_id.id
-				# order.invoice_status = 'no'
+				self.invoice_status = 'no'
 
 	def _check_prepayment_done(self):
 		""" Check if the required prepayment has been completed for this sale order. """
@@ -85,6 +85,19 @@ class SaleOrder(models.Model):
 							})
 							move_lines.append(move_line)
 						record.update({'service_product_ids': move_lines})
+		return res
+
+	def write(self,vals):
+		res = super().write(vals)
+		if 'have_special_permission' in vals:
+			if self.have_special_permission:
+				self.invoice_status = 'to invoice'
+			else:
+				self.invoice_status = 'no'
+
+
+
+
 		return res
 
 	def action_to_approve(self):

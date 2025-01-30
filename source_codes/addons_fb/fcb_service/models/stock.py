@@ -15,7 +15,7 @@ class StockPicking(models.Model):
 	pick_up = fields.Selection([
 		('pc_driver', "Send Driver For Self Collection"),
 		('pc_supplier', "Delivery"),
-	], )
+	], string="Collection")
 
 	def button_validate(self):
 		res = super().button_validate()
