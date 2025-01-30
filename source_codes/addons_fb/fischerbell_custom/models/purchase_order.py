@@ -211,6 +211,9 @@ class PurchaseOrder(models.Model):
     
     @api.model
     def create(self, vals):
+        if 'import_file' in self._context:
+            vals.update({'user_id':1})
+            
         if 'name' not in vals or vals['name'] == 'New':
             vals['name'] = self.env['ir.sequence'].next_by_code('purchase.order.rfq')
         res = super(PurchaseOrder, self).create(vals)

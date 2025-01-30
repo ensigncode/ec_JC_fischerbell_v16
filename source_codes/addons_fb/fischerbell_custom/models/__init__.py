@@ -37,3 +37,4 @@ from . import helpdesk_ticket
 from . import account_report
 from . import purchase_requisition
 from . import opportunity_type
+from . import mail_activity

@@ -13,8 +13,8 @@ class StockPicking(models.Model):
 	attachment_ids = fields.Many2many(
 		'ir.attachment','stock_attachment_rel', string='Attachments')
 	pick_up = fields.Selection([
-		('pc_driver', "Pickup by Driver"),
-		('pc_supplier', "Pickup by Supplier"),
+		('pc_driver', "Send Driver For Self Collection"),
+		('pc_supplier', "Delivery"),
 	], )
 
 	def button_validate(self):

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_mail_activity_form_inherit" model="ir.ui.view">
+        <field name="name">mail.activity.form.inherit</field>
+        <field name="model">mail.activity</field>
+        <field name="inherit_id" ref="mail.mail_activity_view_form_popup"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='user_id']" position="after">
+                <field name="user_group_id" attrs="{'invisible': [('res_model', 'not in', ['sale.order','purchase.order'])]}"/>
+                <field name="user_ids" attrs="{'invisible': [('res_model', 'not in', ['sale.order','purchase.order'])]}" widget="many2many_tags"/>
+            </xpath>
+             <xpath expr="//field[@name='user_id']" position="attributes">
+                <attribute name="attrs">{'invisible': [('res_model', 'in', ['sale.order','purchase.order'])]}</attribute>
+             </xpath>
+            <xpath expr="//field[@name='user_id']" position="attributes">
+                <attribute name="required">False</attribute>
+            </xpath>
+        </field>
+    </record>
+</odoo>
