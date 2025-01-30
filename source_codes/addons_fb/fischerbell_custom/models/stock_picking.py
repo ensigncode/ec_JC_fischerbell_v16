@@ -639,7 +639,6 @@ class Picking(models.Model):
 		days_limit = self.env.company.picking_notification_days
 		cutoff_date = fields.Datetime.now() - timedelta(days=days_limit)
 		picking_ids = self.search([('state', '=', 'assigned'), ('assigned_date', '<=', cutoff_date)])
-		picking_ids = self.browse(924)
 		template_id = self.env.ref('fischerbell_custom.email_template_picking_assigned_date', raise_if_not_found=True)
 		stock_group = self.env.ref('stock.group_stock_manager', raise_if_not_found=False)
 		stock_users = stock_group.users if stock_group else self.env['res.users']
