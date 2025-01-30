@@ -67,7 +67,7 @@ class PurchaseOrder(models.Model):
     partner_request_state = fields.Selection([('none','None'),('pending','Pending'),('approved','Approved'),
                                             ('rejected','Rejected')],default='none', string='Partner Request')
     is_requested = fields.Boolean('Requested')
-    is_supplier = fields.Boolean('Suppli Confirmation')
+    is_supplier = fields.Boolean('Supplier Confirmation')
     approval_state = fields.Selection(
         selection=[
             ('no', 'Nothing To Approve'),

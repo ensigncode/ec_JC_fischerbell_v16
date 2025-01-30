@@ -11,8 +11,8 @@
 								<t t-if="o.is_pass_fail==True">
 									<div class="row">
 										<div class="col-6" style="padding: 0; margin-left: -37px">
-											<img src="/fcb_fit_test_training/static/src/img/side_bar_image.jpeg"
-											     alt="certificate" style="height: 702px;width: 400px; margin: 0;"/>
+											<img src="/fcb_fit_test_training/static/src/img/test_cert_bg.jpeg"
+											     alt="certificate" style="height: 792px;width: 400px; margin: 0;"/>s
 										</div>
 										<div class="col-6 mt-4 pt-4">
 											<t t-if="doc.training_types == 'aed'">

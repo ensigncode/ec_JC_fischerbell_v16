@@ -1306,13 +1306,13 @@ class SaleOrderLine(models.Model):
             self.bp_code = ''
 
 
-    @api.onchange('price_unit')
-    def onchange_price_unit(self):
-        if self.price_unit:
-            if self.price_unit > self.product_template_id.max_price:
-                raise ValidationError("Sales price is greater than maximal price")
-            if self.price_unit < self.product_template_id.min_price:
-                raise ValidationError("Sales price is less than minimal price")
+    # @api.onchange('price_unit')
+    # def onchange_price_unit(self):
+    #     if self.price_unit:
+    #         if self.price_unit > self.product_template_id.max_price:
+    #             raise ValidationError("Sales price is greater than maximal price")
+    #         if self.price_unit < self.product_template_id.min_price:
+    #             raise ValidationError("Sales price is less than minimal price")
     
     def update_request_price(self):
         for line in self:
