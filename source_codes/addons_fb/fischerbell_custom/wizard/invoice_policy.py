@@ -57,6 +57,7 @@ class InvoicePolicyWizard(models.TransientModel):
 
         # Prepare the email template
         template = self.env.ref('fischerbell_custom.email_template_notify_account_manager', raise_if_not_found=False)
+
         if template:
             # Update the email values to include the email addresses
             email_values = {
@@ -81,6 +82,7 @@ class InvoicePolicyWizard(models.TransientModel):
 
     def btn_confirm(self):
         product_list = []
+      
         if self._context.get("active_model") == 'purchase.order' and self._context.get("is_purchase"):
             purchase_id = self.env["purchase.order"].search([("id", '=', self._context.get("active_id"))])
             line_ids = purchase_id.order_line.filtered(lambda x: x.product_id.detailed_type != 'service').mapped(
@@ -104,6 +106,9 @@ class InvoicePolicyWizard(models.TransientModel):
                         picking.update({'pick_up': 'pc_supplier'})
                     else:
                         picking.update({'pick_up': ''})
+
+            if self.purchase_method == 'purchase':
+                purchase_id.can_create_bill = True
 
         if self._context.get("active_model") == 'sale.order' and self._context.get("is_sale"):
             sale_id = self.env["sale.order"].search([("id", '=', self._context.get("active_id"))])

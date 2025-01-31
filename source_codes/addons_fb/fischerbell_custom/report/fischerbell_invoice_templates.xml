@@ -446,8 +446,13 @@
                                                                 <span style="font-family: 'Unitext Pro Regular'; line-height: 1em; font-size: 12px;">:</span>
                                                             </td>
                                                             <td width="58%" class="text-style">
-                                                                <t t-if="o.partner_id.country_id">
-                                                                    <span style="font-family: 'Unitext Pro Regular'; line-height: 1em; font-size: 12px;" t-esc="o.partner_id.country_id.name"/> 
+                                                                 <t t-if="doc.partner_id.company_type=='company'">
+                                                                     <span style="font-family: 'Unitext Pro Regular'; line-height: 1em; font-size: 12px;" t-esc="o.partner_id.country_id.name"/> 
+                                                                 </t>
+                                                                 <t t-else="">
+                                                                    <t t-if="o.partner_id.parent_id.country_id">
+                                                                        <span style="font-family: 'Unitext Pro Regular'; line-height: 1em; font-size: 12px;" t-esc="o.partner_id.parent_id.country_id.name"/> 
+                                                                    </t>
                                                                 </t>
                                                                 <t t-if="doc.partner_id.company_type=='company'">
                                                                     <t t-if="o.partner_id.zip">

@@ -67,7 +67,7 @@ class PurchaseOrder(models.Model):
     partner_request_state = fields.Selection([('none','None'),('pending','Pending'),('approved','Approved'),
                                             ('rejected','Rejected')],default='none', string='Partner Request')
     is_requested = fields.Boolean('Requested')
-    is_supplier = fields.Boolean('Supplier Confirmation')
+    is_supplier = fields.Boolean('Suppli Confirmation')
     approval_state = fields.Selection(
         selection=[
             ('no', 'Nothing To Approve'),
@@ -191,6 +191,8 @@ class PurchaseOrder(models.Model):
         for record in self:
             record.state = "manager_approvel"
 
+            
+
     def sc_approved(self):
         for rec in self:
             rec.state = "approved"
@@ -213,7 +215,7 @@ class PurchaseOrder(models.Model):
     def create(self, vals):
         if 'import_file' in self._context:
             vals.update({'user_id':1})
-            
+
         if 'name' not in vals or vals['name'] == 'New':
             vals['name'] = self.env['ir.sequence'].next_by_code('purchase.order.rfq')
         res = super(PurchaseOrder, self).create(vals)
