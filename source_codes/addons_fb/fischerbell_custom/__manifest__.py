@@ -53,6 +53,7 @@
         'report/fischerbell_temporary_loan_order_templates.xml',
         'report/report_delivery_slip.xml',
         'report/instrument_rental_tc_report.xml',
+        'report/slow_moving_report.xml',
         'security/ir.model.access.csv',
         'security/fischerbell_security.xml',
         'wizard/fischerbell_wizard_report_all_loan_item_views.xml',

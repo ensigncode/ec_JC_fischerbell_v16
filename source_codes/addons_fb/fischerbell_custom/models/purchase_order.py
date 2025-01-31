@@ -95,6 +95,19 @@ class PurchaseOrder(models.Model):
         compute="_compute_can_create_bill",
         store=True
     )
+    slow_moving_days = fields.Integer(
+        string="Days Since Confirmation",
+        compute="_compute_slow_moving_days",
+        store=True,
+    )
+
+    @api.depends('date_approve')
+    def _compute_slow_moving_days(self):
+        for record in self:
+            if record.date_approve:
+                record.slow_moving_days = (date.today() - record.date_approve.date()).days
+            else:
+                record.slow_moving_days = 0
 
     @api.depends('purchase_method', 'picking_ids.state', 'order_line.qty_received', 'state')
     def _compute_can_create_bill(self):

@@ -1,0 +1,38 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<odoo>
+
+    <record id="slow_moving_report_tree_view" model="ir.ui.view">
+        <field name="name">slow.moving.report.tree.view</field>
+        <field name="model">purchase.order</field>
+        <field name="arch" type="xml">
+            <tree string="Slow Moving Report" create="false">
+                <field name="name"/>
+                <field name="date_approve" string="Confirmation Date"/>
+                <field name="shipment_tracking_date"/>
+                <field name="partner_id"/>
+                <field name="user_id"/>
+                <field name="state"/>
+                <field name="slow_moving_days"/>
+            </tree>
+        </field>
+    </record>
+    <record id="action_slow_moving_report" model="ir.actions.act_window">
+        <field name="name">Slow Moving Report</field>
+        <field name="res_model">purchase.order</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[
+            ('state', '=', 'purchase'),
+            ('slow_moving_days', '&gt;=', 10),
+            ('picking_ids', '!=', False),
+            ('order_line.move_ids', '=', False)
+        ]</field>
+        <field name="view_id" ref="fischerbell_custom.slow_moving_report_tree_view"/>
+    </record>
+
+    <menuitem id="menu_slow_moving_report"
+    name="Slow Moving Report"
+    action="fischerbell_custom.action_slow_moving_report"
+    parent="purchase.purchase_report_main" />
+
+    
+</odoo>
