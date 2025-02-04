@@ -211,17 +211,19 @@
                 <field name="approval_state" readonly="1"/>
             </xpath>
             <xpath expr="//button[@name='action_quotation_send'][1]" position="attributes">
-                <attribute name="attrs">{'invisible':['|', ('hide_send_by_email', '=', True), ('state', 'not in', ('draft', 'reject')), ('partner_request_state', '!=', 'approved')]}</attribute>
+                <attribute name="attrs">{'invisible':['|', '|', ('hide_send_by_email', '=', True), ('state', 'not in', ('draft', 'reject')), ('partner_request_state', '!=', 'approved')]}</attribute>
                 <attribute name="states"></attribute>
             </xpath>
             <xpath expr="//button[@name='action_quotation_send'][2]" position="attributes">
-                <attribute name="attrs">{'invisible':['|', '|', ('hide_send_by_email', '=', True), ('state', '!=', 'draft'), ('invoice_count', '&gt;=', 1), ('partner_request_state', '!=', 'approved')]}</attribute>
+                <!-- <attribute name="attrs">{'invisible':['|', '|', '|', ('hide_send_by_email', '=', True), ('state', '!=', 'draft'), ('invoice_count', '&gt;=', 1), ('partner_request_state', '!=', 'approved')]}</attribute> -->
+                <attribute name="string">Send PROFORMA Invoice</attribute>
             </xpath>
             <xpath expr="//button[@name='action_quotation_send'][3]" position="attributes">
-                <attribute name="attrs">{'invisible':['|', '|', ('hide_send_by_email', '=', True), ('state', '!=', 'draft'), ('invoice_count', '&gt;=', 1), ('partner_request_state', '!=', 'approved')]}</attribute>
+                <!-- <attribute name="attrs">{'invisible':['|', '|', '|', ('hide_send_by_email', '=', True), ('state', '=', 'draft'), ('invoice_count', '&gt;=', 1), ('partner_request_state', '!=', 'approved')]}</attribute> -->
+                <attribute name="string">Send PROFORMA Invoice</attribute>
             </xpath>
             <xpath expr="//button[@name='action_quotation_send'][4]" position="attributes">
-                <attribute name="attrs">{'invisible':['|', ('hide_send_by_email', '=', True), ('state', '!=', 'approve'), ('partner_request_state', '!=', 'approved')]}</attribute>
+                <attribute name="attrs">{'invisible':['|', '|', ('hide_send_by_email', '=', True), ('state', '!=', 'approve'), ('partner_request_state', '!=', 'approved')]}</attribute>
                 <attribute name="states">approve,sale</attribute>
             </xpath>
             <xpath expr="//button[@name='action_cancel']" position="attributes">

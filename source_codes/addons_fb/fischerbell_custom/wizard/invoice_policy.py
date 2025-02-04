@@ -144,6 +144,14 @@ class InvoicePolicyWizard(models.TransientModel):
                             'qty': qty_to_add
                         })
 
+            if sale_id.picking_ids:
+                for picking in sale_id.picking_ids:
+                    if sale_id.collection == 'self_collection':
+                        picking.update({'pick_up': 'pc_driver'})
+                    elif sale_id.collection == 'assigned_driver':   
+                        picking.update({'pick_up': 'pc_supplier'})
+                    else:
+                        picking.update({'pick_up': ''})
             for location, lines_group in lines_by_location.items():
                 picking_type = self.env['stock.picking.type'].search([('code', '=', 'outgoing')], limit=1)
                 picking_lines = []
@@ -169,6 +177,5 @@ class InvoicePolicyWizard(models.TransientModel):
                         'location_dest_id': sale_id.warehouse_id.lot_stock_id.id,
                         'move_ids_without_package': picking_lines
                     })
-
                     picking.action_confirm()
         return True

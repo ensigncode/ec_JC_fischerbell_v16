@@ -65,6 +65,7 @@
 			</xpath>
 			<xpath expr="//page[@name='purchase_delivery_invoice']//group//group[@name='other_info']//field[@name='user_id']" position="after">
 				<field name="purchase_team_id" optional="hide"/>
+				<field name="mail_sended" invisible="1"/>
 				<field name="artwork_attachment_ids" optional="hide" widget="many2many_binary" string="Artwork/Attachment"/>
 			</xpath>
 			<xpath expr="//page[@name='products']//group//group//field[@name='notes']" optional="hide" position="after">
@@ -201,7 +202,7 @@
 		<field name="inherit_id" ref="purchase_stock.purchase_order_view_form_inherit"/>
 		<field name="arch" type="xml">
 			<xpath expr="//field[@name='picking_type_id']" position="after">
-				<field name="mail_sended" readonly="1"/>
+				<field name="mail_sended" readonly="1" />
 				<field name="partner_note"/>
 			</xpath>
 			<xpath expr="//field[@name='incoterm_location']" position="attributes">

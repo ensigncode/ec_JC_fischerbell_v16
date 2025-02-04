@@ -31,12 +31,14 @@ class FitTestTraining(models.Model):
 		if self.name_of_trainer:
 			self.location = self.name_of_trainer.city if self.name_of_trainer.city else '' 
 			self.phone = self.name_of_trainer.phone if self.name_of_trainer.phone else '' 
+			self.company = self.name_of_trainer.parent_id if self.name_of_trainer.parent_id else '' 
 
-	@api.onchange('company')
-	def _onchange_company_id(self):
-		if self.company:
-			self.phone = self.company.phone
-			self.partner_id = self.company.id
+	# @api.onchange('company')
+	# def _onchange_company_id(self):
+	# 	if self.company:
+	# 		self.phone = self.company.phone
+	# 		self.partner_id = self.company.id
+			
 	
 	def action_send_invitation(self):
 		self.ensure_one()

@@ -8,7 +8,7 @@
         Fischerbell Custom
     """,
     'website': 'https://www.sgeede.com/',
-    'depends': ['purchase','purchase_requisition','account','sale', 'stock',
+    'depends': ['purchase','purchase_requisition','account','account_edi','sale', 'stock',
                 'stock_landed_costs','postal_management','purchase_stock', 
                 'report_xlsx','contacts','mrp','crm','sale_subscription',
                 'account_accountant','industry_fsm','helpdesk',
