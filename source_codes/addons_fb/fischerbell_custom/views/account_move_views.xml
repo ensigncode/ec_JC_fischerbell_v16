@@ -6,6 +6,9 @@
             <field name="model">account.move</field>
             <field name="inherit_id" ref="account.view_move_form"/>
             <field name="arch" type="xml">
+                <xpath expr="//page//field[@name='line_ids']//tree//field[@name='partner_id']" position="attributes">
+                    <attribute name="string">Customer/Vendor</attribute>
+                </xpath>
                 <xpath expr="//header//button[@name='button_draft']" position="before">
                     <field name="is_freight_charge" invisible="1"/>
                     <field name="move_count" invisible="1" />
@@ -135,5 +138,32 @@
                 </xpath>
             </field>
         </record>
+        <record id="view_move_tree_fb_inherit" model="ir.ui.view">
+            <field name="name">account.move.tree.fb.inherit</field>
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="account.view_move_tree"></field>
+            <field name="arch" type="xml">
+                <xpath expr="//tree//field[@name='partner_id']" position="attributes">
+                    <attribute name="string">Customer/Vendor</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="view_move_line_tree_fb_inherit" model="ir.ui.view">
+            <field name="name">account.move.line.tree.fb.inherit</field>
+            <field name="model">account.move.line</field>
+            <field name="inherit_id" ref="account.view_move_line_tree"></field>
+            <field name="arch" type="xml">
+                <xpath expr="//tree//field[@name='partner_id']" position="attributes">
+                    <attribute name="string">Customer/Vendor</attribute>
+                </xpath>
+                
+                <!-- <xpath expr="//tree//field[@name='partner_id']" position="attributes">
+                    <attribute name="string">Customer/Vendor</attribute>
+                </xpath> -->
+            </field>
+        </record>
+
+        <!-- <field name="partner_id" string="Customer/Vendor" optional="show" /> -->
     </data>
 </odoo>

@@ -107,6 +107,7 @@
         'views/account_payment.xml',
         'views/opportunity_type.xml',
         'views/mail_activity_view.xml',
+        'views/payment_token_views.xml',
         'wizard/account_register_payment.xml',
         'wizard/update_po_quantity.xml',
 

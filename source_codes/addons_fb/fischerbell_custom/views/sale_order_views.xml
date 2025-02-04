@@ -604,7 +604,7 @@
         sequence="1"/>
 
     <menuitem id="fischerbell_menu_sale_order_partner_update_request"
-        name="Partner Requests"
+        name="Customer Requests"
         action="fischerbell_custom.fischerbell_sale_partner_update_request"
         parent="fischerbell_custom.fischerbell_menu_sale_main_request"
         sequence="2"/>

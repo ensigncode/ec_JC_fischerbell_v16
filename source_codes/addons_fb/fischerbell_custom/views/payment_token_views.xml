@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+     <record id="payment_token_form_inherit_fb" model="ir.ui.view">
+            <field name="name">payment.token.form.inherit.fb</field>
+            <field name="model">payment.token</field>
+            <field name="inherit_id" ref="payment.payment_token_form"></field>
+            <field name="arch" type="xml">
+                <xpath expr="//sheet//field[@name='partner_id']" position="attributes">
+                    <attribute name="string">Customer/Vendor</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="payment_token_list_inherit_fb" model="ir.ui.view">
+            <field name="name">payment.token.list.inherit.fb</field>
+            <field name="model">payment.token</field>
+            <field name="inherit_id" ref="payment.payment_token_list"></field>
+            <field name="arch" type="xml">
+                <xpath expr="//tree//field[@name='partner_id']" position="attributes">
+                    <attribute name="string">Customer/Vendor</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="payment_transaction_list_inherit_fb" model="ir.ui.view">
+            <field name="name">payment.transaction.list.inherit.fb</field>
+            <field name="model">payment.transaction</field>
+            <field name="inherit_id" ref="payment.payment_transaction_list"></field>
+            <field name="arch" type="xml">
+                <xpath expr="//tree//field[@name='partner_id']" position="attributes">
+                    <attribute name="string">Customer/Vendor</attribute>
+                </xpath>
+                <xpath expr="//tree//field[@name='partner_name']" position="attributes">
+                    <attribute name="string">Customer/Vendor Name</attribute>
+                </xpath>
+            </field>
+        </record>
+
+</odoo>

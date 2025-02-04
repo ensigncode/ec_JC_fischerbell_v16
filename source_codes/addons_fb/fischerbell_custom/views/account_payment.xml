@@ -3,11 +3,23 @@
     <record model="ir.ui.view" id="view_account_payment_form_inh_l10n_mx">
         <field name="name">view.account.payment.form.inh.l10n.mx</field>
         <field name="model">account.payment</field>
-        <field name="inherit_id" ref="account.view_account_payment_form"/>
+        <field name="inherit_id" ref="account.view_account_payment_form" />
         <field name="arch" type="xml">
-        	<field name="ref" position="after">
-        		<field name="bank_account_no" readonly="1" force_save="1"/>
-        	</field>
+            <field name="ref" position="after">
+                <field name="bank_account_no" readonly="1" force_save="1" />
+            </field>
         </field>
     </record>
+
+    <record id="account_report_form_inherit_fb" model="ir.ui.view">
+        <field name="name">account.report.form.inherit.fb</field>
+        <field name="model">account.report</field>
+        <field name="inherit_id" ref="account_reports.account_report_form"></field>
+        <field name="arch" type="xml">
+            <xpath expr="//form//notebook//field[@name='filter_partner']" position="attributes">
+                <attribute name="string">Customer/Vendor</attribute>
+            </xpath>
+        </field>
+    </record>
+
 </odoo>

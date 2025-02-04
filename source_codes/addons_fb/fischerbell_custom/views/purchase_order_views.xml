@@ -304,7 +304,7 @@
     </record>
 
 	<menuitem id="fischerbell_menu_purchase_report"
-        name="Reporting"
+        name="Purchase Analysis"
         action="fischerbell_custom.fischerbell_action_purchase_order_report_all"
         parent="purchase.purchase_report_main" />
 
@@ -360,7 +360,7 @@
 				<field name="name" readonly="1"/>
             	<field name="partner_id" string="Requested Customer" readonly="1"/>
             	<field name="user_id" readonly="1"/>
-            	<field name="partner_request_state" readonly="1"/>
+            	<field name="partner_request_state" string="Customer/Vendor Request" readonly="1"/>
             	<field name="company_id" readonly="1"/>
             	<button name="request_approved" type="object" string="Approve"
             		class="oe_highlight"/>

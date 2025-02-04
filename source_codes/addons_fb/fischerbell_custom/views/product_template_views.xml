@@ -309,4 +309,11 @@
         </field>
     </record>
 
+    <record id="product.attribute_action" model="ir.actions.act_window">
+        <field name="name">Product Attributes</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">product.attribute</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
 </odoo>
