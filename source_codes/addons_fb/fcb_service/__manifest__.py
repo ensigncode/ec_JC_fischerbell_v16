@@ -8,7 +8,7 @@
     'website': '',
     'depends': [
         'industry_fsm', 'sale', 'stock', 'industry_fsm_sale',
-        'helpdesk','purchase','industry_fsm_report','portal_signature'
+        'helpdesk','purchase','industry_fsm_report','portal_signature','helpdesk_timesheet'
     ],
     'data': [
         'security/ir.model.access.csv',
