@@ -71,6 +71,15 @@
                 <field name="product_code"/>
                 <field name="bp_code" optional="hide"/>
             </xpath>
+
+            <xpath expr="//field[@name='order_line']//tree//field[@name='product_packaging_qty']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='order_line']//tree//field[@name='product_packaging_id']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            
             <xpath expr="//field[@name='partner_shipping_id']" position="replace">
                 <field name="partner_shipping_id"/>
             </xpath>
