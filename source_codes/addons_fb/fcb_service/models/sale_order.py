@@ -44,6 +44,18 @@ class SaleOrder(models.Model):
 			return False
 		return True
 
+	@api.depends('order_line.is_delivery', 'order_line.is_downpayment')
+	def _compute_invoice_status(self):
+		super()._compute_invoice_status()
+		for order in self:
+			prepayment_done = sum(payment.amount_total for payment in order.invoice_ids.filtered(
+				lambda inv: inv.state == 'posted' and inv.payment_state == 'paid'
+			)) >= order.amount_total
+			if order.invoice_status in ['no'] and order.have_special_permission and not prepayment_done:
+				prepayment_term = self.env.ref('fcb_service.account_payment_term_prepayment', raise_if_not_found=False)
+				order.payment_term_id = prepayment_term
+				order.invoice_status = 'to invoice'
+
 	def action_confirm(self):
 		""" Override to check for prepayment and allow invoice creation. """
 		if self.have_special_permission:
