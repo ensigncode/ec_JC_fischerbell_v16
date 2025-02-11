@@ -5,3 +5,4 @@ fcb_service.access_product_service,access_product_service,fcb_service.model_prod
 fcb_service.access_fcb_location,access_fcb_location,fcb_service.model_fcb_location,base.group_user,1,1,1,1
 fcb_service.access_fcb_return_location,access_fcb_return_location,fcb_service.model_fcb_return_location,base.group_user,1,1,1,1
 fcb_service.access_fcb_outsource_location,access_fcb_outsource_location,fcb_service.model_fcb_outsource_location,base.group_user,1,1,1,1
+access_fcb_prepayment_validation_manager,fcb_prepayment_validation_manager,fcb_service.model_fcb_prepayment_validation,,1,1,1,1
