@@ -494,7 +494,7 @@ class PurchaseOrder(models.Model):
                     'reviewed_by': self.env.user.id
                 })
             else:
-                raise ValidationError("Sorry, you are not allowed to reject this order.")
+                raise ValidationError("Sorry, you are not allowed to approve this order.")
 
     def action_to_reject(self):
         for order in self:

@@ -14,7 +14,7 @@
                 'account_accountant','industry_fsm','helpdesk',
                 'marketing_automation','mrp','quality_control','stock_barcode',
                 'maintenance','hr','hr_appraisal', 'mail','sale_renting',
-                'fcb_accounting'],
+                'fcb_accounting', 'website_sale_delivery'],
     'data': [
         'data/fischerbell_consignment_note_send_email_templates.xml',
         'data/stock_mail_template.xml',
