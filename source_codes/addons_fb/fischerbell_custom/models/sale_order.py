@@ -1247,6 +1247,8 @@ class SaleOrderLine(models.Model):
 
     def _prepare_invoice_line(self, **optional_values):
         res = super(SaleOrderLine,self)._prepare_invoice_line(**optional_values)
+        if self.is_downpayment:
+            return res
         if self.qty_to_invoice == 0.0:
             res.update({'quantity':self.product_uom_qty})
         else:
