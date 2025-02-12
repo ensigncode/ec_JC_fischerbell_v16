@@ -7,7 +7,7 @@
 This module allows you to sell rental products in your eCommerce with
 appropriate views and selling choices.
     """,
-    'depends': ['website_sale', 'sale_renting'],
+    'depends': ['sale', 'website_sale', 'sale_renting'],
     'data': [
         'security/ir.model.access.csv',
         'security/website_sale.xml',
