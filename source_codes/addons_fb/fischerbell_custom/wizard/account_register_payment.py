@@ -22,23 +22,6 @@ class AccountPaymentRegister(models.TransientModel):
                 record.is_bank = False
 
     def _init_payments(self, to_process, edit_mode=False):
-        records = self.env['product.template'].browse(12846 )
-        for reg in records:
-            prod_new = reg.sudo().copy({'name': reg.name+' (copy)'})
-            prod_new['bom_count'] = reg.bom_count
-            for rec in reg.bom_ids:
-                value = self.env['mrp.bom'].create({
-                    'type': rec.type,
-                    'product_tmpl_id': prod_new.id,
-                    'product_qty': rec.product_qty,
-                    'code': rec.code,
-                    'company_id': rec.company_id.id,
-                })
-                value['bom_line_ids'] = [(0, 0, {
-                    'product_id': line.product_id.id,
-                    'product_qty': line.product_qty,
-                    'attachments_count': line.attachments_count,
-                }) for line in rec.bom_line_ids]
         payments = super()._init_payments(to_process, edit_mode=edit_mode)
         for payment, vals in zip(payments, to_process):
                 payment.write({'bank_account_no': self.bank_account_no})
