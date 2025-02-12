@@ -22,11 +22,11 @@ class AccountReport(models.Model):
     def send_email_to_customer(self, options):
         self.ensure_one()
         if not options.get('partner_ids'):
-            raise ValueError(_("Please provide partner IDs in options."))
+            raise UserError(_("Please provide partner IDs in options."))
         
         partners = self.env['res.partner'].browse(options['partner_ids'])
         if not partners:
-            raise ValueError(_("No partners found for the provided IDs."))
+            raise ValidationError(_("No partners found for the provided IDs."))
 
         # Ensure assets are committed for wkhtmltopdf
         if not config['test_enable']:
